@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2012-2013 Trento RISE
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either   express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<resources>
+
+    <string-array name="broadcast_notifications_array">
+        <item>@string/broadcast_notifications_bus_delay</item>
+        <item>@string/broadcast_notifications_train_delay</item>
+        <item>@string/broadcast_notifications_accident</item>
+        <item>@string/broadcast_notifications_road_works</item>
+        <item>@string/broadcast_notifications_strike</item>
+        <item>@string/broadcast_notifications_traffic_jam</item>
+        <item>@string/broadcast_notifications_diversion</item>
+    </string-array>
+    
+    <string-array name="smart_checks_list">
+        <item>@string/smart_check_list_bus_timetable</item>
+        <item>@string/smart_check_list_train_timetable</item>       
+        <item>@string/smart_check_list_parking</item>               
+    </string-array>
+    
+    
+   <string-array name="smart_checks_bus_number">
+        <item>_A</item>
+        <item>_B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>01</item>
+        <item>02</item>
+        <item>03</item>
+        <item>04</item>
+        <item>05</item>
+        <item>06</item>
+        <item>07</item>
+        <item>08</item>
+        <item>09</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>NP</item>
+<!--         <item>funivia</item>      -->
+    </string-array>
+    
+      <array name="smart_checks_bus_icons">
+        <item>@drawable/ic_f_a</item>
+        <item>@drawable/ic_f_b</item>
+        <item>@drawable/ic_f_c</item>
+        <item>@drawable/ic_f_d</item>
+        <item>@drawable/ic_f1</item>
+        <item>@drawable/ic_f2</item>
+        <item>@drawable/ic_f3</item>
+        <item>@drawable/ic_f4</item>
+        <item>@drawable/ic_f5</item>
+        <item>@drawable/ic_f6</item>
+        <item>@drawable/ic_f7</item>
+        <item>@drawable/ic_f8</item>
+        <item>@drawable/ic_f9</item>
+        <item>@drawable/ic_f10</item>
+        <item>@drawable/ic_f11</item>
+        <item>@drawable/ic_f12</item>
+        <item>@drawable/ic_f13</item>
+        <item>@drawable/ic_f14</item>
+        <item>@drawable/ic_f15</item>
+        <item>@drawable/ic_f16</item>
+        <item>@drawable/ic_f17</item>
+        <item>@drawable/ic_f_np</item>
+<!--         <item>@drawable/ic_f_cw</item>      -->
+    </array>
+    
+    <array name="smart_checks_bus_color">
+        <item>#B9BAB5</item>
+        <item>#717880</item>
+        <item>#000</item>
+        <item>#000</item>
+        <item>#174072</item>
+        <item>#D65A2E</item>
+        <item>#C02927</item>
+        <item>#0976B7</item>
+        <item>#E8C01C </item>
+        <item>#6EB046</item>
+        <item>#1B9887</item>
+        <item>#553428 </item>
+        <item>#8A4D2C </item>
+        <item>#105446 </item>
+        <item>#563176 </item>
+        <item>#91283F</item>
+        <item>#B75D8E</item>
+        <item>#DB8FAC</item>
+        <item>#7CC243</item>
+        <item>#212C5F</item>
+        <item>#2493C5</item>
+        <item>#000</item>
+<!--         <item>#FFF</item>      -->
+    </array>
+    
+
+
+</resources>

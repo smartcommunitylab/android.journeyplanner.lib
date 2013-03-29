@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2012-2013 Trento RISE
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either   express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<resources>
+
+    <string name="maps_api_key">0fdlLrw2lMFFg-TnfYFuceTi0m60-Q1mBF6EMFA</string>
+    <string name="empty" />
+    <string name="placeholder">&#8230;</string>
+    <string name="app_name">ViaggiaTrento</string>
+    <string name="btn_planjourney">Pianifica\nviaggio</string>
+    <string name="btn_monitorrecurrent">I miei viaggi</string>
+    <string name="btn_broadcast">Invia\nsegnalazioni</string>
+    <string name="btn_myprofile">Preferenze</string>
+    <string name="btn_smartcheck">Info in tempo reale</string>
+    <string name="btn_notifications">Leggi\nnotifiche</string>
+    <string name="btn_save">Salva</string>
+    <string name="btn_delete">Cancella</string>
+    <string name="backstring">Indietro</string>
+    <string name="btn_startmonitoring">Salva</string>
+    <string name="tab_plannew">Nuovo viaggio</string>
+    <string name="tab_myjourneys">I miei viaggi</string>
+    <string name="tab_profile">Preferenze viaggio</string>
+    <string name="tab_favorites">I miei luoghi</string>
+    <string name="dialog_itineraryname_hint">Nome dell\'itinerario</string>
+    <string name="plan_location">Dove</string>
+    <string name="plan_datetime">Quando</string>
+    <string name="plan_preferences">Preferenze</string>
+    <string name="plan_timing">Quando</string>
+    <string name="plan_schedule">Giorni</string>
+    <string name="plan_from">Da&#8230;</string>
+    <string name="plan_to">A&#8230;</string>
+    <string name="plan_date">Data</string>
+    <string name="plan_time">Ora</string>
+    <string name="plan_search">Vai</string>
+    <string name="no_items">Nessun risultato trovato</string>
+    <string name="plan_custom_prefs">Preferenze</string>
+    <string name="plan_custom_prefs_off">Nascondi</string>
+    <string name="plan_custom_prefs_on">Mostra</string>
+    <string name="monitor_off">Segnalazioni NON ATTIVE</string>
+    <string name="monitor_on">Segnalazioni ATTIVE</string>
+    <string name="spinner_routes">Scegli la corsa</string>
+    <string name="spinner_stops">Scegli la fermata</string>
+    <string name="spinner_stoptimes">Scegli l\'orario</string>
+    <string name="form_busdelay_routes">Linea</string>
+    <string name="form_busdelay_stop">Fermata</string>
+    <string name="form_busdelay_time">Ora prevista</string>
+    <string name="form_busdelay_delay">Ritardo</string>
+    <string name="header_ttypes">Come vuoi viaggiare?</string>
+    <string name="header_rtypes">Tragitto preferito</string>
+    <string name="tab_broadcast">Nuova notifica</string>
+    <string name="tab_news">Notifiche</string>
+    <string name="tmp">Disponibile a breve!</string>
+    <string name="positionhint">Dove</string>
+    <string name="bus">Bus</string>
+    <string name="car">Auto</string>
+    <string name="van">Furgone</string>
+    <string name="bike">Bici</string>
+    <string name="train">Treno</string>
+    <string name="other">Altro</string>
+    <string name="send">Invia segnalazione</string>
+    <string name="trainnumber">Numero treno</string>
+    <string name="busline">Linea bus</string>
+    <string name="strike">Lo sciopero termina alle</string>
+    <string name="delay">Ritardo</string>
+    <string name="app_failure_security">Recupero delle informazioni di autenticazione non riuscito!</string>
+    <string name="app_failure_setup">Inizializzazione dell\'applicatione non riuscita</string>
+    <string name="app_failure_operation">OOPS! C\'è stato un errore. Controlla la connessione e riprova a breve.</string>
+    <string name="err_delay_fields_empty">Non puoi inviare una notifica se alcuni campi sono incompleti.</string>
+    <string name="app_uid_label">SmartCampus</string>
+    <string name="from_field_empty">Scegli la posizione di partenza!</string>
+    <string name="to_field_empty">Scegli la destinazione!</string>
+    <string name="datetime_before_now">Non puoi pianificare un viaggio nel passato!</string>
+    <string name="datetime_to_before_from">Data e/o orario di fine sono precedenti a quelle di inizio!</string>
+    <string name="no_days_selected">Devi selezionare almeno un giorno in cui viaggiare!</string>
+    <string name="favorites_empty">Scegli l\'indirizzo</string>
+    <string name="favorites_saved">Aggiunto ai preferiti</string>
+    <string name="favorites_title">Preferiti</string>
+    <string name="address_dlg_current">Posizione attuale</string>
+    <string name="address_dlg_map">Da mappa</string>
+    <string name="address_dlg_favorites">I miei luoghi</string>
+    <string name="address_dlg_title">Scegli la posizione</string>
+    <string name="recur_time_from">Orario di inizio</string>
+    <string name="recur_time_to">Orario di fine</string>
+    <string name="recur_date_from">Data di inizio</string>
+    <string name="recur_date_to">Data di fine</string>
+    <string name="recur_name">Nome</string>
+    <string name="recur_monitor">Controlla</string>
+    <string name="recurr_next">Vai</string>
+    <string name="recurr_save">Salva</string>
+    <string name="recurr_delete">Cancella</string>
+    <string name="from_time_field_empty">Seleziona orario di inizio!</string>
+    <string name="to_time_field_empty">Selezione orario di fine</string>
+    <string name="from_date_field_empty">Selezione data di inizio!</string>
+    <string name="to_date_field_empty">Seleziona data di fine!</string>
+    <string name="name_field_empty">Specifica il nome!</string>
+    <string name="journey_saved_alert">Viaggio salvato!</string>
+    <string name="recur_journey_saved_alert">Viaggio abituale salvato!</string>
+    <string name="to_date_before_from_date">La data di partenza deve essere precedente a quella di arrivo!</string>
+    <string name="interval_too_large">E\' possibile monitorare un intervallo di tempo di due ore al massimo. Riduci l\'intervallo selezionato.</string>
+    <string name="object_not_found">Oggetto non trovato!</string>
+    <string name="address_select_toast">Tieni premuto il dito per scegliere la posizione</string>
+    <string name="title_broadcast">Invio segnalazioni</string>
+    <string name="title_plan_single">Pianifica viaggio</string>
+    <string name="title_plan_recur">Viaggi abituali</string>
+    <string name="title_prefs">Preferenze</string>
+    <string name="title_smart_check">Info in tempo reale</string>
+    <string name="menu_item_delete">Cancella</string>
+    <string name="menu_item_monitor_on">Controllo ATTIVO</string>
+    <string name="menu_item_monitor_off">Controllo NON ATTIVO</string>
+    <string name="always">Sempre</string>
+    <string name="separator">-</string>
+    <string name="saved_journey">Viaggio salvato</string>
+    <string name="deleted_journey">Viaggio cancellato</string>
+    <string name="deleted">cancellato </string>
+    <string name="label_from">Da:</string>
+    <string name="label_to">A:</string>
+    <string name="label_days">Giorni:</string>
+    <string name="menu_item_edit">Modifica</string>
+    <string name="btn_monitorsaved">Controlla\nviaggi salvati</string>
+    <string name="title_saved_journey">I miei viaggi</string>
+    <string name="title_plan_journey">Pianifica viaggio</string>
+    <string name="tab_myoneoffjourneys">VIAGGIO SINGOLO</string>
+    <string name="tab_myrecjourneys">VIAGGIO ABITUALE</string>
+    <!-- days of the week -->
+    <string name="monday">Lun</string>
+    <string name="tuesday">Mar</string>
+    <string name="wednesday">Mer</string>
+    <string name="thursday">Gio</string>
+    <string name="friday">Ven</string>
+    <string name="saturday">Sab</string>
+    <string name="sunday">Dom</string>
+    <string name="hello_world">Ciao mondo!</string>
+    <string name="menu_settings">Impostazioni</string>
+    <string name="title_activity_smart_check">SmartCheckActivity</string>
+    <string name="smart_check_bus_choose_stop_text">Scegli la fermata:</string>
+    <string name="smart_check_bus_choose_line_text">Scegli la linea:</string>
+    <string name="smart_check_train_choose_stop_text">Scegli la fermata:</string>
+    <string name="smart_check_train_choose_line_text">Scegli la linea:</string>
+    <string name="choose_direction_label">Scegli la direzione:</string>
+    <string name="delaysLabel">Ritardi</string>
+    <string name="dayLabel">Giorni</string>
+    <string name="loading_dialog_label">Creazione tabella &#8230;</string>
+    
+    <string name="leg_from">da</string>
+    <string name="leg_to">a</string>
+    <string name="leg_pick_bike">prendi una bicicletta a</string>
+    <string name="leg_bike_leave">lascia la bicicletta a</string>
+    <string name="leg_car_pick_up">prendi un\'auto a</string>
+    <string name="leg_car_leave">lascia l\'auto a</string>
+    <string name="leg_bus_line">linea</string>
+    <string name="leg_train">treno</string>
+    <string name="leg_move">Prosegui</string>
+    <string name="leg_delay">Ritardo:</string>
+    
+    <string name="broadcast_notifications_accident">Incidente</string>
+    <string name="broadcast_notifications_bus_delay">Ritardo autobus</string>
+    <string name="broadcast_notifications_train_delay">Ritardo treno</string>
+    <string name="broadcast_notifications_road_works">Lavori in corso</string>
+    <string name="broadcast_notifications_strike">Sciopero</string>
+    <string name="broadcast_notifications_traffic_jam">Coda</string>
+    <string name="broadcast_notifications_diversion">Deviazione</string>
+    
+    <string name="smart_check_list_bus_timetable">Orario autobus</string>
+    <string name="smart_check_list_train_timetable">Orario treni</string>
+    <string name="smart_check_list_parking">Disponibilità parcheggi</string>
+    
+    <string name="smart_check_stops_type_mobility">Mobilità</string>
+    <string name="smart_check_stops_delay">Ritardo:</string>
+    
+    <string name="smart_check_routes_empty">Nessuna corsa</string>
+    
+    <string name="ttype_transit">Mezzi pubblici</string>
+    <string name="ttype_car">Auto</string>
+    <string name="ttype_bicycle">Bici</string>
+<!--     <string name="ttype_sharedbike">Bici condivisa</string> -->
+<!--     <string name="ttype_sharedbike_wo_station">Bici pubbliche senza stazione</string> -->
+    <string name="ttype_sharedbike_wo_station">Bici condivisa</string>
+
+    <string name="ttype_car_w_parking">Auto con parcheggio</string>
+<!--     <string name="ttype_sharedcar">Car sharing</string> -->
+<!--     <string name="ttype_sharedcar_wo_station">Car sharing senza stazione</string> -->
+    <string name="ttype_sharedcar_wo_station">Car sharing</string>
+
+    <string name="ttype_bus">Bus</string>
+    <string name="ttype_train">Treno</string>
+    <string name="ttype_walk">A piedi</string>
+    <string name="ttype_gondola">Gondola</string>
+    <string name="ttype_shuttle">Shuttle</string>
+    
+    <string name="rtype_fastest">Il più veloce</string>
+    <string name="rtype_greenest">Più ecologico</string>
+    <string name="rtype_healthy">Più salutare</string>
+    <string name="rtype_least_changes">Con meno cambi</string>
+    <string name="rtype_least_walking">Minimo tragitto a piedi</string>
+    <string name="rtype_safest">Più sicuro</string>
+    
+    <string name="toast_position">Posizione</string>
+    <string name="toast_deleted">%s eliminata</string>
+    <string name="toast_alert_sent">Segnalazione inviata</string>
+    <string name="toast_prefs_saved">Preferenze salvate!</string>
+    <string name="toast_notification_sent">La tua notifica è stata inviata!</string>
+    <string name="toast_itinerary_not_saved">Itinerario NON salvato</string>
+    <string name="toast_itinerary_name_empty">Devi assegnare un nome all\'itinerario</string>
+    
+    <string name="notifications_unread">Notifiche non lette</string>
+    <string name="notifications_list_empty_jp">Non hai ancora ricevuto notifiche.</string>
+    <string name="notifications_itinerary_delay_title">Ritardo itinerario \"%s\"</string>
+    <string name="notifications_itinerary_delay_min">%s minuto</string>
+    <string name="notifications_itinerary_delay_mins">%s minuti</string>
+    <string name="notifications_itinerary_delay_bus">Linea %1$s per %2$s</string>
+    <string name="notifications_itinerary_delay_train">Treno %1$s per %2$s</string>
+    <string name="notifications_itinerary_delay_original_schedule">atteso alle %1$s a %2$s</string>
+    
+    <string name="dialog_are_you_sure">Sei sicuro?</string>
+    <string name="dialog_delete_itinerary">Cancellazione di \"%s\"</string>
+    <string name="minutes">m</string>
+	<string name="problem_loading">Problema di caricamento</string>
+	
+	<string name="agency_10_route_555">Trento - Malé</string>
+    <string name="agency_10_route_556">Malé - Trento</string>
+    <string name="agency_5_route_BV_R1_G">Bolzano - Verona</string>
+    <string name="agency_5_route_BV_R1_R">Verona - Bolzano</string>
+    <string name="agency_6_route_TB_R2_G">Trento - Bassano D.G. </string>
+    <string name="agency_6_route_TB_R2_R">Bassano D.G. - Trento</string>
+	
+</resources>
