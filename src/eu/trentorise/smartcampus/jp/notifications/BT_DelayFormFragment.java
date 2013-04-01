@@ -181,6 +181,10 @@ public class BT_DelayFormFragment extends FeedbackFragment {
 		sendBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				selectedRoute = routesSpinner.getSelectedItemPosition() >=0 ? routes.get(routesSpinner.getSelectedItemPosition()) : null;
+				selectedStop = stopsSpinner.getSelectedItemPosition() >=0 ? stops.get(stopsSpinner.getSelectedItemPosition()) : null;
+				selectedStoptime = stoptimesSpinner.getSelectedItemPosition() >=0 ? stoptimes.get(stoptimesSpinner.getSelectedItemPosition()) : null;
+						
 				if (selectedRoute == null || selectedStop == null || selectedStoptime == null) {
 					Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.err_delay_fields_empty,
 							Toast.LENGTH_SHORT).show();
