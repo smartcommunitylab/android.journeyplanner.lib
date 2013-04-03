@@ -236,4 +236,6 @@
     <string name="agency_6_route_TB_R2_G">Trento - Bassano D.G. </string>
     <string name="agency_6_route_TB_R2_R">Bassano D.G. - Trento</string>
 	
+    <string name="toast_nextday_loaded">Nuovo giorno caricato!</string>
+     <string name="toast_prevday_loaded">Giorno precedente caricato</string>
 </resources>
