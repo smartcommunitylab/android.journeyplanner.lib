@@ -21,6 +21,7 @@ import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourneyParameters;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -72,7 +73,7 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 
 	private static final Map<Integer, ToggleButton> days = new HashMap<Integer, ToggleButton>();
 	public static final String PARAMS = "parameters";
-
+	
 	private static final int INTERVALHOUR = 2;
 	private static final int INTERVALDAY = 1;
 	private BasicRecurrentJourney params = null;
@@ -83,6 +84,7 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 	private ToggleButton monitorToggleBtn = null;
 	private CheckBox alwaysCheckbox =null;
 	private LinearLayout monitorLayout = null;
+	
 	@Override
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);

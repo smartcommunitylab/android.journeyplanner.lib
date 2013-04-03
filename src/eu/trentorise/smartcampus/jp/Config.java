@@ -17,19 +17,13 @@ package eu.trentorise.smartcampus.jp;
 
 import it.sayservice.platform.smartplanner.data.message.RType;
 import it.sayservice.platform.smartplanner.data.message.TType;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Id;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-
-import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 
 
 public class Config {
@@ -148,7 +142,8 @@ public class Config {
 
 	public static final SimpleDateFormat FORMAT_DATE_SMARTPLANNER = new SimpleDateFormat("MM/dd/yyyy",Locale.ENGLISH);
 	public static final SimpleDateFormat FORMAT_TIME_SMARTPLANNER = new SimpleDateFormat("hh:mmaa",Locale.ENGLISH);
-	public static final SimpleDateFormat FORMAT_DATE_UI = new SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH);
+	public static final SimpleDateFormat FORMAT_DATE_UI = new SimpleDateFormat("dd/MM/yy",Locale.ENGLISH);
+	//public static final SimpleDateFormat FORMAT_DATE_UI = new SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH);
 	public static final SimpleDateFormat FORMAT_TIME_UI = new SimpleDateFormat("HH:mm",Locale.ENGLISH);
 	public static final String USER_PREFS_FAVORITES = "favorites";
 
