@@ -73,7 +73,8 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 	private static final Map<Integer, ToggleButton> days = new HashMap<Integer, ToggleButton>();
 	public static final String PARAMS = "parameters";
 
-	private static final int intervalhour = 2;
+	private static final int INTERVALHOUR = 2;
+	private static final int INTERVALDAY = 1;
 	private BasicRecurrentJourney params = null;
 	private EditText fromTime = null;
 	private EditText fromDate = null;
@@ -524,7 +525,7 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 			//toTime is set to now + intervalhour			
 			Calendar cal = Calendar.getInstance();  
 			cal.setTime(newDate);  
-			cal.add(Calendar.HOUR_OF_DAY, intervalhour);
+			cal.add(Calendar.HOUR_OF_DAY, INTERVALHOUR);
 			Date interval = cal.getTime(); 
 			toTime.setTag(interval);
 			toTime.setText(Config.FORMAT_TIME_UI.format(interval));
@@ -536,6 +537,10 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 			d=today;
 		fromDate.setText(Config.FORMAT_DATE_UI.format(d));
 
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(today);
+		cal.add(Calendar.DATE, INTERVALDAY);
+		newDate = cal.getTime();
 		d = params.getData().getParameters().getToDate() > 0 ? new Date(params.getData().getParameters().getToDate()) : newDate;
 		if (params.getData().getParameters().getToDate()!=Config.ALWAYS_DATE)
 			toDate.setText(Config.FORMAT_DATE_UI.format(d));
@@ -545,7 +550,6 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 				alwaysCheckbox.setChecked(true);
 				d=newDate;
 				toDate.setEnabled(false);
-
 			}
 		
 		fromTime.setOnClickListener(new View.OnClickListener() {

@@ -243,32 +243,39 @@
 	                    
 	                    <ToggleButton
 	                        android:id="@+id/monday_toggle"
-	                        android:layout_width="wrap_content"
+	                        android:layout_width="48dp"
 	                        android:layout_height="wrap_content"
-	                        android:textOn="@string/monday_short" 
+	                        android:background="@drawable/btn_toggle_bg"
 	                        android:textOff="@string/monday_short"
-	                        /><!-- android:background="@drawable/btn_toggle_bg" -->
+	                        android:textOn="@string/monday_short" 
+	                        android:layout_margin="3dp"/>
 	
 	                    <ToggleButton
 	                        android:id="@+id/tuesday_toggle"
-	                        android:layout_width="wrap_content"
+	                        android:layout_width="48dp"
 	                        android:layout_height="wrap_content"
 	                        android:textOn="@string/tuesday_short" 
-	                        android:textOff="@string/tuesday_short" />
+	                        android:textOff="@string/tuesday_short"
+	                        android:background="@drawable/btn_toggle_bg"
+	                        android:layout_margin="3dp" />
 	
 	                    <ToggleButton
 	                        android:id="@+id/wednesday_toggle"
-	                        android:layout_width="wrap_content"
+	                        android:layout_width="48dp"
 	                        android:layout_height="wrap_content"
 	                        android:textOn="@string/wednesday_short" 
-	                        android:textOff="@string/wednesday_short" />
+	                        android:textOff="@string/wednesday_short"
+	                        android:background="@drawable/btn_toggle_bg" 
+	                        android:layout_margin="3dp"/>
 	
 	                    <ToggleButton
 	                        android:id="@+id/thursday_toggle"
-	                        android:layout_width="wrap_content"
+	                        android:layout_width="48dp"
 	                        android:layout_height="wrap_content"
 	                        android:textOn="@string/thursday_short"
-	                        android:textOff="@string/thursday_short" />
+	                        android:textOff="@string/thursday_short" 
+	                        android:background="@drawable/btn_toggle_bg"
+	                        android:layout_margin="3dp"/>
                     </LinearLayout>
                     <LinearLayout
                     android:layout_width="match_parent"
@@ -277,24 +284,30 @@
                     
 	                    <ToggleButton
 	                        android:id="@+id/friday_toggle"
-	                        android:layout_width="wrap_content"
+	                        android:layout_width="48dp"
 	                        android:layout_height="wrap_content"
 	                        android:textOn="@string/friday_short" 
-	                        android:textOff="@string/friday_short" />
+	                        android:textOff="@string/friday_short" 
+	                        android:background="@drawable/btn_toggle_bg"
+	                        android:layout_margin="3dp"/>
 	                    
 	                    <ToggleButton
 	                        android:id="@+id/saturday_toggle"
-	                        android:layout_width="wrap_content"
+	                        android:layout_width="48dp"
 	                        android:layout_height="wrap_content"
 	                        android:textOn="@string/saturday_short" 
-	                        android:textOff="@string/saturday_short" />
+	                        android:textOff="@string/saturday_short"
+	                        android:background="@drawable/btn_toggle_bg"
+	                        android:layout_margin="3dp"/>
 	
 	                    <ToggleButton
 	                        android:id="@+id/sunday_toggle"
-	                        android:layout_width="wrap_content"
+	                        android:layout_width="48dp"
 	                        android:layout_height="wrap_content"
 	                        android:textOn="@string/sunday_short" 
-	                        android:textOff="@string/sunday_short" />
+	                        android:textOff="@string/sunday_short" 
+	                        android:background="@drawable/btn_toggle_bg"
+	                        android:layout_margin="3dp"/>
                		 </LinearLayout>
                 </LinearLayout>
 
