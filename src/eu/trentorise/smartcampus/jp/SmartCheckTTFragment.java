@@ -329,6 +329,7 @@ public class SmartCheckTTFragment extends FeedbackFragment implements
 		actualDate = tempDate.getTime();
 		tvday.setText(dateFormat.format(actualDate));
 		tvday.setTextAppearance(getSherlockActivity(), R.style.day_tt_jp);
+		tvday.setMinimumHeight(ROW_HEIGHT);
 
 		// Delays row
 		TableRow trDelays = new TableRow(getSherlockActivity());
@@ -343,10 +344,10 @@ public class SmartCheckTTFragment extends FeedbackFragment implements
 		// now lets add the main content
 		mElsvMainContent = new EndlessLinkedScrollView(getSherlockActivity(),
 				SmartCheckTTFragment.this);
-		mElsvMainContent.tollerance+=20;
 
 		tlMainContent = new TableLayout(getSherlockActivity());
 		tlMainContent.setId(R.id.ttTimeTable);
+		tlMainContent.setVerticalScrollBarEnabled(true);
 
 		new RenderTimeTableAsyncTask(this).execute(0, NUM_ROWS);
 
@@ -378,22 +379,13 @@ public class SmartCheckTTFragment extends FeedbackFragment implements
 	@Override
 	public void onDayFinished(boolean result) {
 		toggleProgressDialog();
+		mElsvMainContent.setEnabled(true);
 		tlMainContent.setEnabled(true);
-		mElsvMainContent.post(new Runnable() {
-			
-			@Override
-			public void run() {
-				if(displayedDay==0)
-					mElsvMainContent.scrollTo(+30, 0);
-				else
-					mElsvMainContent.scrollTo(0, 0);
-			}
-		});
 	}
 
 	@Override
 	public void onRightOverScrolled() {
-		if (displayedDay < DAYS_WINDOWS ) {
+		if (displayedDay < DAYS_WINDOWS) {
 			displayedDay++;
 			refreshTimes(displayedDay);
 		}
@@ -401,7 +393,6 @@ public class SmartCheckTTFragment extends FeedbackFragment implements
 
 	@Override
 	public void onLeftOverScrolled() {
-
 		if (displayedDay > 0) {
 			displayedDay--;
 			firstColumn = 0;
@@ -451,6 +442,7 @@ public class SmartCheckTTFragment extends FeedbackFragment implements
 
 	private void refreshTimes(int displayDay) {
 		toggleProgressDialog();
+		mElsvMainContent.setEnabled(false);
 		tlMainContent.setEnabled(false);
 		refreshDayTextView(displayedDay);
 		refreshDelays(displayedDay);
