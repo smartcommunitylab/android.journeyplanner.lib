@@ -70,14 +70,15 @@ public class SmartCheckListFragment extends FeedbackFragment {
 					fragmentTransaction.commit();
 				} else if (optionName
 						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[2]) == 0) {
-					// Parking availability
-					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
-							.beginTransaction();
-					Fragment fragment = new SmartCheckParkingsFragment();
-					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-					fragmentTransaction.replace(Config.mainlayout, fragment);
-					fragmentTransaction.addToBackStack(null);
-					fragmentTransaction.commit();
+					// // Parking availability
+					// FragmentTransaction fragmentTransaction =
+					// getSherlockActivity().getSupportFragmentManager()
+					// .beginTransaction();
+					// Fragment fragment = new SmartCheckParkingsFragment();
+					// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+					// fragmentTransaction.replace(Config.mainlayout, fragment);
+					// fragmentTransaction.addToBackStack(null);
+					// fragmentTransaction.commit();
 				} else {
 					// Toast available soon
 					Toast.makeText(getSherlockActivity(), R.string.tmp, Toast.LENGTH_SHORT).show();
