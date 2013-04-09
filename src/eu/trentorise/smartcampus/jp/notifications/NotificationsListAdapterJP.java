@@ -90,8 +90,10 @@ public class NotificationsListAdapterJP extends ArrayAdapter<Notification> {
 	private void buildHolder(Holder holder, Notification notification) {
 		// missing custom data
 		if (notification.getContent() == null) {
-			holder.title.setText(notification.getTitle());
-			holder.desc.setText(notification.getDescription());
+			String title = notification.getTitle();
+			String description = notification.getDescription();
+			holder.title.setText(title != null ? title : "Title");
+			holder.desc.setText(description != null ? description : "Description");
 			return;
 		}
 

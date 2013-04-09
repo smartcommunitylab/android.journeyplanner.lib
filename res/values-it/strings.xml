@@ -181,6 +181,7 @@
     <string name="smart_check_stops_delay">Ritardo:</string>
     
     <string name="smart_check_routes_empty">Nessuna corsa</string>
+    <string name="smart_check_parkings_empty">Nessun parcheggio</string>
     
     <string name="ttype_transit">Mezzi pubblici</string>
     <string name="ttype_car">Auto</string>

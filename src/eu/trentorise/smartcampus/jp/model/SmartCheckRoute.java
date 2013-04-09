@@ -26,6 +26,7 @@ public class SmartCheckRoute extends BasicObject {
 	private String route;
 	private String name;
 	private Map<String, Integer> delays;
+	private Map<String, String> delaysSources;
 	private List<SmartCheckTime> times;
 
 	public String getRoute() {
@@ -50,6 +51,14 @@ public class SmartCheckRoute extends BasicObject {
 
 	public void setDelays(Map<String, Integer> delays) {
 		this.delays = delays;
+	}
+
+	public Map<String, String> getDelaysSources() {
+		return delaysSources;
+	}
+
+	public void setDelaysSources(Map<String, String> delaysSources) {
+		this.delaysSources = delaysSources;
 	}
 
 	public List<SmartCheckTime> getTimes() {

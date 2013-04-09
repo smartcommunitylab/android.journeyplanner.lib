@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.jp.helper;
 
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
+import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
@@ -257,7 +258,7 @@ public class JPHelper {
 		// Route route = JSONUtils.getFullMapper().convertValue(r, Route.class);
 		// list.add(route);
 		// }
-		list = RoutesHelper.getRoutesList(mContext, new int[] {Integer.parseInt(agencyId)});
+		list = RoutesHelper.getRoutesList(mContext, new int[] { Integer.parseInt(agencyId) });
 		Collections.sort(list, Utils.getRouteComparator());
 
 		// get all-the-routes for a smartline
@@ -593,7 +594,7 @@ public class JPHelper {
 		if (agencyId != null) {
 			criteria.put("customData.agencyId", agencyId);
 		}
-		
+
 		filter.setCriteria(criteria);
 
 		// filter by near me
@@ -673,8 +674,15 @@ public class JPHelper {
 					tripData.setTripId(timeData.getTrip().getId());
 					tripData.setAgencyId(timeData.getTrip().getAgency());
 
+					// delay
 					if (routeData.getDelays().containsKey(timeData.getTrip().getId())) {
 						tripData.setDelay(routeData.getDelays().get(timeData.getTrip().getId()));
+					}
+
+					// delay source
+					if (routeData.getDelaysSources().containsKey(timeData.getTrip().getId())) {
+						tripData.setDelaySource(CreatorType.getAlertType(routeData.getDelaysSources().get(
+								timeData.getTrip().getId())));
 					}
 
 					objects.add(tripData);

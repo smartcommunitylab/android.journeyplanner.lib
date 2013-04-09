@@ -44,36 +44,47 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
+
 		FeedbackFragmentInflater.inflateHandleButton(getSherlockActivity(), getView());
 
 		adapter = new NotificationsListAdapterJP(getActivity(), R.layout.notifications_row_jp);
 		setListAdapter(adapter);
 
-		adapter.clear();
+		// loadNotifications();
+	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		loadNotifications();
+	}
+
+	private void loadNotifications() {
 		List<Notification> notificationsList = NotificationsHelper.getNotifications(getNotificationFilter(), 0, -1, 0);
 
 		TextView listEmptyTextView = (TextView) getView().findViewById(R.id.jp_list_text_empty);
-		if (notificationsList.size() > 0) {
-			for (Notification n : NotificationsHelper.getNotifications(getNotificationFilter(), 0, -1, 0)) {
+
+		if (!notificationsList.isEmpty()) {
+			adapter.clear();
+			for (Notification n : notificationsList) {
 				adapter.add(n);
 			}
 			listEmptyTextView.setVisibility(View.GONE);
-		} else {
+			adapter.notifyDataSetChanged();
+		} else if (adapter.isEmpty()) {
 			listEmptyTextView.setVisibility(View.VISIBLE);
 		}
-
-		adapter.notifyDataSetChanged();
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		// TODO: use JPHelper.getItineraryObject(id) in AsyncTask
-		String objectId = adapter.getItem(position).getEntities().get(0).getId();
-
-		SCAsyncTask<String, Void, Object> viewDetailsTask = new SCAsyncTask<String, Void, Object>(getSherlockActivity(),
-				new NotificationsAsyncTaskProcessorJP(getSherlockActivity()));
-		viewDetailsTask.execute(objectId);
+		if (adapter.getItem(position).getEntities() != null && !adapter.getItem(position).getEntities().isEmpty()) {
+			String objectId = adapter.getItem(position).getEntities().get(0).getId();
+			SCAsyncTask<String, Void, Object> viewDetailsTask = new SCAsyncTask<String, Void, Object>(getSherlockActivity(),
+					new NotificationsAsyncTaskProcessorJP(getSherlockActivity()));
+			viewDetailsTask.execute(objectId);
+		}
 	}
 
 	@Override

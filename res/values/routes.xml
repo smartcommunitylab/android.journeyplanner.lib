@@ -43,8 +43,8 @@
     <string name="agency_12_route_14R">P.Dante - Via Sanseverino - Belvedere Ravina</string>
     <string name="agency_12_route_15A">Piazza Dante - Interporto - Spini di Gardolo</string>
     <string name="agency_12_route_15R">Spini di Gardolo - Interporto - Piazza Dante</string>
-    <string name="agency_12_route_16A">Povo-Cognola-Martignano-Centochiavi</string>
-    <string name="agency_12_route_16R">Centochiavi-Martignano-Cognola-Povo</string>
+    <string name="agency_12_route_16A">Centochiavi-Martignano-Cognola-Povo</string>
+    <string name="agency_12_route_16R">Povo-Cognola-Martignano-Centochiavi</string>
     <string name="agency_12_route_17A">Piazza Dante - Via Bolzano - Lavis</string>
     <string name="agency_12_route_17R">Lavis - S.Lazzaro -  Piazza Dante</string>
 

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.model;
 
+import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 import eu.trentorise.smartcampus.storage.BasicObject;
 
 public class TripData extends BasicObject {
@@ -27,6 +28,7 @@ public class TripData extends BasicObject {
 	private String tripId;
 	private long time;
 	private int delay;
+	private CreatorType delaySource;
 
 	public String getAgencyId() {
 		return agencyId;
@@ -82,6 +84,14 @@ public class TripData extends BasicObject {
 
 	public void setDelay(int delay) {
 		this.delay = delay;
+	}
+
+	public CreatorType getDelaySource() {
+		return delaySource;
+	}
+
+	public void setDelaySource(CreatorType delaySource) {
+		this.delaySource = delaySource;
 	}
 
 }

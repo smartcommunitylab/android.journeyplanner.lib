@@ -184,6 +184,7 @@
     <string name="smart_check_stops_delay">Delay:</string>
     
     <string name="smart_check_routes_empty">No routes</string>
+    <string name="smart_check_parkings_empty">No parkings</string>
     
     <string name="ttype_transit">Transit</string>
     <string name="ttype_car">Car</string>
