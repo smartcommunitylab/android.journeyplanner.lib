@@ -16,6 +16,9 @@
 package eu.trentorise.smartcampus.jp.model;
 
 import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
+
+import java.util.Map;
+
 import eu.trentorise.smartcampus.storage.BasicObject;
 
 public class TripData extends BasicObject {
@@ -27,8 +30,7 @@ public class TripData extends BasicObject {
 	private String routeShortName;
 	private String tripId;
 	private long time;
-	private int delay;
-	private CreatorType delaySource;
+	private Map<CreatorType, String> delays;
 
 	public String getAgencyId() {
 		return agencyId;
@@ -78,20 +80,12 @@ public class TripData extends BasicObject {
 		this.time = time;
 	}
 
-	public int getDelay() {
-		return delay;
+	public Map<CreatorType, String> getDelays() {
+		return delays;
 	}
 
-	public void setDelay(int delay) {
-		this.delay = delay;
-	}
-
-	public CreatorType getDelaySource() {
-		return delaySource;
-	}
-
-	public void setDelaySource(CreatorType delaySource) {
-		this.delaySource = delaySource;
+	public void setDelays(Map<CreatorType, String> delays) {
+		this.delays = delays;
 	}
 
 }

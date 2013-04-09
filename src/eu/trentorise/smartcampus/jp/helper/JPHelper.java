@@ -674,15 +674,14 @@ public class JPHelper {
 					tripData.setTripId(timeData.getTrip().getId());
 					tripData.setAgencyId(timeData.getTrip().getAgency());
 
-					// delay
+					// delays
 					if (routeData.getDelays().containsKey(timeData.getTrip().getId())) {
-						tripData.setDelay(routeData.getDelays().get(timeData.getTrip().getId()));
-					}
-
-					// delay source
-					if (routeData.getDelaysSources().containsKey(timeData.getTrip().getId())) {
-						tripData.setDelaySource(CreatorType.getAlertType(routeData.getDelaysSources().get(
-								timeData.getTrip().getId())));
+						Map<CreatorType, String> delays = new HashMap<CreatorType, String>();
+						Map<String, String> rdDelays = routeData.getDelays().get(timeData.getTrip().getId());
+						for (Entry<String, String> delay : rdDelays.entrySet()) {
+							delays.put(CreatorType.getAlertType(delay.getKey()), delay.getValue());
+						}
+						tripData.setDelays(delays);
 					}
 
 					objects.add(tripData);

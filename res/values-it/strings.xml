@@ -178,7 +178,8 @@
     <string name="smart_check_list_parking">Disponibilità parcheggi</string>
     
     <string name="smart_check_stops_type_mobility">Mobilità</string>
-    <string name="smart_check_stops_delay">Ritardo:</string>
+    <string name="smart_check_stops_delay">ritardo %sm</string>
+    <string name="smart_check_stops_delay_user">ritardo %sm (u)</string>
     
     <string name="smart_check_routes_empty">Nessuna corsa</string>
     <string name="smart_check_parkings_empty">Nessun parcheggio</string>

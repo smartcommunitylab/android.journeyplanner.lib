@@ -15,8 +15,11 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom;
 
+import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
+
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
@@ -34,17 +37,15 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 
 	Context mContext;
 	int layoutResourceId;
-	List<TripData> trips;
 
 	String[] lines;
 	TypedArray icons;
 	TypedArray colors;
 
-	public SmartCheckRoutesListAdapter(Context context, int layoutResourceId, List<TripData> trips) {
-		super(context, layoutResourceId, trips);
+	public SmartCheckRoutesListAdapter(Context context, int layoutResourceId) {
+		super(context, layoutResourceId);
 		this.mContext = context;
 		this.layoutResourceId = layoutResourceId;
-		this.trips = trips;
 
 		lines = mContext.getResources().getStringArray(R.array.smart_checks_bus_number);
 		icons = mContext.getResources().obtainTypedArray(R.array.smart_checks_bus_icons);
@@ -55,7 +56,7 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View row = convertView;
 
-		TripData tripData = trips.get(position);
+		TripData tripData = getItem(position);
 
 		RowHolder holder = null;
 		if (row == null) {
@@ -65,14 +66,15 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 			holder = new RowHolder();
 			holder.route = (TextView) row.findViewById(R.id.smartcheck_trip_route);
 			holder.time = (TextView) row.findViewById(R.id.smartcheck_trip_time);
-			holder.delay = (TextView) row.findViewById(R.id.smartcheck_trip_delay);
+			holder.delaySystem = (TextView) row.findViewById(R.id.smartcheck_trip_delay_system);
+			holder.delayUser = (TextView) row.findViewById(R.id.smartcheck_trip_delay_user);
 			row.setTag(holder);
 		} else {
 			holder = (RowHolder) row.getTag();
 		}
 
 		// separator
-		if (position == 0 || !(trips.get(position - 1).getRouteId()).equalsIgnoreCase(tripData.getRouteId())) {
+		if (position == 0 || !(getItem(position - 1).getRouteId()).equalsIgnoreCase(tripData.getRouteId())) {
 			holder.route.setBackgroundColor(mContext.getResources().getColor(R.color.sc_gray));
 			for (int i = 0; i < lines.length; i++) {
 				if (tripData.getRouteId().startsWith(lines[i])) {
@@ -94,13 +96,41 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 		holder.time.setText(timeFromString);
 
 		// delay
-		if (tripData.getDelay() > 0) {
-			holder.delay.setText(mContext.getString(R.string.smart_check_stops_delay) + " " + tripData.getDelay() + "'");
+		/*
+		 * TEST
+		 */
+		if (tripData.getDelays().size() == 0) {
+			Map<CreatorType, String> testDelays = new HashMap<CreatorType, String>();
+			testDelays.put(CreatorType.USER, "5");
+			testDelays.put(CreatorType.SERVICE, "2");
+			tripData.setDelays(testDelays);
 		}
-		// else {
-		// holder.delay.setText(mContext.getString(R.string.smart_check_stops_delay)
-		// + " " + "5'");
-		// }
+		/*
+		 * 
+		 */
+
+		Map<CreatorType, String> delays = tripData.getDelays();
+
+		if (delays.get(CreatorType.USER) != null) {
+			holder.delayUser.setText(mContext.getString(R.string.smart_check_stops_delay_user, delays.get(CreatorType.USER)));
+			holder.delayUser.setVisibility(View.VISIBLE);
+		} else {
+			holder.delayUser.setVisibility(View.GONE);
+		}
+
+		if (delays.get(CreatorType.SERVICE) != null) {
+			holder.delaySystem.setText(mContext.getString(R.string.smart_check_stops_delay, delays.get(CreatorType.SERVICE)));
+			holder.delaySystem.setVisibility(View.VISIBLE);
+		} else {
+			holder.delaySystem.setVisibility(View.GONE);
+		}
+
+		if (delays.get(CreatorType.DEFAULT) != null) {
+			holder.delaySystem.setText(mContext.getString(R.string.smart_check_stops_delay, delays.get(CreatorType.DEFAULT)));
+			holder.delaySystem.setVisibility(View.VISIBLE);
+		} else {
+			holder.delaySystem.setVisibility(View.GONE);
+		}
 
 		return row;
 	}
@@ -108,7 +138,8 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 	static class RowHolder {
 		TextView route;
 		TextView time;
-		TextView delay;
+		TextView delaySystem;
+		TextView delayUser;
 	}
 
 }

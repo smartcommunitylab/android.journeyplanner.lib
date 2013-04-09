@@ -1,6 +1,5 @@
 package eu.trentorise.smartcampus.jp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.database.DataSetObserver;
@@ -26,7 +25,6 @@ public class SmartCheckStopFragment extends SherlockListFragment {
 	// private SmartLine params = null;
 	private SmartCheckRoutesListAdapter adapter;
 	private SmartCheckStop stop;
-	private List<TripData> trips = new ArrayList<TripData>();
 
 	public SmartCheckStopFragment() {
 	}
@@ -35,7 +33,7 @@ public class SmartCheckStopFragment extends SherlockListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		adapter = new SmartCheckRoutesListAdapter(getSherlockActivity(), R.layout.smartchecktrip, trips);
+		adapter = new SmartCheckRoutesListAdapter(getSherlockActivity(), R.layout.smartchecktrip);
 		adapter.registerDataSetObserver(new DataSetObserver() {
 			@Override
 			public void onChanged() {
@@ -71,7 +69,7 @@ public class SmartCheckStopFragment extends SherlockListFragment {
 	public void onStart() {
 		super.onStart();
 		FeedbackFragmentInflater.inflateHandleButton(getSherlockActivity(), getView());
-//		if (this.stop != null) {
-//		}
+		// if (this.stop != null) {
+		// }
 	}
 }

@@ -15,20 +15,21 @@
   limitations under the License.
 -->
 <resources>
+
     <color name="jpappcolor">#f95f9a</color>
     <color name="sc_gray">#666666</color>
     <color name="sc_dark_gray">#333333</color>
     <color name="sc_light_gray">#ededed</color>
     <color name="red">#ff0000</color>
+    <color name="blue">#0000ff</color>
     <color name="transparent_journeyplanner">#bbf95f9a</color>
     <color name="path">#cc0000ff</color>
     <color name="path_done">#cc00ffff</color>
     <color name="path_actual">#ccff0000</color>
     <color name="transparent_white">#bbffffff</color>
     <color name="tt_gray_1">#888888</color>
-	<color name="tt_gray_2">#666666</color> 
-	<color name="tt_red">#D80000</color> 
-	<color name="tt_day_gray">#dcdcdc</color> 
-	 
-    
+    <color name="tt_gray_2">#666666</color>
+    <color name="tt_red">#D80000</color>
+    <color name="tt_day_gray">#dcdcdc</color>
+
 </resources>
