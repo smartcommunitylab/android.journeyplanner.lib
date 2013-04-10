@@ -87,7 +87,7 @@ public class SmartCheckTTFragment extends FeedbackFragment implements
 		// get the BusTimeTable
 		AsyncTaskNoDialog<Object, Void, TimeTable> task = new AsyncTaskNoDialog<Object, Void, TimeTable>(
 				getSherlockActivity(), new GetBusTimeTableProcessor(
-						getSherlockActivity()), null);
+						getSherlockActivity()));
 		task.execute(from_date_milisecond, to_date_milisecond, params
 				.getRouteID().get(0));
 	}
@@ -141,15 +141,15 @@ public class SmartCheckTTFragment extends FeedbackFragment implements
 			long from_day = (Long) params[0];
 			long to_day = (Long) params[1];
 			String routeId = (String) params[2];
-
+			toggleProgressDialog();
 			return JPHelper.getTransitTimeTableById(from_day, to_day, routeId);
 		}
 
 		@Override
 		public void handleResult(TimeTable result) {
 			actualTimeTable = result;
-			toggleProgressDialog();
 			try {
+				toggleProgressDialog();
 				reloadTimeTable(actualTimeTable);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -187,7 +187,6 @@ public class SmartCheckTTFragment extends FeedbackFragment implements
 
 	private void reloadTimeTable(final TimeTable actualBusTimeTable)
 			throws Exception {
-
 		final int COL_PLACE_WIDTH = 170;
 		actualTimeTable = actualBusTimeTable;
 		long actualDate = from_date_milisecond;
@@ -511,7 +510,8 @@ public class SmartCheckTTFragment extends FeedbackFragment implements
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
-			// the usage of this index is so shitty!
+			// the usage of this index is so shitty! 
+			//TODO find another solution!
 			firstColumn = endColumn + 1;
 			mRenderListener.onDayFinished(mDayIndex == 0);
 		}

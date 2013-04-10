@@ -11,13 +11,14 @@ import android.os.AsyncTask;
 		private enum STATUS {OK, SECURITY, CONNECTION, FAILURE};
 		private Exception error;
 		private STATUS status = STATUS.OK;
-		private ProgressDialog progress;
+		//private ProgressDialog progress;
 		
-		public AsyncTaskNoDialog(Activity activity, SCAsyncTaskProcessorNoDialog<Params,Result> processor, ProgressDialog progress) {
+		public AsyncTaskNoDialog(Activity activity, SCAsyncTaskProcessorNoDialog<Params,Result> processor/*,
+				ProgressDialog progress*/) {
 			super();
 			this.activity = activity;
 			this.processor = processor;
-			this.progress = progress;
+			//this.progress = progress;
 		}
 
 		@Override
