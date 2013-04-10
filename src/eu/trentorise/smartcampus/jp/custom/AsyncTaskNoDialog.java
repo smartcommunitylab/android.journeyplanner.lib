@@ -55,21 +55,21 @@ import android.os.AsyncTask;
 
 		protected void handleFailure() {
 			processor.handleFailure(error);
-			if (progress.isShowing())
-				progress.dismiss();
+//			if (progress.isShowing())
+//				progress.dismiss();
 			
 		}
 
 		protected void handleSecurityError() {
 			processor.handleSecurityError();
-			if (progress.isShowing())
-				progress.dismiss();
+//			if (progress.isShowing())
+//				progress.dismiss();
 		}
 		
 		protected void handleConnectionError() {
 			processor.handleConnectionError();
-			if (progress.isShowing())
-				progress.dismiss();
+//			if (progress.isShowing())
+//				progress.dismiss();
 		}
 
 		protected void handleSuccess(Result result) {

@@ -136,20 +136,20 @@ public class SmartCheckTTFragment extends FeedbackFragment implements
 		}
 
 		@Override
-		public TimeTable performAction(Object... parmas)
+		public TimeTable performAction(Object... params)
 				throws SecurityException, Exception {
-			long from_day = (Long) parmas[0];
-			long to_day = (Long) parmas[1];
-			String routeId = (String) parmas[2];
+			long from_day = (Long) params[0];
+			long to_day = (Long) params[1];
+			String routeId = (String) params[2];
+
 			return JPHelper.getTransitTimeTableById(from_day, to_day, routeId);
 		}
 
 		@Override
 		public void handleResult(TimeTable result) {
-
 			actualTimeTable = result;
+			toggleProgressDialog();
 			try {
-				toggleProgressDialog();
 				reloadTimeTable(actualTimeTable);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -294,6 +294,13 @@ public class SmartCheckTTFragment extends FeedbackFragment implements
 				tv.setTextAppearance(getSherlockActivity(), R.style.place_tt_jp);
 				tv.setBackgroundResource(R.drawable.cell_place);
 				tv.setPadding(10, 0, 0, 0);
+				tv.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						//this is needed to view all content of the cell
+					}
+				});
 
 			} else
 				tr.addView(new TextView(getSherlockActivity()));
@@ -429,7 +436,8 @@ public class SmartCheckTTFragment extends FeedbackFragment implements
 			for (int i = 0; i < actualTimeTable.getDelays().get(displayedDay)
 					.size(); i++) {
 				TextView tv = new TextView(getSherlockActivity());
-				tv.setText(delays[i]);
+				if(delays[i]!=null)
+					tv.setText(delays[i]+'m');
 				tv.setMinWidth(COL_WIDTH);
 				tv.setMinimumHeight(ROW_HEIGHT);
 				tv.setBackgroundColor(Color.LTGRAY);
