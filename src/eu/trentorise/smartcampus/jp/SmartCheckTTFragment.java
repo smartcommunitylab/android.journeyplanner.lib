@@ -1,15 +1,19 @@
 package eu.trentorise.smartcampus.jp;
 
+import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -43,7 +48,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 	private long from_date_milisecond;
 	private long to_date_milisecond;
 	private String[] rows = null;
-	private String[] cols = null;
+	private Map<String, String>[] cols = null;
 	private String[][] data = null;
 	private final int ROW_HEIGHT = 50;
 	private final int COL_WIDTH = 100;
@@ -169,7 +174,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 		int tempNumbCol = 0;
 		int daySkipped = 0;
 		courseForDay.add(0);
-		for (List<Integer> tt : actualBusTimeTable.getDelays()) {
+		for (List<Map<String, String>> tt : actualBusTimeTable.getDelays()) {
 			tempNumbCol = tempNumbCol + tt.size();
 			courseForDay.add(tempNumbCol);
 		}
@@ -183,7 +188,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 																	// i'm lazy
 		final int NUMB_OF_TT = actualBusTimeTable.getTimes().size();
 
-		cols = new String[NUM_COLS];
+		cols = new HashMap[NUM_COLS];
 		rows = new String[NUM_ROWS];
 		data = new String[NUM_ROWS][NUM_COLS];
 		for (int i = 0; i < NUM_ROWS; i++) {
@@ -200,12 +205,18 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 					indexOfDay++;
 				}
 				if (i == 0) {
-					String late = new String(actualBusTimeTable.getDelays().get(indexOfDay).get(indexOfCourseInThatDay)
-							.toString());
-					if (late.compareTo("0") != 0) {
-						cols[j] = late;
-					}
-
+					Map<String, String> delays = actualBusTimeTable.getDelays().get(indexOfDay).get(indexOfCourseInThatDay);
+					/*
+					 * TODO: TEST
+					 */
+					// if (delays.isEmpty()) {
+					// delays.put(CreatorType.SERVICE.toString(), "1");
+					// delays.put(CreatorType.USER.toString(), "2");
+					// }
+					/*
+					 * 
+					 */
+					cols[j] = delays;
 				}
 
 				data[i][j] = actualBusTimeTable.getTimes().get(indexOfDay).get(indexOfCourseInThatDay).get(i);
@@ -239,7 +250,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 
 		TextView delaysLabel = new TextView(getSherlockActivity());
 		delaysLabel.setText(R.string.delaysLabel);
-		delaysLabel.setTextAppearance(getSherlockActivity(), R.style.late_tt_jp);
+		delaysLabel.setTextAppearance(getSherlockActivity(), R.style.late_tt_system_jp);
 		delaysLabel.setBackgroundResource(R.drawable.cell_place);
 		delaysLabel.setGravity(Gravity.CENTER);
 		delaysLabel.setMinHeight(ROW_HEIGHT);
@@ -336,15 +347,35 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 		actualDate = tempDate.getTime();
 
 		for (int i = 0; i < cols.length; i++) {
-			TextView tv = new TextView(getSherlockActivity());
-			tv.setText(cols[i]);
-			tv.setMinWidth(COL_WIDTH);
-			tv.setMinimumHeight(ROW_HEIGHT);
-			tv.setBackgroundColor(Color.LTGRAY);
-			tv.setTextAppearance(getSherlockActivity(), R.style.late_tt_jp);
-			tv.setBackgroundResource(R.drawable.cell_late);
-			tv.setGravity(Gravity.CENTER);
-			trDelays.addView(tv);
+			LinearLayout dll = new LinearLayout(getSherlockActivity());
+			dll.setMinimumWidth(COL_WIDTH);
+			dll.setMinimumHeight(ROW_HEIGHT);
+			dll.setOrientation(LinearLayout.HORIZONTAL);
+			dll.setBackgroundColor(getSherlockActivity().getResources().getColor(R.color.sc_light_gray));
+			dll.setBackgroundResource(R.drawable.cell_late);
+			dll.setGravity(Gravity.CENTER);
+
+			for (Entry<String, String> delay : cols[i].entrySet()) {
+				CreatorType ct = CreatorType.getAlertType(delay.getKey());
+
+				TextView tv = new TextView(getSherlockActivity());
+				tv.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+				tv.setBackgroundColor(getSherlockActivity().getResources().getColor(R.color.sc_light_gray));
+				tv.setBackgroundResource(R.drawable.cell_late);
+				tv.setGravity(Gravity.CENTER);
+
+				if (ct.equals(CreatorType.USER)) {
+					tv.setTextAppearance(getSherlockActivity(), R.style.late_tt_user_jp);
+					tv.setText(getSherlockActivity().getString(R.string.smart_check_tt_delay_user, delay.getValue()));
+				} else {
+					tv.setTextAppearance(getSherlockActivity(), R.style.late_tt_system_jp);
+					tv.setText(getSherlockActivity().getString(R.string.smart_check_tt_delay, delay.getValue()));
+					// trDelays.addView(tv);
+				}
+
+				dll.addView(tv);
+			}
+			trDelays.addView(dll);
 
 			// get new day
 			if (i == courseForDay.get(actualDay)) {
@@ -376,9 +407,9 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 				}
 				trDay.addView(day);
 
-				TableRow.LayoutParams params = (TableRow.LayoutParams) day.getLayoutParams();
-				params.span = toSpan;
-				day.setLayoutParams(params); // causes layout update
+				TableRow.LayoutParams tableParams = (TableRow.LayoutParams) day.getLayoutParams();
+				tableParams.span = toSpan;
+				day.setLayoutParams(tableParams); // causes layout update
 
 			}
 

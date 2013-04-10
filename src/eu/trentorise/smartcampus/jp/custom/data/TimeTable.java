@@ -1,6 +1,7 @@
 package eu.trentorise.smartcampus.jp.custom.data;
 
 import java.util.List;
+import java.util.Map;
 
 public class TimeTable {
 
@@ -23,16 +24,16 @@ public class TimeTable {
 	public void setTimes(List<List<List<String>>> times) {
 		this.times = times;
 	}
-	public List<List<Integer>> getDelays() {
+	public List<List<Map<String, String>>> getDelays() {
 		return delays;
 	}
-	public void setDelays(List<List<Integer>> delays) {
+	public void setDelays(List<List<Map<String, String>>> delays) {
 		this.delays = delays;
 	}
 	private List<String> stops; 
 	private List<String> stopsId; 
 	private List<List<List<String>>> times; 
-	private List<List<Integer>> delays;
+	private List<List<Map<String, String>>> delays;
 	
 //	{
 //		"stops" : [ "piazza", "via"],

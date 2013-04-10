@@ -97,39 +97,58 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 
 		// delay
 		/*
-		 * TEST
+		 * TODO: TEST
 		 */
-		if (tripData.getDelays().size() == 0) {
-			Map<CreatorType, String> testDelays = new HashMap<CreatorType, String>();
-			testDelays.put(CreatorType.USER, "5");
-			testDelays.put(CreatorType.SERVICE, "2");
-			tripData.setDelays(testDelays);
-		}
+		// if (tripData.getDelays() == null) {
+		// Map<CreatorType, String> testDelays = new HashMap<CreatorType,
+		// String>();
+		// if (position == 0) {
+		// testDelays.put(CreatorType.USER, "2");
+		// testDelays.put(CreatorType.SERVICE, "1");
+		// } else if (position == 1) {
+		// testDelays.put(CreatorType.USER, "2");
+		// } else if (position == 2) {
+		// testDelays.put(CreatorType.SERVICE, "1");
+		// }
+		//
+		// tripData.setDelays(testDelays);
+		// }
 		/*
 		 * 
 		 */
 
 		Map<CreatorType, String> delays = tripData.getDelays();
+		if (delays != null) {
+			if (delays.get(CreatorType.USER) != null) {
+				holder.delayUser
+						.setText(mContext.getString(R.string.smart_check_stops_delay_user, delays.get(CreatorType.USER)));
+				holder.delayUser.setVisibility(View.VISIBLE);
+			} else {
+				holder.delayUser.setVisibility(View.GONE);
+			}
 
-		if (delays.get(CreatorType.USER) != null) {
-			holder.delayUser.setText(mContext.getString(R.string.smart_check_stops_delay_user, delays.get(CreatorType.USER)));
-			holder.delayUser.setVisibility(View.VISIBLE);
-		} else {
-			holder.delayUser.setVisibility(View.GONE);
-		}
+			if (delays.get(CreatorType.SERVICE) != null) {
+				holder.delaySystem
+						.setText(mContext.getString(R.string.smart_check_stops_delay, delays.get(CreatorType.SERVICE)));
+				holder.delaySystem.setVisibility(View.VISIBLE);
+			} else if (delays.get(CreatorType.DEFAULT) != null) {
+				holder.delaySystem
+						.setText(mContext.getString(R.string.smart_check_stops_delay, delays.get(CreatorType.DEFAULT)));
+				holder.delaySystem.setVisibility(View.VISIBLE);
+			} else {
+				holder.delaySystem.setVisibility(View.GONE);
+			}
 
-		if (delays.get(CreatorType.SERVICE) != null) {
-			holder.delaySystem.setText(mContext.getString(R.string.smart_check_stops_delay, delays.get(CreatorType.SERVICE)));
-			holder.delaySystem.setVisibility(View.VISIBLE);
-		} else {
-			holder.delaySystem.setVisibility(View.GONE);
-		}
+			if (holder.delaySystem.getVisibility() == View.VISIBLE && holder.delayUser.getVisibility() == View.VISIBLE) {
+				holder.delaySystem.setTextAppearance(mContext, android.R.style.TextAppearance_Small);
+				holder.delayUser.setTextAppearance(mContext, android.R.style.TextAppearance_Small);
+			} else {
+				holder.delaySystem.setTextAppearance(mContext, android.R.style.TextAppearance_Medium);
+				holder.delayUser.setTextAppearance(mContext, android.R.style.TextAppearance_Medium);
+			}
 
-		if (delays.get(CreatorType.DEFAULT) != null) {
-			holder.delaySystem.setText(mContext.getString(R.string.smart_check_stops_delay, delays.get(CreatorType.DEFAULT)));
-			holder.delaySystem.setVisibility(View.VISIBLE);
-		} else {
-			holder.delaySystem.setVisibility(View.GONE);
+			holder.delaySystem.setTextColor(mContext.getResources().getColor(R.color.red));
+			holder.delayUser.setTextColor(mContext.getResources().getColor(R.color.blue));
 		}
 
 		return row;

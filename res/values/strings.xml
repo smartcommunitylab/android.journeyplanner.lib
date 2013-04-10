@@ -181,8 +181,10 @@
     <string name="smart_check_list_parking">Parking Availability</string>
     
     <string name="smart_check_stops_type_mobility">Mobility</string>
-    <string name="smart_check_stops_delay">%sm delay</string>
-    <string name="smart_check_stops_delay_user">%sm delay (u)</string>
+    <string name="smart_check_stops_delay">%s\' delay</string>
+    <string name="smart_check_stops_delay_user">%s\'u delay</string>
+    <string name="smart_check_tt_delay">%s\'</string>
+    <string name="smart_check_tt_delay_user">%s\'u</string>
     
     <string name="smart_check_routes_empty">No routes</string>
     <string name="smart_check_parkings_empty">No parkings</string>
