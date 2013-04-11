@@ -237,4 +237,7 @@
     <string name="minutes">m</string>
     <string name="problem_loading">Problem loading</string>
     
+    <string name="toast_nextday_loaded">New day loaded!</string>
+     <string name="toast_prevday_loaded">Previus day loaded</string>
+    
 </resources>

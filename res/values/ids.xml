@@ -24,5 +24,6 @@
     <item name="ttTimeTable" type="id"/>
     
     <item name="menu_item_notifications" type="id"/>
+    <item name="delays_row" type="id" />
 
 </resources>
