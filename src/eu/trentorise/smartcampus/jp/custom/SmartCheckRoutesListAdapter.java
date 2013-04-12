@@ -17,6 +17,7 @@ package eu.trentorise.smartcampus.jp.custom;
 
 import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,11 +25,17 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.model.TripData;
@@ -56,7 +63,7 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View row = convertView;
 
-		TripData tripData = getItem(position);
+		final TripData tripData = getItem(position);
 
 		RowHolder holder = null;
 		if (row == null) {
@@ -149,6 +156,21 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 
 			holder.delaySystem.setTextColor(mContext.getResources().getColor(R.color.red));
 			holder.delayUser.setTextColor(mContext.getResources().getColor(R.color.blue));
+
+			LinearLayout delaysLinearLayout = (LinearLayout) row.findViewById(R.id.smartcheck_trip_delays);
+			delaysLinearLayout.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Map<CreatorType, String> delays = tripData.getDelays();
+					if (delays != null && !delays.isEmpty()) {
+						DelaysDialogFragment delaysDialog = new DelaysDialogFragment();
+						Bundle args = new Bundle();
+						args.putSerializable(DelaysDialogFragment.ARG_DELAYS, (Serializable) delays);
+						delaysDialog.setArguments(args);
+						delaysDialog.show(((SherlockFragmentActivity) mContext).getSupportFragmentManager(), "delaysdialog");
+					}
+				}
+			});
 		}
 
 		return row;

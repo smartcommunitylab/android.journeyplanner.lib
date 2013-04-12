@@ -241,5 +241,12 @@
     <string name="agency_6_route_TB_R2_R">Bassano D.G. - Trento</string>
 	
     <string name="toast_nextday_loaded">Nuovo giorno caricato!</string>
-     <string name="toast_prevday_loaded">Giorno precedente caricato</string>
+    <string name="toast_prevday_loaded">Giorno precedente caricato</string>
+     
+    <string name="dialog_delays">Ritardi</string>
+    <string name="dialog_delay_system">%s minuti di ritardo segnalati dal sistema</string>
+    <string name="dialog_delay_system_1">%s minuto di ritardo segnalato dal sistema</string>
+    <string name="dialog_delay_user">%s minuti di ritardo segnalati da un utente</string>
+    <string name="dialog_delay_user_1">%s minuto di ritardo segnalato da un utente</string>
+    
 </resources>

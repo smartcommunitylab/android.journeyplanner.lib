@@ -19,12 +19,12 @@
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#FFFFFF"
-        android:textIsSelectable="true" >
+        android:textIsSelectable="false" >
 
-        <requestFocus
-            android:duplicateParentState="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true" />
+<!--         <requestFocus -->
+<!--             android:duplicateParentState="true" -->
+<!--             android:focusable="true" -->
+<!--             android:focusableInTouchMode="true" /> -->
     </TextView>
 
     <LinearLayout
@@ -44,6 +44,7 @@
             android:textIsSelectable="false" />
 
         <LinearLayout
+            android:id="@+id/smartcheck_trip_delays"
             android:layout_width="0dip"
             android:layout_height="?android:attr/listPreferredItemHeight"
             android:layout_weight="1"

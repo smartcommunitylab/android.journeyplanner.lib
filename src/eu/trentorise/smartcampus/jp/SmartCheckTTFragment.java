@@ -2,6 +2,7 @@ package eu.trentorise.smartcampus.jp;
 
 import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.EndlessLinkedScrollView.TimetableNavigation;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessorNoDialog;
 import eu.trentorise.smartcampus.jp.custom.AsyncTaskNoDialog;
+import eu.trentorise.smartcampus.jp.custom.DelaysDialogFragment;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 import eu.trentorise.smartcampus.jp.custom.data.TimeTable;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
@@ -203,10 +205,10 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 					/*
 					 * TODO: TEST
 					 */
-					if (actualDelays.isEmpty()) {
-						actualDelays.put(CreatorType.SERVICE.toString(), "1");
-						actualDelays.put(CreatorType.USER.toString(), "2");
-					}
+					// if (actualDelays.isEmpty()) {
+					// actualDelays.put(CreatorType.SERVICE.toString(), "1");
+					// actualDelays.put(CreatorType.USER.toString(), "2");
+					// }
 					/*
 					 * 
 					 */
@@ -238,7 +240,7 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 
 		TextView delaysLabel = new TextView(getSherlockActivity());
 		delaysLabel.setText(R.string.delaysLabel);
-		delaysLabel.setTextAppearance(getSherlockActivity(), R.style.late_tt_system_jp);
+		delaysLabel.setTextAppearance(getSherlockActivity(), R.style.late_tt_jp);
 		delaysLabel.setBackgroundResource(R.drawable.cell_place);
 		delaysLabel.setGravity(Gravity.CENTER);
 		delaysLabel.setMinHeight(ROW_HEIGHT);
@@ -416,26 +418,45 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 				dll.setBackgroundResource(R.drawable.cell_late);
 				dll.setGravity(Gravity.CENTER);
 
-				for (Entry<String, String> delay : delays[i].entrySet()) {
+				Map<String, String> delaysStringsMap = delays[i];
+				final Map<CreatorType, String> delaysCreatorTypesMap = new HashMap<CreatorType, String>();
+
+				for (Entry<String, String> delay : delaysStringsMap.entrySet()) {
 					CreatorType ct = CreatorType.getAlertType(delay.getKey());
+
+					delaysCreatorTypesMap.put(ct, delay.getValue());
 
 					TextView tv = new TextView(getSherlockActivity());
 					tv.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 					tv.setBackgroundColor(getSherlockActivity().getResources().getColor(R.color.sc_light_gray));
 					tv.setBackgroundResource(R.drawable.cell_late);
 					tv.setGravity(Gravity.CENTER);
+					tv.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Small);
 
 					if (ct.equals(CreatorType.USER)) {
-						tv.setTextAppearance(getSherlockActivity(), R.style.late_tt_user_jp);
+						tv.setTextColor(getSherlockActivity().getResources().getColor(R.color.blue));
 						tv.setText(getSherlockActivity().getString(R.string.smart_check_tt_delay_user, delay.getValue()));
 					} else {
-						tv.setTextAppearance(getSherlockActivity(), R.style.late_tt_system_jp);
+						tv.setTextColor(getSherlockActivity().getResources().getColor(R.color.red));
 						tv.setText(getSherlockActivity().getString(R.string.smart_check_tt_delay, delay.getValue()));
-						// trDelays.addView(tv);
 					}
 
 					dll.addView(tv);
 				}
+
+				if (!delaysCreatorTypesMap.isEmpty()) {
+					dll.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							DelaysDialogFragment delaysDialog = new DelaysDialogFragment();
+							Bundle args = new Bundle();
+							args.putSerializable(DelaysDialogFragment.ARG_DELAYS, (Serializable) delaysCreatorTypesMap);
+							delaysDialog.setArguments(args);
+							delaysDialog.show(getSherlockActivity().getSupportFragmentManager(), "delaysdialog");
+						}
+					});
+				}
+
 				trDelays.addView(dll);
 			}
 		}

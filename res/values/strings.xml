@@ -238,6 +238,12 @@
     <string name="problem_loading">Problem loading</string>
     
     <string name="toast_nextday_loaded">New day loaded!</string>
-     <string name="toast_prevday_loaded">Previus day loaded</string>
+    <string name="toast_prevday_loaded">Previus day loaded</string>
+     
+    <string name="dialog_delays">Delays</string>
+    <string name="dialog_delay_system">%s minutes delay notified by the system</string>
+    <string name="dialog_delay_system_1">%s minute delay notified by the system</string>
+    <string name="dialog_delay_user">%s minutes delay notified by a user</string>
+    <string name="dialog_delay_user_1">%s minute delay notified by a user</string>
     
 </resources>

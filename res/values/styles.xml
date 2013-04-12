@@ -67,21 +67,12 @@
         <item name="android:textStyle">bold</item>
     </style>
     
-    <style name="late_tt_system_jp" parent="@android:style/TextAppearance.Small">
-<!--         <item name="android:layout_width">match_parent</item> -->
+    <style name="late_tt_jp" parent="@android:style/TextAppearance.Small">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-<!--         <item name="android:padding">10dp</item> -->
+        <item name="android:padding">10dp</item>
         <item name="android:textColor">@color/tt_red</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-    
-    <style name="late_tt_user_jp" parent="@android:style/TextAppearance.Small">
-<!--         <item name="android:layout_width">match_parent</item> -->
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-<!--         <item name="android:padding">10dp</item> -->
-        <item name="android:textColor">@color/blue</item>
         <item name="android:textStyle">bold</item>
     </style>
 
