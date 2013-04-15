@@ -222,7 +222,6 @@ public class JPHelper {
 			list.add(route);
 		}
 
-		Collections.sort(list, Utils.getRouteComparator());
 
 		return list;
 	}
@@ -304,11 +303,6 @@ public class JPHelper {
 			list.add(stop);
 		}
 
-		Collections.sort(list, new Comparator<Stop>() {
-			public int compare(Stop o1, Stop o2) {
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
 
 		return list;
 	}
@@ -341,13 +335,6 @@ public class JPHelper {
 		}
 		list = newlist;
 
-		Collections.sort(list, new Comparator<StopTime>() {
-			public int compare(StopTime o1, StopTime o2) {
-				if (o1.getTime() == o2.getTime())
-					return 0;
-				return o1.getTime() < o2.getTime() ? -1 : 1;
-			}
-		});
 
 		return list;
 	}
