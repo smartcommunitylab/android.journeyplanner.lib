@@ -171,6 +171,9 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 					}
 				}
 			});
+		} else {
+			holder.delayUser.setVisibility(View.GONE);
+			holder.delaySystem.setVisibility(View.GONE);
 		}
 
 		return row;

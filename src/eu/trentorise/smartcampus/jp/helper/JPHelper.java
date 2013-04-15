@@ -573,7 +573,7 @@ public class JPHelper {
 
 		filter.setSkip(0);
 		// filter.setLimit(100);
-		filter.setType("Mobility");
+		filter.setTypes(Collections.singletonList("Mobility"));
 
 		Map<String, Object> criteria = new HashMap<String, Object>();
 		criteria.put("source", "smartplanner-transitstops");

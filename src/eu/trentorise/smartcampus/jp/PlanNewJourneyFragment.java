@@ -68,6 +68,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 
 	protected static final String FROM = "from";
 	protected static final String TO = "to";
+	protected static final String FROM_STAR = "from_star";
+	protected static final String TO_STAR = "to_star";
 
 	protected SharedPreferences userPrefs;
 
@@ -75,13 +77,29 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 	protected Position toPosition;
 	protected UserPrefsHolder userPrefsHolder;
 
+	protected boolean fromFav = false;
+	protected boolean toFav = false;
+
+	private ImageButton fromFavBtn;
+	private ImageButton toFavBtn;
+
 	@Override
-	public void onSaveInstanceState(Bundle arg0) {
-		super.onSaveInstanceState(arg0);
-		if (fromPosition != null)
-			arg0.putSerializable(FROM, fromPosition);
-		if (toPosition != null)
-			arg0.putSerializable(TO, toPosition);
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+
+		if (fromPosition != null) {
+			savedInstanceState.putSerializable(FROM, fromPosition);
+		}
+
+		if (toPosition != null) {
+			savedInstanceState.putSerializable(TO, toPosition);
+		}
+
+		fromFav = (Boolean) fromFavBtn.getTag();
+		savedInstanceState.putBoolean(FROM_STAR, (Boolean) fromFav);
+
+		toFav = (Boolean) toFavBtn.getTag();
+		savedInstanceState.putBoolean(TO_STAR, (Boolean) toFav);
 	}
 
 	@Override
@@ -89,31 +107,39 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		super.onCreate(savedInstanceState);
 
 		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(FROM))
-				fromPosition = (Position) savedInstanceState.get(FROM);
-			if (savedInstanceState.containsKey(TO))
-				toPosition = (Position) savedInstanceState.get(TO);
+			if (savedInstanceState.containsKey(FROM)) {
+				fromPosition = (Position) savedInstanceState.getSerializable(FROM);
+			}
+
+			if (savedInstanceState.containsKey(TO)) {
+				toPosition = (Position) savedInstanceState.getSerializable(TO);
+			}
+
+			if (savedInstanceState.containsKey(FROM_STAR)) {
+				fromFav = savedInstanceState.getBoolean(FROM_STAR);
+			}
+
+			if (savedInstanceState.containsKey(TO_STAR)) {
+				toFav = savedInstanceState.getBoolean(TO_STAR);
+			}
 		}
 
 		Address from = null, to = null;
 		if (getArguments() != null) {
-			from = (Address) getArguments().getSerializable(
-					getString(R.string.navigate_arg_from));
-			to = (Address) getArguments().getSerializable(
-					getString(R.string.navigate_arg_to));
+			from = (Address) getArguments().getSerializable(getString(R.string.navigate_arg_from));
+			to = (Address) getArguments().getSerializable(getString(R.string.navigate_arg_to));
 		} else if (getActivity().getIntent() != null) {
-			from = (Address) getActivity().getIntent().getParcelableExtra(
-					getString(R.string.navigate_arg_from));
-			to = (Address) getActivity().getIntent().getParcelableExtra(
-					getString(R.string.navigate_arg_to));
+			from = (Address) getActivity().getIntent().getParcelableExtra(getString(R.string.navigate_arg_from));
+			to = (Address) getActivity().getIntent().getParcelableExtra(getString(R.string.navigate_arg_to));
 		}
+
 		if (from != null) {
 			findAddressForField(FROM, new GeoPoint((int) (from.getLatitude() * 1E6), (int) (from.getLongitude() * 1E6)));
 		}
+
 		if (to != null) {
 			findAddressForField(TO, new GeoPoint((int) (to.getLatitude() * 1E6), (int) (to.getLongitude() * 1E6)));
 		}
-
 	}
 
 	@Override
@@ -124,17 +150,17 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-
-		setUpLocationControls();
-		setUpPreferenceControls();
-		setUpTimingControls();
-		setUpMainOperation();
-
 	}
 
 	@Override
 	public void onResume() {
 		JPHelper.getLocationHelper().start();
+		
+		setUpLocationControls();
+		setUpPreferenceControls();
+		setUpTimingControls();
+		setUpMainOperation();
+		
 		super.onResume();
 	}
 
@@ -268,18 +294,15 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			}
 		});
 
-		ImageButton fromFavBtn = (ImageButton) getView().findViewById(R.id.plannew_from_star);
-		fromFavBtn.setTag(false);
+		fromFavBtn = (ImageButton) getView().findViewById(R.id.plannew_from_star);
+		toggleStar(fromFavBtn, fromFav);
 		fromFavBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (((AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text)).getText().toString().trim()
-						.length() > 0) {
-					Position position = addToFavorites(FROM);
-					if (userPrefsHolder.getFavorites().contains(position)) {
-						((ImageButton) v).setImageResource(R.drawable.ic_star_active);
-						v.setTag(true);
-					}
+				String fromString = ((AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text)).getText().toString().trim();
+				if (fromString.length() > 0 && !isFavorite(fromString)) {
+					addToFavorites(FROM);
+					toggleStar(fromFavBtn, true);
 				} else {
 					Toast.makeText(getActivity(), R.string.from_field_empty, Toast.LENGTH_SHORT).show();
 					return;
@@ -287,17 +310,15 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			}
 		});
 
-		ImageButton toFavBtn = (ImageButton) getView().findViewById(R.id.plannew_to_star);
-		toFavBtn.setTag(false);
+		toFavBtn = (ImageButton) getView().findViewById(R.id.plannew_to_star);
+		toggleStar(toFavBtn, toFav);
 		toFavBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text)).getText().toString().trim().length() > 0) {
-					Position position = addToFavorites(TO);
-					if (userPrefsHolder.getFavorites().contains(position)) {
-						((ImageButton) v).setImageResource(R.drawable.ic_star_active);
-						v.setTag(true);
-					}
+				String toString = ((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text)).getText().toString().trim();
+				if (toString.length() > 0 && !isFavorite(toString)) {
+					addToFavorites(TO);
+					toggleStar(toFavBtn, true);
 				} else {
 					Toast.makeText(getActivity(), R.string.to_field_empty, Toast.LENGTH_SHORT).show();
 					return;
@@ -309,11 +330,9 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		fromEditText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {
-				ImageButton imgBtn = (ImageButton) getView().findViewById(R.id.plannew_from_star);
-				if ((Boolean) imgBtn.getTag() == true) {
-					imgBtn.setImageResource(R.drawable.ic_star);
-					imgBtn.setTag(false);
-				}
+				boolean fav = isFavorite(((AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text)).getText()
+						.toString());
+				toggleStar(fromFavBtn, fav);
 			}
 
 			@Override
@@ -328,11 +347,9 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		toEditText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {
-				ImageButton imgBtn = (ImageButton) getView().findViewById(R.id.plannew_to_star);
-				if ((Boolean) imgBtn.getTag() == true) {
-					imgBtn.setImageResource(R.drawable.ic_star);
-					imgBtn.setTag(false);
-				}
+				boolean fav = isFavorite(((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text)).getText()
+						.toString());
+				toggleStar(toFavBtn, fav);
 			}
 
 			@Override
@@ -578,4 +595,36 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		prefsEditor.putString(Config.USER_PREFS_FAVORITES, json);
 		return prefsEditor.commit();
 	}
+
+	private boolean isFavorite(String text) {
+		text = text.trim();
+		if (text.length() > 0) {
+			for (Position p : userPrefsHolder.getFavorites()) {
+				if (p.getName().equalsIgnoreCase(text)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private void toggleStar(ImageButton btn, Boolean isActive) {
+		if (isActive != null) {
+			btn.setTag(isActive);
+			if (isActive) {
+				btn.setImageResource(R.drawable.ic_star_active);
+			} else {
+				btn.setImageResource(R.drawable.ic_star);
+			}
+		} else {
+			if ((Boolean) btn.getTag()) {
+				btn.setTag(false);
+				btn.setImageResource(R.drawable.ic_star);
+			} else {
+				btn.setTag(true);
+				btn.setImageResource(R.drawable.ic_star_active);
+			}
+		}
+	}
+
 }
