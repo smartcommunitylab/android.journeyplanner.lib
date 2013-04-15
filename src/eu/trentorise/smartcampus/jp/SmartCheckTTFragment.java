@@ -35,10 +35,13 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
-import eu.trentorise.smartcampus.jp.EndlessLinkedScrollView.TimetableNavigation;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessorNoDialog;
 import eu.trentorise.smartcampus.jp.custom.AsyncTaskNoDialog;
 import eu.trentorise.smartcampus.jp.custom.DelaysDialogFragment;
+import eu.trentorise.smartcampus.jp.custom.EndlessLinkedScrollView;
+import eu.trentorise.smartcampus.jp.custom.LinkedScrollView;
+import eu.trentorise.smartcampus.jp.custom.RenderListener;
+import eu.trentorise.smartcampus.jp.custom.EndlessLinkedScrollView.TimetableNavigation;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 import eu.trentorise.smartcampus.jp.custom.data.TimeTable;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
@@ -64,6 +67,7 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 	private EndlessLinkedScrollView mElsvMainContent;
 	private TextView tvday;
 	private int displayedDay;
+	private boolean firstHasNoCourses;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -196,6 +200,10 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 
 			for (int j = 0; j < NUM_COLS; j++) {
 				while (actualBusTimeTable.getDelays().get(indexOfDay).isEmpty()) {
+					if(indexOfDay==0){
+						firstHasNoCourses = true;
+						displayedDay=1;
+					}
 					indexOfDay++;
 				}
 
@@ -218,7 +226,8 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 				times[i][j] = actualBusTimeTable.getTimes().get(indexOfDay).get(indexOfCourseInThatDay).get(i);
 
 				if (indexOfCourseInThatDay == actualBusTimeTable.getDelays().get(indexOfDay).size() - 1) {
-					indexOfDay++;
+					if(indexOfDay<DAYS_WINDOWS)
+						indexOfDay++;
 					indexOfCourseInThatDay = 0;
 				} else {
 					indexOfCourseInThatDay++;
@@ -306,14 +315,11 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 		// Day row
 		tvday = new TextView(getSherlockActivity());
 		tvday.setBackgroundColor(getSherlockActivity().getResources().getColor(android.R.color.white));
-		Date tempDate = new Date(actualDate);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(tempDate);
-		tempDate = cal.getTime();
-		actualDate = tempDate.getTime();
-		tvday.setText(dateFormat.format(actualDate));
 		tvday.setTextAppearance(getSherlockActivity(), R.style.day_tt_jp);
 		tvday.setMinimumHeight(ROW_HEIGHT);
+		
+		refreshDayTextView(displayedDay);
+		
 
 		// Delays row
 		TableRow trDelays = new TableRow(getSherlockActivity());
@@ -327,12 +333,13 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 
 		// now lets add the main content
 		mElsvMainContent = new EndlessLinkedScrollView(getSherlockActivity(), SmartCheckTTFragment.this);
-
+		mElsvMainContent.tollerance+=20;
+		
 		tlMainContent = new TableLayout(getSherlockActivity());
 		tlMainContent.setId(R.id.ttTimeTable);
 		tlMainContent.setVerticalScrollBarEnabled(true);
 
-		new RenderTimeTableAsyncTask(this).execute(0, NUM_ROWS);
+		new RenderTimeTableAsyncTask(this).execute(displayedDay, NUM_ROWS);
 
 		mElsvMainContent.addView(tlMainContent);
 
@@ -376,7 +383,7 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 
 	@Override
 	public void onLeftOverScrolled() {
-		if (displayedDay > 0) {
+		if (displayedDay > 0 && !firstHasNoCourses) {
 			displayedDay--;
 			firstColumn = 0;
 			refreshTimes(displayedDay);

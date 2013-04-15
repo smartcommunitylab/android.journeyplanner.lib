@@ -1,4 +1,4 @@
-package eu.trentorise.smartcampus.jp;
+package eu.trentorise.smartcampus.jp.custom;
 
 import android.content.Context;
 import android.graphics.Rect;
