@@ -1,6 +1,7 @@
 package eu.trentorise.smartcampus.jp;
 
-import java.util.Collections;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
+
 import java.util.List;
 
 import android.database.DataSetObserver;
@@ -20,7 +21,6 @@ import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckParkingsProcessor
 public class SmartCheckParkingsFragment extends SherlockListFragment {
 
 	private SmartCheckParkingsAdapter adapter;
-	private List<Object> parkingsList = Collections.emptyList();
 
 	public SmartCheckParkingsFragment() {
 	}
@@ -29,7 +29,7 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		adapter = new SmartCheckParkingsAdapter(getSherlockActivity(), R.layout.smartcheckparking_row, parkingsList);
+		adapter = new SmartCheckParkingsAdapter(getSherlockActivity(), R.layout.smartcheckparking_row);
 		adapter.registerDataSetObserver(new DataSetObserver() {
 			@Override
 			public void onChanged() {
@@ -46,8 +46,8 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 		setListAdapter(adapter);
 
 		// LOAD
-		new SCAsyncTask<Void, Void, List<Object>>(getSherlockActivity(), new SmartCheckParkingsProcessor(getSherlockActivity(),
-				adapter)).execute();
+		new SCAsyncTask<Void, Void, List<Parking>>(getSherlockActivity(), new SmartCheckParkingsProcessor(
+				getSherlockActivity(), adapter)).execute();
 	}
 
 	@Override

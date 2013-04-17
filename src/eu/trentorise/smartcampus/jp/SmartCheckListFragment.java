@@ -68,8 +68,9 @@ public class SmartCheckListFragment extends FeedbackFragment {
 					fragmentTransaction.replace(Config.mainlayout, fragment);
 					fragmentTransaction.addToBackStack(null);
 					fragmentTransaction.commit();
-				} else if (optionName
-						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[2]) == 0) {
+					// } else if (optionName
+					// .compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[2])
+					// == 0) {
 					// // Parking availability
 					// FragmentTransaction fragmentTransaction =
 					// getSherlockActivity().getSupportFragmentManager()

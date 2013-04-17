@@ -15,8 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom;
 
-import java.util.List;
-
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -26,17 +25,15 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import eu.trentorise.smartcampus.jp.R;
 
-public class SmartCheckParkingsAdapter extends ArrayAdapter<Object> {
+public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 
 	Context mContext;
 	int layoutResourceId;
-	List<Object> routes;
 
-	public SmartCheckParkingsAdapter(Context context, int layoutResourceId, List<Object> routes) {
-		super(context, layoutResourceId, routes);
+	public SmartCheckParkingsAdapter(Context context, int layoutResourceId) {
+		super(context, layoutResourceId);
 		this.mContext = context;
 		this.layoutResourceId = layoutResourceId;
-		this.routes = routes;
 	}
 
 	@Override
@@ -58,8 +55,25 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Object> {
 			holder = (Holder) row.getTag();
 		}
 
-		// RouteDescriptor route = routes.get(position);
-		// holder.parkingName.setText(mContext.getString(route.getNameResource()));
+		Parking parking = getItem(position);
+
+		holder.parkingName.setText(parking.getName());
+		// TODO: distance from my position
+		holder.parkingData.setText(parking.getDescription());
+
+		holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, parking.getSlotsAvailable(),
+				parking.getSlotsTotal()));
+
+		if (parking.getSlotsAvailable() > 20) {
+			holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.parking_green));
+		} else if (parking.getSlotsAvailable() <= 20 && parking.getSlotsAvailable() > 5) {
+			holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.parking_orange));
+		} else if (parking.getSlotsAvailable() <= 5) {
+			holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.red));
+			if (parking.getSlotsAvailable() == 0) {
+				holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_full));
+			}
+		}
 
 		return row;
 	}

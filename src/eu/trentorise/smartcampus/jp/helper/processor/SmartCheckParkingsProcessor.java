@@ -15,6 +15,8 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.helper.processor;
 
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,29 +27,58 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void, List<Object>> {
+public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void, List<Parking>> {
 
-	private ArrayAdapter<Object> adapter;
+	private ArrayAdapter<Parking> adapter;
 
-	public SmartCheckParkingsProcessor(SherlockFragmentActivity activity, ArrayAdapter<Object> adapter) {
+	public SmartCheckParkingsProcessor(SherlockFragmentActivity activity, ArrayAdapter<Parking> adapter) {
 		super(activity);
 		this.adapter = adapter;
 	}
 
 	@Override
-	public List<Object> performAction(Void... params) throws SecurityException, Exception {
-		List<Object> list = new ArrayList<Object>();
+	public List<Parking> performAction(Void... params) throws SecurityException, Exception {
+		List<Parking> list = new ArrayList<Parking>();
 
 		// list = JPHelper.getTrips(stop);
+		// TODO: manually create parkings
+		Parking parking = new Parking();
+
+		parking.setName("P1");
+		parking.setDescription("Via Uno");
+		parking.setSlotsTotal(200);
+		parking.setSlotsAvailable(50);
+		list.add(parking);
+
+		parking = new Parking();
+		parking.setName("P2");
+		parking.setDescription("Via Due");
+		parking.setSlotsTotal(100);
+		parking.setSlotsAvailable(10);
+		list.add(parking);
+
+		parking = new Parking();
+		parking.setName("P3");
+		parking.setDescription("Via Tre");
+		parking.setSlotsTotal(70);
+		parking.setSlotsAvailable(4);
+		list.add(parking);
+
+		parking = new Parking();
+		parking.setName("P4");
+		parking.setDescription("Via Quattro");
+		parking.setSlotsTotal(50);
+		parking.setSlotsAvailable(0);
+		list.add(parking);
 
 		return list;
 	}
 
 	@Override
-	public void handleResult(List<Object> result) {
+	public void handleResult(List<Parking> result) {
 		adapter.clear();
-		for (Object tripData : result) {
-			adapter.add(tripData);
+		for (Parking parking : result) {
+			adapter.add(parking);
 		}
 		adapter.notifyDataSetChanged();
 	}

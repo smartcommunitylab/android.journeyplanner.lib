@@ -200,9 +200,9 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 
 			for (int j = 0; j < NUM_COLS; j++) {
 				while (actualBusTimeTable.getDelays().get(indexOfDay).isEmpty()) {
-					if(indexOfDay==0){
+					if (indexOfDay == 0) {
 						firstHasNoCourses = true;
-						displayedDay=1;
+						displayedDay = 1;
 					}
 					indexOfDay++;
 				}
@@ -226,7 +226,7 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 				times[i][j] = actualBusTimeTable.getTimes().get(indexOfDay).get(indexOfCourseInThatDay).get(i);
 
 				if (indexOfCourseInThatDay == actualBusTimeTable.getDelays().get(indexOfDay).size() - 1) {
-					if(indexOfDay<DAYS_WINDOWS)
+					if (indexOfDay < DAYS_WINDOWS)
 						indexOfDay++;
 					indexOfCourseInThatDay = 0;
 				} else {
@@ -317,9 +317,8 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 		tvday.setBackgroundColor(getSherlockActivity().getResources().getColor(android.R.color.white));
 		tvday.setTextAppearance(getSherlockActivity(), R.style.day_tt_jp);
 		tvday.setMinimumHeight(ROW_HEIGHT);
-		
+
 		refreshDayTextView(displayedDay);
-		
 
 		// Delays row
 		TableRow trDelays = new TableRow(getSherlockActivity());
@@ -333,8 +332,8 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 
 		// now lets add the main content
 		mElsvMainContent = new EndlessLinkedScrollView(getSherlockActivity(), SmartCheckTTFragment.this);
-		mElsvMainContent.tollerance+=20;
-		
+		mElsvMainContent.tollerance += 20;
+
 		tlMainContent = new TableLayout(getSherlockActivity());
 		tlMainContent.setId(R.id.ttTimeTable);
 		tlMainContent.setVerticalScrollBarEnabled(true);
@@ -429,26 +428,29 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 				final Map<CreatorType, String> delaysCreatorTypesMap = new HashMap<CreatorType, String>();
 
 				for (Entry<String, String> delay : delaysStringsMap.entrySet()) {
-					CreatorType ct = CreatorType.getAlertType(delay.getKey());
+					if (!delay.getValue().equalsIgnoreCase("0")) {
+						CreatorType ct = CreatorType.getAlertType(delay.getKey());
 
-					delaysCreatorTypesMap.put(ct, delay.getValue());
+						delaysCreatorTypesMap.put(ct, delay.getValue());
 
-					TextView tv = new TextView(getSherlockActivity());
-					tv.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
-					tv.setBackgroundColor(getSherlockActivity().getResources().getColor(R.color.sc_light_gray));
-					tv.setBackgroundResource(R.drawable.cell_late);
-					tv.setGravity(Gravity.CENTER);
-					tv.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Small);
+						TextView tv = new TextView(getSherlockActivity());
+						tv.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+								1f));
+						tv.setBackgroundColor(getSherlockActivity().getResources().getColor(R.color.sc_light_gray));
+						tv.setBackgroundResource(R.drawable.cell_late);
+						tv.setGravity(Gravity.CENTER);
+						tv.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Small);
 
-					if (ct.equals(CreatorType.USER)) {
-						tv.setTextColor(getSherlockActivity().getResources().getColor(R.color.blue));
-						tv.setText(getSherlockActivity().getString(R.string.smart_check_tt_delay_user, delay.getValue()));
-					} else {
-						tv.setTextColor(getSherlockActivity().getResources().getColor(R.color.red));
-						tv.setText(getSherlockActivity().getString(R.string.smart_check_tt_delay, delay.getValue()));
+						if (ct.equals(CreatorType.USER)) {
+							tv.setTextColor(getSherlockActivity().getResources().getColor(R.color.blue));
+							tv.setText(getSherlockActivity().getString(R.string.smart_check_tt_delay_user, delay.getValue()));
+						} else {
+							tv.setTextColor(getSherlockActivity().getResources().getColor(R.color.red));
+							tv.setText(getSherlockActivity().getString(R.string.smart_check_tt_delay, delay.getValue()));
+						}
+
+						dll.addView(tv);
 					}
-
-					dll.addView(tv);
 				}
 
 				if (!delaysCreatorTypesMap.isEmpty()) {

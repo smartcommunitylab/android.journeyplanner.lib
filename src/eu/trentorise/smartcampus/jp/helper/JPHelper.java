@@ -28,7 +28,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -222,7 +221,6 @@ public class JPHelper {
 			list.add(route);
 		}
 
-
 		return list;
 	}
 
@@ -303,7 +301,6 @@ public class JPHelper {
 			list.add(stop);
 		}
 
-
 		return list;
 	}
 
@@ -334,7 +331,6 @@ public class JPHelper {
 			}
 		}
 		list = newlist;
-
 
 		return list;
 	}
@@ -552,10 +548,12 @@ public class JPHelper {
 	// "Neufahrn\",\"RONCAFORT\",\"RONCAFORT nord\"],\"delays\":[[0,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7],[0,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7]]}";
 	public static TimeTable getTransitTimeTableById(long from_day, long to_day, String routeId) throws ConnectionException,
 			ProtocolException, SecurityException, JSONException, JsonParseException, JsonMappingException, IOException {
-
-		MessageRequest req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), Config.TARGET_ADDRESS
-				+ Config.CALL_GET_TRANSIT_TIME_BY_ROUTE + "/" + routeId + "/" + from_day + "/" + to_day);
+		String url = Config.TARGET_ADDRESS + Config.CALL_GET_TRANSIT_TIME_BY_ROUTE + "/" + routeId + "/" + from_day + "/"
+				+ to_day;
+		
+		MessageRequest req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), url);
 		req.setMethod(Method.GET);
+		req.setQuery("complex=true");
 
 		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
 
@@ -572,7 +570,7 @@ public class JPHelper {
 		filter.setClassName("eu.trentorise.smartcampus.dt.model.POIObject");
 
 		filter.setSkip(0);
-		// filter.setLimit(100);
+		filter.setLimit(-1);
 		filter.setTypes(Collections.singletonList("Mobility"));
 
 		Map<String, Object> criteria = new HashMap<String, Object>();
@@ -633,6 +631,7 @@ public class JPHelper {
 
 		MessageRequest request = new MessageRequest(GlobalConfig.getAppUrl(getInstance().mContext), url);
 		request.setMethod(Method.GET);
+		request.setQuery("complex=true");
 
 		MessageResponse response = getInstance().protocolCarrier.invokeSync(request, Config.APP_TOKEN, getAuthToken());
 		String body = response.getBody();

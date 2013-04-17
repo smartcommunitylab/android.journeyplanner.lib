@@ -31,5 +31,7 @@
     <color name="tt_gray_2">#666666</color>
     <color name="tt_red">#D80000</color>
     <color name="tt_day_gray">#dcdcdc</color>
+    <color name="parking_green">#00cc00</color>
+    <color name="parking_orange">#ff8000</color>
 
 </resources>

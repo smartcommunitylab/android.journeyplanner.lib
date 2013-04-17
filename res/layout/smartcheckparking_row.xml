@@ -46,11 +46,12 @@
     <TextView
         android:id="@+id/smart_check_parking_status"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingRight="6dip"
+        android:paddingRight="25dip"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/parking_green"
         android:textIsSelectable="false" />
 
 </LinearLayout>
