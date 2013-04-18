@@ -19,6 +19,7 @@ import it.sayservice.platform.smartplanner.data.message.Itinerary;
 import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Stop;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
@@ -550,7 +551,7 @@ public class JPHelper {
 			ProtocolException, SecurityException, JSONException, JsonParseException, JsonMappingException, IOException {
 		String url = Config.TARGET_ADDRESS + Config.CALL_GET_TRANSIT_TIME_BY_ROUTE + "/" + routeId + "/" + from_day + "/"
 				+ to_day;
-		
+
 		MessageRequest req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), url);
 		req.setMethod(Method.GET);
 		req.setQuery("complex=true");
@@ -621,7 +622,7 @@ public class JPHelper {
 	public static List<TripData> getTrips(SmartCheckStop stop) throws Exception {
 
 		getInstance();
-		String url = JPHelper.mContext.getString(R.string.api_jp_getlimitedtimetable);
+		String url = Config.TARGET_ADDRESS + Config.CALL_GET_LIMITED_TIMETABLE;
 		url += "/";
 		url += stop.getCustomData().get("agencyId"); // agencyId
 		url += "/";
@@ -675,6 +676,27 @@ public class JPHelper {
 				}
 			}
 		}
+
+		return objects;
+	}
+
+	public static List<Parking> getParkings() throws Exception {
+
+		getInstance();
+		String url = Config.TARGET_ADDRESS + Config.CALL_GET_PARKINGS;
+
+		MessageRequest request = new MessageRequest(GlobalConfig.getAppUrl(getInstance().mContext), url);
+		request.setMethod(Method.GET);
+
+		MessageResponse response = getInstance().protocolCarrier.invokeSync(request, Config.APP_TOKEN, getAuthToken());
+		String body = response.getBody();
+		if (body == null || body.trim().length() == 0) {
+			return Collections.emptyList();
+		}
+
+		List<Parking> objects = eu.trentorise.smartcampus.android.common.Utils.convertJSON(body,
+				new TypeReference<List<Parking>>() {
+				});
 
 		return objects;
 	}
