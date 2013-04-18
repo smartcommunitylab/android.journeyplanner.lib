@@ -16,7 +16,6 @@
 package eu.trentorise.smartcampus.jp.custom;
 
 import it.sayservice.platform.smartplanner.data.message.SimpleLeg;
-import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney;
 
 import java.util.List;
 import java.util.Map;
@@ -29,24 +28,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-
 import eu.trentorise.smartcampus.jp.R;
-import eu.trentorise.smartcampus.jp.custom.data.BasicItinerary;
-import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourney;
-import eu.trentorise.smartcampus.jp.custom.data.BasicRoute;
 import eu.trentorise.smartcampus.jp.custom.data.RecurrentItinerary;
-import eu.trentorise.smartcampus.jp.custom.data.RecurrentTemp;
-import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.jp.helper.Utils;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
+import eu.trentorise.smartcampus.jp.model.RouteDescriptor;
 
 public class MyRouteItinerariesListAdapter extends ArrayAdapter<RecurrentItinerary> {
 
@@ -87,7 +76,15 @@ public class MyRouteItinerariesListAdapter extends ArrayAdapter<RecurrentItinera
 			row.setTag(holder);
 			holder.monitor.setChecked(myItineraries.get(position).isMonitor());
 			RecurrentItinerary myItinerary = myItineraries.get(position);
-			holder.name.setText(myItinerary.getName());
+			
+			RouteDescriptor rd = RoutesHelper.getRouteDescriptorByRouteId(myItinerary.getName()); 
+			if (rd != null) {
+				String name = rd.getShortNameResource() + ": " + context.getString(rd.getNameResource());
+				holder.name.setText(name);
+			} else {
+				holder.name.setText(myItinerary.getName());
+			}
+			
 			holder.locationFrom.setText(myItinerary.getFrom());
 			holder.locationTo.setText(myItinerary.getTo());
 

@@ -64,6 +64,7 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 		holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, parking.getSlotsAvailable(),
 				parking.getSlotsTotal()));
 
+		holder.parkingStatus.setVisibility(View.VISIBLE);
 		if (parking.getSlotsAvailable() > 20) {
 			holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.parking_green));
 		} else if (parking.getSlotsAvailable() <= 20 && parking.getSlotsAvailable() > 5) {
@@ -72,6 +73,12 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 			holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.red));
 			if (parking.getSlotsAvailable() == 0) {
 				holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_full));
+			} else if (parking.getSlotsAvailable() == -1) {
+				// data unavailable
+				holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_full));
+			} else if (parking.getSlotsAvailable() == -2) {
+				// data not monitored
+				holder.parkingStatus.setVisibility(View.GONE);
 			}
 		}
 

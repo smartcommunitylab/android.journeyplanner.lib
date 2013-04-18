@@ -221,7 +221,8 @@
                         android:id="@+id/always_checkbox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/always" />
+                        android:text="@string/always" 
+                        />
                 </LinearLayout>
 
                 <TextView
@@ -232,53 +233,85 @@
                     android:paddingTop="10dp"
                     android:text="@string/plan_schedule" />
 
-                <LinearLayout
+               <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
-
-                    <CheckBox
-                        android:id="@+id/monday_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/monday" />
-
-                    <CheckBox
-                        android:id="@+id/tuersday_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tuesday" />
-
-                    <CheckBox
-                        android:id="@+id/wednesday_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/wednesday" />
-
-                    <CheckBox
-                        android:id="@+id/thursday_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/thursday" />
-
-                    <CheckBox
-                        android:id="@+id/friday_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/friday" />
-
-                    <CheckBox
-                        android:id="@+id/saturday_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/saturday" />
-
-                    <CheckBox
-                        android:id="@+id/sunday_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sunday" />
+					<LinearLayout
+	                    android:layout_width="match_parent"
+	                    android:layout_height="wrap_content"
+	                    android:orientation="horizontal" >
+	                    
+	                    <ToggleButton
+	                        android:id="@+id/monday_toggle"
+	                        android:layout_width="48dp"
+	                        android:layout_height="wrap_content"
+	                        android:background="@drawable/btn_toggle_bg"
+	                        android:textOff="@string/monday_short"
+	                        android:textOn="@string/monday_short" 
+	                        android:layout_margin="3dp"/>
+	
+	                    <ToggleButton
+	                        android:id="@+id/tuesday_toggle"
+	                        android:layout_width="48dp"
+	                        android:layout_height="wrap_content"
+	                        android:textOn="@string/tuesday_short" 
+	                        android:textOff="@string/tuesday_short"
+	                        android:background="@drawable/btn_toggle_bg"
+	                        android:layout_margin="3dp" />
+	
+	                    <ToggleButton
+	                        android:id="@+id/wednesday_toggle"
+	                        android:layout_width="48dp"
+	                        android:layout_height="wrap_content"
+	                        android:textOn="@string/wednesday_short" 
+	                        android:textOff="@string/wednesday_short"
+	                        android:background="@drawable/btn_toggle_bg" 
+	                        android:layout_margin="3dp"/>
+	
+	                    <ToggleButton
+	                        android:id="@+id/thursday_toggle"
+	                        android:layout_width="48dp"
+	                        android:layout_height="wrap_content"
+	                        android:textOn="@string/thursday_short"
+	                        android:textOff="@string/thursday_short" 
+	                        android:background="@drawable/btn_toggle_bg"
+	                        android:layout_margin="3dp"/>
+                    </LinearLayout>
+                    <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+                    
+	                    <ToggleButton
+	                        android:id="@+id/friday_toggle"
+	                        android:layout_width="48dp"
+	                        android:layout_height="wrap_content"
+	                        android:textOn="@string/friday_short" 
+	                        android:textOff="@string/friday_short" 
+	                        android:background="@drawable/btn_toggle_bg"
+	                        android:layout_margin="3dp"/>
+	                    
+	                    <ToggleButton
+	                        android:id="@+id/saturday_toggle"
+	                        android:layout_width="48dp"
+	                        android:layout_height="wrap_content"
+	                        android:textOn="@string/saturday_short" 
+	                        android:textOff="@string/saturday_short"
+	                        android:background="@drawable/btn_toggle_bg"
+	                        android:layout_margin="3dp"/>
+	
+	                    <ToggleButton
+	                        android:id="@+id/sunday_toggle"
+	                        android:layout_width="48dp"
+	                        android:layout_height="wrap_content"
+	                        android:textOn="@string/sunday_short" 
+	                        android:textOff="@string/sunday_short" 
+	                        android:background="@drawable/btn_toggle_bg"
+	                        android:layout_margin="3dp"/>
+               		 </LinearLayout>
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/plannew_options"

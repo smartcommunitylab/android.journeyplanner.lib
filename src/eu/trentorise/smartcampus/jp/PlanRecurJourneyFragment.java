@@ -21,6 +21,7 @@ import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourneyParameters;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -70,10 +71,11 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 
 	private static final String[] RECURRENCE = new String[] { "Daily", "Weekdays", "Weekends" };
 
-	private static final Map<Integer,CheckBox> days = new HashMap<Integer,CheckBox>();
+	private static final Map<Integer, ToggleButton> days = new HashMap<Integer, ToggleButton>();
 	public static final String PARAMS = "parameters";
-
-	private static final int intervalhour = 2;
+	
+	private static final int INTERVALHOUR = 2;
+	private static final int INTERVALDAY = 1;
 	private BasicRecurrentJourney params = null;
 	private EditText fromTime = null;
 	private EditText fromDate = null;
@@ -82,6 +84,7 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 	private ToggleButton monitorToggleBtn = null;
 	private CheckBox alwaysCheckbox =null;
 	private LinearLayout monitorLayout = null;
+	
 	@Override
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
@@ -392,30 +395,21 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 				rj.setRouteType(userPrefsHolder.getRouteType());
 
 				/*set recurrence on the ui*/
-				
-
 				rj.setRecurrence(new ArrayList<Integer>());
-				 CheckBox mondayCheckBox = (CheckBox) getView().findViewById(R.id.monday_checkbox);
-				 if (mondayCheckBox.isChecked())
-				 	rj.getRecurrence().add(2);
-				 CheckBox tuersdayCheckBox = (CheckBox) getView().findViewById(R.id.tuersday_checkbox);
-				 if (tuersdayCheckBox.isChecked())
-					 	rj.getRecurrence().add(3);
-				 CheckBox wednesdayCheckBox = (CheckBox) getView().findViewById(R.id.wednesday_checkbox);
-				 if (wednesdayCheckBox.isChecked())
-					 	rj.getRecurrence().add(4);
-				 CheckBox thursdayCheckBox = (CheckBox) getView().findViewById(R.id.thursday_checkbox);
-				 if (thursdayCheckBox.isChecked())
-					 	rj.getRecurrence().add(5);
-				 CheckBox fridayCheckBox = (CheckBox) getView().findViewById(R.id.friday_checkbox);
-				 if (fridayCheckBox.isChecked())
-					 	rj.getRecurrence().add(6);
-				 CheckBox saturdayCheckBox = (CheckBox) getView().findViewById(R.id.saturday_checkbox);
-				 if (saturdayCheckBox.isChecked())
-					 	rj.getRecurrence().add(7);
-				 CheckBox sundayCheckBox = (CheckBox) getView().findViewById(R.id.sunday_checkbox);
-				 if (sundayCheckBox.isChecked())
-					 	rj.getRecurrence().add(1);
+				ToggleButton tmpToggle = (ToggleButton)getView().findViewById(R.id.monday_toggle);
+				if(tmpToggle.isChecked()) rj.getRecurrence().add(2);
+				tmpToggle=(ToggleButton)getView().findViewById(R.id.tuesday_toggle);
+				if(tmpToggle.isChecked()) rj.getRecurrence().add(3);
+				tmpToggle=(ToggleButton)getView().findViewById(R.id.wednesday_toggle);
+				if(tmpToggle.isChecked()) rj.getRecurrence().add(4);
+				tmpToggle=(ToggleButton)getView().findViewById(R.id.thursday_toggle);
+				if(tmpToggle.isChecked()) rj.getRecurrence().add(5);
+				tmpToggle=(ToggleButton)getView().findViewById(R.id.friday_toggle);
+				if(tmpToggle.isChecked()) rj.getRecurrence().add(6);
+				tmpToggle=(ToggleButton)getView().findViewById(R.id.saturday_toggle);
+				if(tmpToggle.isChecked()) rj.getRecurrence().add(7);
+				tmpToggle=(ToggleButton)getView().findViewById(R.id.sunday_toggle);
+				if(tmpToggle.isChecked()) rj.getRecurrence().add(1);
 
 				if (rj.getRecurrence().isEmpty()) {
 						Toast.makeText(getActivity(), R.string.no_days_selected, Toast.LENGTH_SHORT).show();
@@ -533,7 +527,7 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 			//toTime is set to now + intervalhour			
 			Calendar cal = Calendar.getInstance();  
 			cal.setTime(newDate);  
-			cal.add(Calendar.HOUR_OF_DAY, intervalhour);
+			cal.add(Calendar.HOUR_OF_DAY, INTERVALHOUR);
 			Date interval = cal.getTime(); 
 			toTime.setTag(interval);
 			toTime.setText(Config.FORMAT_TIME_UI.format(interval));
@@ -545,6 +539,10 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 			d=today;
 		fromDate.setText(Config.FORMAT_DATE_UI.format(d));
 
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(today);
+		cal.add(Calendar.DATE, INTERVALDAY);
+		newDate = cal.getTime();
 		d = params.getData().getParameters().getToDate() > 0 ? new Date(params.getData().getParameters().getToDate()) : newDate;
 		if (params.getData().getParameters().getToDate()!=Config.ALWAYS_DATE)
 			toDate.setText(Config.FORMAT_DATE_UI.format(d));
@@ -554,7 +552,6 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 				alwaysCheckbox.setChecked(true);
 				d=newDate;
 				toDate.setEnabled(false);
-
 			}
 		
 		fromTime.setOnClickListener(new View.OnClickListener() {
@@ -591,25 +588,32 @@ public class PlanRecurJourneyFragment extends PlanNewJourneyFragment {
 				newFragment.show(getSherlockActivity().getSupportFragmentManager(), "datePicker");
 			}
 		});
-		/*set the checkbox*/		
+		
+		/*set the toggle buttons*/		
 		 days.clear();
 
-		 CheckBox mondayCheckBox = (CheckBox) getView().findViewById(R.id.monday_checkbox);
-		 days.put(2, mondayCheckBox);
-		 CheckBox tuersdayCheckBox = (CheckBox) getView().findViewById(R.id.tuersday_checkbox);
-		 days.put(3, tuersdayCheckBox);
-		 CheckBox wednesdayCheckBox = (CheckBox) getView().findViewById(R.id.wednesday_checkbox);
-		 days.put(4, wednesdayCheckBox);
-		 CheckBox thursdayCheckBox = (CheckBox) getView().findViewById(R.id.thursday_checkbox);
-		 days.put(5, thursdayCheckBox);
-		 CheckBox fridayCheckBox = (CheckBox) getView().findViewById(R.id.friday_checkbox);
-		 days.put(6, fridayCheckBox);
-		 CheckBox saturdayCheckBox = (CheckBox) getView().findViewById(R.id.saturday_checkbox);
-		 days.put(7, saturdayCheckBox);
-		 CheckBox sundayCheckBox = (CheckBox) getView().findViewById(R.id.sunday_checkbox);
-		 days.put(1, sundayCheckBox);
-		 setCheckBoxDays(params.getData().getParameters().getRecurrence());
+		 ToggleButton tmpToggle = (ToggleButton)getView().findViewById(R.id.monday_toggle);
+		 days.put(2, tmpToggle);
+		 tmpToggle=(ToggleButton)getView().findViewById(R.id.tuesday_toggle);
+		 days.put(3,tmpToggle);
+		 tmpToggle=(ToggleButton)getView().findViewById(R.id.wednesday_toggle);
+		 days.put(4,tmpToggle);
+		 tmpToggle=(ToggleButton)getView().findViewById(R.id.thursday_toggle);
+		 days.put(5,tmpToggle);
+		 tmpToggle=(ToggleButton)getView().findViewById(R.id.friday_toggle);
+		 days.put(6,tmpToggle);
+		 tmpToggle=(ToggleButton)getView().findViewById(R.id.saturday_toggle);
+		 days.put(7,tmpToggle);
+		 tmpToggle=(ToggleButton)getView().findViewById(R.id.sunday_toggle);
+		 days.put(1,tmpToggle);
+		 setToggleDays(params.getData().getParameters().getRecurrence());
 
+	}
+	
+	private void setToggleDays(List<Integer> list) {
+		if (list!=null)
+			for(Integer day:list)
+				days.get(day).setChecked(true);
 	}
 	
 	private void setCheckBoxDays(List<Integer> list) {

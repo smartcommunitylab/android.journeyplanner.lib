@@ -126,7 +126,7 @@
     <string name="always">Always</string>
     <string name="separator">-</string>
     <string name="saved_journey">Journey saved</string>
-    <string name="deleted_journey">Journey Deleted</string>
+    <string name="deleted_journey">Journey deleted</string>
     <string name="deleted">deleted </string>
     <string name="label_from">From:</string>
     <string name="label_to">To:</string>
@@ -241,12 +241,21 @@
     <string name="problem_loading">Problem loading</string>
     
     <string name="toast_nextday_loaded">New day loaded!</string>
-    <string name="toast_prevday_loaded">Previus day loaded</string>
+    <string name="toast_prevday_loaded">Previous day loaded</string>
      
     <string name="dialog_delays">Delays</string>
     <string name="dialog_delay_system">%s minutes delay notified by the system</string>
     <string name="dialog_delay_system_1">%s minute delay notified by the system</string>
     <string name="dialog_delay_user">%s minutes delay notified by a user</string>
     <string name="dialog_delay_user_1">%s minute delay notified by a user</string>
+    
+    <!-- short days of the week -->
+    <string name="monday_short">M</string>
+    <string name="tuesday_short">T</string>
+    <string name="wednesday_short">W</string>
+    <string name="thursday_short">T</string>
+    <string name="friday_short">F</string>
+    <string name="saturday_short">S</string>
+    <string name="sunday_short">S</string>
     
 </resources>

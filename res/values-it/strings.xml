@@ -235,13 +235,6 @@
     <string name="minutes">m</string>
 	<string name="problem_loading">Problema di caricamento</string>
 	
-	<string name="agency_10_route_555">Trento - Malé</string>
-    <string name="agency_10_route_556">Malé - Trento</string>
-    <string name="agency_5_route_BV_R1_G">Bolzano - Verona</string>
-    <string name="agency_5_route_BV_R1_R">Verona - Bolzano</string>
-    <string name="agency_6_route_TB_R2_G">Trento - Bassano D.G. </string>
-    <string name="agency_6_route_TB_R2_R">Bassano D.G. - Trento</string>
-	
     <string name="toast_nextday_loaded">Nuovo giorno caricato!</string>
     <string name="toast_prevday_loaded">Giorno precedente caricato</string>
      
@@ -250,5 +243,14 @@
     <string name="dialog_delay_system_1">%s minuto di ritardo segnalato dal sistema</string>
     <string name="dialog_delay_user">%s minuti di ritardo segnalati da un utente</string>
     <string name="dialog_delay_user_1">%s minuto di ritardo segnalato da un utente</string>
+
+    <!-- short days of the week -->
+    <string name="monday_short">L</string>
+    <string name="tuesday_short">M</string>
+    <string name="wednesday_short">M</string>
+    <string name="thursday_short">G</string>
+    <string name="friday_short">V</string>
+    <string name="saturday_short">S</string>
+    <string name="sunday_short">D</string>
     
 </resources>
