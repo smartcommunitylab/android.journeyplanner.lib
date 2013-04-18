@@ -230,6 +230,7 @@
     <string name="notifications_itinerary_delay_title">Delay for \"%s\" journey</string>
     <string name="notifications_itinerary_delay_min">%s minute</string>
     <string name="notifications_itinerary_delay_mins">%s minutes</string>
+    <string name="notifications_itinerary_on_time">On Time</string>
     <string name="notifications_itinerary_delay_bus">Line %1$s for %2$s</string>
     <string name="notifications_itinerary_delay_train">Train %1$s for %2$s</string>
     <string name="notifications_itinerary_delay_original_schedule">scheduled at %1$s at %2$s</string>
