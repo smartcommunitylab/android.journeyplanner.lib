@@ -1,25 +1,18 @@
 package eu.trentorise.smartcampus.jp;
 
-import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
-
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
-import eu.trentorise.smartcampus.jp.custom.DelaysDialogFragment;
 import eu.trentorise.smartcampus.jp.custom.SmartCheckRoutesListAdapter;
 import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckTripsProcessor;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;

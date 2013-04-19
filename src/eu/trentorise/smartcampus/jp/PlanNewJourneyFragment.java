@@ -154,13 +154,14 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 
 	@Override
 	public void onResume() {
-		JPHelper.getLocationHelper().start();
-		
+		// // turn on location helper
+		// JPHelper.getLocationHelper().start();
+
 		setUpLocationControls();
 		setUpPreferenceControls();
 		setUpTimingControls();
 		setUpMainOperation();
-		
+
 		super.onResume();
 	}
 
@@ -299,7 +300,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		fromFavBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String fromString = ((AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text)).getText().toString().trim();
+				String fromString = ((AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text)).getText()
+						.toString().trim();
 				if (fromString.length() > 0 && !isFavorite(fromString)) {
 					addToFavorites(FROM);
 					toggleStar(fromFavBtn, true);
@@ -315,7 +317,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		toFavBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String toString = ((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text)).getText().toString().trim();
+				String toString = ((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text)).getText().toString()
+						.trim();
 				if (toString.length() > 0 && !isFavorite(toString)) {
 					addToFavorites(TO);
 					toggleStar(toFavBtn, true);
@@ -365,8 +368,10 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 	@Override
 	public void onPause() {
 		super.onPause();
-		// turn off LocationHelper
-		JPHelper.getLocationHelper().stop();
+
+		// // turn off LocationHelper
+		// JPHelper.getLocationHelper().stop();
+
 		// hide keyboard if it is still open
 		InputMethodManager imm = (InputMethodManager) getSherlockActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		EditText timeEditText = (EditText) getView().findViewById(R.id.plannew_time);

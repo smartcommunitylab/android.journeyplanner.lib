@@ -21,6 +21,7 @@
     <item name="menu_item_delete" type="id"/>
     <item name="menu_item_monitor" type="id"/>
     <item name="menu_item_edit" type="id"/>
+    <item name="menu_item_map" type="id"/>
     <item name="ttTimeTable" type="id"/>
     
     <item name="menu_item_notifications" type="id"/>

@@ -18,22 +18,38 @@ package eu.trentorise.smartcampus.jp.custom;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.google.android.maps.GeoPoint;
+
 import eu.trentorise.smartcampus.jp.R;
 
 public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 
-	Context mContext;
-	int layoutResourceId;
+	private Context mContext;
+	private int layoutResourceId;
+	private Location myLocation;
 
 	public SmartCheckParkingsAdapter(Context context, int layoutResourceId) {
 		super(context, layoutResourceId);
 		this.mContext = context;
 		this.layoutResourceId = layoutResourceId;
+	}
+
+	public void setMyLocation(Location location) {
+		this.myLocation = location;
+	}
+
+	public void setMyLocation(GeoPoint geoPoint) {
+		Location location = new Location("");
+		location.setLatitude(geoPoint.getLatitudeE6() / 1e6);
+		location.setLongitude(geoPoint.getLongitudeE6() / 1e6);
+		this.myLocation = location;
 	}
 
 	@Override
@@ -57,14 +73,34 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 
 		Parking parking = getItem(position);
 
+		// name
 		holder.parkingName.setText(parking.getName());
+
+		// description
 		// TODO: distance from my position
 		String desc = "";
 		if (!parking.getName().equalsIgnoreCase(parking.getDescription())) {
 			desc += parking.getDescription();
 		}
+
+		if (myLocation != null) {
+			Location parkingLocation = new Location("");
+			parkingLocation.setLatitude(parking.getPosition()[0]);
+			parkingLocation.setLongitude(parking.getPosition()[1]);
+			float distance = myLocation.distanceTo(parkingLocation);
+
+			if (desc.length() != 0) {
+				desc += " (";
+				desc += String.format("%.2f", distance / 1000) + " km";
+				desc += ")";
+			} else {
+				desc += String.format("%.2f", distance / 1000) + " km";
+			}
+		}
+
 		holder.parkingData.setText(desc);
 
+		// status
 		holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, parking.getSlotsAvailable(),
 				parking.getSlotsTotal()));
 

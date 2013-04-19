@@ -120,6 +120,7 @@
     <string name="menu_item_delete">Cancella</string>
     <string name="menu_item_monitor_on">Controllo ATTIVO</string>
     <string name="menu_item_monitor_off">Controllo NON ATTIVO</string>
+    <string name="menu_item_parking_map">Mappa dei parcheggi</string>
     <string name="always">Sempre</string>
     <string name="separator">-</string>
     <string name="saved_journey">Viaggio salvato</string>

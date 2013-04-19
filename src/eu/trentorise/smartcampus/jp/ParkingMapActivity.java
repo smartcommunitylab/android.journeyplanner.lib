@@ -18,7 +18,6 @@ package eu.trentorise.smartcampus.jp;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import android.content.res.Configuration;
@@ -40,27 +39,23 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
 
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
-import eu.trentorise.smartcampus.jp.custom.map.StopObjectMapItemTapListener;
-import eu.trentorise.smartcampus.jp.custom.map.StopsInfoDialog;
-import eu.trentorise.smartcampus.jp.custom.map.StopsItemizedOverlay;
-import eu.trentorise.smartcampus.jp.custom.map.StopsMapLoadProcessor;
+import eu.trentorise.smartcampus.jp.custom.map.ParkingObjectMapItemTapListener;
+import eu.trentorise.smartcampus.jp.custom.map.ParkingsInfoDialog;
+import eu.trentorise.smartcampus.jp.custom.map.ParkingsItemizedOverlay;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
-import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
+import eu.trentorise.smartcampus.jp.model.Sparking;
 
-public class StopSelectActivity extends FeedbackFragmentActivity implements StopObjectMapItemTapListener {
+public class ParkingMapActivity extends FeedbackFragmentActivity implements ParkingObjectMapItemTapListener {
 
-	public final static String ARG_AGENCY_IDS = "agencyIds";
-	public final static String ARG_STOP = "stop";
-	public final static int REQUEST_CODE = 1983;
+	public final static String ARG_PARKINGS = "parkings";
+	public final static int REQUEST_CODE = 1986;
 
 	private MapView mapView = null;
 	private MyLocationOverlay mMyLocationOverlay = null;
-	StopsItemizedOverlay mItemizedoverlay = null;
+	ParkingsItemizedOverlay mItemizedoverlay = null;
 
-	private int[] selectedAgencyIds = null;
-	private SmartCheckStop selectedStop = null;
+	private ArrayList<Parking> parkingsList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,8 +63,12 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 
 		setContentView(R.layout.mapcontainer_jp);
 
-		if (getIntent().getIntArrayExtra(ARG_AGENCY_IDS) != null) {
-			selectedAgencyIds = getIntent().getIntArrayExtra(ARG_AGENCY_IDS);
+		if (getIntent().getSerializableExtra(ARG_PARKINGS) != null) {
+			ArrayList<Sparking> sparkingList = (ArrayList<Sparking>) getIntent().getSerializableExtra(ARG_PARKINGS);
+			parkingsList = new ArrayList<Parking>();
+			for (Sparking sp : sparkingList) {
+				parkingsList.add(sp.getParking());
+			}
 		}
 
 		ActionBar actionBar = getSupportActionBar();
@@ -111,7 +110,7 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 		mapView.getController().setZoom(15);
 
 		List<Overlay> listOfOverlays = mapView.getOverlays();
-		mItemizedoverlay = new StopsItemizedOverlay(this, mapView);
+		mItemizedoverlay = new ParkingsItemizedOverlay(this, mapView);
 		mItemizedoverlay.setMapItemTapListener(this);
 		listOfOverlays.add(mItemizedoverlay);
 
@@ -151,29 +150,11 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 		});
 
 		// LOAD
-		new SCAsyncTask<Void, Void, Collection<SmartCheckStop>>(this,
-				new StopsMapLoadProcessor(this, mItemizedoverlay, mapView) {
-					@Override
-					protected Collection<SmartCheckStop> getObjects() {
-						List<SmartCheckStop> list = new ArrayList<SmartCheckStop>();
-						if (selectedAgencyIds != null) {
-							for (int i = 0; i < selectedAgencyIds.length; i++) {
-								try {
-									list.addAll(JPHelper.getStops(Integer.toString(selectedAgencyIds[i]), null));
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						} else {
-							try {
-								list.addAll(JPHelper.getStops(null, null));
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-						return list;
-					}
-				}).execute();
+		for (Parking o : parkingsList) {
+			mItemizedoverlay.addOverlay(o);
+		}
+		mItemizedoverlay.populateAll();
+		mapView.invalidate();
 	}
 
 	@Override
@@ -195,29 +176,25 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 	}
 
 	@Override
-	public void onStopObjectTap(SmartCheckStop stopObject) {
-		StopsInfoDialog stopInfoDialog = new StopsInfoDialog();
+	public void onParkingObjectTap(Parking parking) {
+		ParkingsInfoDialog stopInfoDialog = new ParkingsInfoDialog();
 		Bundle args = new Bundle();
-		args.putSerializable(StopsInfoDialog.ARG_STOP, stopObject);
+		args.putSerializable(ParkingsInfoDialog.ARG_PARKING, new Sparking(parking));
 		stopInfoDialog.setArguments(args);
-		stopInfoDialog.show(getSupportFragmentManager(), "stopselected");
+		stopInfoDialog.show(getSupportFragmentManager(), "parking_selected");
 	}
 
 	@Override
-	public void onStopObjectsTap(List<SmartCheckStop> stopObjectsList) {
-		StopsInfoDialog stopInfoDialog = new StopsInfoDialog();
+	public void onParkingObjectsTap(List<Parking> parkingsList) {
+		ArrayList<Sparking> sparkingList = new ArrayList<Sparking>();
+		for (Parking p : parkingsList) {
+			sparkingList.add(new Sparking(p));
+		}
+		ParkingsInfoDialog stopInfoDialog = new ParkingsInfoDialog();
 		Bundle args = new Bundle();
-		args.putSerializable(StopsInfoDialog.ARG_STOPS, (ArrayList<SmartCheckStop>) stopObjectsList);
+		args.putSerializable(ParkingsInfoDialog.ARG_PARKINGS, sparkingList);
 		stopInfoDialog.setArguments(args);
-		stopInfoDialog.show(getSupportFragmentManager(), "stopselected");
-	}
-
-	public SmartCheckStop getSelectedStop() {
-		return selectedStop;
-	}
-
-	public void setSelectedStop(SmartCheckStop selectedStop) {
-		this.selectedStop = selectedStop;
+		stopInfoDialog.show(getSupportFragmentManager(), "parking_selected");
 	}
 
 	@Override

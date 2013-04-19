@@ -15,10 +15,11 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom.map;
 
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
+
+import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -33,26 +34,34 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 
 import eu.trentorise.smartcampus.jp.R;
-import eu.trentorise.smartcampus.jp.StopSelectActivity;
-import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
+import eu.trentorise.smartcampus.jp.model.Sparking;
 
-public class InfoDialog extends SherlockDialogFragment {
+public class ParkingsInfoDialog extends SherlockDialogFragment {
 
-	public static final String ARG_STOP = "stop";
-	public static final String ARG_STOPS = "stops";
-	private SmartCheckStop stopObject;
-	private List<SmartCheckStop> stopObjectsList;
-	private RadioGroup stopsRadioGroup;
+	public static final String ARG_PARKING = "parking";
+	public static final String ARG_PARKINGS = "parkings";
+	private Parking parking;
+	private List<Parking> parkingsList;
+	private RadioGroup parkingsRadioGroup;
 
-	public InfoDialog() {
+	public ParkingsInfoDialog() {
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.stopObject = (SmartCheckStop) this.getArguments().getSerializable(ARG_STOP);
-		this.stopObjectsList = (List<SmartCheckStop>) this.getArguments().getSerializable(ARG_STOPS);
+
+		Sparking sparking = (Sparking) this.getArguments().getSerializable(ARG_PARKING);
+		this.parking = sparking.getParking();
+
+		ArrayList<Sparking> sparkingsList = (ArrayList<Sparking>) this.getArguments().getSerializable(ARG_PARKINGS);
+		if (sparkingsList != null) {
+			this.parkingsList = new ArrayList<Parking>();
+			for (Sparking sp : sparkingsList) {
+				parkingsList.add(sp.getParking());
+			}
+		}
 	}
 
 	@Override
@@ -60,7 +69,7 @@ public class InfoDialog extends SherlockDialogFragment {
 		getDialog().setTitle(R.string.smart_check_stops_type_mobility);
 		View view = null;
 
-		if (stopObjectsList != null) {
+		if (parkingsList != null) {
 			view = inflater.inflate(R.layout.mapdialogmulti, container, false);
 		} else {
 			view = inflater.inflate(R.layout.mapdialog, container, false);
@@ -73,21 +82,29 @@ public class InfoDialog extends SherlockDialogFragment {
 	public void onStart() {
 		super.onStart();
 
-		if (stopObjectsList != null) {
+		if (parkingsList != null) {
 			// multiple stops
-			stopsRadioGroup = (RadioGroup) getDialog().findViewById(R.id.mapdialogmulti_rg);
-			stopsRadioGroup.removeAllViews();
-			for (SmartCheckStop stop : stopObjectsList) {
+			parkingsRadioGroup = (RadioGroup) getDialog().findViewById(R.id.mapdialogmulti_rg);
+			parkingsRadioGroup.removeAllViews();
+			for (Parking p : parkingsList) {
 				RadioButton rb = new RadioButton(getSherlockActivity());
-				rb.setTag(stop);
-				rb.setText(stop.getTitle());
-				stopsRadioGroup.addView(rb);
+				rb.setTag(p);
+				if (!p.getName().equalsIgnoreCase(p.getDescription())) {
+					rb.setText(p.getName() + " " + p.getDescription());
+				} else {
+					rb.setText(p.getName());
+				}
+				parkingsRadioGroup.addView(rb);
 			}
-			stopsRadioGroup.getChildAt(0).setSelected(true);
-		} else if (stopObject != null) {
+			parkingsRadioGroup.getChildAt(0).setSelected(true);
+		} else if (parking != null) {
 			// single stop
 			TextView msg = (TextView) getDialog().findViewById(R.id.mapdialog_msg);
-			msg.setText(stopObject.getTitle());
+			if (!parking.getName().equalsIgnoreCase(parking.getDescription())) {
+				msg.setText(parking.getName() + " " + parking.getDescription());
+			} else {
+				msg.setText(parking.getName());
+			}
 			msg.setMovementMethod(new ScrollingMovementMethod());
 		}
 
@@ -103,22 +120,27 @@ public class InfoDialog extends SherlockDialogFragment {
 		btn_ok.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				SmartCheckStop stop = null;
-
-				if (stopObjectsList != null) {
-					RadioButton selectedRb = (RadioButton) stopsRadioGroup.findViewById(stopsRadioGroup
-							.getCheckedRadioButtonId());
-					stop = (SmartCheckStop) selectedRb.getTag();
-				} else if (stopObject != null) {
-					stop = stopObject;
-				}
-
-				StopSelectActivity stopSelectActivity = (StopSelectActivity) getSherlockActivity();
-				Intent stopSelectActivityIntent = stopSelectActivity.getIntent();
-				stopSelectActivityIntent.putExtra(StopSelectActivity.ARG_STOP, stop);
-				stopSelectActivity.setResult(Activity.RESULT_OK, stopSelectActivityIntent);
-				stopSelectActivity.finish();
-
+				// Parking stop = null;
+				//
+				// if (parkingsList != null) {
+				// RadioButton selectedRb = (RadioButton)
+				// parkingsRadioGroup.findViewById(parkingsRadioGroup
+				// .getCheckedRadioButtonId());
+				// stop = (Parking) selectedRb.getTag();
+				// } else if (parking != null) {
+				// stop = parking;
+				// }
+				//
+				// StopSelectActivity stopSelectActivity = (StopSelectActivity)
+				// getSherlockActivity();
+				// Intent stopSelectActivityIntent =
+				// stopSelectActivity.getIntent();
+				// stopSelectActivityIntent.putExtra(StopSelectActivity.ARG_STOP,
+				// stop);
+				// stopSelectActivity.setResult(Activity.RESULT_OK,
+				// stopSelectActivityIntent);
+				// stopSelectActivity.finish();
+				//
 				getDialog().dismiss();
 			}
 		});

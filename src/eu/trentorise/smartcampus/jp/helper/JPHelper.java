@@ -384,7 +384,10 @@ public class JPHelper {
 	}
 
 	public static LocationHelper getLocationHelper() {
-		return mLocationHelper;
+		if (JPHelper.mLocationHelper == null) {
+			setLocationHelper(new LocationHelper(mContext));
+		}
+		return JPHelper.mLocationHelper;
 	}
 
 	public static void setLocationHelper(LocationHelper mLocationHelper) {

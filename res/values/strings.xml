@@ -123,6 +123,7 @@
     <string name="menu_item_delete">Delete</string>
     <string name="menu_item_monitor_on">Monitor on</string>
     <string name="menu_item_monitor_off">Monitor off</string>
+    <string name="menu_item_parking_map">Parkings on map</string>
     <string name="always">Always</string>
     <string name="separator">-</string>
     <string name="saved_journey">Journey saved</string>

@@ -26,16 +26,19 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
+import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.notifications.BroadcastNotificationsActivity;
 import eu.trentorise.smartcampus.jp.notifications.NotificationsFragmentActivityJP;
 
 public class HomeActivity extends BaseActivity {
 
 	private boolean mHiddenNotification;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,21 +52,20 @@ public class HomeActivity extends BaseActivity {
 
 	private void setHiddenNotification() {
 		try {
-			ApplicationInfo ai = getPackageManager().getApplicationInfo(this.getPackageName(),
-					PackageManager.GET_META_DATA);
-			Bundle aBundle=ai.metaData;
-			mHiddenNotification=aBundle.getBoolean("hidden-notification");
+			ApplicationInfo ai = getPackageManager().getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA);
+			Bundle aBundle = ai.metaData;
+			mHiddenNotification = aBundle.getBoolean("hidden-notification");
 		} catch (NameNotFoundException e) {
-			mHiddenNotification=false;
-			Log.e(HomeActivity.class.getName(),
-					"you should set the hidden-notification metadata in app manifest");
+			mHiddenNotification = false;
+			Log.e(HomeActivity.class.getName(), "you should set the hidden-notification metadata in app manifest");
 		}
-		if (mHiddenNotification){
-			View notificationButton= findViewById(R.id.btn_notifications);
-			if (notificationButton!=null)
+		if (mHiddenNotification) {
+			View notificationButton = findViewById(R.id.btn_notifications);
+			if (notificationButton != null)
 				notificationButton.setVisibility(View.GONE);
-			}
+		}
 	}
+
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -90,6 +92,21 @@ public class HomeActivity extends BaseActivity {
 		super.onResume();
 		getSupportActionBar().setHomeButtonEnabled(true);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		JPHelper.getLocationHelper().start();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		JPHelper.getLocationHelper().stop();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.clear();
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.emptymenu, menu);
+		return true;
 	}
 
 	public void goToFunctionality(View view) {
