@@ -30,6 +30,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
@@ -40,6 +41,7 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
 
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
+import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.map.ParkingObjectMapItemTapListener;
 import eu.trentorise.smartcampus.jp.custom.map.ParkingsInfoDialog;
 import eu.trentorise.smartcampus.jp.custom.map.ParkingsItemizedOverlay;
@@ -94,8 +96,8 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 
 	private void setContent() {
 
-		// FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
-		// (RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
+		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
+		(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
 
 		mapView = new MapView(this, getResources().getString(R.string.maps_api_key));
 		// mapView = MapManager.getMapView();
