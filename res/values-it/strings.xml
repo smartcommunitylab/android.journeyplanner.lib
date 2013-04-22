@@ -184,6 +184,8 @@
     <string name="smart_check_tt_delay">%s\'</string>
     <string name="smart_check_tt_delay_user">%s\'u</string>
     <string name="smart_check_parking_full">completo</string>
+    <string name="smart_check_parking_dialog_title">Parcheggio</string>
+    <string name="smart_check_parking_dialog_directions">Indicazioni stradali</string>
     
     <string name="smart_check_routes_empty">Nessuna corsa</string>
     <string name="smart_check_parkings_empty">Nessun parcheggio</string>

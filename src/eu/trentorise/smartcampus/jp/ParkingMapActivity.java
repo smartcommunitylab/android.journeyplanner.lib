@@ -72,11 +72,10 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 		}
 
 		ActionBar actionBar = getSupportActionBar();
+		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true); // back arrow
-		actionBar.setDisplayUseLogoEnabled(false); // system logo
-		actionBar.setDisplayShowTitleEnabled(true); // system title
-		actionBar.setDisplayShowHomeEnabled(false); // home icon bar
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); // tabs
+		actionBar.setTitle(R.string.title_smart_check);
 
 		setContent();
 	}
@@ -177,11 +176,11 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 
 	@Override
 	public void onParkingObjectTap(Parking parking) {
-		ParkingsInfoDialog stopInfoDialog = new ParkingsInfoDialog();
+		ParkingsInfoDialog parkingsInfoDialog = new ParkingsInfoDialog();
 		Bundle args = new Bundle();
 		args.putSerializable(ParkingsInfoDialog.ARG_PARKING, new Sparking(parking));
-		stopInfoDialog.setArguments(args);
-		stopInfoDialog.show(getSupportFragmentManager(), "parking_selected");
+		parkingsInfoDialog.setArguments(args);
+		parkingsInfoDialog.show(getSupportFragmentManager(), "parking_selected");
 	}
 
 	@Override
@@ -190,11 +189,11 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 		for (Parking p : parkingsList) {
 			sparkingList.add(new Sparking(p));
 		}
-		ParkingsInfoDialog stopInfoDialog = new ParkingsInfoDialog();
+		ParkingsInfoDialog parkingsInfoDialog = new ParkingsInfoDialog();
 		Bundle args = new Bundle();
 		args.putSerializable(ParkingsInfoDialog.ARG_PARKINGS, sparkingList);
-		stopInfoDialog.setArguments(args);
-		stopInfoDialog.show(getSupportFragmentManager(), "parking_selected");
+		parkingsInfoDialog.setArguments(args);
+		parkingsInfoDialog.show(getSupportFragmentManager(), "parking_selected");
 	}
 
 	@Override

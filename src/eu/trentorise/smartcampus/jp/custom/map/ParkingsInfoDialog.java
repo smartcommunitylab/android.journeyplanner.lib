@@ -19,21 +19,25 @@ import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
+import com.google.android.maps.GeoPoint;
 
+import eu.trentorise.smartcampus.android.common.navigation.NavigationHelper;
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.custom.SmartCheckParkingsAdapter;
+import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.model.Sparking;
 
 public class ParkingsInfoDialog extends SherlockDialogFragment {
@@ -41,8 +45,10 @@ public class ParkingsInfoDialog extends SherlockDialogFragment {
 	public static final String ARG_PARKING = "parking";
 	public static final String ARG_PARKINGS = "parkings";
 	private Parking parking;
+	private Location myLocation;
 	private List<Parking> parkingsList;
-	private RadioGroup parkingsRadioGroup;
+
+	// private RadioGroup parkingsRadioGroup;
 
 	public ParkingsInfoDialog() {
 	}
@@ -62,17 +68,22 @@ public class ParkingsInfoDialog extends SherlockDialogFragment {
 				parkingsList.add(sp.getParking());
 			}
 		}
+
+		GeoPoint myGeoPoint = JPHelper.getLocationHelper().getLocation();
+		myLocation = new Location("");
+		myLocation.setLatitude(myGeoPoint.getLatitudeE6() / 1e6);
+		myLocation.setLongitude(myGeoPoint.getLongitudeE6() / 1e6);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		getDialog().setTitle(R.string.smart_check_stops_type_mobility);
+		getDialog().setTitle(R.string.smart_check_parking_dialog_title);
 		View view = null;
 
 		if (parkingsList != null) {
-			view = inflater.inflate(R.layout.mapdialogmulti, container, false);
+			view = inflater.inflate(R.layout.parkings_dialog_multi, container, false);
 		} else {
-			view = inflater.inflate(R.layout.mapdialog, container, false);
+			view = inflater.inflate(R.layout.parkings_dialog, container, false);
 		}
 
 		return view;
@@ -84,31 +95,22 @@ public class ParkingsInfoDialog extends SherlockDialogFragment {
 
 		if (parkingsList != null) {
 			// multiple stops
-			parkingsRadioGroup = (RadioGroup) getDialog().findViewById(R.id.mapdialogmulti_rg);
-			parkingsRadioGroup.removeAllViews();
-			for (Parking p : parkingsList) {
-				RadioButton rb = new RadioButton(getSherlockActivity());
-				rb.setTag(p);
-				if (!p.getName().equalsIgnoreCase(p.getDescription())) {
-					rb.setText(p.getName() + " " + p.getDescription());
-				} else {
-					rb.setText(p.getName());
-				}
-				parkingsRadioGroup.addView(rb);
-			}
-			parkingsRadioGroup.getChildAt(0).setSelected(true);
+			Parking firstParking = parkingsList.get(0);
+			View parkingView = SmartCheckParkingsAdapter.buildParking(getSherlockActivity(), R.layout.smartcheckparking_row,
+					myLocation, firstParking, null, null);
+
+			LinearLayout entryLayout = (LinearLayout) getDialog().findViewById(R.id.parkings_dialog_entry);
+			entryLayout.addView(parkingView, 0);
 		} else if (parking != null) {
 			// single stop
-			TextView msg = (TextView) getDialog().findViewById(R.id.mapdialog_msg);
-			if (!parking.getName().equalsIgnoreCase(parking.getDescription())) {
-				msg.setText(parking.getName() + " " + parking.getDescription());
-			} else {
-				msg.setText(parking.getName());
-			}
-			msg.setMovementMethod(new ScrollingMovementMethod());
+			View parkingView = SmartCheckParkingsAdapter.buildParking(getSherlockActivity(), R.layout.smartcheckparking_row,
+					myLocation, parking, null, null);
+
+			LinearLayout entryLayout = (LinearLayout) getDialog().findViewById(R.id.parkings_dialog_entry);
+			entryLayout.addView(parkingView, 0);
 		}
 
-		Button btn_cancel = (Button) getDialog().findViewById(R.id.mapdialog_cancel);
+		Button btn_cancel = (Button) getDialog().findViewById(R.id.parkings_dialog_close);
 		btn_cancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -116,31 +118,20 @@ public class ParkingsInfoDialog extends SherlockDialogFragment {
 			}
 		});
 
-		Button btn_ok = (Button) getDialog().findViewById(R.id.mapdialog_ok);
+		Button btn_ok = (Button) getDialog().findViewById(R.id.parkings_dialog_directions);
 		btn_ok.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Parking stop = null;
-				//
-				// if (parkingsList != null) {
-				// RadioButton selectedRb = (RadioButton)
-				// parkingsRadioGroup.findViewById(parkingsRadioGroup
-				// .getCheckedRadioButtonId());
-				// stop = (Parking) selectedRb.getTag();
-				// } else if (parking != null) {
-				// stop = parking;
-				// }
-				//
-				// StopSelectActivity stopSelectActivity = (StopSelectActivity)
-				// getSherlockActivity();
-				// Intent stopSelectActivityIntent =
-				// stopSelectActivity.getIntent();
-				// stopSelectActivityIntent.putExtra(StopSelectActivity.ARG_STOP,
-				// stop);
-				// stopSelectActivity.setResult(Activity.RESULT_OK,
-				// stopSelectActivityIntent);
-				// stopSelectActivity.finish();
-				//
+				Address from = new Address(Locale.getDefault());
+				from.setLatitude(myLocation.getLatitude());
+				from.setLongitude(myLocation.getLongitude());
+
+				Address to = new Address(Locale.getDefault());
+				to.setLatitude(parking.getPosition()[0]);
+				to.setLongitude(parking.getPosition()[1]);
+
+				NavigationHelper.bringMeThere(getActivity(), from, to);
+
 				getDialog().dismiss();
 			}
 		});
