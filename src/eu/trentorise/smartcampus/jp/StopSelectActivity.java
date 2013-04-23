@@ -15,8 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,6 +29,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
@@ -42,6 +41,7 @@ import com.google.android.maps.Projection;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
+import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.map.StopObjectMapItemTapListener;
 import eu.trentorise.smartcampus.jp.custom.map.StopsInfoDialog;
 import eu.trentorise.smartcampus.jp.custom.map.StopsItemizedOverlay;
@@ -95,8 +95,8 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 
 	private void setContent() {
 
-		// FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
-		// (RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
+		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
+				(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
 
 		mapView = new MapView(this, getResources().getString(R.string.maps_api_key));
 		// mapView = MapManager.getMapView();
