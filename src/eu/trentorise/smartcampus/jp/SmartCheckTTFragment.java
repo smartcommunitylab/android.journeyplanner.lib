@@ -20,9 +20,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils.TruncateAt;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -33,15 +35,16 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
 
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessorNoDialog;
 import eu.trentorise.smartcampus.jp.custom.AsyncTaskNoDialog;
 import eu.trentorise.smartcampus.jp.custom.DelaysDialogFragment;
 import eu.trentorise.smartcampus.jp.custom.EndlessLinkedScrollView;
+import eu.trentorise.smartcampus.jp.custom.EndlessLinkedScrollView.TimetableNavigation;
 import eu.trentorise.smartcampus.jp.custom.LinkedScrollView;
 import eu.trentorise.smartcampus.jp.custom.RenderListener;
-import eu.trentorise.smartcampus.jp.custom.EndlessLinkedScrollView.TimetableNavigation;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 import eu.trentorise.smartcampus.jp.custom.data.TimeTable;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
@@ -68,6 +71,8 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 	private TextView tvday;
 	private int displayedDay;
 	private boolean firstHasNoCourses;
+
+	private RenderTimeTableAsyncTask renderTimeTableAsyncTask;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -111,11 +116,31 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 	@Override
 	public void onStart() {
 		super.onStart();
+
+		getView().setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (keyCode == KeyEvent.KEYCODE_BACK) {
+					renderTimeTableAsyncTask.cancel(true);
+					return true;
+				}
+				return false;
+			}
+		});
+
 		mProgressBar = (ProgressBar) getView().findViewById(R.id.smartcheckbustt_content_pb);
 		TextView lineNumber = (TextView) getSherlockActivity().findViewById(R.id.lineNumber);
 		lineNumber.setText(params.getLine());
 		lineNumber.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
 		lineNumber.setBackgroundColor(params.getColor());
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			renderTimeTableAsyncTask.cancel(true);
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private class GetBusTimeTableProcessor extends AbstractAsyncTaskProcessorNoDialog<Object, TimeTable> {
@@ -338,7 +363,8 @@ public class SmartCheckTTFragment extends FeedbackFragment implements RenderList
 		tlMainContent.setId(R.id.ttTimeTable);
 		tlMainContent.setVerticalScrollBarEnabled(true);
 
-		new RenderTimeTableAsyncTask(this).execute(displayedDay, NUM_ROWS);
+		renderTimeTableAsyncTask = new RenderTimeTableAsyncTask(this);
+		renderTimeTableAsyncTask.execute(displayedDay, NUM_ROWS);
 
 		mElsvMainContent.addView(tlMainContent);
 
