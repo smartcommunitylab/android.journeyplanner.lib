@@ -50,7 +50,11 @@ public class BetterMapView extends MapView {
 		GeoPoint rd = proj.fromPixels(getWidth(), getHeight());
 		int h = rd.getLongitudeE6()-lu.getLongitudeE6();
 		int w = rd.getLatitudeE6()-rd.getLatitudeE6();
-		mDiagonal = Math.sqrt(Math.pow(w, 2)+Math.pow(h, 2));
+		double diagonal = Math.sqrt(Math.pow(w, 2)+Math.pow(h, 2))/1e6;
+		if(diagonal!=mDiagonal){
+			mDiagonal=diagonal;
+			mOnMapChanged.onZoomChanged(getMapCenter(), diagonal);
+		}
 		
 	}
 

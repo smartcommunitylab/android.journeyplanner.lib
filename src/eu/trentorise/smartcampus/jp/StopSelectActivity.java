@@ -77,6 +77,7 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 	private SmartCheckStop selectedStop = null;
 	private StopsAsyncTask active;
 	private double diagonalold;
+	private double[] location_old;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -166,7 +167,11 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 						loc.y - bitmap.getHeight(), null);
 			}
 		};
-
+		diagonalold= mapView.getDiagonalLenght();
+		location_old=new double[2];
+		location_old[0]=mapView.getMapCenter().getLatitudeE6()/1e6;
+		location_old[1]=mapView.getMapCenter().getLongitudeE6()/1e6;
+		
 		listOfOverlays.add(mMyLocationOverlay);
 
 		mMyLocationOverlay.runOnFirstFix(new Runnable() {
@@ -176,6 +181,7 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 				// load with radius? Not for now.
 			}
 		});
+		new StopsAsyncTask(mItemizedoverlay, location_old, diagonalold, mapView, this);
 	}
 
 	@Override
@@ -237,11 +243,11 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 	public void onCenterChanged(GeoPoint center) {
 		Log.i("where", "Center Long: " + center.getLongitudeE6() / 1e6
 				+ " Lat: " + center.getLatitudeE6() / 1e6);
-		final double[] location = { center.getLongitudeE6() / 1e6,
-				center.getLatitudeE6() / 1e6 };
+		final double[] location = { center.getLatitudeE6() / 1e6,
+				center.getLongitudeE6() / 1e6 };
 		final double diagonal = mapView.getDiagonalLenght();
 		
-		if (diagonal > diagonalold) {
+		if (location_old[0]!=location[0] || location_old[1]!=location[1]) {
 			diagonalold = diagonal;
 			if (active != null)
 				active.cancel(true);
@@ -255,11 +261,11 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 
 	@Override
 	public void onZoomChanged(GeoPoint center, double diagonalLenght) {
-		Log.i("where", "DiagonalLenght: " + diagonalLenght / 1e6
+		Log.i("where", "DiagonalLenght: " + diagonalLenght 
 				+ "\nCenter Long: " + center.getLongitudeE6() / 1e6 + " Lat: "
-				+ center.getLatitudeE6());
-		final double[] location = { center.getLongitudeE6() / 1e6,
-				center.getLatitudeE6() / 1e6 };
+				+ center.getLatitudeE6()/1e6);
+		final double[] location = { center.getLatitudeE6() / 1e6,
+				center.getLongitudeE6() / 1e6 };
 		final double diagonal = diagonalLenght;
 		if (diagonal > diagonalold) {
 			diagonalold = diagonal;

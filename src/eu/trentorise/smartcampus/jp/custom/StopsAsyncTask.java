@@ -42,7 +42,7 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 	protected void onPreExecute() {
 		super.onPreExecute();
 		old_overlay = overlay;
-		overlay.clearMarkers();
+		
 	}
 
 	@Override
@@ -58,11 +58,10 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 		try {
 			list.addAll(JPHelper.getStops(RoutesHelper.AGENCYID_BUS + "",
 					location, diagonal));
-			for (SmartCheckStop o : list) {
-				publishProgress(o);
-			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}
@@ -70,13 +69,18 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 	@Override
 	protected void onProgressUpdate(SmartCheckStop... values) {
 		super.onProgressUpdate(values);
-		overlay.addOverlay(values[0]);
+		//overlay.addOverlay(values[0]);
 	}
 
 	@Override
 	protected void onPostExecute(Boolean result) {
 		super.onPostExecute(result);
 		if (result) {
+			overlay.clearMarkers();
+			for (SmartCheckStop o : list) {
+				overlay.addOverlay(o);
+			}
+			
 			overlay.populateAll();
 			mapView.invalidate();
 		}
