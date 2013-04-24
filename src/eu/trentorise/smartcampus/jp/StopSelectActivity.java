@@ -15,13 +15,10 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.Map;
 
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -31,7 +28,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -46,10 +42,8 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
 
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
-import eu.trentorise.smartcampus.jp.custom.AsyncTaskNoDialog;
 import eu.trentorise.smartcampus.jp.custom.BetterMapView;
 import eu.trentorise.smartcampus.jp.custom.BetterMapView.OnMapChanged;
 import eu.trentorise.smartcampus.jp.custom.StopsAsyncTask;
@@ -57,13 +51,11 @@ import eu.trentorise.smartcampus.jp.custom.StopsAsyncTask.OnStopLoadingFinished;
 import eu.trentorise.smartcampus.jp.custom.map.StopObjectMapItemTapListener;
 import eu.trentorise.smartcampus.jp.custom.map.StopsInfoDialog;
 import eu.trentorise.smartcampus.jp.custom.map.StopsItemizedOverlay;
-import eu.trentorise.smartcampus.jp.custom.map.StopsMapLoadProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
-import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
-public class StopSelectActivity extends FeedbackFragmentActivity implements
-		StopObjectMapItemTapListener, OnMapChanged, OnStopLoadingFinished {
+public class StopSelectActivity extends FeedbackFragmentActivity implements StopObjectMapItemTapListener, OnMapChanged,
+		OnStopLoadingFinished {
 
 	public final static String ARG_AGENCY_IDS = "agencyIds";
 	public final static String ARG_STOP = "stop";
@@ -79,12 +71,14 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 	private double diagonalold;
 	private double[] location_old;
 
+	private Map<String, SmartCheckStop> smartCheckStopMap;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		
+
 		setContentView(R.layout.mapcontainer_jp);
 
 		if (getIntent().getIntArrayExtra(ARG_AGENCY_IDS) != null) {
@@ -97,7 +91,9 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 		actionBar.setDisplayShowTitleEnabled(true); // system title
 		actionBar.setDisplayShowHomeEnabled(false); // home icon bar
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); // tabs
-	
+
+		smartCheckStopMap = new HashMap<String, SmartCheckStop>();
+
 		setContent();
 	}
 
@@ -114,13 +110,10 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 
 	private void setContent() {
 		setSupportProgressBarIndeterminateVisibility(true);
-		FeedbackFragmentInflater
-				.inflateHandleButtonInRelativeLayout(
-						this,
-						(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
+		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
+				(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
 
-		mapView = new BetterMapView(this, getResources().getString(
-				R.string.maps_api_key), StopSelectActivity.this);
+		mapView = new BetterMapView(this, getResources().getString(R.string.maps_api_key), StopSelectActivity.this);
 		// mapView = MapManager.getMapView();
 		// setContentView(R.layout.mapcontainer);
 
@@ -137,19 +130,16 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 		mItemizedoverlay.setMapItemTapListener(this);
 		listOfOverlays.add(mItemizedoverlay);
 
-		mMyLocationOverlay = new MyLocationOverlay(getApplicationContext(),
-				mapView) {
+		mMyLocationOverlay = new MyLocationOverlay(getApplicationContext(), mapView) {
 			@Override
-			protected void drawMyLocation(Canvas canvas, MapView mapView,
-					Location lastFix, GeoPoint myLocation, long when) {
+			protected void drawMyLocation(Canvas canvas, MapView mapView, Location lastFix, GeoPoint myLocation, long when) {
 				Projection p = mapView.getProjection();
 				float accuracy = p.metersToEquatorPixels(lastFix.getAccuracy());
 				Point loc = p.toPixels(myLocation, null);
 				Paint paint = new Paint();
 				paint.setAntiAlias(true);
 				// paint.setColor(Color.BLUE);
-				paint.setColor(Color.parseColor(getApplicationContext()
-						.getResources().getString(R.color.jpappcolor)));
+				paint.setColor(Color.parseColor(getApplicationContext().getResources().getString(R.color.jpappcolor)));
 
 				if (accuracy > 10.0f) {
 					paint.setAlpha(50);
@@ -160,28 +150,25 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 					canvas.drawCircle(loc.x, loc.y, accuracy, paint);
 				}
 
-				Bitmap bitmap = BitmapFactory.decodeResource(
-						getApplicationContext().getResources(), R.drawable.me)
-						.copy(Bitmap.Config.ARGB_8888, true);
-				canvas.drawBitmap(bitmap, loc.x - (bitmap.getWidth() / 2),
-						loc.y - bitmap.getHeight(), null);
+				Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.me).copy(
+						Bitmap.Config.ARGB_8888, true);
+				canvas.drawBitmap(bitmap, loc.x - (bitmap.getWidth() / 2), loc.y - bitmap.getHeight(), null);
 			}
 		};
-		diagonalold= mapView.getDiagonalLenght();
-		location_old=new double[2];
-		location_old[0]=mapView.getMapCenter().getLatitudeE6()/1e6;
-		location_old[1]=mapView.getMapCenter().getLongitudeE6()/1e6;
-		
+		diagonalold = mapView.getDiagonalLenght();
+		location_old = new double[2];
+		location_old[0] = mapView.getMapCenter().getLatitudeE6() / 1e6;
+		location_old[1] = mapView.getMapCenter().getLongitudeE6() / 1e6;
+
 		listOfOverlays.add(mMyLocationOverlay);
 
 		mMyLocationOverlay.runOnFirstFix(new Runnable() {
 			public void run() {
-				mapView.getController().animateTo(
-						mMyLocationOverlay.getMyLocation());
+				mapView.getController().animateTo(mMyLocationOverlay.getMyLocation());
 				// load with radius? Not for now.
 			}
 		});
-		new StopsAsyncTask(mItemizedoverlay, location_old, diagonalold, mapView, this);
+		new StopsAsyncTask(smartCheckStopMap, mItemizedoverlay, location_old, diagonalold, mapView, this);
 	}
 
 	@Override
@@ -215,8 +202,7 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 	public void onStopObjectsTap(List<SmartCheckStop> stopObjectsList) {
 		StopsInfoDialog stopInfoDialog = new StopsInfoDialog();
 		Bundle args = new Bundle();
-		args.putSerializable(StopsInfoDialog.ARG_STOPS,
-				(ArrayList<SmartCheckStop>) stopObjectsList);
+		args.putSerializable(StopsInfoDialog.ARG_STOPS, (ArrayList<SmartCheckStop>) stopObjectsList);
 		stopInfoDialog.setArguments(args);
 		stopInfoDialog.show(getSupportFragmentManager(), "stopselected");
 	}
@@ -241,19 +227,16 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 
 	@Override
 	public void onCenterChanged(GeoPoint center) {
-		Log.i("where", "Center Long: " + center.getLongitudeE6() / 1e6
-				+ " Lat: " + center.getLatitudeE6() / 1e6);
-		final double[] location = { center.getLatitudeE6() / 1e6,
-				center.getLongitudeE6() / 1e6 };
+		Log.i("where", "Center Long: " + center.getLongitudeE6() / 1e6 + " Lat: " + center.getLatitudeE6() / 1e6);
+		final double[] location = { center.getLatitudeE6() / 1e6, center.getLongitudeE6() / 1e6 };
 		final double diagonal = mapView.getDiagonalLenght();
-		
-		if (location_old[0]!=location[0] || location_old[1]!=location[1]) {
+
+		if (location_old[0] != location[0] || location_old[1] != location[1]) {
 			diagonalold = diagonal;
 			if (active != null)
 				active.cancel(true);
 			setSupportProgressBarIndeterminateVisibility(true);
-			active = new StopsAsyncTask(mItemizedoverlay, location, diagonal,
-					mapView,this);
+			active = new StopsAsyncTask(smartCheckStopMap, mItemizedoverlay, location, diagonal, mapView, this);
 			active.execute();
 		}
 
@@ -261,19 +244,16 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 
 	@Override
 	public void onZoomChanged(GeoPoint center, double diagonalLenght) {
-		Log.i("where", "DiagonalLenght: " + diagonalLenght 
-				+ "\nCenter Long: " + center.getLongitudeE6() / 1e6 + " Lat: "
-				+ center.getLatitudeE6()/1e6);
-		final double[] location = { center.getLatitudeE6() / 1e6,
-				center.getLongitudeE6() / 1e6 };
+		Log.i("where", "DiagonalLenght: " + diagonalLenght + "\nCenter Long: " + center.getLongitudeE6() / 1e6 + " Lat: "
+				+ center.getLatitudeE6() / 1e6);
+		final double[] location = { center.getLatitudeE6() / 1e6, center.getLongitudeE6() / 1e6 };
 		final double diagonal = diagonalLenght;
 		if (diagonal > diagonalold) {
 			diagonalold = diagonal;
 			if (active != null)
 				active.cancel(true);
 			setSupportProgressBarIndeterminateVisibility(true);
-			active = new StopsAsyncTask(mItemizedoverlay, location, diagonal,
-					mapView,this);
+			active = new StopsAsyncTask(smartCheckStopMap, mItemizedoverlay, location, diagonal, mapView, this);
 			active.execute();
 		}
 	}
@@ -282,6 +262,5 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements
 	public void onStopLoadingFinished() {
 		setSupportProgressBarIndeterminateVisibility(false);
 	}
-
 
 }
