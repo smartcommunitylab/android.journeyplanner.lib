@@ -33,6 +33,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -83,12 +84,23 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 	}
 
 	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.clear();
+		MenuItem item = menu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_list, 1, R.string.menu_item_parking_list);
+		item.setIcon(R.drawable.ic_list);
+		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
+		if (item.getItemId() == android.R.id.home) {
 			finish();
 			return true;
-		default:
+		} else if (item.getItemId() == R.id.menu_item_list) {
+			finish();
+			return true;
+		} else {
 			return super.onOptionsItemSelected(item);
 		}
 	}
@@ -96,7 +108,7 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 	private void setContent() {
 
 		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
-		(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
+				(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
 
 		mapView = new MapView(this, getResources().getString(R.string.maps_api_key));
 		// mapView = MapManager.getMapView();
