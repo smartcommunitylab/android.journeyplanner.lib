@@ -22,7 +22,7 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 
 	private OnStopLoadingFinished mOnStopLoadingFinished;
 
-	private Collection<SmartCheckStop> list;
+	// private Collection<SmartCheckStop> list;
 	private Map<String, SmartCheckStop> smartCheckStopMap;
 	private StopsItemizedOverlay overlay;
 	private double diagonal;
@@ -38,7 +38,7 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 		this.diagonal = diagonal;
 		this.location = location;
 		this.mOnStopLoadingFinished = listener;
-		this.list = new ArrayList<SmartCheckStop>();
+		// this.list = new ArrayList<SmartCheckStop>();
 		this.smartCheckStopMap = smartCheckStopMap;
 	}
 
@@ -61,11 +61,11 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 		// params[1]=radius
 		try {
 			List<SmartCheckStop> stops = JPHelper.getStops(RoutesHelper.AGENCYID_BUS + "", location, diagonal);
-			list.clear();
+			// list.clear();
 			for (SmartCheckStop stop : stops) {
 				if (!smartCheckStopMap.containsKey(stop.getId())) {
 					smartCheckStopMap.put(stop.getId(), stop);
-					list.add(stop);
+					// list.add(stop);
 				}
 			}
 		} catch (Exception e) {
@@ -85,13 +85,14 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 	protected void onPostExecute(Boolean result) {
 		super.onPostExecute(result);
 		if (result) {
-			// overlay.clearMarkers();
-			for (SmartCheckStop o : list) {
+			overlay.clearMarkers();
+			// for (SmartCheckStop o : list) {
+			for (SmartCheckStop o : smartCheckStopMap.values()) {
 				overlay.addOverlay(o);
 			}
 			overlay.populateAll();
 			mapView.invalidate();
-			list.clear();
+			// list.clear();
 		} else {
 			overlay = old_overlay;
 		}
