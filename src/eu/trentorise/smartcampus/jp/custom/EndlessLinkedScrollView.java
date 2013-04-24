@@ -37,7 +37,7 @@ public class EndlessLinkedScrollView extends LinkedScrollView implements
 			ViewGroup row = ((ViewGroup) (table.getChildAt(0)));
 			if (row != null && row.getChildCount() > 0) {
 				int endLeft = this.getWidth()
-						- row.getChildAt(row.getChildCount() - 2).getWidth();
+						- row.getChildAt(row.getChildCount() - 1).getWidth();
 				Rect end = new Rect(endLeft - tollerance, 0, this.getWidth()
 						+ tollerance, this.getHeight());
 				Rect touch = new Rect((int) (event.getX() - tollerance), 0,
