@@ -46,11 +46,15 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 	}
 
 	public void setMyLocation(GeoPoint geoPoint) {
-		Location location = new Location("");
-		location.setLatitude(geoPoint.getLatitudeE6() / 1e6);
-		location.setLongitude(geoPoint.getLongitudeE6() / 1e6);
-		this.myLocation = location;
-	}
+        if (geoPoint != null) {
+        	Location location = new Location("");
+        	location.setLatitude(geoPoint.getLatitudeE6() / 1e6);
+        	location.setLongitude(geoPoint.getLongitudeE6() / 1e6);
+        	this.myLocation = location;
+        } else {
+            this.myLocation = null;
+        }
+}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
