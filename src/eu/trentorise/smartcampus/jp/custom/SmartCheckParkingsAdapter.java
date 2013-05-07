@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.google.android.maps.GeoPoint;
 
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 
 public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 
@@ -46,15 +47,15 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 	}
 
 	public void setMyLocation(GeoPoint geoPoint) {
-        if (geoPoint != null) {
-        	Location location = new Location("");
-        	location.setLatitude(geoPoint.getLatitudeE6() / 1e6);
-        	location.setLongitude(geoPoint.getLongitudeE6() / 1e6);
-        	this.myLocation = location;
-        } else {
-            this.myLocation = null;
-        }
-}
+		if (geoPoint != null) {
+			Location location = new Location("");
+			location.setLatitude(geoPoint.getLatitudeE6() / 1e6);
+			location.setLongitude(geoPoint.getLongitudeE6() / 1e6);
+			this.myLocation = location;
+		} else {
+			this.myLocation = null;
+		}
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -79,12 +80,16 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 		}
 
 		// name
-		holder.parkingName.setText(parking.getName());
+		String parkingName = ParkingsHelper.getParkingName(parking);
+		if (parkingName == null) {
+			parkingName = parking.getName();
+		}
+		holder.parkingName.setText(parkingName);
 
 		// description
 		// TODO: distance from my position
 		String desc = "";
-		if (!parking.getName().equalsIgnoreCase(parking.getDescription())) {
+		if (!parkingName.equalsIgnoreCase(parking.getDescription())) {
 			desc += parking.getDescription();
 		}
 
@@ -109,31 +114,24 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 		holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, parking.getSlotsAvailable(),
 				parking.getSlotsTotal()));
 
-		if (parking.getSlotsAvailable() > 20) {
-			holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.parking_green));
-		} else if (parking.getSlotsAvailable() <= 20 && parking.getSlotsAvailable() > 5) {
-			holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.parking_orange));
-		} else if (parking.getSlotsAvailable() <= 5) {
-			holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.red));
-			if (parking.getSlotsAvailable() == 0) {
-				holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_full));
-			} else if (parking.getSlotsAvailable() == -1) {
-				// data unavailable
-				holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, "?",
-						parking.getSlotsTotal()));
-			} else if (parking.getSlotsAvailable() == -2) {
-				// data not monitored
-				holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.blue));
-				holder.parkingStatus.setText(Integer.toString(parking.getSlotsTotal()));
-			}
+		if (parking.getSlotsAvailable() == ParkingsHelper.PARKING_FULL) {
+			holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_full));
+		} else if (parking.getSlotsAvailable() == ParkingsHelper.PARKING_UNAVAILABLE) {
+			// data unavailable
+			holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, "?", parking.getSlotsTotal()));
+		} else if (parking.getSlotsAvailable() == ParkingsHelper.PARKING_NOT_MONITORED) {
+			// data not monitored
+			holder.parkingStatus.setText(Integer.toString(parking.getSlotsTotal()));
 		}
+
+		holder.parkingStatus.setTextColor(mContext.getResources().getColor(ParkingsHelper.getParkingColor(parking)));
 
 		return row;
 	}
 
 	public static View buildParking(Context mContext, int layoutResourceId, Location myLocation, Parking parking,
 			View convertView, ViewGroup parent) {
-		
+
 		View row = convertView;
 		ParkingHolder holder = null;
 

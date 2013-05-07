@@ -155,12 +155,13 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 
 		listOfOverlays.add(mMyLocationOverlay);
 
-		mMyLocationOverlay.runOnFirstFix(new Runnable() {
-			public void run() {
-				mapView.getController().animateTo(mMyLocationOverlay.getMyLocation());
-				// load with radius? Not for now.
-			}
-		});
+		// // move map to my location at first fix 
+		// mMyLocationOverlay.runOnFirstFix(new Runnable() {
+		// public void run() {
+		// mapView.getController().animateTo(mMyLocationOverlay.getMyLocation());
+		// // load with radius? Not for now.
+		// }
+		// });
 
 		// LOAD
 		for (Parking o : parkingsList) {

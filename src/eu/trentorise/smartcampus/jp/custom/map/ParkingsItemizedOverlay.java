@@ -40,6 +40,7 @@ import com.google.android.maps.OverlayItem;
 import com.google.android.maps.Projection;
 
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 
 public class ParkingsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 
@@ -93,7 +94,7 @@ public class ParkingsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 			GeoPoint point = new GeoPoint((int) (parking.getPosition()[0] * 1E6), (int) (parking.getPosition()[1] * 1E6));
 			OverlayItem overlayitem = new OverlayItem(point, parking.getName(), "");
 
-			Drawable drawable = mContext.getResources().getDrawable(R.drawable.marker_poi_parking);
+			Drawable drawable = mContext.getResources().getDrawable(ParkingsHelper.getParkingMarker(parking));
 			drawable.setBounds(-drawable.getIntrinsicWidth() / 2, -drawable.getIntrinsicHeight(),
 					drawable.getIntrinsicWidth() / 2, 0);
 			overlayitem.setMarker(drawable);
@@ -338,7 +339,7 @@ public class ParkingsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 		mapView.getProjection().toPixels(point, ptScreenCoord);
 
 		if (groupMarker == null) {
-			groupMarker = mContext.getResources().getDrawable(R.drawable.marker_poi_generic);
+			groupMarker = mContext.getResources().getDrawable(R.drawable.marker_parking_cluster);
 			groupMarker.setBounds(-groupMarker.getIntrinsicWidth() / 2, -groupMarker.getIntrinsicHeight(),
 					groupMarker.getIntrinsicWidth() / 2, 0);
 		}

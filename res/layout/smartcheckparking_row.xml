@@ -16,7 +16,8 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="wrap_content"
+    android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="horizontal" >
 
     <LinearLayout
@@ -49,6 +50,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="vertical"
+        android:paddingLeft="10dip"
         android:paddingRight="25dip"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/parking_green"
