@@ -28,6 +28,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
@@ -44,12 +46,13 @@ import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActiv
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.map.StopObjectMapItemTapListener;
 import eu.trentorise.smartcampus.jp.custom.map.StopsInfoDialog;
+import eu.trentorise.smartcampus.jp.custom.map.StopsInfoDialog.OnDetailsClick;
 import eu.trentorise.smartcampus.jp.custom.map.StopsItemizedOverlay;
 import eu.trentorise.smartcampus.jp.custom.map.StopsMapLoadProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
-public class StopSelectActivity extends FeedbackFragmentActivity implements StopObjectMapItemTapListener {
+public class StopSelectActivity extends FeedbackFragmentActivity implements StopObjectMapItemTapListener,OnDetailsClick {
 
 	public final static String ARG_AGENCY_IDS = "agencyIds";
 	public final static String ARG_STOP = "stop";
@@ -196,7 +199,7 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 
 	@Override
 	public void onStopObjectTap(SmartCheckStop stopObject) {
-		StopsInfoDialog stopInfoDialog = new StopsInfoDialog();
+		StopsInfoDialog stopInfoDialog = new StopsInfoDialog(this);
 		Bundle args = new Bundle();
 		args.putSerializable(StopsInfoDialog.ARG_STOP, stopObject);
 		stopInfoDialog.setArguments(args);
@@ -205,7 +208,7 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 
 	@Override
 	public void onStopObjectsTap(List<SmartCheckStop> stopObjectsList) {
-		StopsInfoDialog stopInfoDialog = new StopsInfoDialog();
+		StopsInfoDialog stopInfoDialog = new StopsInfoDialog(this);
 		Bundle args = new Bundle();
 		args.putSerializable(StopsInfoDialog.ARG_STOPS, (ArrayList<SmartCheckStop>) stopObjectsList);
 		stopInfoDialog.setArguments(args);
@@ -228,5 +231,21 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 	@Override
 	public String getAuthToken() {
 		return JPHelper.getAuthToken();
+	}
+
+	@Override
+	public void OnDialogDetailsClick(SmartCheckStop stop) {
+		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		Fragment fragment = new SmartCheckStopFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(SmartCheckStopFragment.ARG_STOP, stop);
+		fragment.setArguments(args);
+		fragmentTransaction
+				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.replace(Config.mainlayout, fragment);
+		fragmentTransaction.addToBackStack(null);
+		// fragmentTransaction.commitAllowingStateLoss();
+		fragmentTransaction.commit();
+		selectedStop = null;
 	}
 }

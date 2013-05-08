@@ -111,36 +111,6 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 		});
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent result) {
-		super.onActivityResult(requestCode, resultCode, result);
-
-		if (requestCode == StopSelectActivity.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-			if (result.getExtras().containsKey(StopSelectActivity.ARG_STOP)) {
-				selectedStop = (SmartCheckStop) result.getSerializableExtra(StopSelectActivity.ARG_STOP);
-			}
-		}
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-		if (selectedStop != null) {
-			FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
-			Fragment fragment = new SmartCheckStopFragment();
-			Bundle args = new Bundle();
-			args.putSerializable(SmartCheckStopFragment.ARG_STOP, selectedStop);
-			fragment.setArguments(args);
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			fragmentTransaction.replace(Config.mainlayout, fragment);
-			fragmentTransaction.addToBackStack(null);
-			// fragmentTransaction.commitAllowingStateLoss();
-			fragmentTransaction.commit();
-			selectedStop = null;
-		}
-	}
-
 	public class GetBusDirectionsProcessor extends AbstractAsyncTaskProcessor<String, List<SmartLine>> {
 
 		public GetBusDirectionsProcessor(SherlockFragmentActivity activity) {
