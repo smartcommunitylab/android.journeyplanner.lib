@@ -52,13 +52,17 @@ import eu.trentorise.smartcampus.jp.model.Sparking;
 public class ParkingMapActivity extends FeedbackFragmentActivity implements ParkingObjectMapItemTapListener {
 
 	public final static String ARG_PARKINGS = "parkings";
+	public final static String ARG_PARKING_FOCUSED = "parking_focused";
 	public final static int REQUEST_CODE = 1986;
+	
+	private final static int FOCUSED_ZOOM = 17;
 
 	private MapView mapView = null;
 	private MyLocationOverlay mMyLocationOverlay = null;
 	ParkingsItemizedOverlay mItemizedoverlay = null;
 
 	private ArrayList<Parking> parkingsList;
+	private Parking focusedParking;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,11 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 			for (Sparking sp : sparkingList) {
 				parkingsList.add(sp.getParking());
 			}
+		}
+
+		if (getIntent().getSerializableExtra(ARG_PARKINGS) != null) {
+			Sparking sparking = (Sparking) getIntent().getSerializableExtra(ARG_PARKING_FOCUSED);
+			focusedParking = sparking.getParking();
 		}
 
 		ActionBar actionBar = getSupportActionBar();
@@ -155,7 +164,7 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 
 		listOfOverlays.add(mMyLocationOverlay);
 
-		// // move map to my location at first fix 
+		// // move map to my location at first fix
 		// mMyLocationOverlay.runOnFirstFix(new Runnable() {
 		// public void run() {
 		// mapView.getController().animateTo(mMyLocationOverlay.getMyLocation());
@@ -169,6 +178,14 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 		}
 		mItemizedoverlay.populateAll();
 		mapView.invalidate();
+
+		if (focusedParking != null) {
+			int lat = (int) (focusedParking.getPosition()[0] * 1E6);
+			int lon = (int) (focusedParking.getPosition()[1] * 1E6);
+			GeoPoint focus = new GeoPoint(lat, lon);
+			mapView.getController().animateTo(focus);
+			mapView.getController().setZoom(FOCUSED_ZOOM);
+		}
 	}
 
 	@Override

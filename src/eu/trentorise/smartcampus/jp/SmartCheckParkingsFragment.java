@@ -2,7 +2,6 @@ package eu.trentorise.smartcampus.jp;
 
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +13,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -65,7 +65,13 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 
 		// LOAD
 		new SCAsyncTask<Void, Void, List<Parking>>(getSherlockActivity(), new SmartCheckParkingsProcessor(
-				getSherlockActivity(), adapter)).execute();
+				getSherlockActivity(), adapter, JPHelper.getLocationHelper().getLocation())).execute();
+	}
+
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		Parking parking = adapter.getItem(position);
+		goToParkingsMap(parking);
 	}
 
 	@Override
@@ -106,20 +112,30 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.menu_item_map) {
-			ArrayList<Sparking> spl = new ArrayList<Sparking>();
-			for (int i = 0; i < adapter.getCount(); i++) {
-				Parking p = adapter.getItem(i);
-				Sparking s = new Sparking(p);
-				spl.add(s);
-			}
-
-			Intent intent = new Intent(getSherlockActivity(), ParkingMapActivity.class);
-			intent.putExtra(ParkingMapActivity.ARG_PARKINGS, spl);
-			startActivity(intent);
+			goToParkingsMap(null);
 			return true;
 		} else {
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void goToParkingsMap(Parking focus) {
+		Intent intent = new Intent(getSherlockActivity(), ParkingMapActivity.class);
+
+		ArrayList<Sparking> spl = new ArrayList<Sparking>();
+		for (int i = 0; i < adapter.getCount(); i++) {
+			Parking p = adapter.getItem(i);
+			Sparking s = new Sparking(p);
+			spl.add(s);
+		}
+		intent.putExtra(ParkingMapActivity.ARG_PARKINGS, spl);
+
+		if (focus != null) {
+			Sparking focusSparking = new Sparking(focus);
+			intent.putExtra(ParkingMapActivity.ARG_PARKING_FOCUSED, focusSparking);
+		}
+
+		startActivity(intent);
 	}
 
 	/*

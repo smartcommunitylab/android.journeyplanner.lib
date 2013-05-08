@@ -59,8 +59,12 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-
 		Parking parking = getItem(position);
+		return buildParking(mContext, layoutResourceId, myLocation, parking, convertView, parent);
+	}
+
+	public static View buildParking(Context mContext, int layoutResourceId, Location myLocation, Parking parking,
+			View convertView, ViewGroup parent) {
 
 		View row = convertView;
 		ParkingHolder holder = null;
@@ -73,6 +77,7 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 			holder.parkingName = (TextView) row.findViewById(R.id.smart_check_parking_name);
 			holder.parkingData = (TextView) row.findViewById(R.id.smart_check_parking_data);
 			holder.parkingStatus = (TextView) row.findViewById(R.id.smart_check_parking_status);
+			holder.parkingDistance = (TextView) row.findViewById(R.id.smart_check_parking_distance);
 
 			row.setTag(holder);
 		} else {
@@ -81,34 +86,15 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 
 		// name
 		String parkingName = ParkingsHelper.getParkingName(parking);
-		if (parkingName == null) {
-			parkingName = parking.getName();
-		}
 		holder.parkingName.setText(parkingName);
 
 		// description
-		// TODO: distance from my position
-		String desc = "";
 		if (!parkingName.equalsIgnoreCase(parking.getDescription())) {
-			desc += parking.getDescription();
+			holder.parkingData.setText(parking.getDescription());
+			holder.parkingData.setVisibility(View.VISIBLE);
+		} else {
+			holder.parkingData.setVisibility(View.GONE);
 		}
-
-		if (myLocation != null) {
-			Location parkingLocation = new Location("");
-			parkingLocation.setLatitude(parking.getPosition()[0]);
-			parkingLocation.setLongitude(parking.getPosition()[1]);
-			float distance = myLocation.distanceTo(parkingLocation);
-
-			if (desc.length() != 0) {
-				desc += " (";
-				desc += String.format("%.2f", distance / 1000) + " km";
-				desc += ")";
-			} else {
-				desc += String.format("%.2f", distance / 1000) + " km";
-			}
-		}
-
-		holder.parkingData.setText(desc);
 
 		// status
 		holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, parking.getSlotsAvailable(),
@@ -126,77 +112,17 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 
 		holder.parkingStatus.setTextColor(mContext.getResources().getColor(ParkingsHelper.getParkingColor(parking)));
 
-		return row;
-	}
-
-	public static View buildParking(Context mContext, int layoutResourceId, Location myLocation, Parking parking,
-			View convertView, ViewGroup parent) {
-
-		View row = convertView;
-		ParkingHolder holder = null;
-
-		if (row == null) {
-			LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
-			row = inflater.inflate(layoutResourceId, parent, false);
-
-			holder = new ParkingHolder();
-			holder.parkingName = (TextView) row.findViewById(R.id.smart_check_parking_name);
-			holder.parkingData = (TextView) row.findViewById(R.id.smart_check_parking_data);
-			holder.parkingStatus = (TextView) row.findViewById(R.id.smart_check_parking_status);
-
-			row.setTag(holder);
-		} else {
-			holder = (ParkingHolder) row.getTag();
-		}
-
-		// name
-		holder.parkingName.setText(parking.getName());
-
-		// description
-		// TODO: distance from my position
-		String desc = "";
-		if (!parking.getName().equalsIgnoreCase(parking.getDescription())) {
-			desc += parking.getDescription();
-		}
-
+		// distance
 		if (myLocation != null) {
 			Location parkingLocation = new Location("");
 			parkingLocation.setLatitude(parking.getPosition()[0]);
 			parkingLocation.setLongitude(parking.getPosition()[1]);
 			float distance = myLocation.distanceTo(parkingLocation);
-
-			if (desc.length() != 0) {
-				desc += " (";
-				desc += String.format("%.2f", distance / 1000) + " km";
-				desc += ")";
-			} else {
-				desc += String.format("%.2f", distance / 1000) + " km";
-			}
-		}
-
-		holder.parkingData.setText(desc);
-
-		// status
-		holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, parking.getSlotsAvailable(),
-				parking.getSlotsTotal()));
-
-		if (parking.getSlotsAvailable() > 20) {
-			holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.parking_green));
-		} else if (parking.getSlotsAvailable() <= 20 && parking.getSlotsAvailable() > 5) {
-			holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.parking_orange));
-		} else if (parking.getSlotsAvailable() <= 5) {
-			holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.red));
-			if (parking.getSlotsAvailable() == 0) {
-				holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_full));
-			} else if (parking.getSlotsAvailable() == -1) {
-				// data unavailable
-				holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, "?",
-						parking.getSlotsTotal()));
-			} else if (parking.getSlotsAvailable() == -2) {
-				// data not monitored
-				holder.parkingStatus.setTextColor(mContext.getResources().getColor(R.color.blue));
-				holder.parkingStatus.setText(Integer.toString(parking.getSlotsTotal()));
-			}
+			String distanceString = String.format("%.2f", distance / 1000) + " km";
+			holder.parkingDistance.setText(distanceString);
+			holder.parkingDistance.setVisibility(View.VISIBLE);
+		} else {
+			holder.parkingDistance.setVisibility(View.GONE);
 		}
 
 		return row;
@@ -206,5 +132,6 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 		TextView parkingName;
 		TextView parkingData;
 		TextView parkingStatus;
+		TextView parkingDistance;
 	}
 }
