@@ -55,7 +55,7 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 	public final static String ARG_PARKING_FOCUSED = "parking_focused";
 	public final static int REQUEST_CODE = 1986;
 	
-	private final static int FOCUSED_ZOOM = 17;
+	private final static int FOCUSED_ZOOM = 18;
 
 	private MapView mapView = null;
 	private MyLocationOverlay mMyLocationOverlay = null;
