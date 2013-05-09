@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="agency_10_route_555">Trent - Malé</string>
-    <string name="agency_10_route_556">Malé - Trent</string>
-    <string name="agency_5_route_BV_R1_G">Bozen - Verona</string>
-    <string name="agency_5_route_BV_R1_R">Verona - Bozen</string>
-    <string name="agency_6_route_TB_R2_G">Trent - Bassano D.G.</string>
-    <string name="agency_6_route_TB_R2_R">Bassano D.G. - Trent</string>
+    <string name="agency_10_route_555">Trento - Malé</string>
+    <string name="agency_10_route_556">Malé - Trento</string>
+    <string name="agency_5_route_BV_R1_G">Bolzano - Verona</string>
+    <string name="agency_5_route_BV_R1_R">Verona - Bolzano</string>
+    <string name="agency_6_route_TB_R2_G">Trento - Bassano D.G.</string>
+    <string name="agency_6_route_TB_R2_R">Bassano D.G. - Trento</string>
     
     <string name="agency_12_route__A">P.Dante - Osp.S.Chiara - Clarina - P.Dante</string>
     <string name="agency_12_route__B">Piazza Dante - Laste - Piazza Dante</string>
