@@ -28,6 +28,7 @@ import com.actionbarsherlock.view.MenuItem;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.helper.JPHelper;
 
 public class BroadcastNotificationsActivity extends FeedbackFragmentActivity {
 	@Override
@@ -82,14 +83,12 @@ public class BroadcastNotificationsActivity extends FeedbackFragmentActivity {
 
 	@Override
 	public String getAppToken() {
-		// TODO Auto-generated method stub
-		return null;
+		return Config.APP_TOKEN;
 	}
 
 	@Override
 	public String getAuthToken() {
-		// TODO Auto-generated method stub
-		return null;
+		return JPHelper.getAuthToken();
 	}
 
 }
