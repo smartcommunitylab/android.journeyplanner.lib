@@ -19,7 +19,6 @@ import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
@@ -38,6 +37,8 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
+import eu.trentorise.smartcampus.jp.model.RouteDescriptor;
 import eu.trentorise.smartcampus.jp.model.TripData;
 
 public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
@@ -90,7 +91,10 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 				}
 			}
 
-			holder.route.setText(tripData.getRouteShortName() + " - " + tripData.getRouteName());
+			RouteDescriptor rd = RoutesHelper.getRouteDescriptorByRouteId(tripData.getRouteId());
+			holder.route.setText(rd.getShortNameResource() + " - " + mContext.getResources().getString(rd.getNameResource()));
+
+			rd.getNameResource();
 			holder.route.setVisibility(View.VISIBLE);
 		} else {
 			holder.route.setVisibility(View.GONE);
