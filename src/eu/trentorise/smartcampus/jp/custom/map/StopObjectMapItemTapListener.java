@@ -22,6 +22,7 @@ import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 public interface StopObjectMapItemTapListener {
 
 	public void onStopObjectTap(SmartCheckStop o);
+
 	public void onStopObjectsTap(List<SmartCheckStop> list);
-	
+
 }

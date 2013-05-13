@@ -67,6 +67,10 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.journeyplanner" />
         <activity
+            android:name=".ParkingMapActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.journeyplanner" />
+        <activity
             android:name=".LegMapActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.journeyplanner" />

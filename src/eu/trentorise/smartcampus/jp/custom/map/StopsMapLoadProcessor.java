@@ -16,6 +16,8 @@
 
 package eu.trentorise.smartcampus.jp.custom.map;
 
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
+
 import java.util.Collection;
 
 import android.app.Activity;
@@ -26,12 +28,12 @@ import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public abstract class MapLoadProcessor extends AbstractAsyncTaskProcessor<Void, Collection<SmartCheckStop>> {
+public abstract class StopsMapLoadProcessor extends AbstractAsyncTaskProcessor<Void, Collection<SmartCheckStop>> {
 
 	protected StopsItemizedOverlay overlay = null;
 	protected MapView mapView = null;
 
-	public MapLoadProcessor(Activity activity, StopsItemizedOverlay overlay, MapView mapView) {
+	public StopsMapLoadProcessor(Activity activity, StopsItemizedOverlay overlay, MapView mapView) {
 		super(activity);
 		this.overlay = overlay;
 		this.mapView = mapView;

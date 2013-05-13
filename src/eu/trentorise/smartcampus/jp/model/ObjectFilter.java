@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.model;
 
+import java.util.List;
 import java.util.Map;
 
 public class ObjectFilter {
@@ -22,17 +23,17 @@ public class ObjectFilter {
 	private boolean myObjects;
 	private double[] center;
 	private Double radius;
-	private String type;
+	private List<String> types;
 	private Long fromTime;
 	private Long toTime;
-	
+
 	private Integer limit;
 	private Integer skip;
-	
+
 	private String domainType;
 	private String className;
 
-	private Map<String,Object> criteria = null;
+	private Map<String, Object> criteria = null;
 
 	public ObjectFilter() {
 		super();
@@ -50,16 +51,16 @@ public class ObjectFilter {
 		return radius;
 	}
 
-	public void setRadius(Double  radius) {
+	public void setRadius(Double radius) {
 		this.radius = radius;
 	}
 
-	public String getType() {
-		return type;
+	public List<String> getTypes() {
+		return types;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setTypes(List<String> types) {
+		this.types = types;
 	}
 
 	public Long getFromTime() {
@@ -125,5 +126,5 @@ public class ObjectFilter {
 	public void setClassName(String className) {
 		this.className = className;
 	}
-	
+
 }

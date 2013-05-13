@@ -40,7 +40,7 @@ public class SmartCheckTripsProcessor extends AbstractAsyncTaskProcessor<SmartCh
 	@Override
 	public List<TripData> performAction(SmartCheckStop... params) throws SecurityException, Exception {
 		List<TripData> list = new ArrayList<TripData>();
-		
+
 		for (int i = 0; i < params.length; i++) {
 			SmartCheckStop stop = params[i];
 			if (stop != null) {

@@ -123,6 +123,8 @@
     <string name="menu_item_delete">Delete</string>
     <string name="menu_item_monitor_on">Monitor on</string>
     <string name="menu_item_monitor_off">Monitor off</string>
+    <string name="menu_item_parking_map">Parkings on map</string>
+    <string name="menu_item_parking_list">Parkings on list</string>
     <string name="always">Always</string>
     <string name="separator">-</string>
     <string name="saved_journey">Journey saved</string>
@@ -181,9 +183,17 @@
     <string name="smart_check_list_parking">Parking Availability</string>
     
     <string name="smart_check_stops_type_mobility">Mobility</string>
-    <string name="smart_check_stops_delay">Delay:</string>
+    <string name="smart_check_stops_delay">%s\' delay</string>
+    <string name="smart_check_stops_delay_user">%s\'u delay</string>
+    <string name="smart_check_tt_delay">%s\'</string>
+    <string name="smart_check_tt_delay_user">%s\'u</string>
+    <string name="smart_check_parking_avail">%1$s / %2$s</string>
+    <string name="smart_check_parking_full">full</string>
+    <string name="smart_check_parking_dialog_title">Parking</string>
+    <string name="smart_check_parking_dialog_directions">Directions</string>
     
     <string name="smart_check_routes_empty">No routes</string>
+    <string name="smart_check_parkings_empty">No parkings</string>
     
     <string name="ttype_transit">Transit</string>
     <string name="ttype_car">Car</string>
@@ -224,6 +234,7 @@
     <string name="notifications_itinerary_delay_title">Delay for \"%s\" journey</string>
     <string name="notifications_itinerary_delay_min">%s minute</string>
     <string name="notifications_itinerary_delay_mins">%s minutes</string>
+    <string name="notifications_itinerary_on_time">On Time</string>
     <string name="notifications_itinerary_delay_bus">Line %1$s for %2$s</string>
     <string name="notifications_itinerary_delay_train">Train %1$s for %2$s</string>
     <string name="notifications_itinerary_delay_original_schedule">scheduled at %1$s at %2$s</string>
@@ -232,6 +243,15 @@
     <string name="dialog_delete_itinerary">Delete \"%s\"</string>
     <string name="minutes">m</string>
     <string name="problem_loading">Problem loading</string>
+    
+    <string name="toast_nextday_loaded">New day loaded!</string>
+    <string name="toast_prevday_loaded">Previous day loaded</string>
+     
+    <string name="dialog_delays">Delays</string>
+    <string name="dialog_delay_system">%s minutes delay notified by the system</string>
+    <string name="dialog_delay_system_1">%s minute delay notified by the system</string>
+    <string name="dialog_delay_user">%s minutes delay notified by a user</string>
+    <string name="dialog_delay_user_1">%s minute delay notified by a user</string>
     
     <!-- short days of the week -->
     <string name="monday_short">M</string>

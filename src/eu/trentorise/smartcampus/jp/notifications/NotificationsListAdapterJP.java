@@ -140,6 +140,8 @@ public class NotificationsListAdapterJP extends ArrayAdapter<Notification> {
 			} else {
 				description.append(mContext.getString(R.string.notifications_itinerary_delay_mins, minutes));
 			}
+		} else if (delay == 0) {
+			description.append(mContext.getString(R.string.notifications_itinerary_on_time));
 		}
 
 		// line/train (with train number) and direction

@@ -15,8 +15,11 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom.map;
 
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
+
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,15 +39,21 @@ import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.StopSelectActivity;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
-public class InfoDialog extends SherlockDialogFragment {
+public class StopsInfoDialog extends SherlockDialogFragment {
+	
+	public interface OnDetailsClick{
+		public void OnDialogDetailsClick(SmartCheckStop stop);
+	}
 
 	public static final String ARG_STOP = "stop";
 	public static final String ARG_STOPS = "stops";
 	private SmartCheckStop stopObject;
 	private List<SmartCheckStop> stopObjectsList;
 	private RadioGroup stopsRadioGroup;
-
-	public InfoDialog() {
+	private OnDetailsClick listener;
+	
+	public StopsInfoDialog(OnDetailsClick listener) {
+		this.listener=listener;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -113,11 +122,7 @@ public class InfoDialog extends SherlockDialogFragment {
 					stop = stopObject;
 				}
 
-				StopSelectActivity stopSelectActivity = (StopSelectActivity) getSherlockActivity();
-				Intent stopSelectActivityIntent = stopSelectActivity.getIntent();
-				stopSelectActivityIntent.putExtra(StopSelectActivity.ARG_STOP, stop);
-				stopSelectActivity.setResult(Activity.RESULT_OK, stopSelectActivityIntent);
-				stopSelectActivity.finish();
+				listener.OnDialogDetailsClick(stop);
 
 				getDialog().dismiss();
 			}

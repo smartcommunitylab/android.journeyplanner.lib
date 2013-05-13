@@ -120,6 +120,8 @@
     <string name="menu_item_delete">Cancella</string>
     <string name="menu_item_monitor_on">Controllo ATTIVO</string>
     <string name="menu_item_monitor_off">Controllo NON ATTIVO</string>
+    <string name="menu_item_parking_map">Mappa dei parcheggi</string>
+    <string name="menu_item_parking_list">Lista dei parcheggi</string>
     <string name="always">Sempre</string>
     <string name="separator">-</string>
     <string name="saved_journey">Viaggio salvato</string>
@@ -178,9 +180,16 @@
     <string name="smart_check_list_parking">Disponibilità parcheggi</string>
     
     <string name="smart_check_stops_type_mobility">Mobilità</string>
-    <string name="smart_check_stops_delay">Ritardo:</string>
+    <string name="smart_check_stops_delay">ritardo %s\'</string>
+    <string name="smart_check_stops_delay_user">ritardo %s\'u</string>
+    <string name="smart_check_tt_delay">%s\'</string>
+    <string name="smart_check_tt_delay_user">%s\'u</string>
+    <string name="smart_check_parking_full">completo</string>
+    <string name="smart_check_parking_dialog_title">Parcheggio</string>
+    <string name="smart_check_parking_dialog_directions">Indicazioni stradali</string>
     
     <string name="smart_check_routes_empty">Nessuna corsa</string>
+    <string name="smart_check_parkings_empty">Nessun parcheggio</string>
     
     <string name="ttype_transit">Mezzi pubblici</string>
     <string name="ttype_car">Auto</string>
@@ -220,6 +229,7 @@
     <string name="notifications_itinerary_delay_title">Ritardo itinerario \"%s\"</string>
     <string name="notifications_itinerary_delay_min">%s minuto</string>
     <string name="notifications_itinerary_delay_mins">%s minuti</string>
+    <string name="notifications_itinerary_on_time">In orario</string>
     <string name="notifications_itinerary_delay_bus">Linea %1$s per %2$s</string>
     <string name="notifications_itinerary_delay_train">Treno %1$s per %2$s</string>
     <string name="notifications_itinerary_delay_original_schedule">atteso alle %1$s a %2$s</string>
@@ -229,14 +239,16 @@
     <string name="minutes">m</string>
 	<string name="problem_loading">Problema di caricamento</string>
 	
-	<string name="agency_10_route_555">Trento - Malé</string>
-    <string name="agency_10_route_556">Malé - Trento</string>
-    <string name="agency_5_route_BV_R1_G">Bolzano - Verona</string>
-    <string name="agency_5_route_BV_R1_R">Verona - Bolzano</string>
-    <string name="agency_6_route_TB_R2_G">Trento - Bassano D.G. </string>
-    <string name="agency_6_route_TB_R2_R">Bassano D.G. - Trento</string>
-	
-     <!-- short days of the week -->
+    <string name="toast_nextday_loaded">Nuovo giorno caricato!</string>
+    <string name="toast_prevday_loaded">Giorno precedente caricato</string>
+     
+    <string name="dialog_delays">Ritardi</string>
+    <string name="dialog_delay_system">%s minuti di ritardo segnalati dal sistema</string>
+    <string name="dialog_delay_system_1">%s minuto di ritardo segnalato dal sistema</string>
+    <string name="dialog_delay_user">%s minuti di ritardo segnalati da un utente</string>
+    <string name="dialog_delay_user_1">%s minuto di ritardo segnalato da un utente</string>
+
+    <!-- short days of the week -->
     <string name="monday_short">L</string>
     <string name="tuesday_short">M</string>
     <string name="wednesday_short">M</string>

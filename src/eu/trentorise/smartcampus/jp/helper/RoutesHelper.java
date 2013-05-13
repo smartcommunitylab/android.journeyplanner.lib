@@ -34,6 +34,11 @@ public class RoutesHelper {
 	}
 
 	public static List<RouteDescriptor> getRouteDescriptorsList(int[] agencyIds) {
+		// if agencyIds are not provided use all
+		if (agencyIds == null || agencyIds.length == 0) {
+			agencyIds = new int[] { AGENCYID_BUS, AGENCYID_TRAIN_BZVR, AGENCYID_TRAIN_TM, AGENCYID_TRAIN_TNBDG };
+		}
+
 		List<RouteDescriptor> list = new ArrayList<RouteDescriptor>();
 		for (int i = 0; i < agencyIds.length; i++) {
 			for (RouteDescriptor r : ROUTES.get(agencyIds[i])) {
@@ -41,6 +46,19 @@ public class RoutesHelper {
 			}
 		}
 		return list;
+	}
+
+	public static RouteDescriptor getRouteDescriptorByRouteId(String routeId) {
+		RouteDescriptor routeDescriptor = null;
+
+		for (RouteDescriptor rd : getRouteDescriptorsList(null)) {
+			if (rd.getRouteId().equalsIgnoreCase(routeId)) {
+				routeDescriptor = rd;
+				break;
+			}
+		}
+		
+		return routeDescriptor;
 	}
 
 	public static List<SmartLine> getSmartLines(Context ctx, String agencyId) {

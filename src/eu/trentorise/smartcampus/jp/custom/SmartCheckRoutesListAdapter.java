@@ -15,36 +15,45 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom;
 
+import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
+
+import java.io.Serializable;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
+import eu.trentorise.smartcampus.jp.model.RouteDescriptor;
 import eu.trentorise.smartcampus.jp.model.TripData;
 
 public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 
 	Context mContext;
 	int layoutResourceId;
-	List<TripData> trips;
 
 	String[] lines;
 	TypedArray icons;
 	TypedArray colors;
 
-	public SmartCheckRoutesListAdapter(Context context, int layoutResourceId, List<TripData> trips) {
-		super(context, layoutResourceId, trips);
+	public SmartCheckRoutesListAdapter(Context context, int layoutResourceId) {
+		super(context, layoutResourceId);
 		this.mContext = context;
 		this.layoutResourceId = layoutResourceId;
-		this.trips = trips;
 
 		lines = mContext.getResources().getStringArray(R.array.smart_checks_bus_number);
 		icons = mContext.getResources().obtainTypedArray(R.array.smart_checks_bus_icons);
@@ -55,7 +64,7 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View row = convertView;
 
-		TripData tripData = trips.get(position);
+		final TripData tripData = getItem(position);
 
 		RowHolder holder = null;
 		if (row == null) {
@@ -65,14 +74,15 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 			holder = new RowHolder();
 			holder.route = (TextView) row.findViewById(R.id.smartcheck_trip_route);
 			holder.time = (TextView) row.findViewById(R.id.smartcheck_trip_time);
-			holder.delay = (TextView) row.findViewById(R.id.smartcheck_trip_delay);
+			holder.delaySystem = (TextView) row.findViewById(R.id.smartcheck_trip_delay_system);
+			holder.delayUser = (TextView) row.findViewById(R.id.smartcheck_trip_delay_user);
 			row.setTag(holder);
 		} else {
 			holder = (RowHolder) row.getTag();
 		}
 
 		// separator
-		if (position == 0 || !(trips.get(position - 1).getRouteId()).equalsIgnoreCase(tripData.getRouteId())) {
+		if (position == 0 || !(getItem(position - 1).getRouteId()).equalsIgnoreCase(tripData.getRouteId())) {
 			holder.route.setBackgroundColor(mContext.getResources().getColor(R.color.sc_gray));
 			for (int i = 0; i < lines.length; i++) {
 				if (tripData.getRouteId().startsWith(lines[i])) {
@@ -81,7 +91,10 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 				}
 			}
 
-			holder.route.setText(tripData.getRouteShortName() + " - " + tripData.getRouteName());
+			RouteDescriptor rd = RoutesHelper.getRouteDescriptorByRouteId(tripData.getRouteId());
+			holder.route.setText(rd.getShortNameResource() + " - " + mContext.getResources().getString(rd.getNameResource()));
+
+			rd.getNameResource();
 			holder.route.setVisibility(View.VISIBLE);
 		} else {
 			holder.route.setVisibility(View.GONE);
@@ -94,13 +107,78 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 		holder.time.setText(timeFromString);
 
 		// delay
-		if (tripData.getDelay() > 0) {
-			holder.delay.setText(mContext.getString(R.string.smart_check_stops_delay) + " " + tripData.getDelay() + "'");
-		}
-		// else {
-		// holder.delay.setText(mContext.getString(R.string.smart_check_stops_delay)
-		// + " " + "5'");
+		/*
+		 * TODO: TEST
+		 */
+		// if (tripData.getDelays() == null) {
+		// Map<CreatorType, String> testDelays = new HashMap<CreatorType,
+		// String>();
+		// if (position == 0) {
+		// testDelays.put(CreatorType.USER, "2");
+		// testDelays.put(CreatorType.SERVICE, "1");
+		// } else if (position == 1) {
+		// testDelays.put(CreatorType.USER, "2");
+		// } else if (position == 2) {
+		// testDelays.put(CreatorType.SERVICE, "1");
 		// }
+		//
+		// tripData.setDelays(testDelays);
+		// }
+		/*
+		 * 
+		 */
+
+		Map<CreatorType, String> delays = tripData.getDelays();
+		if (delays != null) {
+			if (delays.get(CreatorType.USER) != null) {
+				holder.delayUser
+						.setText(mContext.getString(R.string.smart_check_stops_delay_user, delays.get(CreatorType.USER)));
+				holder.delayUser.setVisibility(View.VISIBLE);
+			} else {
+				holder.delayUser.setVisibility(View.GONE);
+			}
+
+			if (delays.get(CreatorType.SERVICE) != null) {
+				holder.delaySystem
+						.setText(mContext.getString(R.string.smart_check_stops_delay, delays.get(CreatorType.SERVICE)));
+				holder.delaySystem.setVisibility(View.VISIBLE);
+			} else if (delays.get(CreatorType.DEFAULT) != null) {
+				holder.delaySystem
+						.setText(mContext.getString(R.string.smart_check_stops_delay, delays.get(CreatorType.DEFAULT)));
+				holder.delaySystem.setVisibility(View.VISIBLE);
+			} else {
+				holder.delaySystem.setVisibility(View.GONE);
+			}
+
+			if (holder.delaySystem.getVisibility() == View.VISIBLE && holder.delayUser.getVisibility() == View.VISIBLE) {
+				holder.delaySystem.setTextAppearance(mContext, android.R.style.TextAppearance_Small);
+				holder.delayUser.setTextAppearance(mContext, android.R.style.TextAppearance_Small);
+			} else {
+				holder.delaySystem.setTextAppearance(mContext, android.R.style.TextAppearance_Medium);
+				holder.delayUser.setTextAppearance(mContext, android.R.style.TextAppearance_Medium);
+			}
+
+			holder.delaySystem.setTextColor(mContext.getResources().getColor(R.color.red));
+			holder.delayUser.setTextColor(mContext.getResources().getColor(R.color.blue));
+
+			LinearLayout delaysLinearLayout = (LinearLayout) row.findViewById(R.id.smartcheck_trip_delays);
+			delaysLinearLayout.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Map<CreatorType, String> delays = tripData.getDelays();
+					if (delays != null && !delays.isEmpty()) {
+						DelaysDialogFragment delaysDialog = new DelaysDialogFragment();
+						Bundle args = new Bundle();
+						args.putSerializable(DelaysDialogFragment.ARG_DELAYS, (Serializable) delays);
+						delaysDialog.setArguments(args);
+						delaysDialog.show(((SherlockFragmentActivity) mContext).getSupportFragmentManager(), "delaysdialog");
+					}
+				}
+			});
+		} else {
+			holder.delayUser.setVisibility(View.GONE);
+			holder.delaySystem.setVisibility(View.GONE);
+		}
 
 		return row;
 	}
@@ -108,7 +186,8 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 	static class RowHolder {
 		TextView route;
 		TextView time;
-		TextView delay;
+		TextView delaySystem;
+		TextView delayUser;
 	}
 
 }

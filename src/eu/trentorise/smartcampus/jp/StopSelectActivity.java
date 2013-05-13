@@ -28,7 +28,10 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
@@ -40,14 +43,16 @@ import com.google.android.maps.Projection;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
-import eu.trentorise.smartcampus.jp.custom.map.InfoDialog;
-import eu.trentorise.smartcampus.jp.custom.map.MapLoadProcessor;
+import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.map.StopObjectMapItemTapListener;
+import eu.trentorise.smartcampus.jp.custom.map.StopsInfoDialog;
+import eu.trentorise.smartcampus.jp.custom.map.StopsInfoDialog.OnDetailsClick;
 import eu.trentorise.smartcampus.jp.custom.map.StopsItemizedOverlay;
+import eu.trentorise.smartcampus.jp.custom.map.StopsMapLoadProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
-public class StopSelectActivity extends FeedbackFragmentActivity implements StopObjectMapItemTapListener {
+public class StopSelectActivity extends FeedbackFragmentActivity implements StopObjectMapItemTapListener,OnDetailsClick {
 
 	public final static String ARG_AGENCY_IDS = "agencyIds";
 	public final static String ARG_STOP = "stop";
@@ -65,7 +70,7 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.mapcontainer_jp);
-		
+
 		if (getIntent().getIntArrayExtra(ARG_AGENCY_IDS) != null) {
 			selectedAgencyIds = getIntent().getIntArrayExtra(ARG_AGENCY_IDS);
 		}
@@ -93,8 +98,8 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 
 	private void setContent() {
 
-		// FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
-		// (RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
+		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
+				(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
 
 		mapView = new MapView(this, getResources().getString(R.string.maps_api_key));
 		// mapView = MapManager.getMapView();
@@ -149,28 +154,29 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 		});
 
 		// LOAD
-		new SCAsyncTask<Void, Void, Collection<SmartCheckStop>>(this, new MapLoadProcessor(this, mItemizedoverlay, mapView) {
-			@Override
-			protected Collection<SmartCheckStop> getObjects() {
-				List<SmartCheckStop> list = new ArrayList<SmartCheckStop>();
-				if (selectedAgencyIds != null) {
-					for (int i = 0; i < selectedAgencyIds.length; i++) {
-						try {
-							list.addAll(JPHelper.getStops(Integer.toString(selectedAgencyIds[i]), null));
-						} catch (Exception e) {
-							e.printStackTrace();
+		new SCAsyncTask<Void, Void, Collection<SmartCheckStop>>(this,
+				new StopsMapLoadProcessor(this, mItemizedoverlay, mapView) {
+					@Override
+					protected Collection<SmartCheckStop> getObjects() {
+						List<SmartCheckStop> list = new ArrayList<SmartCheckStop>();
+						if (selectedAgencyIds != null) {
+							for (int i = 0; i < selectedAgencyIds.length; i++) {
+								try {
+									list.addAll(JPHelper.getStops(Integer.toString(selectedAgencyIds[i]), null));
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						} else {
+							try {
+								list.addAll(JPHelper.getStops(null, null));
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
+						return list;
 					}
-				} else {
-					try {
-						list.addAll(JPHelper.getStops(null, null));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-				return list;
-			}
-		}).execute();
+				}).execute();
 	}
 
 	@Override
@@ -193,18 +199,18 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 
 	@Override
 	public void onStopObjectTap(SmartCheckStop stopObject) {
-		InfoDialog stopInfoDialog = new InfoDialog();
+		StopsInfoDialog stopInfoDialog = new StopsInfoDialog(this);
 		Bundle args = new Bundle();
-		args.putSerializable(InfoDialog.ARG_STOP, stopObject);
+		args.putSerializable(StopsInfoDialog.ARG_STOP, stopObject);
 		stopInfoDialog.setArguments(args);
 		stopInfoDialog.show(getSupportFragmentManager(), "stopselected");
 	}
 
 	@Override
 	public void onStopObjectsTap(List<SmartCheckStop> stopObjectsList) {
-		InfoDialog stopInfoDialog = new InfoDialog();
+		StopsInfoDialog stopInfoDialog = new StopsInfoDialog(this);
 		Bundle args = new Bundle();
-		args.putSerializable(InfoDialog.ARG_STOPS, (ArrayList<SmartCheckStop>) stopObjectsList);
+		args.putSerializable(StopsInfoDialog.ARG_STOPS, (ArrayList<SmartCheckStop>) stopObjectsList);
 		stopInfoDialog.setArguments(args);
 		stopInfoDialog.show(getSupportFragmentManager(), "stopselected");
 	}
@@ -225,5 +231,21 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 	@Override
 	public String getAuthToken() {
 		return JPHelper.getAuthToken();
+	}
+
+	@Override
+	public void OnDialogDetailsClick(SmartCheckStop stop) {
+		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		Fragment fragment = new SmartCheckStopFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(SmartCheckStopFragment.ARG_STOP, stop);
+		fragment.setArguments(args);
+		fragmentTransaction
+				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.replace(Config.mainlayout, fragment);
+		fragmentTransaction.addToBackStack(null);
+		// fragmentTransaction.commitAllowingStateLoss();
+		fragmentTransaction.commit();
+		selectedStop = null;
 	}
 }

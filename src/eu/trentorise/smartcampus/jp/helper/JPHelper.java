@@ -16,8 +16,10 @@
 package eu.trentorise.smartcampus.jp.helper;
 
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
+import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Stop;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
@@ -27,7 +29,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -221,8 +222,6 @@ public class JPHelper {
 			list.add(route);
 		}
 
-		Collections.sort(list, Utils.getRouteComparator());
-
 		return list;
 	}
 
@@ -257,7 +256,7 @@ public class JPHelper {
 		// Route route = JSONUtils.getFullMapper().convertValue(r, Route.class);
 		// list.add(route);
 		// }
-		list = RoutesHelper.getRoutesList(mContext, new int[] {Integer.parseInt(agencyId)});
+		list = RoutesHelper.getRoutesList(mContext, new int[] { Integer.parseInt(agencyId) });
 		Collections.sort(list, Utils.getRouteComparator());
 
 		// get all-the-routes for a smartline
@@ -303,12 +302,6 @@ public class JPHelper {
 			list.add(stop);
 		}
 
-		Collections.sort(list, new Comparator<Stop>() {
-			public int compare(Stop o1, Stop o2) {
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
-
 		return list;
 	}
 
@@ -339,14 +332,6 @@ public class JPHelper {
 			}
 		}
 		list = newlist;
-
-		Collections.sort(list, new Comparator<StopTime>() {
-			public int compare(StopTime o1, StopTime o2) {
-				if (o1.getTime() == o2.getTime())
-					return 0;
-				return o1.getTime() < o2.getTime() ? -1 : 1;
-			}
-		});
 
 		return list;
 	}
@@ -399,7 +384,10 @@ public class JPHelper {
 	}
 
 	public static LocationHelper getLocationHelper() {
-		return mLocationHelper;
+		if (JPHelper.mLocationHelper == null) {
+			setLocationHelper(new LocationHelper(mContext));
+		}
+		return JPHelper.mLocationHelper;
 	}
 
 	public static void setLocationHelper(LocationHelper mLocationHelper) {
@@ -564,10 +552,12 @@ public class JPHelper {
 	// "Neufahrn\",\"RONCAFORT\",\"RONCAFORT nord\"],\"delays\":[[0,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7],[0,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7,8,5,0,5,7]]}";
 	public static TimeTable getTransitTimeTableById(long from_day, long to_day, String routeId) throws ConnectionException,
 			ProtocolException, SecurityException, JSONException, JsonParseException, JsonMappingException, IOException {
+		String url = Config.TARGET_ADDRESS + Config.CALL_GET_TRANSIT_TIME_BY_ROUTE + "/" + routeId + "/" + from_day + "/"
+				+ to_day;
 
-		MessageRequest req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), Config.TARGET_ADDRESS
-				+ Config.CALL_GET_TRANSIT_TIME_BY_ROUTE + "/" + routeId + "/" + from_day + "/" + to_day);
+		MessageRequest req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), url);
 		req.setMethod(Method.GET);
+		req.setQuery("complex=true");
 
 		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
 
@@ -584,8 +574,8 @@ public class JPHelper {
 		filter.setClassName("eu.trentorise.smartcampus.dt.model.POIObject");
 
 		filter.setSkip(0);
-		// filter.setLimit(100);
-		filter.setType("Mobility");
+		filter.setLimit(-1);
+		filter.setTypes(Collections.singletonList("Mobility"));
 
 		Map<String, Object> criteria = new HashMap<String, Object>();
 		criteria.put("source", "smartplanner-transitstops");
@@ -593,7 +583,7 @@ public class JPHelper {
 		if (agencyId != null) {
 			criteria.put("customData.agencyId", agencyId);
 		}
-		
+
 		filter.setCriteria(criteria);
 
 		// filter by near me
@@ -635,7 +625,7 @@ public class JPHelper {
 	public static List<TripData> getTrips(SmartCheckStop stop) throws Exception {
 
 		getInstance();
-		String url = JPHelper.mContext.getString(R.string.api_jp_getlimitedtimetable);
+		String url = Config.TARGET_ADDRESS + Config.CALL_GET_LIMITED_TIMETABLE;
 		url += "/";
 		url += stop.getCustomData().get("agencyId"); // agencyId
 		url += "/";
@@ -645,6 +635,7 @@ public class JPHelper {
 
 		MessageRequest request = new MessageRequest(GlobalConfig.getAppUrl(getInstance().mContext), url);
 		request.setMethod(Method.GET);
+		request.setQuery("complex=true");
 
 		MessageResponse response = getInstance().protocolCarrier.invokeSync(request, Config.APP_TOKEN, getAuthToken());
 		String body = response.getBody();
@@ -673,14 +664,42 @@ public class JPHelper {
 					tripData.setTripId(timeData.getTrip().getId());
 					tripData.setAgencyId(timeData.getTrip().getAgency());
 
+					// delays
+					Map<CreatorType, String> delays = null;
 					if (routeData.getDelays().containsKey(timeData.getTrip().getId())) {
-						tripData.setDelay(routeData.getDelays().get(timeData.getTrip().getId()));
+						delays = new HashMap<CreatorType, String>();
+						Map<String, String> rdDelays = routeData.getDelays().get(timeData.getTrip().getId());
+						for (Entry<String, String> delay : rdDelays.entrySet()) {
+							delays.put(CreatorType.getAlertType(delay.getKey()), delay.getValue());
+						}
 					}
+					tripData.setDelays(delays);
 
 					objects.add(tripData);
 				}
 			}
 		}
+
+		return objects;
+	}
+
+	public static List<Parking> getParkings() throws Exception {
+
+		getInstance();
+		String url = Config.TARGET_ADDRESS + Config.CALL_GET_PARKINGS;
+
+		MessageRequest request = new MessageRequest(GlobalConfig.getAppUrl(getInstance().mContext), url);
+		request.setMethod(Method.GET);
+
+		MessageResponse response = getInstance().protocolCarrier.invokeSync(request, Config.APP_TOKEN, getAuthToken());
+		String body = response.getBody();
+		if (body == null || body.trim().length() == 0) {
+			return Collections.emptyList();
+		}
+
+		List<Parking> objects = eu.trentorise.smartcampus.android.common.Utils.convertJSON(body,
+				new TypeReference<List<Parking>>() {
+				});
 
 		return objects;
 	}

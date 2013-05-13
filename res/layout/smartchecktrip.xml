@@ -19,11 +19,18 @@
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#FFFFFF"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="false" >
+
+<!--         <requestFocus -->
+<!--             android:duplicateParentState="true" -->
+<!--             android:focusable="true" -->
+<!--             android:focusableInTouchMode="true" /> -->
+    </TextView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="?android:attr/listPreferredItemHeight"
+        android:background="@android:color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="6dip"
@@ -31,20 +38,38 @@
 
         <TextView
             android:id="@+id/smartcheck_trip_time"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="true" />
+            android:textIsSelectable="false" />
 
-        <TextView
-            android:id="@+id/smartcheck_trip_delay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/smartcheck_trip_delays"
+            android:layout_width="0dip"
+            android:layout_height="?android:attr/listPreferredItemHeight"
             android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/red"
-            android:textIsSelectable="true" />
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/smartcheck_trip_delay_system"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/red"
+                android:textIsSelectable="false"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/smartcheck_trip_delay_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/blue"
+                android:textIsSelectable="false"
+                android:visibility="gone" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
