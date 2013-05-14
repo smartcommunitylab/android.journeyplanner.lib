@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import android.content.Context;
@@ -24,6 +25,8 @@ public class RoutesHelper {
 	public static final int AGENCYID_TRAIN_TM = 10;
 	public static final int AGENCYID_TRAIN_BZVR = 5;
 	public static final int AGENCYID_TRAIN_TNBDG = 6;
+
+	public static Map<String, List<SmartLine>> smartLines = new HashMap<String, List<SmartLine>>();
 
 	public static List<Route> getRoutesList(Context ctx, int[] agencyIds) {
 		List<Route> list = new ArrayList<Route>();
@@ -57,11 +60,18 @@ public class RoutesHelper {
 				break;
 			}
 		}
-		
+
 		return routeDescriptor;
 	}
 
 	public static List<SmartLine> getSmartLines(Context ctx, String agencyId) {
+
+		List<SmartLine> cachedSmartLine = smartLines.get(agencyId);
+
+		if (cachedSmartLine != null) {
+			return cachedSmartLine;
+		}
+
 		List<Route> list = new ArrayList<Route>();
 		Resources resources = ctx.getResources();
 		String[] lines = resources.getStringArray(R.array.smart_checks_bus_number);
@@ -82,9 +92,9 @@ public class RoutesHelper {
 			// put them in the array
 			for (Route route : list) {
 				//
-				if ((route.getId().getId().toUpperCase().compareTo(lines[index].toUpperCase()) == 0)
-						|| route.getId().getId().toUpperCase().compareTo(lines[index].toUpperCase() + "R") == 0
-						|| route.getId().getId().toUpperCase().compareTo(lines[index].toUpperCase() + "A") == 0) {
+				if ((route.getId().getId().toUpperCase(Locale.getDefault()).compareTo(lines[index].toUpperCase()) == 0)
+						|| route.getId().getId().toUpperCase(Locale.getDefault()).compareTo(lines[index].toUpperCase() + "R") == 0
+						|| route.getId().getId().toUpperCase(Locale.getDefault()).compareTo(lines[index].toUpperCase() + "A") == 0) {
 					if (singleRoutesShorts.get(lines[index]) == null) {
 						singleRoutesShorts.put(lines[index], new ArrayList<String>());
 						singleRoutesLong.put(lines[index], new ArrayList<String>());
@@ -101,6 +111,9 @@ public class RoutesHelper {
 					singleRoutesShorts.get(lines[index]), singleRoutesLong.get(lines[index]), singleRoutesId.get(lines[index]));
 			busLines.add(singleLine);
 		}
+
+		smartLines.put(agencyId, busLines);
+
 		return busLines;
 	}
 
