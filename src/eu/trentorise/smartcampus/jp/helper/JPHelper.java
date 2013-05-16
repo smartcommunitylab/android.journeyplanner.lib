@@ -564,7 +564,7 @@ public class JPHelper {
 		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), TimeTable.class);
 	}
 
-	public static List<SmartCheckStop> getStops(String agencyId, double[] location) throws Exception {
+	public static List<SmartCheckStop> getStops(String agencyId, double[] location, double radius) throws Exception {
 		getInstance();
 		MessageRequest request = new MessageRequest(GlobalConfig.getAppUrl(getInstance().mContext),
 				JPHelper.mContext.getString(R.string.api_dt_objects));
@@ -589,7 +589,7 @@ public class JPHelper {
 		// filter by near me
 		if (location != null) {
 			filter.setCenter(location);
-			filter.setRadius(0.01);
+			filter.setRadius(radius);
 		}
 
 		String queryStrObject = eu.trentorise.smartcampus.android.common.Utils.convertToJSON(filter);

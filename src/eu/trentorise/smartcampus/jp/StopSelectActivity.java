@@ -16,8 +16,9 @@
 package eu.trentorise.smartcampus.jp;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -30,44 +31,57 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
 
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
+import eu.trentorise.smartcampus.jp.custom.BetterMapView;
+import eu.trentorise.smartcampus.jp.custom.BetterMapView.OnMapChanged;
+import eu.trentorise.smartcampus.jp.custom.StopsAsyncTask;
+import eu.trentorise.smartcampus.jp.custom.StopsAsyncTask.OnStopLoadingFinished;
 import eu.trentorise.smartcampus.jp.custom.map.StopObjectMapItemTapListener;
 import eu.trentorise.smartcampus.jp.custom.map.StopsInfoDialog;
 import eu.trentorise.smartcampus.jp.custom.map.StopsInfoDialog.OnDetailsClick;
 import eu.trentorise.smartcampus.jp.custom.map.StopsItemizedOverlay;
-import eu.trentorise.smartcampus.jp.custom.map.StopsMapLoadProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
-public class StopSelectActivity extends FeedbackFragmentActivity implements StopObjectMapItemTapListener,OnDetailsClick {
+public class StopSelectActivity extends FeedbackFragmentActivity implements StopObjectMapItemTapListener, OnMapChanged,
+		OnStopLoadingFinished, OnDetailsClick {
 
 	public final static String ARG_AGENCY_IDS = "agencyIds";
 	public final static String ARG_STOP = "stop";
 	public final static int REQUEST_CODE = 1983;
 
-	private MapView mapView = null;
+	private BetterMapView mapView = null;
 	private MyLocationOverlay mMyLocationOverlay = null;
 	StopsItemizedOverlay mItemizedoverlay = null;
 
 	private int[] selectedAgencyIds = null;
 	private SmartCheckStop selectedStop = null;
 
+	private StopsAsyncTask active;
+	private double diagonalold;
+	private double[] location_old;
+
+	private Map<String, SmartCheckStop> smartCheckStopMap;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		setContentView(R.layout.mapcontainer_jp);
 
@@ -82,6 +96,7 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 		actionBar.setDisplayShowHomeEnabled(false); // home icon bar
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); // tabs
 
+		smartCheckStopMap = new HashMap<String, SmartCheckStop>();
 		setContent();
 	}
 
@@ -97,11 +112,12 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 	}
 
 	private void setContent() {
-
+		setSupportProgressBarIndeterminateVisibility(true);
 		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
 				(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
 
-		mapView = new MapView(this, getResources().getString(R.string.maps_api_key));
+		mapView = new BetterMapView(this, getResources().getString(R.string.maps_api_key), StopSelectActivity.this);
+
 		// mapView = MapManager.getMapView();
 		// setContentView(R.layout.mapcontainer);
 
@@ -143,6 +159,10 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 				canvas.drawBitmap(bitmap, loc.x - (bitmap.getWidth() / 2), loc.y - bitmap.getHeight(), null);
 			}
 		};
+		diagonalold = mapView.getDiagonalLenght();
+		location_old = new double[2];
+		location_old[0] = mapView.getMapCenter().getLatitudeE6() / 1e6;
+		location_old[1] = mapView.getMapCenter().getLongitudeE6() / 1e6;
 
 		listOfOverlays.add(mMyLocationOverlay);
 
@@ -153,30 +173,33 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 			}
 		});
 
-		// LOAD
-		new SCAsyncTask<Void, Void, Collection<SmartCheckStop>>(this,
-				new StopsMapLoadProcessor(this, mItemizedoverlay, mapView) {
-					@Override
-					protected Collection<SmartCheckStop> getObjects() {
-						List<SmartCheckStop> list = new ArrayList<SmartCheckStop>();
-						if (selectedAgencyIds != null) {
-							for (int i = 0; i < selectedAgencyIds.length; i++) {
-								try {
-									list.addAll(JPHelper.getStops(Integer.toString(selectedAgencyIds[i]), null));
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						} else {
-							try {
-								list.addAll(JPHelper.getStops(null, null));
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-						return list;
-					}
-				}).execute();
+		// // LOAD
+		// new SCAsyncTask<Void, Void, Collection<SmartCheckStop>>(this,
+		// new StopsMapLoadProcessor(this, mItemizedoverlay, mapView) {
+		// @Override
+		// protected Collection<SmartCheckStop> getObjects() {
+		// List<SmartCheckStop> list = new ArrayList<SmartCheckStop>();
+		// if (selectedAgencyIds != null) {
+		// for (int i = 0; i < selectedAgencyIds.length; i++) {
+		// try {
+		// list.addAll(JPHelper.getStops(Integer.toString(selectedAgencyIds[i]),
+		// null));
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// }
+		// } else {
+		// try {
+		// list.addAll(JPHelper.getStops(null, null));
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// }
+		// return list;
+		// }
+		// }).execute();
+
+		new StopsAsyncTask(selectedAgencyIds, smartCheckStopMap, mItemizedoverlay, location_old, diagonalold, mapView, this);
 	}
 
 	@Override
@@ -240,12 +263,50 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 		Bundle args = new Bundle();
 		args.putSerializable(SmartCheckStopFragment.ARG_STOP, stop);
 		fragment.setArguments(args);
-		fragmentTransaction
-				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		fragmentTransaction.replace(Config.mainlayout, fragment);
 		fragmentTransaction.addToBackStack(null);
 		// fragmentTransaction.commitAllowingStateLoss();
 		fragmentTransaction.commit();
 		selectedStop = null;
 	}
+
+	public void onCenterChanged(GeoPoint center) {
+		Log.i("where", "Center Long: " + center.getLongitudeE6() / 1e6 + " Lat: " + center.getLatitudeE6() / 1e6);
+		final double[] location = { center.getLatitudeE6() / 1e6, center.getLongitudeE6() / 1e6 };
+		final double diagonal = mapView.getDiagonalLenght();
+
+		if (location_old[0] != location[0] || location_old[1] != location[1]) {
+			diagonalold = diagonal;
+			if (active != null)
+				active.cancel(true);
+			setSupportProgressBarIndeterminateVisibility(true);
+			active = new StopsAsyncTask(selectedAgencyIds, smartCheckStopMap, mItemizedoverlay, location, diagonal, mapView,
+					this);
+			active.execute();
+		}
+	}
+
+	@Override
+	public void onZoomChanged(GeoPoint center, double diagonalLenght) {
+		Log.i("where", "DiagonalLenght: " + diagonalLenght + "\nCenter Long: " + center.getLongitudeE6() / 1e6 + " Lat: "
+				+ center.getLatitudeE6() / 1e6);
+		final double[] location = { center.getLatitudeE6() / 1e6, center.getLongitudeE6() / 1e6 };
+		final double diagonal = diagonalLenght;
+		if (diagonal > diagonalold) {
+			diagonalold = diagonal;
+			if (active != null)
+				active.cancel(true);
+			setSupportProgressBarIndeterminateVisibility(true);
+			active = new StopsAsyncTask(selectedAgencyIds, smartCheckStopMap, mItemizedoverlay, location, diagonal, mapView,
+					this);
+			active.execute();
+		}
+	}
+
+	@Override
+	public void onStopLoadingFinished() {
+		setSupportProgressBarIndeterminateVisibility(false);
+	}
+
 }

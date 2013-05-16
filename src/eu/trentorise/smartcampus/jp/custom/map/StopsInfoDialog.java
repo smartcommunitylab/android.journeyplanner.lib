@@ -15,13 +15,9 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom.map;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-
 import java.util.List;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -36,12 +32,12 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 
 import eu.trentorise.smartcampus.jp.R;
-import eu.trentorise.smartcampus.jp.StopSelectActivity;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
+@SuppressLint("ValidFragment")
 public class StopsInfoDialog extends SherlockDialogFragment {
-	
-	public interface OnDetailsClick{
+
+	public interface OnDetailsClick {
 		public void OnDialogDetailsClick(SmartCheckStop stop);
 	}
 
@@ -51,9 +47,9 @@ public class StopsInfoDialog extends SherlockDialogFragment {
 	private List<SmartCheckStop> stopObjectsList;
 	private RadioGroup stopsRadioGroup;
 	private OnDetailsClick listener;
-	
+
 	public StopsInfoDialog(OnDetailsClick listener) {
-		this.listener=listener;
+		this.listener = listener;
 	}
 
 	@SuppressWarnings("unchecked")
