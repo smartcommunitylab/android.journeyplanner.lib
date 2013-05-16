@@ -179,6 +179,7 @@
     <string name="broadcast_notifications_diversion">Diversions</string>
     
     <string name="smart_check_list_bus_timetable">Bus Timetable</string>
+    <string name="smart_check_list_extraurban_timetable">Extraurban Bus Timetable</string>
     <string name="smart_check_list_train_timetable">Train Timetable</string>
     <string name="smart_check_list_parking">Parking Availability</string>
     

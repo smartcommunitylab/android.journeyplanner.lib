@@ -28,6 +28,7 @@
     
     <string-array name="smart_checks_list">
         <item>@string/smart_check_list_bus_timetable</item>
+        <item>@string/smart_check_list_extraurban_timetable</item>
         <item>@string/smart_check_list_train_timetable</item>       
         <item>@string/smart_check_list_parking</item>
     </string-array>

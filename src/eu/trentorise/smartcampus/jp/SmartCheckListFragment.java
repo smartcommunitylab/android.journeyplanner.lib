@@ -60,6 +60,16 @@ public class SmartCheckListFragment extends FeedbackFragment {
 					fragmentTransaction.commit();
 				} else if (optionName
 						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[1]) == 0) {
+					// extraurban bus Time Table
+					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
+							.beginTransaction();
+					Fragment fragment = new SmartCheckExtraurbanFragment();
+					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+					fragmentTransaction.replace(Config.mainlayout, fragment);
+					fragmentTransaction.addToBackStack(null);
+					fragmentTransaction.commit();
+				} else if (optionName
+						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[2]) == 0) {
 					// train Time Table
 					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
 							.beginTransaction();
@@ -69,7 +79,7 @@ public class SmartCheckListFragment extends FeedbackFragment {
 					fragmentTransaction.addToBackStack(null);
 					fragmentTransaction.commit();
 				} else if (optionName
-						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[2]) == 0) {
+						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[3]) == 0) {
 					// Parking availability
 					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
 							.beginTransaction();

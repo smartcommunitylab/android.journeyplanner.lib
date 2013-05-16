@@ -176,6 +176,7 @@
     <string name="broadcast_notifications_diversion">Deviazione</string>
     
     <string name="smart_check_list_bus_timetable">Orario autobus</string>
+    <string name="smart_check_list_extraurban_timetable">Orario autobus extraurbano</string>
     <string name="smart_check_list_train_timetable">Orario treni</string>
     <string name="smart_check_list_parking">Disponibilità parcheggi</string>
     
