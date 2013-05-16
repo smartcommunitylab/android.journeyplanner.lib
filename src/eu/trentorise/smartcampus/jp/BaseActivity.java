@@ -27,6 +27,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.google.analytics.tracking.android.EasyTracker;
 
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
@@ -44,6 +45,18 @@ public class BaseActivity extends FeedbackFragmentActivity {
 		} catch (Exception e) {
 			JPHelper.endAppFailure(this, R.string.app_failure_setup);
 		}
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		EasyTracker.getInstance().activityStart(this); 
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		EasyTracker.getInstance().activityStop(this);
 	}
 
 	protected void initData() {

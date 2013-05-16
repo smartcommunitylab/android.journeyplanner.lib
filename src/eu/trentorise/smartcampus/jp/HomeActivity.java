@@ -67,7 +67,7 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onStart() {
+	public void onStart() {
 		super.onStart();
 
 		getSupportActionBar().setHomeButtonEnabled(false);
