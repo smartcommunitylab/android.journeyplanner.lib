@@ -68,7 +68,7 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 	private MyLocationOverlay mMyLocationOverlay = null;
 	StopsItemizedOverlay mItemizedoverlay = null;
 
-	private int[] selectedAgencyIds = null;
+	private String[] selectedAgencyIds = null;
 	private SmartCheckStop selectedStop = null;
 
 	private StopsAsyncTask active;
@@ -85,8 +85,9 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 
 		setContentView(R.layout.mapcontainer_jp);
 
-		if (getIntent().getIntArrayExtra(ARG_AGENCY_IDS) != null) {
-			selectedAgencyIds = getIntent().getIntArrayExtra(ARG_AGENCY_IDS);
+		String[] bundleAgencyIds = getIntent().getStringArrayExtra(ARG_AGENCY_IDS);
+		if (bundleAgencyIds != null) {
+			selectedAgencyIds = bundleAgencyIds;
 		}
 
 		ActionBar actionBar = getSupportActionBar();

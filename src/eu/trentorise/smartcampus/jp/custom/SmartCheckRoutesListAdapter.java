@@ -55,9 +55,9 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 		this.mContext = context;
 		this.layoutResourceId = layoutResourceId;
 
-		lines = mContext.getResources().getStringArray(R.array.smart_checks_bus_number);
-		icons = mContext.getResources().obtainTypedArray(R.array.smart_checks_bus_icons);
-		colors = mContext.getResources().obtainTypedArray(R.array.smart_checks_bus_color);
+		lines = mContext.getResources().getStringArray(R.array.smart_check_12_numbers);
+		icons = mContext.getResources().obtainTypedArray(R.array.smart_check_12_icons);
+		colors = mContext.getResources().obtainTypedArray(R.array.smart_check_12_colors);
 	}
 
 	@Override

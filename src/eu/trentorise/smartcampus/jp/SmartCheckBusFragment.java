@@ -120,7 +120,7 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 				Intent intent = new Intent(getSherlockActivity(),
 						StopSelectActivity.class);
 				intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS,
-						new int[] { RoutesHelper.AGENCYID_BUS });
+						new String[] { RoutesHelper.AGENCYID_BUS });
 				startActivityForResult(intent, StopSelectActivity.REQUEST_CODE);
 			}
 		});

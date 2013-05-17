@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="agency_17_zone_1">Val di Fiemme, Val di Fassa, Val di Cembra</string>
+    <string name="agency_17_zone_2">Val Rendena, Giudicarie</string>
+    <string name="agency_17_zone_3">Rovereto, Lavarone, Destra Adige, Riva del Garda</string>
+    <string name="agency_17_zone_4">Valsugana</string>
+    <string name="agency_17_zone_5">Valle di Primiero</string>
+    <string name="agency_17_zone_6">Val di Non, Val di Sole</string>
+    
     <string name="agency_10_route_555">Trent - Malé</string>
     <string name="agency_10_route_556">Malé - Trent</string>
     

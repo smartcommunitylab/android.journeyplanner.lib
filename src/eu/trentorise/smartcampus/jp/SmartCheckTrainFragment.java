@@ -34,7 +34,7 @@ public class SmartCheckTrainFragment extends FeedbackFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.smartchecktrain, container, false);
+		return inflater.inflate(R.layout.smartcheck_simple, container, false);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class SmartCheckTrainFragment extends FeedbackFragment {
 
 		// get routes from Constants
 		adapter = new SmartCheckTrainAdapter(getSherlockActivity(), android.R.layout.simple_list_item_1,
-				RoutesHelper.getRouteDescriptorsList(new int[] { RoutesHelper.AGENCYID_TRAIN_BZVR,
+				RoutesHelper.getRouteDescriptorsList(new String[] { RoutesHelper.AGENCYID_TRAIN_BZVR,
 						RoutesHelper.AGENCYID_TRAIN_TM, RoutesHelper.AGENCYID_TRAIN_TNBDG }));
 		routesListView.setAdapter(adapter);
 
@@ -81,7 +81,7 @@ public class SmartCheckTrainFragment extends FeedbackFragment {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getSherlockActivity(), StopSelectActivity.class);
-				intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS, new int[] { RoutesHelper.AGENCYID_TRAIN_BZVR,
+				intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS, new String[] { RoutesHelper.AGENCYID_TRAIN_BZVR,
 						RoutesHelper.AGENCYID_TRAIN_TM, RoutesHelper.AGENCYID_TRAIN_TNBDG });
 				startActivityForResult(intent, StopSelectActivity.REQUEST_CODE);
 			}

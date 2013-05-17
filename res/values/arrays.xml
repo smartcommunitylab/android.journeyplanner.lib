@@ -25,16 +25,13 @@
         <item>@string/broadcast_notifications_traffic_jam</item>
         <item>@string/broadcast_notifications_diversion</item>
     </string-array>
-    
     <string-array name="smart_checks_list">
         <item>@string/smart_check_list_bus_timetable</item>
         <item>@string/smart_check_list_extraurban_timetable</item>
-        <item>@string/smart_check_list_train_timetable</item>       
+        <item>@string/smart_check_list_train_timetable</item>
         <item>@string/smart_check_list_parking</item>
     </string-array>
-    
-    
-   <string-array name="smart_checks_bus_number">
+    <string-array name="smart_check_12_numbers">
         <item>_A</item>
         <item>_B</item>
         <item>C</item>
@@ -57,10 +54,10 @@
         <item>16</item>
         <item>17</item>
         <item>NP</item>
-<!--         <item>funivia</item>      -->
+        <!-- <item>funivia</item> -->
     </string-array>
-    
-      <array name="smart_checks_bus_icons">
+
+    <array name="smart_check_12_icons">
         <item>@drawable/ic_f_a</item>
         <item>@drawable/ic_f_b</item>
         <item>@drawable/ic_f_c</item>
@@ -83,10 +80,9 @@
         <item>@drawable/ic_f16</item>
         <item>@drawable/ic_f17</item>
         <item>@drawable/ic_f_np</item>
-<!--         <item>@drawable/ic_f_cw</item>      -->
+        <!-- <item>@drawable/ic_f_cw</item> -->
     </array>
-    
-    <array name="smart_checks_bus_color">
+    <array name="smart_check_12_colors">
         <item>#B9BAB5</item>
         <item>#717880</item>
         <item>#000</item>
@@ -109,9 +105,23 @@
         <item>#212C5F</item>
         <item>#2493C5</item>
         <item>#000</item>
-<!--         <item>#FFF</item>      -->
+        <!-- <item>#FFF</item> -->
     </array>
-    
-
+    <array name="smart_check_17_zones">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </array>
+    <array name="smart_check_17_colors">
+        <item>#924B00</item>
+        <item>#EB0070</item>
+        <item>#FCB146</item>
+        <item>#0062B5</item>
+        <item>#19B9BA</item>
+        <item>#7C7E80</item>
+    </array>
 
 </resources>

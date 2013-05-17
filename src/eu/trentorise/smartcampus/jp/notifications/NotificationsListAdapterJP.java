@@ -99,7 +99,7 @@ public class NotificationsListAdapterJP extends ArrayAdapter<Notification> {
 
 		Map<String, Object> content = notification.getContent();
 		String journeyName = notification.getTitle();
-		Integer agencyId = Integer.parseInt((String) content.get("agencyId"));
+		String agencyId = (String) content.get("agencyId");
 		Integer delay = (Integer) content.get("delay"); // milliseconds
 		String line = "?";
 		if (content.get("routeShortName") != null) {

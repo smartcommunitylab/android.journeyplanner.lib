@@ -230,9 +230,9 @@ public class JPHelper {
 
 		List<Route> list = new ArrayList<Route>();
 		Resources resources = mContext.getResources();
-		String[] lines = resources.getStringArray(R.array.smart_checks_bus_number);
-		TypedArray icons = resources.obtainTypedArray(R.array.smart_checks_bus_icons);
-		TypedArray colors = resources.obtainTypedArray(R.array.smart_checks_bus_color);
+		String[] lines = resources.getStringArray(R.array.smart_check_12_numbers);
+		TypedArray icons = resources.obtainTypedArray(R.array.smart_check_12_icons);
+		TypedArray colors = resources.obtainTypedArray(R.array.smart_check_12_colors);
 
 		// get info from result (busRoutes)
 		Map<String, List<String>> singleRoutesShorts = new HashMap<String, List<String>>();
@@ -256,7 +256,7 @@ public class JPHelper {
 		// Route route = JSONUtils.getFullMapper().convertValue(r, Route.class);
 		// list.add(route);
 		// }
-		list = RoutesHelper.getRoutesList(mContext, new int[] { Integer.parseInt(agencyId) });
+		list = RoutesHelper.getRoutesList(mContext, new String[] { agencyId });
 		Collections.sort(list, Utils.getRouteComparator());
 
 		// get all-the-routes for a smartline

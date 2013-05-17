@@ -62,17 +62,15 @@ public class Utils {
 
 	public static ImageView getImageByAgencyId(Context ctx, int agencyId) {
 		ImageView imgv = new ImageView(ctx);
+		String agencyIdString = Integer.toString(agencyId);
 
-		switch (agencyId) {
-		case RoutesHelper.AGENCYID_BUS:
+		if (agencyIdString.equalsIgnoreCase(RoutesHelper.AGENCYID_BUS)
+				|| agencyIdString.equalsIgnoreCase(RoutesHelper.AGENCYID_BUS_EXTRAURBAN)) {
 			imgv.setImageResource(R.drawable.ic_mt_bus);
-			break;
-		case RoutesHelper.AGENCYID_TRAIN_BZVR:
-		case RoutesHelper.AGENCYID_TRAIN_TNBDG:
-		case RoutesHelper.AGENCYID_TRAIN_TM:
+		} else if (agencyIdString.equalsIgnoreCase(RoutesHelper.AGENCYID_TRAIN_BZVR)
+				|| agencyIdString.equalsIgnoreCase(RoutesHelper.AGENCYID_TRAIN_TM)
+				|| agencyIdString.equalsIgnoreCase(RoutesHelper.AGENCYID_TRAIN_TNBDG)) {
 			imgv.setImageResource(R.drawable.ic_mt_train);
-			break;
-		default:
 		}
 
 		return imgv;

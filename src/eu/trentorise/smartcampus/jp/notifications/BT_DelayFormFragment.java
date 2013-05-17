@@ -76,7 +76,7 @@ public class BT_DelayFormFragment extends FeedbackFragment {
 	private Stop selectedStop;
 	private StopTime selectedStoptime;
 
-	private int[] agencyIds;
+	private String[] agencyIds;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +103,7 @@ public class BT_DelayFormFragment extends FeedbackFragment {
 
 		Bundle bundle = this.getArguments();
 
-		agencyIds = bundle.getIntArray(ARG_AGENCYID);
+		agencyIds = bundle.getStringArray(ARG_AGENCYID);
 
 		String itemtext = bundle.getString("itemtext");
 		if (itemtext != null) {
@@ -181,10 +181,13 @@ public class BT_DelayFormFragment extends FeedbackFragment {
 		sendBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectedRoute = routesSpinner.getSelectedItemPosition() >=0 ? routes.get(routesSpinner.getSelectedItemPosition()) : null;
-				selectedStop = stopsSpinner.getSelectedItemPosition() >=0 ? stops.get(stopsSpinner.getSelectedItemPosition()) : null;
-				selectedStoptime = stoptimesSpinner.getSelectedItemPosition() >=0 ? stoptimes.get(stoptimesSpinner.getSelectedItemPosition()) : null;
-						
+				selectedRoute = routesSpinner.getSelectedItemPosition() >= 0 ? routes.get(routesSpinner
+						.getSelectedItemPosition()) : null;
+				selectedStop = stopsSpinner.getSelectedItemPosition() >= 0 ? stops.get(stopsSpinner.getSelectedItemPosition())
+						: null;
+				selectedStoptime = stoptimesSpinner.getSelectedItemPosition() >= 0 ? stoptimes.get(stoptimesSpinner
+						.getSelectedItemPosition()) : null;
+
 				if (selectedRoute == null || selectedStop == null || selectedStoptime == null) {
 					Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.err_delay_fields_empty,
 							Toast.LENGTH_SHORT).show();

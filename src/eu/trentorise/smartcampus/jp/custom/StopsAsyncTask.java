@@ -26,11 +26,11 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 	private double diagonal;
 	private double[] location;
 	private MapView mapView;
-	private int[] selectedAgencyIds;
+	private String[] selectedAgencyIds;
 	private StopsItemizedOverlay old_overlay;
 
-	public StopsAsyncTask(int[] selectedAgencyIds, Map<String, SmartCheckStop> smartCheckStopMap, StopsItemizedOverlay overlay,
-			double[] location, double diagonal, MapView mapView, OnStopLoadingFinished listener) {
+	public StopsAsyncTask(String[] selectedAgencyIds, Map<String, SmartCheckStop> smartCheckStopMap,
+			StopsItemizedOverlay overlay, double[] location, double diagonal, MapView mapView, OnStopLoadingFinished listener) {
 		super();
 		this.overlay = overlay;
 		this.mapView = mapView;
@@ -65,7 +65,7 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 			if (selectedAgencyIds != null) {
 				for (int i = 0; i < selectedAgencyIds.length; i++) {
 					try {
-						stops.addAll(JPHelper.getStops(Integer.toString(selectedAgencyIds[i]), location, diagonal));
+						stops.addAll(JPHelper.getStops(selectedAgencyIds[i], location, diagonal));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
