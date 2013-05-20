@@ -35,6 +35,7 @@ import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
@@ -178,6 +179,19 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 					}
 				}).execute();
 	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		EasyTracker.getInstance().activityStart(this); 
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		EasyTracker.getInstance().activityStop(this);
+	}
+
 
 	@Override
 	public void onResume() {

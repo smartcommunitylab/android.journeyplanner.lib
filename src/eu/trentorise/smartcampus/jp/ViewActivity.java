@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.google.analytics.tracking.android.EasyTracker;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
@@ -36,6 +37,19 @@ public class ViewActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.empty_layout_jp);
 	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		EasyTracker.getInstance().activityStart(this); 
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		EasyTracker.getInstance().activityStop(this);
+	}
+
 
 	@Override
 	protected void onResume() {

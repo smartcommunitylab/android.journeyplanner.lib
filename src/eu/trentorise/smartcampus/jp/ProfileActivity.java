@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.analytics.tracking.android.EasyTracker;
 
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.jp.custom.TabListener;
@@ -57,6 +58,19 @@ public class ProfileActivity extends FeedbackFragmentActivity {
 			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		}
 	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		EasyTracker.getInstance().activityStart(this); 
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		EasyTracker.getInstance().activityStop(this);
+	}
+
 
 	public void favoriteDeletionHandler(View target) {
 		TextView textView = null;
