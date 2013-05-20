@@ -147,9 +147,9 @@ public class NotificationsListAdapterJP extends ArrayAdapter<Notification> {
 		// line/train (with train number) and direction
 		if (line != null && line.length() > 0 && direction != null && direction.length() > 0) {
 			description.append("\n");
-			if (agencyId == RoutesHelper.AGENCYID_BUS) {
+			if (RoutesHelper.AGENCYIDS_BUSES.contains(agencyId) || RoutesHelper.AGENCYIDS_BUSES_SUBURBAN.contains(agencyId)) {
 				description.append(mContext.getString(R.string.notifications_itinerary_delay_bus, line, direction));
-			} else if (agencyId == RoutesHelper.AGENCYID_TRAIN_TM) {
+			} else if (RoutesHelper.AGENCYIDS_TRAINS.contains(agencyId)) {
 				String train = line;
 				if (tripId != null) {
 					train += " " + tripId;

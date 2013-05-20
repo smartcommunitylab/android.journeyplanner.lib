@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,15 +26,12 @@ import eu.trentorise.smartcampus.jp.custom.SmartCheckBusAdapter;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
-import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class SmartCheckBusFragment extends FeedbackFragment {
 	private GridView busGridView;
 	private List<SmartLine> busLines = new ArrayList<SmartLine>();
-	private final static String busAgencyId = "12";
 	private SmartCheckBusAdapter adapter;
-	private SmartCheckStop selectedStop = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,8 +39,7 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.smartcheckbus, container, false);
 	}
 
@@ -55,54 +50,42 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 		// SCAsyncTask<String, Void, List<SmartLine>>(getSherlockActivity(),
 		// new GetBusDirectionsProcessor(getSherlockActivity()));
 		// task.execute(busAgencyId);
-		busLines = RoutesHelper.getSmartLines(getSherlockActivity(),
-				busAgencyId);
+		busLines = RoutesHelper.getSmartLines(getSherlockActivity(), RoutesHelper.AGENCYID_BUS_TRENTO);
 
 		// get lines from array
-		busGridView = (GridView) getSherlockActivity().findViewById(
-				R.id.smart_check_grid);
-		adapter = new SmartCheckBusAdapter(getSherlockActivity(),
-				layout.smart_option_bus_element, busLines);
+		busGridView = (GridView) getSherlockActivity().findViewById(R.id.smart_check_grid);
+		adapter = new SmartCheckBusAdapter(getSherlockActivity(), layout.smart_option_bus_element, busLines);
 		busGridView.setAdapter(adapter);
 		busGridView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// call the fragment with the bus direction
-				if (busLines.get(arg2).getRoutesLong().size() != 1) {
-					FragmentTransaction fragmentTransaction = getSherlockActivity()
-							.getSupportFragmentManager().beginTransaction();
+				if (busLines.get(position).getRoutesLong().size() != 1) {
+					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
+							.beginTransaction();
 					Fragment fragment = new SmartCheckBusDirectionFragment();
 					Bundle b = new Bundle();
-					b.putParcelable(SmartCheckBusDirectionFragment.PARAMS,
-							busLines.get(arg2));
+					b.putParcelable(SmartCheckBusDirectionFragment.PARAM_LINE, busLines.get(position));
 					fragment.setArguments(b);
-					fragmentTransaction
-							.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 					fragmentTransaction.replace(Config.mainlayout, fragment);
 					fragmentTransaction.addToBackStack(null);
 					fragmentTransaction.commit();
 				} else {
 					// call directly the
 					// fragment with the bus timetable
-					FragmentTransaction fragmentTransaction = getSherlockActivity()
-							.getSupportFragmentManager().beginTransaction();
+					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
+							.beginTransaction();
 					Fragment fragment = new SmartCheckTTFragment();
 					Bundle b = new Bundle();
-					SmartLine param = new SmartLine(null, busLines.get(arg2)
-							.getRoutesShorts().get(0), busLines.get(arg2)
-							.getColor(), new ArrayList<String>(
-							Arrays.asList(busLines.get(arg2).getRoutesShorts()
-									.get(0))),
-							new ArrayList<String>(Arrays.asList(busLines
-									.get(arg2).getRoutesLong().get(0))),
-							new ArrayList<String>(Arrays.asList(busLines
-									.get(arg2).getRouteID().get(0))));
+					SmartLine param = new SmartLine(null, busLines.get(position).getRoutesShorts().get(0), busLines.get(
+							position).getColor(), new ArrayList<String>(Arrays.asList(busLines.get(position).getRoutesShorts()
+							.get(0))), new ArrayList<String>(Arrays.asList(busLines.get(position).getRoutesLong().get(0))),
+							new ArrayList<String>(Arrays.asList(busLines.get(position).getRouteID().get(0))));
 					b.putParcelable(SmartCheckTTFragment.PARAM_SMARTLINE, param);
 					fragment.setArguments(b);
-					fragmentTransaction
-							.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 					fragmentTransaction.replace(Config.mainlayout, fragment);
 					fragmentTransaction.addToBackStack(null);
 					fragmentTransaction.commit();
@@ -117,17 +100,14 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 		chooseStop.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getSherlockActivity(),
-						StopSelectActivity.class);
-				intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS,
-						new String[] { RoutesHelper.AGENCYID_BUS });
+				Intent intent = new Intent(getSherlockActivity(), StopSelectActivity.class);
+				intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS, new String[] { RoutesHelper.AGENCYID_BUS_TRENTO });
 				startActivityForResult(intent, StopSelectActivity.REQUEST_CODE);
 			}
 		});
 	}
 
-	public class GetBusDirectionsProcessor extends
-			AbstractAsyncTaskProcessor<String, List<SmartLine>> {
+	public class GetBusDirectionsProcessor extends AbstractAsyncTaskProcessor<String, List<SmartLine>> {
 
 		public GetBusDirectionsProcessor(SherlockFragmentActivity activity) {
 			super(activity);
@@ -135,8 +115,7 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 		}
 
 		@Override
-		public List<SmartLine> performAction(String... params)
-				throws SecurityException, Exception {
+		public List<SmartLine> performAction(String... params) throws SecurityException, Exception {
 			return JPHelper.getSmartLinesByAgencyId(params[0]);
 		}
 
@@ -147,8 +126,7 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 				System.out.println(sl.getRoutesShorts());
 				System.out.println(sl.getRoutesLong());
 			}
-			adapter = new SmartCheckBusAdapter(getSherlockActivity(),
-					layout.smart_option_bus_element, busLines);
+			adapter = new SmartCheckBusAdapter(getSherlockActivity(), layout.smart_option_bus_element, busLines);
 			busGridView.setAdapter(adapter);
 		}
 	}

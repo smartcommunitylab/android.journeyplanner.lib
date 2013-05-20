@@ -1,6 +1,5 @@
 package eu.trentorise.smartcampus.jp;
 
-import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -17,15 +16,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
-import eu.trentorise.smartcampus.jp.custom.SmartCheckExtraurbanoZonesAdapter;
-import eu.trentorise.smartcampus.jp.custom.SmartCheckTrainAdapter;
+import eu.trentorise.smartcampus.jp.custom.SmartCheckSuburbanZonesAdapter;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
-public class SmartCheckExtraurbanFragment extends FeedbackFragment {
+public class SmartCheckSuburbanFragment extends FeedbackFragment {
 	private ListView routesListView;
-	private SmartCheckExtraurbanoZonesAdapter adapter;
+	private SmartCheckSuburbanZonesAdapter adapter;
 
 	private SmartCheckStop selectedStop = null;
 
@@ -46,8 +44,8 @@ public class SmartCheckExtraurbanFragment extends FeedbackFragment {
 		routesListView = (ListView) getSherlockActivity().findViewById(R.id.smart_check_train_list);
 
 		// get routes from Constants
-		adapter = new SmartCheckExtraurbanoZonesAdapter(getSherlockActivity(), android.R.layout.simple_list_item_1);
-		List<SmartLine> smartZones = RoutesHelper.getSmartLines(getSherlockActivity(), RoutesHelper.AGENCYID_BUS_EXTRAURBAN);
+		adapter = new SmartCheckSuburbanZonesAdapter(getSherlockActivity(), android.R.layout.simple_list_item_1);
+		List<SmartLine> smartZones = RoutesHelper.getSmartLines(getSherlockActivity(), RoutesHelper.AGENCYID_BUS_SUBURBAN);
 		for (int i = 0; i < smartZones.size(); i++) {
 			adapter.add(smartZones.get(i));
 		}
@@ -56,29 +54,16 @@ public class SmartCheckExtraurbanFragment extends FeedbackFragment {
 		routesListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// // call directly the
-				// // fragment with the bus timetable
-				// FragmentTransaction fragmentTransaction =
-				// getSherlockActivity().getSupportFragmentManager().beginTransaction();
-				// Fragment fragment = new SmartCheckTTFragment();
-				// Bundle b = new Bundle();
-				// SmartLine param = new SmartLine(null,
-				// getString(adapter.getItem(position).getNameResource()),
-				// getResources()
-				// .getColor(R.color.sc_gray), null, null,
-				// Arrays.asList(adapter.getItem(position).getRouteId()));
-				// b.putParcelable(SmartCheckTTFragment.PARAM_SMARTLINE, param);
-				// fragment.setArguments(b);
-				// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-				// fragmentTransaction.replace(Config.mainlayout, fragment);
-				// fragmentTransaction.addToBackStack(null);
-				// fragmentTransaction.commit();
-				//
-				// // Toast toast = Toast.makeText(getSherlockActivity(),
-				// //
-				// getSherlockActivity().getString(adapter.getItem(position).getNameResource()),
-				// // Toast.LENGTH_SHORT);
-				// // toast.show();
+				FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
+				Fragment fragment = new SmartCheckBusDirectionFragment();
+				Bundle b = new Bundle();
+				b.putParcelable(SmartCheckBusDirectionFragment.PARAM_LINE, adapter.getItem(position));
+				b.putString(SmartCheckBusDirectionFragment.PARAM_AGENCY, RoutesHelper.AGENCYID_BUS_SUBURBAN);
+				fragment.setArguments(b);
+				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+				fragmentTransaction.replace(Config.mainlayout, fragment);
+				fragmentTransaction.addToBackStack(null);
+				fragmentTransaction.commit();
 			}
 		});
 
@@ -89,7 +74,7 @@ public class SmartCheckExtraurbanFragment extends FeedbackFragment {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getSherlockActivity(), StopSelectActivity.class);
-				intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS, new String[] { RoutesHelper.AGENCYID_BUS_EXTRAURBAN });
+				intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS, new String[] { RoutesHelper.AGENCYID_BUS_SUBURBAN });
 				startActivityForResult(intent, StopSelectActivity.REQUEST_CODE);
 			}
 		});

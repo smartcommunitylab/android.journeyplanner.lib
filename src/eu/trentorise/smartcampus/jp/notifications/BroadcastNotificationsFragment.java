@@ -59,7 +59,7 @@ public class BroadcastNotificationsFragment extends FeedbackFragment {
 
 				SherlockFragment fragment = null;
 				if (itemtext.contentEquals(getString(R.string.broadcast_notifications_bus_delay))) {
-					bundle.putStringArray(BT_DelayFormFragment.ARG_AGENCYID, new String[] { RoutesHelper.AGENCYID_BUS });
+					bundle.putStringArray(BT_DelayFormFragment.ARG_AGENCYID, new String[] { RoutesHelper.AGENCYID_BUS_TRENTO });
 					fragment = new BT_DelayFormFragment();
 				} else if (itemtext.contentEquals(getString(R.string.broadcast_notifications_train_delay))) {
 					bundle.putStringArray(BT_DelayFormFragment.ARG_AGENCYID, new String[] { RoutesHelper.AGENCYID_TRAIN_BZVR,

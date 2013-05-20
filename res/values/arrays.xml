@@ -27,7 +27,7 @@
     </string-array>
     <string-array name="smart_checks_list">
         <item>@string/smart_check_list_bus_timetable</item>
-        <item>@string/smart_check_list_extraurban_timetable</item>
+        <item>@string/smart_check_list_suburban_timetable</item>
         <item>@string/smart_check_list_train_timetable</item>
         <item>@string/smart_check_list_parking</item>
     </string-array>
@@ -91,13 +91,13 @@
         <item>#D65A2E</item>
         <item>#C02927</item>
         <item>#0976B7</item>
-        <item>#E8C01C </item>
+        <item>#E8C01C</item>
         <item>#6EB046</item>
         <item>#1B9887</item>
-        <item>#553428 </item>
-        <item>#8A4D2C </item>
-        <item>#105446 </item>
-        <item>#563176 </item>
+        <item>#553428</item>
+        <item>#8A4D2C</item>
+        <item>#105446</item>
+        <item>#563176</item>
         <item>#91283F</item>
         <item>#B75D8E</item>
         <item>#DB8FAC</item>
@@ -107,14 +107,14 @@
         <item>#000</item>
         <!-- <item>#FFF</item> -->
     </array>
-    <array name="smart_check_17_zones">
+    <string-array name="smart_check_17_zones">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
         <item>6</item>
-    </array>
+    </string-array>
     <array name="smart_check_17_colors">
         <item>#924B00</item>
         <item>#EB0070</item>
@@ -122,6 +122,14 @@
         <item>#0062B5</item>
         <item>#19B9BA</item>
         <item>#7C7E80</item>
+    </array>
+    <array name="smart_check_17_names">
+        <item>@string/agency_17_zone_1</item>
+        <item>@string/agency_17_zone_2</item>
+        <item>@string/agency_17_zone_3</item>
+        <item>@string/agency_17_zone_4</item>
+        <item>@string/agency_17_zone_5</item>
+        <item>@string/agency_17_zone_6</item>
     </array>
 
 </resources>

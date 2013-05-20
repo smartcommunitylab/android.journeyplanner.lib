@@ -26,13 +26,13 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 
-public class SmartCheckExtraurbanoZonesAdapter extends ArrayAdapter<SmartLine> {
+public class SmartCheckSuburbanZonesAdapter extends ArrayAdapter<SmartLine> {
 
 	Context mContext;
 	int layoutResourceId;
 	List<SmartLine> routes;
 
-	public SmartCheckExtraurbanoZonesAdapter(Context context, int layoutResourceId) {
+	public SmartCheckSuburbanZonesAdapter(Context context, int layoutResourceId) {
 		super(context, layoutResourceId);
 		this.mContext = context;
 		this.layoutResourceId = layoutResourceId;
@@ -58,7 +58,12 @@ public class SmartCheckExtraurbanoZonesAdapter extends ArrayAdapter<SmartLine> {
 		SmartLine smartZone = getItem(position);
 
 		holder.zoneName.setText(smartZone.getLine());
+
+		// colored text, white background
 		holder.zoneName.setTextColor(smartZone.getColor());
+		// white text, colored background
+		// holder.zoneName.setTextColor(mContext.getResources().getColor(android.R.color.white));
+		// holder.zoneName.setBackgroundColor(smartZone.getColor());
 		holder.zoneName.setTextAppearance(mContext, android.R.attr.textAppearanceMedium);
 
 		return row;
@@ -67,4 +72,5 @@ public class SmartCheckExtraurbanoZonesAdapter extends ArrayAdapter<SmartLine> {
 	private class Holder {
 		TextView zoneName;
 	}
+
 }

@@ -45,8 +45,8 @@ public class SmartCheckListFragment extends FeedbackFragment {
 		optionsListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				RelativeLayout ll = (RelativeLayout) arg1;
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				RelativeLayout ll = (RelativeLayout) view;
 				TextView option = (TextView) ll.getChildAt(0);
 				String optionName = option.getText().toString();
 				if (optionName.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[0]) == 0) {
@@ -63,7 +63,7 @@ public class SmartCheckListFragment extends FeedbackFragment {
 					// extraurban bus Time Table
 					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
 							.beginTransaction();
-					Fragment fragment = new SmartCheckExtraurbanFragment();
+					Fragment fragment = new SmartCheckSuburbanFragment();
 					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 					fragmentTransaction.replace(Config.mainlayout, fragment);
 					fragmentTransaction.addToBackStack(null);

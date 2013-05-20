@@ -64,12 +64,10 @@ public class Utils {
 		ImageView imgv = new ImageView(ctx);
 		String agencyIdString = Integer.toString(agencyId);
 
-		if (agencyIdString.equalsIgnoreCase(RoutesHelper.AGENCYID_BUS)
-				|| agencyIdString.equalsIgnoreCase(RoutesHelper.AGENCYID_BUS_EXTRAURBAN)) {
+		if (RoutesHelper.AGENCYIDS_BUSES.contains(agencyIdString)
+				|| RoutesHelper.AGENCYIDS_BUSES_SUBURBAN.contains(agencyIdString)) {
 			imgv.setImageResource(R.drawable.ic_mt_bus);
-		} else if (agencyIdString.equalsIgnoreCase(RoutesHelper.AGENCYID_TRAIN_BZVR)
-				|| agencyIdString.equalsIgnoreCase(RoutesHelper.AGENCYID_TRAIN_TM)
-				|| agencyIdString.equalsIgnoreCase(RoutesHelper.AGENCYID_TRAIN_TNBDG)) {
+		} else if (RoutesHelper.AGENCYIDS_TRAINS.contains(agencyIdString)) {
 			imgv.setImageResource(R.drawable.ic_mt_train);
 		}
 
