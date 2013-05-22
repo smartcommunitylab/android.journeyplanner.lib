@@ -29,6 +29,10 @@ import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class SmartCheckBusFragment extends FeedbackFragment {
+
+	protected static final String PARAM_AID = "agencyid";
+	private String agencyId;
+
 	private GridView busGridView;
 	private List<SmartLine> busLines = new ArrayList<SmartLine>();
 	private SmartCheckBusAdapter adapter;
@@ -36,6 +40,12 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if (savedInstanceState != null && savedInstanceState.containsKey(PARAM_AID)) {
+			this.agencyId = savedInstanceState.getString(PARAM_AID);
+		} else if (getArguments() != null && getArguments().containsKey(PARAM_AID)) {
+			this.agencyId = getArguments().getString(PARAM_AID);
+		}
 	}
 
 	@Override
@@ -50,7 +60,7 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 		// SCAsyncTask<String, Void, List<SmartLine>>(getSherlockActivity(),
 		// new GetBusDirectionsProcessor(getSherlockActivity()));
 		// task.execute(busAgencyId);
-		busLines = RoutesHelper.getSmartLines(getSherlockActivity(), RoutesHelper.AGENCYID_BUS_TRENTO);
+		busLines = RoutesHelper.getSmartLines(getSherlockActivity(), agencyId);
 
 		// get lines from array
 		busGridView = (GridView) getSherlockActivity().findViewById(R.id.smart_check_grid);
@@ -101,7 +111,7 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getSherlockActivity(), StopSelectActivity.class);
-				intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS, new String[] { RoutesHelper.AGENCYID_BUS_TRENTO });
+				intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS, new String[] { agencyId });
 				startActivityForResult(intent, StopSelectActivity.REQUEST_CODE);
 			}
 		});

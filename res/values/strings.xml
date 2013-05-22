@@ -178,10 +178,12 @@
     <string name="broadcast_notifications_traffic_jam">Traffic jams</string>
     <string name="broadcast_notifications_diversion">Diversions</string>
     
-    <string name="smart_check_list_bus_timetable">Bus Timetable</string>
+    <string name="smart_check_list_bus_trento_timetable">Trento Bus Timetable</string>
+    <string name="smart_check_list_bus_rovereto_timetable">Rovereto Bus Timetable</string>
     <string name="smart_check_list_suburban_timetable">Extraurban Bus Timetable</string>
     <string name="smart_check_list_train_timetable">Train Timetable</string>
-    <string name="smart_check_list_parking">Parking Availability</string>
+    <string name="smart_check_list_parking_trento">Trento Parking Availability</string>
+    <string name="smart_check_list_parking_rovereto">Rovereto Parking Availability</string>
     
     <string name="smart_check_stops_type_mobility">Mobility</string>
     <string name="smart_check_stops_delay">%s\' delay</string>

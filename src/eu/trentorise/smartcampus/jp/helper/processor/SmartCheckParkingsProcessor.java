@@ -36,8 +36,8 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void, List<Parking>> {
 
 	private ArrayAdapter<Parking> adapter;
-
 	private Location myLocation;
+	private String parkingAid;
 
 	private Comparator<Parking> parkingNameComparator = new Comparator<Parking>() {
 		public int compare(Parking p1, Parking p2) {
@@ -61,9 +61,11 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 		}
 	};
 
-	public SmartCheckParkingsProcessor(SherlockFragmentActivity activity, ArrayAdapter<Parking> adapter, GeoPoint myLocation) {
+	public SmartCheckParkingsProcessor(SherlockFragmentActivity activity, ArrayAdapter<Parking> adapter, GeoPoint myLocation, String parkingAid) {
 		super(activity);
 		this.adapter = adapter;
+		
+		this.parkingAid = parkingAid;
 
 		if (myLocation != null) {
 			Location location = new Location("");
@@ -75,9 +77,7 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 
 	@Override
 	public List<Parking> performAction(Void... params) throws SecurityException, Exception {
-		List<Parking> list = new ArrayList<Parking>();
-		list = JPHelper.getParkings();
-		return list;
+		return JPHelper.getParkings(parkingAid);
 	}
 
 	@Override

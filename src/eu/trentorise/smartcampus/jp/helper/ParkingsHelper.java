@@ -10,6 +10,9 @@ import eu.trentorise.smartcampus.jp.R;
 
 public class ParkingsHelper {
 
+	public static final String PARKING_AID_TRENTO = "COMUNE_DI_TRENTO";
+	public static final String PARKING_AID_ROVERETO = "COMUNE_DI_ROVERETO";
+	
 	public static final int PARKING_NOT_MONITORED = -2;
 	public static final int PARKING_UNAVAILABLE = -1;
 	public static final int PARKING_FULL = 0;
@@ -80,7 +83,7 @@ public class ParkingsHelper {
 		map.put("via Asiago, Stazione FS Villazzano - Trento", "Parcheggio via Asiago - Villazzano STAZIONE FS");
 		map.put("via Fersina - Trento", "Parcheggio Ghiaie via Fersina");
 		map.put("via Maccani - Trento", "Parcheggio Campo Coni via E. Maccani");
-		map.put("via Roggia Grande,16-Trento", "Garage Autorimessa Europa");
+		map.put("via Roggia Grande,16 - Trento", "Garage Autorimessa Europa");
 		map.put("via Torre Verde, 40 - Trento", "Garage Torre Verde");
 		map.put("via valentina Zambra - Trento", "Garage Parcheggio Palazzo Onda");
 		parkingsNames = Collections.unmodifiableMap(map);

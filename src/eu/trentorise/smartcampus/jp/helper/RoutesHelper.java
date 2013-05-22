@@ -34,10 +34,10 @@ public class RoutesHelper {
 	public static final String AGENCYID_BUS_SUBURBAN_ZONE_5 = "17_5";
 	public static final String AGENCYID_BUS_SUBURBAN_ZONE_6 = "17_6";
 
-	public static final List<String> AGENCYIDS = Arrays.asList(AGENCYID_BUS_TRENTO, AGENCYID_BUS_SUBURBAN, AGENCYID_TRAIN_BZVR,
-			AGENCYID_TRAIN_TM, AGENCYID_TRAIN_TNBDG);
+	public static final List<String> AGENCYIDS = Arrays.asList(AGENCYID_BUS_TRENTO, AGENCYID_BUS_ROVERETO,
+			AGENCYID_BUS_SUBURBAN, AGENCYID_TRAIN_BZVR, AGENCYID_TRAIN_TM, AGENCYID_TRAIN_TNBDG);
 
-	public static final List<String> AGENCYIDS_BUSES = Arrays.asList(AGENCYID_BUS_TRENTO);
+	public static final List<String> AGENCYIDS_BUSES = Arrays.asList(AGENCYID_BUS_TRENTO, AGENCYID_BUS_ROVERETO);
 
 	public static final List<String> AGENCYIDS_BUSES_SUBURBAN = Arrays.asList(AGENCYID_BUS_SUBURBAN_ZONE_1,
 			AGENCYID_BUS_SUBURBAN_ZONE_2, AGENCYID_BUS_SUBURBAN_ZONE_3, AGENCYID_BUS_SUBURBAN_ZONE_4,
@@ -108,6 +108,13 @@ public class RoutesHelper {
 			// resources.obtainTypedArray(R.array.smart_check_17_names);
 			icons = resources.obtainTypedArray(R.array.smart_check_12_icons);
 			colors = resources.obtainTypedArray(R.array.smart_check_12_colors);
+		} else if (agencyId == AGENCYID_BUS_ROVERETO) {
+			agencyIds = new String[] { agencyId };
+			lines = resources.getStringArray(R.array.smart_check_16_numbers);
+			// linesNames =
+			// resources.obtainTypedArray(R.array.smart_check_17_names);
+			icons = resources.obtainTypedArray(R.array.smart_check_16_icons);
+			colors = resources.obtainTypedArray(R.array.smart_check_16_colors);
 		} else if (agencyId == AGENCYID_BUS_SUBURBAN) {
 			agencyIds = AGENCYIDS_BUSES_SUBURBAN.toArray(new String[] {});
 			lines = resources.getStringArray(R.array.smart_check_17_zones);
@@ -132,11 +139,7 @@ public class RoutesHelper {
 			// put them in the array
 			for (Route route : routes) {
 				//
-				if (route.getId().getId().equalsIgnoreCase(lines[index])
-						|| route.getId().getId().equalsIgnoreCase(lines[index] + "A")
-						|| route.getId().getId().equalsIgnoreCase(lines[index] + "R")
-						|| route.getId().getAgency().endsWith("_" + lines[index])) {
-
+				if (validateRoute(agencyId, route, lines[index])) {
 					if (singleRoutesShorts.get(lines[index]) == null) {
 						singleRoutesShorts.put(lines[index], new ArrayList<String>());
 						singleRoutesLong.put(lines[index], new ArrayList<String>());
@@ -178,6 +181,23 @@ public class RoutesHelper {
 		route.setRouteLongName(ctx.getString(rd.getNameResource()));
 		return route;
 	}
+
+	private static boolean validateRoute(String agencyId, Route route, String line) {
+		if (AGENCYID_BUS_TRENTO.equals(agencyId)) {
+			return (route.getId().getId().equalsIgnoreCase(line) || route.getId().getId().equalsIgnoreCase(line + "A") || route
+					.getId().getId().equalsIgnoreCase(line + "R"));
+		} else if (AGENCYID_BUS_ROVERETO.equals(agencyId)) {
+			return (route.getRouteShortName().equals(line));
+		} else if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
+			return (route.getId().getAgency().endsWith("_" + line));
+		}
+
+		return false;
+	}
+
+	/**
+	 * ROUTEDESCRIPTORS!
+	 */
 
 	/*
 	 * Trento urbano
@@ -244,7 +264,50 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_TRAIN_TNBDG, "TB_R2_R", R.string.agency_6_route_TB_R2_R, "RG") });
 
 	/*
-	 * Trento extraurbano
+	 * Rovereto urban
+	 */
+	private static final List<RouteDescriptor> RoutesDescriptorsList_16 = Arrays.asList(new RouteDescriptor[] {
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "488_Rov", R.string.agency_16_route_488_Rov, "1"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "390_Rov", R.string.agency_16_route_390_Rov, "2"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "389_Rov", R.string.agency_16_route_389_Rov, "2"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "391_Rov", R.string.agency_16_route_391_Rov, "2"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "392_Rov", R.string.agency_16_route_392_Rov, "2"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "445_Rov", R.string.agency_16_route_445_Rov, "3"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "446_Rov", R.string.agency_16_route_446_Rov, "4"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "383_Rov", R.string.agency_16_route_383_Rov, "5"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "380_Rov", R.string.agency_16_route_380_Rov, "5"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "346_Rov", R.string.agency_16_route_346_Rov, "5"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "384_Rov", R.string.agency_16_route_384_Rov, "5"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "347_Rov", R.string.agency_16_route_347_Rov, "6"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "376_Rov", R.string.agency_16_route_376_Rov, "6"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "377_Rov", R.string.agency_16_route_377_Rov, "7"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "379_Rov", R.string.agency_16_route_379_Rov, "7"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "386_Rov", R.string.agency_16_route_386_Rov, "7"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "385_Rov", R.string.agency_16_route_385_Rov, "7"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "482_Rov", R.string.agency_16_route_482_Rov, "A"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "481_Rov", R.string.agency_16_route_481_Rov, "A"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "470_Rov", R.string.agency_16_route_470_Rov, "B"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "471_Rov", R.string.agency_16_route_471_Rov, "B"),
+	// new RouteDescriptor(AGENCYID_BUS_ROVERETO, "457_Rov",
+	// R.string.agency_16_route_457_Rov, "N-2"),
+	// new RouteDescriptor(AGENCYID_BUS_ROVERETO, "456_Rov",
+	// R.string.agency_16_route_456_Rov, "N-2"),
+	// new RouteDescriptor(AGENCYID_BUS_ROVERETO, "453_Rov",
+	// R.string.agency_16_route_453_Rov, "N-5"),
+	// new RouteDescriptor(AGENCYID_BUS_ROVERETO, "452_Rov",
+	// R.string.agency_16_route_452_Rov, "N-5"),
+	// new RouteDescriptor(AGENCYID_BUS_ROVERETO, "448_Rov",
+	// R.string.agency_16_route_448_Rov, "N-6"),
+	// new RouteDescriptor(AGENCYID_BUS_ROVERETO, "447_Rov",
+	// R.string.agency_16_route_447_Rov, "N-6"),
+	// new RouteDescriptor(AGENCYID_BUS_ROVERETO, "449_Rov",
+	// R.string.agency_16_route_449_Rov, "N-7"),
+	// new RouteDescriptor(AGENCYID_BUS_ROVERETO, "451_Rov",
+	// R.string.agency_16_route_451_Rov, "N-7")
+			});
+
+	/*
+	 * Trento suburban
 	 */
 	private static final List<RouteDescriptor> RoutesDescriptorsList_17_zone_1 = Arrays.asList(new RouteDescriptor[] {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "243_ExUr", R.string.agency_17_route_243_ExUr, "101"),
@@ -739,6 +802,7 @@ public class RoutesHelper {
 			put(AGENCYID_TRAIN_TM, RoutesDescriptorsList_10);
 			put(AGENCYID_TRAIN_BZVR, RoutesDescriptorsList_5);
 			put(AGENCYID_TRAIN_TNBDG, RoutesDescriptorsList_6);
+			put(AGENCYID_BUS_ROVERETO, RoutesDescriptorsList_16);
 			// put(AGENCYID_BUS_EXTRAURBAN, RoutesDescriptorsList_17);
 			put(AGENCYID_BUS_SUBURBAN_ZONE_1, RoutesDescriptorsList_17_zone_1);
 			put(AGENCYID_BUS_SUBURBAN_ZONE_2, RoutesDescriptorsList_17_zone_2);

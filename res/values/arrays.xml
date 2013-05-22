@@ -26,11 +26,15 @@
         <item>@string/broadcast_notifications_diversion</item>
     </string-array>
     <string-array name="smart_checks_list">
-        <item>@string/smart_check_list_bus_timetable</item>
+        <item>@string/smart_check_list_bus_trento_timetable</item>
+        <item>@string/smart_check_list_bus_rovereto_timetable</item>
         <item>@string/smart_check_list_suburban_timetable</item>
         <item>@string/smart_check_list_train_timetable</item>
-        <item>@string/smart_check_list_parking</item>
+        <item>@string/smart_check_list_parking_trento</item>
+        <item>@string/smart_check_list_parking_rovereto</item>
     </string-array>
+
+    <!-- Trento urbano -->
     <string-array name="smart_check_12_numbers">
         <item>_A</item>
         <item>_B</item>
@@ -107,6 +111,44 @@
         <item>#000</item>
         <!-- <item>#FFF</item> -->
     </array>
+
+    <!-- Rovereto urbano -->
+    <string-array name="smart_check_16_numbers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>A</item>
+        <item>B</item>
+    </string-array>
+
+    <array name="smart_check_16_icons">
+        <item>@drawable/ic_f1</item>
+        <item>@drawable/ic_f2</item>
+        <item>@drawable/ic_f3</item>
+        <item>@drawable/ic_f4</item>
+        <item>@drawable/ic_f5</item>
+        <item>@drawable/ic_f6</item>
+        <item>@drawable/ic_f7</item>
+        <item>@drawable/ic_f_a</item>
+        <item>@drawable/ic_f_b</item>
+    </array>
+    <array name="smart_check_16_colors">
+        <item>#174072</item>
+        <item>#D65A2E</item>
+        <item>#C02927</item>
+        <item>#0976B7</item>
+        <item>#E8C01C</item>
+        <item>#6EB046</item>
+        <item>#1B9887</item>
+        <item>#B9BAB5</item>
+        <item>#717880</item>
+    </array>
+
+    <!-- Extraurbano -->
     <string-array name="smart_check_17_zones">
         <item>1</item>
         <item>2</item>
@@ -115,6 +157,7 @@
         <item>5</item>
         <item>6</item>
     </string-array>
+
     <array name="smart_check_17_colors">
         <item>#924B00</item>
         <item>#EB0070</item>

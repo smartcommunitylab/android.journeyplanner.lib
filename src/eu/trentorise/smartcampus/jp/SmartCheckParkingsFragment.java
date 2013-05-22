@@ -30,6 +30,9 @@ import eu.trentorise.smartcampus.jp.model.Sparking;
 
 public class SmartCheckParkingsFragment extends SherlockListFragment {
 
+	protected static final String PARAM_AID = "parkingAgencyId";
+	private String parkingAid;
+
 	private SmartCheckParkingsAdapter adapter;
 	private ParkingsLocationListener parkingLocationListener;
 
@@ -39,6 +42,12 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if (savedInstanceState != null && savedInstanceState.containsKey(PARAM_AID)) {
+			this.parkingAid = savedInstanceState.getString(PARAM_AID);
+		} else if (getArguments() != null && getArguments().containsKey(PARAM_AID)) {
+			this.parkingAid = getArguments().getString(PARAM_AID);
+		}
 
 		ActionBar actionBar = getSherlockActivity().getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(true); // system title
@@ -65,7 +74,7 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 
 		// LOAD
 		new SCAsyncTask<Void, Void, List<Parking>>(getSherlockActivity(), new SmartCheckParkingsProcessor(
-				getSherlockActivity(), adapter, JPHelper.getLocationHelper().getLocation())).execute();
+				getSherlockActivity(), adapter, JPHelper.getLocationHelper().getLocation(), parkingAid)).execute();
 	}
 
 	@Override

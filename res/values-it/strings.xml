@@ -175,10 +175,12 @@
     <string name="broadcast_notifications_traffic_jam">Coda</string>
     <string name="broadcast_notifications_diversion">Deviazione</string>
     
-    <string name="smart_check_list_bus_timetable">Orario autobus</string>
+    <string name="smart_check_list_bus_trento_timetable">Orario autobus di Trento</string>
+    <string name="smart_check_list_bus_rovereto_timetable">Orario autobus di Rovereto</string>
     <string name="smart_check_list_suburban_timetable">Orario autobus extraurbano</string>
     <string name="smart_check_list_train_timetable">Orario treni</string>
-    <string name="smart_check_list_parking">Disponibilità parcheggi</string>
+    <string name="smart_check_list_parking_trento">Disponibilità parcheggi Trento</string>
+    <string name="smart_check_list_parking_rovereto">Disponibilità parcheggi Rovereto</string>
     
     <string name="smart_check_stops_type_mobility">Mobilità</string>
     <string name="smart_check_stops_delay">ritardo %s\'</string>

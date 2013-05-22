@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="agency_17_zone_1">Val di Fiemme, Val di Fassa, Val di Cembra</string>
-    <string name="agency_17_zone_2">Val Rendena, Giudicarie</string>
-    <string name="agency_17_zone_3">Rovereto, Lavarone, Destra Adige, Riva del Garda</string>
-    <string name="agency_17_zone_4">Valsugana</string>
-    <string name="agency_17_zone_5">Valle di Primiero</string>
-    <string name="agency_17_zone_6">Val di Non, Val di Sole</string>
-    
+    <!-- Trento Male routes -->
     <string name="agency_10_route_555">Trent - Malé</string>
     <string name="agency_10_route_556">Malé - Trent</string>
-    
+
+    <!-- Bolzano Verona routes -->
     <string name="agency_5_route_BV_R1_G">Bozen - Verona</string>
     <string name="agency_5_route_BV_R1_R">Verona - Bozen</string>
-    
+
+    <!-- Trento Bassano routes -->
     <string name="agency_6_route_TB_R2_G">Trent - Bassano D.G.</string>
     <string name="agency_6_route_TB_R2_R">Bassano D.G. - Trent</string>
-    
+
+    <!-- Trento urbano routes -->
     <string name="agency_12_route__A">P. Dante - Osp. S. Chiara - Clarina - P. Dante</string>
     <string name="agency_12_route__B">Piazza Dante - Laste - Piazza Dante</string>
     <string name="agency_12_route_C">Servizio Ex Ospedalino</string>
@@ -55,7 +52,16 @@
     <string name="agency_12_route_16R">Povo - Cognola - Martignano - Centochiavi</string>
     <string name="agency_12_route_17A">Piazza Dante - Via Bolzano - Lavis</string>
     <string name="agency_12_route_17R">Lavis - S. Lazzaro -  Piazza Dante</string>
-    
+
+    <!-- Suburban zones -->
+    <string name="agency_17_zone_1">Val di Fiemme, Val di Fassa, Val di Cembra</string>
+    <string name="agency_17_zone_2">Val Rendena, Giudicarie</string>
+    <string name="agency_17_zone_3">Rovereto, Lavarone, Destra Adige, Riva del Garda</string>
+    <string name="agency_17_zone_4">Valsugana</string>
+    <string name="agency_17_zone_5">Valle di Primiero</string>
+    <string name="agency_17_zone_6">Val di Non, Val di Sole</string>
+
+    <!-- Suburban routes -->
     <string name="agency_17_route_243_ExUr">Cavalese - Predazzo - Moena - Canazei - Penia - Fedaia"</string>
     <string name="agency_17_route_244_ExUr">Fedaia - Penia - Canazei - Moena - Predazzo - Cavalese"</string>
     <string name="agency_17_route_6_ExUr">Cavalese - Capriana - Cembra - Trento</string>
@@ -277,5 +283,36 @@
     <string name="agency_17_route_417_ExUr">Linea 3 integrata: Nago - Torbole - Riva - Arco - Bolognano</string>
     <string name="agency_17_route_583_ExUr">Linea 3 integrata: Bolognano - Arco - Riva - Torbole - Nago</string>
     <string name="agency_17_route_418_ExUr">Linea 4: Riva - Grez - Viale Martiri - Riva</string>
+
+    <!-- Rovereto urbano routes -->
+    <string name="agency_16_route_488_Rov">C.so Rosmini - Ospedale - Lizzana - Marco</string>
+    <string name="agency_16_route_390_Rov">Moietto - Toldi - Costa - Isera - Lenzima</string>
+    <string name="agency_16_route_389_Rov">Lenzima - Isera - Costa - Toldi - Moietto</string>
+    <string name="agency_16_route_391_Rov">Isera - C.so Rosmini - Viale dei Colli - Costa</string>
+    <string name="agency_16_route_392_Rov">Costa - Viale dei Colli - C.so Rosmini - Isera</string>
+    <string name="agency_16_route_445_Rov">C.so Rosmini -  Nogaredo - C.so Rosmini</string>
+    <string name="agency_16_route_446_Rov">C.so Rosmini - Nogaredo - C.so Rosmini</string>
+    <string name="agency_16_route_383_Rov">Marco - Brione - Pomarolo - Nomi</string>
+    <string name="agency_16_route_380_Rov">Marco - Villa Lagarina -  Pomarolo - Nomi</string>
+    <string name="agency_16_route_346_Rov">Nomi - Pomarolo - Marco</string>
+    <string name="agency_16_route_384_Rov">Nomi - Pomarolo - Brione - Marco</string>
+    <string name="agency_16_route_347_Rov">Volano - S. Ilario - Mori</string>
+    <string name="agency_16_route_376_Rov">Mori - Marco - P.le Orsi - S. Ilario - Volano</string>
+    <string name="agency_16_route_377_Rov">Castellano - Pedersano - P.le Orsi</string>
+    <string name="agency_16_route_379_Rov">P.le Orsi -  Pedersano - Castellano</string>
+    <string name="agency_16_route_386_Rov">Nogaredo - Villa Lagarina - Mori</string>
+    <string name="agency_16_route_385_Rov">Mori - Villa Lagarina - Nogaredo</string>
+    <string name="agency_16_route_482_Rov">Via Magazol - Ospedale - Via Magazol</string>
+    <string name="agency_16_route_481_Rov">Brione - S. Giorgio - Lizzana - Podestà - Brione</string>
+    <string name="agency_16_route_470_Rov">C.so Rosmini - baldresca</string>
+    <string name="agency_16_route_471_Rov">Baldresca - C.so Rosmini - S. Giovanni Bosco</string>
+    <string name="agency_16_route_457_Rov">Costa - C.so Rosmini</string>
+    <string name="agency_16_route_456_Rov">P.le Orsi - C.so Rosmini - Costa</string>
+    <string name="agency_16_route_453_Rov">Nomi - Pomarolo -  P.le Orsi</string>
+    <string name="agency_16_route_452_Rov">C.so Bettini - Nogaredo - Nomi</string>
+    <string name="agency_16_route_448_Rov">Mori - P.le Orsi - C.so Rosmini</string>
+    <string name="agency_16_route_447_Rov">C.so Bettini - Marco - Mori</string>
+    <string name="agency_16_route_449_Rov">Castellano - Pedersano - Molini - Stazione</string>
+    <string name="agency_16_route_451_Rov">P.le Orsi - Volano - Pedersano - Castellano></string>
 
 </resources>

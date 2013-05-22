@@ -18,6 +18,8 @@ import android.widget.Toast;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.R.layout;
 import eu.trentorise.smartcampus.jp.custom.SmartCheckAdapter;
+import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
+import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 
 public class SmartCheckListFragment extends FeedbackFragment {
 
@@ -49,18 +51,35 @@ public class SmartCheckListFragment extends FeedbackFragment {
 				RelativeLayout ll = (RelativeLayout) view;
 				TextView option = (TextView) ll.getChildAt(0);
 				String optionName = option.getText().toString();
+
 				if (optionName.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[0]) == 0) {
-					// bus Time Table
+					// Trento bus timetable
 					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
 							.beginTransaction();
 					Fragment fragment = new SmartCheckBusFragment();
+					Bundle bundle = new Bundle();
+					bundle.putString(SmartCheckBusFragment.PARAM_AID, RoutesHelper.AGENCYID_BUS_TRENTO);
+					fragment.setArguments(bundle);
 					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 					fragmentTransaction.replace(Config.mainlayout, fragment);
 					fragmentTransaction.addToBackStack(null);
 					fragmentTransaction.commit();
 				} else if (optionName
 						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[1]) == 0) {
-					// extraurban bus Time Table
+					// Rovereto bus timetable
+					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
+							.beginTransaction();
+					Fragment fragment = new SmartCheckBusFragment();
+					Bundle bundle = new Bundle();
+					bundle.putString(SmartCheckBusFragment.PARAM_AID, RoutesHelper.AGENCYID_BUS_ROVERETO);
+					fragment.setArguments(bundle);
+					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+					fragmentTransaction.replace(Config.mainlayout, fragment);
+					fragmentTransaction.addToBackStack(null);
+					fragmentTransaction.commit();
+				} else if (optionName
+						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[2]) == 0) {
+					// Suburban bus timetable
 					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
 							.beginTransaction();
 					Fragment fragment = new SmartCheckSuburbanFragment();
@@ -69,8 +88,8 @@ public class SmartCheckListFragment extends FeedbackFragment {
 					fragmentTransaction.addToBackStack(null);
 					fragmentTransaction.commit();
 				} else if (optionName
-						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[2]) == 0) {
-					// train Time Table
+						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[3]) == 0) {
+					// Trains timetable
 					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
 							.beginTransaction();
 					Fragment fragment = new SmartCheckTrainFragment();
@@ -79,11 +98,27 @@ public class SmartCheckListFragment extends FeedbackFragment {
 					fragmentTransaction.addToBackStack(null);
 					fragmentTransaction.commit();
 				} else if (optionName
-						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[3]) == 0) {
-					// Parking availability
+						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[4]) == 0) {
+					// Trento parking availability
 					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
 							.beginTransaction();
 					Fragment fragment = new SmartCheckParkingsFragment();
+					Bundle bundle = new Bundle();
+					bundle.putString(SmartCheckParkingsFragment.PARAM_AID, ParkingsHelper.PARKING_AID_TRENTO);
+					fragment.setArguments(bundle);
+					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+					fragmentTransaction.replace(Config.mainlayout, fragment);
+					fragmentTransaction.addToBackStack(null);
+					fragmentTransaction.commit();
+				} else if (optionName
+						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[5]) == 0) {
+					// Rovereto parking availability
+					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
+							.beginTransaction();
+					Fragment fragment = new SmartCheckParkingsFragment();
+					Bundle bundle = new Bundle();
+					bundle.putString(SmartCheckParkingsFragment.PARAM_AID, ParkingsHelper.PARKING_AID_ROVERETO);
+					fragment.setArguments(bundle);
 					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 					fragmentTransaction.replace(Config.mainlayout, fragment);
 					fragmentTransaction.addToBackStack(null);
@@ -97,5 +132,4 @@ public class SmartCheckListFragment extends FeedbackFragment {
 		});
 
 	}
-
 }

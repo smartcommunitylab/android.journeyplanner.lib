@@ -683,10 +683,16 @@ public class JPHelper {
 		return objects;
 	}
 
-	public static List<Parking> getParkings() throws Exception {
+	public static List<Parking> getParkings(String parkingAgencyId) throws Exception {
 
 		getInstance();
-		String url = Config.TARGET_ADDRESS + Config.CALL_GET_PARKINGS;
+		String url = Config.TARGET_ADDRESS;
+
+		if (parkingAgencyId != null) {
+			url += Config.CALL_GET_PARKINGS_BY_AGENCY + "/" + parkingAgencyId;
+		} else {
+			url += Config.CALL_GET_PARKINGS;
+		}
 
 		MessageRequest request = new MessageRequest(GlobalConfig.getAppUrl(getInstance().mContext), url);
 		request.setMethod(Method.GET);

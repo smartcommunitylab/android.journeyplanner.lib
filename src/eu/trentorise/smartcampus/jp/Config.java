@@ -58,6 +58,7 @@ public class Config {
 	public static final String CALL_GET_TRANSIT_TIME_BY_ROUTE = "/gettransittimes";
 	public static final String CALL_GET_LIMITED_TIMETABLE = "/getlimitedtimetable";
 	public static final String CALL_GET_PARKINGS = "/getparkings";
+	public static final String CALL_GET_PARKINGS_BY_AGENCY = "/getparkingsbyagency";
 	
 	public static final long ALWAYS_DATE = 9999999999999L; //constant used for "always" option
 	// public static final TType[] TTYPES_ALLOWED = new TType[] { TType.BICYCLE,

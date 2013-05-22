@@ -78,7 +78,7 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 			}
 		}
 
-		if (getIntent().getSerializableExtra(ARG_PARKINGS) != null) {
+		if (getIntent().getSerializableExtra(ARG_PARKING_FOCUSED) != null) {
 			Sparking sparking = (Sparking) getIntent().getSerializableExtra(ARG_PARKING_FOCUSED);
 			focusedParking = sparking.getParking();
 		}
