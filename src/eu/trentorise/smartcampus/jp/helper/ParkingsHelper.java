@@ -12,28 +12,26 @@ public class ParkingsHelper {
 
 	public static final String PARKING_AID_TRENTO = "COMUNE_DI_TRENTO";
 	public static final String PARKING_AID_ROVERETO = "COMUNE_DI_ROVERETO";
-	
-	public static final int PARKING_NOT_MONITORED = -2;
+
 	public static final int PARKING_UNAVAILABLE = -1;
 	public static final int PARKING_FULL = 0;
-	public static final int PARKING_LOW = 5;
-	public static final int PARKING_HIGH = 20;
+	public static final int PARKING_LOW_AVAIL = 5;
+	public static final int PARKING_HIGH_AVAIL = 20;
 
 	public static int getParkingColor(Parking parking) {
 		int color = R.color.parking_blue;
 
-		if (parking.getSlotsAvailable() == PARKING_NOT_MONITORED) {
-			// data not monitored
-			color = R.color.parking_blue;
-		} else if (parking.getSlotsAvailable() == PARKING_UNAVAILABLE) {
-			// data unavailable
-			color = R.color.parking_red;
-		} else if (parking.getSlotsAvailable() <= PARKING_LOW) {
-			color = R.color.parking_red;
-		} else if (parking.getSlotsAvailable() > PARKING_LOW && parking.getSlotsAvailable() <= PARKING_HIGH) {
-			color = R.color.parking_orange;
-		} else if (parking.getSlotsAvailable() > PARKING_HIGH) {
-			color = R.color.parking_green;
+		if (parking.isMonitored()) {
+			if (parking.getSlotsAvailable() == PARKING_UNAVAILABLE) {
+				// data unavailable
+				color = R.color.parking_red;
+			} else if (parking.getSlotsAvailable() <= PARKING_LOW_AVAIL) {
+				color = R.color.parking_red;
+			} else if (parking.getSlotsAvailable() > PARKING_LOW_AVAIL && parking.getSlotsAvailable() <= PARKING_HIGH_AVAIL) {
+				color = R.color.parking_orange;
+			} else if (parking.getSlotsAvailable() > PARKING_HIGH_AVAIL) {
+				color = R.color.parking_green;
+			}
 		}
 
 		return color;
@@ -42,18 +40,17 @@ public class ParkingsHelper {
 	public static int getParkingMarker(Parking parking) {
 		int marker = R.drawable.marker_parking;
 
-		if (parking.getSlotsAvailable() == PARKING_NOT_MONITORED) {
-			// data not monitored
-			marker = R.drawable.marker_parking;
-		} else if (parking.getSlotsAvailable() == PARKING_UNAVAILABLE) {
-			// data unavailable
-			marker = R.drawable.marker_parking_red;
-		} else if (parking.getSlotsAvailable() <= PARKING_LOW) {
-			marker = R.drawable.marker_parking_red;
-		} else if (parking.getSlotsAvailable() > PARKING_LOW && parking.getSlotsAvailable() <= PARKING_HIGH) {
-			marker = R.drawable.marker_parking_orange;
-		} else if (parking.getSlotsAvailable() > PARKING_HIGH) {
-			marker = R.drawable.marker_parking_green;
+		if (parking.isMonitored()) {
+			if (parking.getSlotsAvailable() == PARKING_UNAVAILABLE) {
+				// data unavailable
+				marker = R.drawable.marker_parking_red;
+			} else if (parking.getSlotsAvailable() <= PARKING_LOW_AVAIL) {
+				marker = R.drawable.marker_parking_red;
+			} else if (parking.getSlotsAvailable() > PARKING_LOW_AVAIL && parking.getSlotsAvailable() <= PARKING_HIGH_AVAIL) {
+				marker = R.drawable.marker_parking_orange;
+			} else if (parking.getSlotsAvailable() > PARKING_HIGH_AVAIL) {
+				marker = R.drawable.marker_parking_green;
+			}
 		}
 
 		return marker;

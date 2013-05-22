@@ -61,10 +61,11 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 		}
 	};
 
-	public SmartCheckParkingsProcessor(SherlockFragmentActivity activity, ArrayAdapter<Parking> adapter, GeoPoint myLocation, String parkingAid) {
+	public SmartCheckParkingsProcessor(SherlockFragmentActivity activity, ArrayAdapter<Parking> adapter, GeoPoint myLocation,
+			String parkingAid) {
 		super(activity);
 		this.adapter = adapter;
-		
+
 		this.parkingAid = parkingAid;
 
 		if (myLocation != null) {
@@ -88,10 +89,10 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 
 		for (Parking parking : result) {
 			parking.setName(ParkingsHelper.getParkingName(parking));
-			if (parking.getSlotsAvailable() == ParkingsHelper.PARKING_NOT_MONITORED) {
-				parkingsWithoutData.add(parking);
-			} else {
+			if (parking.isMonitored()) {
 				parkingsWithData.add(parking);
+			} else {
+				parkingsWithoutData.add(parking);
 			}
 		}
 

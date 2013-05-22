@@ -100,13 +100,16 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 		holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, parking.getSlotsAvailable(),
 				parking.getSlotsTotal()));
 
-		if (parking.getSlotsAvailable() == ParkingsHelper.PARKING_FULL) {
-			holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_full));
-		} else if (parking.getSlotsAvailable() == ParkingsHelper.PARKING_UNAVAILABLE) {
-			// data unavailable
-			holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, "?", parking.getSlotsTotal()));
-		} else if (parking.getSlotsAvailable() == ParkingsHelper.PARKING_NOT_MONITORED) {
-			// data not monitored
+		if (parking.isMonitored()) {
+			if (parking.getSlotsAvailable() == ParkingsHelper.PARKING_FULL) {
+				holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_full));
+			} else if (parking.getSlotsAvailable() == ParkingsHelper.PARKING_UNAVAILABLE) {
+				// data unavailable
+				holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, "?",
+						parking.getSlotsTotal()));
+			}
+		} else {
+			// not monitored
 			holder.parkingStatus.setText(Integer.toString(parking.getSlotsTotal()));
 		}
 

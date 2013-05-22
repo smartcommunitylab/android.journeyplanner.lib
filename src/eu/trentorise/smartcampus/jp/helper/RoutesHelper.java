@@ -34,8 +34,10 @@ public class RoutesHelper {
 	public static final String AGENCYID_BUS_SUBURBAN_ZONE_5 = "17_5";
 	public static final String AGENCYID_BUS_SUBURBAN_ZONE_6 = "17_6";
 
-	public static final List<String> AGENCYIDS = Arrays.asList(AGENCYID_BUS_TRENTO, AGENCYID_BUS_ROVERETO,
-			AGENCYID_BUS_SUBURBAN, AGENCYID_TRAIN_BZVR, AGENCYID_TRAIN_TM, AGENCYID_TRAIN_TNBDG);
+	public static final List<String> AGENCYIDS = Arrays.asList(AGENCYID_BUS_TRENTO, AGENCYID_BUS_ROVERETO, AGENCYID_TRAIN_BZVR,
+			AGENCYID_TRAIN_TM, AGENCYID_TRAIN_TNBDG, AGENCYID_BUS_SUBURBAN, AGENCYID_BUS_SUBURBAN_ZONE_1,
+			AGENCYID_BUS_SUBURBAN_ZONE_2, AGENCYID_BUS_SUBURBAN_ZONE_3, AGENCYID_BUS_SUBURBAN_ZONE_4,
+			AGENCYID_BUS_SUBURBAN_ZONE_5, AGENCYID_BUS_SUBURBAN_ZONE_6);
 
 	public static final List<String> AGENCYIDS_BUSES = Arrays.asList(AGENCYID_BUS_TRENTO, AGENCYID_BUS_ROVERETO);
 
@@ -73,10 +75,12 @@ public class RoutesHelper {
 		return list;
 	}
 
-	public static RouteDescriptor getRouteDescriptorByRouteId(String routeId) {
+	public static RouteDescriptor getRouteDescriptorByRouteId(String agencyId, String routeId) {
 		RouteDescriptor routeDescriptor = null;
 
-		for (RouteDescriptor rd : getRouteDescriptorsList(null)) {
+		String[] agencyIds = agencyId != null ? new String[] { agencyId } : null;
+
+		for (RouteDescriptor rd : getRouteDescriptorsList(agencyIds)) {
 			if (rd.getRouteId().equalsIgnoreCase(routeId)) {
 				routeDescriptor = rd;
 				break;
@@ -84,6 +88,10 @@ public class RoutesHelper {
 		}
 
 		return routeDescriptor;
+	}
+
+	public static RouteDescriptor getRouteDescriptorByRouteId(String routeId) {
+		return getRouteDescriptorByRouteId(null, routeId);
 	}
 
 	public static List<SmartLine> getSmartLines(Context ctx, String agencyId) {
