@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,9 @@ public class BroadcastNotificationsFragment extends FeedbackFragment {
 	public void onStart() {
 		super.onStart();
 		ListView list = (ListView) getSherlockActivity().findViewById(R.id.bn_options_list);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getSherlockActivity(), android.R.layout.simple_list_item_1,
+				getResources().getStringArray(R.array.broadcast_notifications_array));
+		list.setAdapter(adapter);
 
 		list.setOnItemClickListener(new OnItemClickListener() {
 			@Override

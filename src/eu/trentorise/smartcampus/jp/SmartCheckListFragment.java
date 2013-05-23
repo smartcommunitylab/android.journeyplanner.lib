@@ -1,8 +1,5 @@
 package eu.trentorise.smartcampus.jp;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -17,13 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.R.layout;
-import eu.trentorise.smartcampus.jp.custom.SmartCheckAdapter;
+import eu.trentorise.smartcampus.jp.custom.SmartCheckListAdapter;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 
 public class SmartCheckListFragment extends FeedbackFragment {
-
-	private ListView optionsListView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,104 +27,75 @@ public class SmartCheckListFragment extends FeedbackFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
 		return inflater.inflate(R.layout.smartcheck, container, false);
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		optionsListView = (ListView) getSherlockActivity().findViewById(R.id.smart_check_list);
-		ArrayList<String> stringOfOptions = new ArrayList<String>(Arrays.asList(getSherlockActivity().getResources()
-				.getStringArray(R.array.smart_checks_list)));
-		SmartCheckAdapter adapter = new SmartCheckAdapter(getSherlockActivity(), layout.smart_option_row, stringOfOptions);
-		optionsListView.setAdapter(adapter);
-		optionsListView.setOnItemClickListener(new OnItemClickListener() {
+		ListView optionsListView = (ListView) getSherlockActivity().findViewById(R.id.smart_check_list);
+		SmartCheckListAdapter adapter = new SmartCheckListAdapter(getSherlockActivity(), layout.smart_option_row);
 
+		String[] optionsList = getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list);
+		for (int opt = 0; opt < optionsList.length; opt++) {
+			adapter.add(optionsList[opt]);
+		}
+
+		optionsListView.setAdapter(adapter);
+
+		optionsListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				RelativeLayout ll = (RelativeLayout) view;
-				TextView option = (TextView) ll.getChildAt(0);
+				TextView option = (TextView) ll.findViewById(R.id.smart_option);
 				String optionName = option.getText().toString();
 
-				if (optionName.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[0]) == 0) {
+				Fragment fragment = null;
+
+				if (optionName.contentEquals(getResources().getString(R.string.smart_check_list_bus_trento_timetable))) {
 					// Trento bus timetable
-					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
-							.beginTransaction();
-					Fragment fragment = new SmartCheckBusFragment();
+					fragment = new SmartCheckBusFragment();
 					Bundle bundle = new Bundle();
 					bundle.putString(SmartCheckBusFragment.PARAM_AID, RoutesHelper.AGENCYID_BUS_TRENTO);
 					fragment.setArguments(bundle);
-					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-					fragmentTransaction.replace(Config.mainlayout, fragment);
-					fragmentTransaction.addToBackStack(null);
-					fragmentTransaction.commit();
-				} else if (optionName
-						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[1]) == 0) {
+				} else if (optionName.contentEquals(getResources().getString(R.string.smart_check_list_bus_rovereto_timetable))) {
 					// Rovereto bus timetable
-					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
-							.beginTransaction();
-					Fragment fragment = new SmartCheckBusFragment();
+					fragment = new SmartCheckBusFragment();
 					Bundle bundle = new Bundle();
 					bundle.putString(SmartCheckBusFragment.PARAM_AID, RoutesHelper.AGENCYID_BUS_ROVERETO);
 					fragment.setArguments(bundle);
-					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-					fragmentTransaction.replace(Config.mainlayout, fragment);
-					fragmentTransaction.addToBackStack(null);
-					fragmentTransaction.commit();
-				} else if (optionName
-						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[2]) == 0) {
+				} else if (optionName.contentEquals(getResources().getString(R.string.smart_check_list_suburban_timetable))) {
 					// Suburban bus timetable
-					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
-							.beginTransaction();
-					Fragment fragment = new SmartCheckSuburbanFragment();
-					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-					fragmentTransaction.replace(Config.mainlayout, fragment);
-					fragmentTransaction.addToBackStack(null);
-					fragmentTransaction.commit();
-				} else if (optionName
-						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[3]) == 0) {
+					fragment = new SmartCheckSuburbanFragment();
+				} else if (optionName.contentEquals(getResources().getString(R.string.smart_check_list_train_timetable))) {
 					// Trains timetable
-					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
-							.beginTransaction();
-					Fragment fragment = new SmartCheckTrainFragment();
-					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-					fragmentTransaction.replace(Config.mainlayout, fragment);
-					fragmentTransaction.addToBackStack(null);
-					fragmentTransaction.commit();
-				} else if (optionName
-						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[4]) == 0) {
+					fragment = new SmartCheckTrainFragment();
+				} else if (optionName.contentEquals(getResources().getString(R.string.smart_check_list_parking_trento))) {
 					// Trento parking availability
-					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
-							.beginTransaction();
-					Fragment fragment = new SmartCheckParkingsFragment();
+					fragment = new SmartCheckParkingsFragment();
 					Bundle bundle = new Bundle();
 					bundle.putString(SmartCheckParkingsFragment.PARAM_AID, ParkingsHelper.PARKING_AID_TRENTO);
 					fragment.setArguments(bundle);
-					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-					fragmentTransaction.replace(Config.mainlayout, fragment);
-					fragmentTransaction.addToBackStack(null);
-					fragmentTransaction.commit();
-				} else if (optionName
-						.compareTo(getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list)[5]) == 0) {
+				} else if (optionName.contentEquals(getResources().getString(R.string.smart_check_list_parking_rovereto))) {
 					// Rovereto parking availability
-					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
-							.beginTransaction();
-					Fragment fragment = new SmartCheckParkingsFragment();
+					fragment = new SmartCheckParkingsFragment();
 					Bundle bundle = new Bundle();
 					bundle.putString(SmartCheckParkingsFragment.PARAM_AID, ParkingsHelper.PARKING_AID_ROVERETO);
 					fragment.setArguments(bundle);
-					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-					fragmentTransaction.replace(Config.mainlayout, fragment);
-					fragmentTransaction.addToBackStack(null);
-					fragmentTransaction.commit();
 				} else {
 					// Toast available soon
 					Toast.makeText(getSherlockActivity(), R.string.tmp, Toast.LENGTH_SHORT).show();
 				}
+
+				if (fragment != null) {
+					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
+							.beginTransaction();
+					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+					fragmentTransaction.replace(Config.mainlayout, fragment);
+					fragmentTransaction.addToBackStack(null);
+					fragmentTransaction.commit();
+				}
 			}
-
 		});
-
 	}
 }

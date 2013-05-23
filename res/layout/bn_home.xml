@@ -18,17 +18,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <LinearLayout
-        android:id="@+id/mainlayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+    <!-- <LinearLayout -->
+    <!-- android:id="@+id/mainlayout" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="match_parent" -->
+    <!-- android:orientation="vertical" > -->
 
-        <ListView
-            android:id="@+id/bn_options_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/broadcast_notifications_array" />
-    </LinearLayout>
+    <ListView
+        android:id="@+id/bn_options_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <!-- </LinearLayout> -->
 
 </RelativeLayout>
