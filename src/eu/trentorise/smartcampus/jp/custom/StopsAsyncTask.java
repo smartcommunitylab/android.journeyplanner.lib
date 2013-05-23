@@ -11,11 +11,12 @@ import com.google.android.maps.MapView;
 import eu.trentorise.smartcampus.jp.custom.map.StopsItemizedOverlay;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
+import eu.trentorise.smartcampus.jp.model.Square;
 
 public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 
 	public interface OnStopLoadingFinished {
-		public void onStopLoadingFinished();
+		public void onStopLoadingFinished(boolean result,double[] location,double diagonal);
 	}
 
 	private OnStopLoadingFinished mOnStopLoadingFinished;
@@ -28,9 +29,10 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 	private MapView mapView;
 	private String[] selectedAgencyIds;
 	private StopsItemizedOverlay old_overlay;
+	private Square cache;
 
 	public StopsAsyncTask(String[] selectedAgencyIds, Map<String, SmartCheckStop> smartCheckStopMap,
-			StopsItemizedOverlay overlay, double[] location, double diagonal, MapView mapView, OnStopLoadingFinished listener) {
+			StopsItemizedOverlay overlay,Square cache, double[] location, double diagonal, MapView mapView, OnStopLoadingFinished listener) {
 		super();
 		this.overlay = overlay;
 		this.mapView = mapView;
@@ -41,6 +43,7 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 		this.smartCheckStopMap = smartCheckStopMap;
 
 		this.selectedAgencyIds = selectedAgencyIds;
+		this.cache=cache;
 	}
 
 	@Override
@@ -101,10 +104,14 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 	protected void onPostExecute(Boolean result) {
 		super.onPostExecute(result);
 		if (result) {
-			overlay.clearMarkers();
+			//overlay.clearMarkers();
 			// for (SmartCheckStop o : list) {
+			Square s;
 			for (SmartCheckStop o : smartCheckStopMap.values()) {
-				overlay.addOverlay(o);
+				s = new Square(o.getLocation(),diagonal);
+				if(cache==null ||overlay.size()<=0 || cache.compareTo(s)<0)
+					overlay.addOverlay(o);
+				s=null;
 			}
 			overlay.populateAll();
 			mapView.invalidate();
@@ -113,7 +120,7 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 			overlay = old_overlay;
 		}
 
-		mOnStopLoadingFinished.onStopLoadingFinished();
+		mOnStopLoadingFinished.onStopLoadingFinished(result,location,diagonal);
 	}
 
 }
