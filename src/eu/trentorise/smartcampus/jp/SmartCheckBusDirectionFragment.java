@@ -76,9 +76,7 @@ public class SmartCheckBusDirectionFragment extends FeedbackFragment {
 			busLine.setText(smartLine.getLine());
 		}
 
-		if (agencyId != null
-				&& (RoutesHelper.AGENCYID_BUS_SUBURBAN.equals(agencyId) || RoutesHelper.AGENCYIDS_BUSES_SUBURBAN
-						.contains(agencyId))) {
+		if (agencyId != null && (RoutesHelper.AGENCYID_BUS_SUBURBAN.equals(agencyId))) {
 			busLine.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Large);
 		}
 

@@ -1,6 +1,295 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Trento urbano -->
+    <string-array name="smart_check_12_numbers">
+        <item>_A</item>
+        <item>_B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>01</item>
+        <item>02</item>
+        <item>03</item>
+        <item>04</item>
+        <item>05</item>
+        <item>06</item>
+        <item>07</item>
+        <item>08</item>
+        <item>09</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>NP</item>
+        <!-- <item>funivia</item> -->
+    </string-array>
+
+    <array name="smart_check_12_icons">
+        <item>@drawable/ic_f_a</item>
+        <item>@drawable/ic_f_b</item>
+        <item>@drawable/ic_f_c</item>
+        <item>@drawable/ic_f_d</item>
+        <item>@drawable/ic_f1</item>
+        <item>@drawable/ic_f2</item>
+        <item>@drawable/ic_f3</item>
+        <item>@drawable/ic_f4</item>
+        <item>@drawable/ic_f5</item>
+        <item>@drawable/ic_f6</item>
+        <item>@drawable/ic_f7</item>
+        <item>@drawable/ic_f8</item>
+        <item>@drawable/ic_f9</item>
+        <item>@drawable/ic_f10</item>
+        <item>@drawable/ic_f11</item>
+        <item>@drawable/ic_f12</item>
+        <item>@drawable/ic_f13</item>
+        <item>@drawable/ic_f14</item>
+        <item>@drawable/ic_f15</item>
+        <item>@drawable/ic_f16</item>
+        <item>@drawable/ic_f17</item>
+        <item>@drawable/ic_f_np</item>
+        <!-- <item>@drawable/ic_f_cw</item> -->
+    </array>
+    <array name="smart_check_12_colors">
+        <item>#B9BAB5</item>
+        <item>#717880</item>
+        <item>#000</item>
+        <item>#000</item>
+        <item>#174072</item>
+        <item>#D65A2E</item>
+        <item>#C02927</item>
+        <item>#0976B7</item>
+        <item>#E8C01C</item>
+        <item>#6EB046</item>
+        <item>#1B9887</item>
+        <item>#553428</item>
+        <item>#8A4D2C</item>
+        <item>#105446</item>
+        <item>#563176</item>
+        <item>#91283F</item>
+        <item>#B75D8E</item>
+        <item>#DB8FAC</item>
+        <item>#7CC243</item>
+        <item>#212C5F</item>
+        <item>#2493C5</item>
+        <item>#000</item>
+        <!-- <item>#FFF</item> -->
+    </array>
+
+    <!-- Rovereto urbano -->
+    <string-array name="smart_check_16_numbers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>A</item>
+        <item>B</item>
+    </string-array>
+
+    <array name="smart_check_16_icons">
+        <item>@drawable/ic_f1</item>
+        <item>@drawable/ic_f2</item>
+        <item>@drawable/ic_f3</item>
+        <item>@drawable/ic_f4</item>
+        <item>@drawable/ic_f5</item>
+        <item>@drawable/ic_f6</item>
+        <item>@drawable/ic_f7</item>
+        <item>@drawable/ic_f_a</item>
+        <item>@drawable/ic_f_b</item>
+    </array>
+    <array name="smart_check_16_colors">
+        <item>#174072</item>
+        <item>#D65A2E</item>
+        <item>#C02927</item>
+        <item>#0976B7</item>
+        <item>#E8C01C</item>
+        <item>#6EB046</item>
+        <item>#1B9887</item>
+        <item>#B9BAB5</item>
+        <item>#717880</item>
+    </array>
+
+    <!-- Extraurbano -->
+    <string-array name="smart_check_17_zones">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <array name="smart_check_17_colors">
+        <item>#924B00</item>
+        <item>#EB0070</item>
+        <item>#FCB146</item>
+        <item>#0062B5</item>
+        <item>#19B9BA</item>
+        <item>#7C7E80</item>
+    </array>
+    <array name="smart_check_17_names">
+        <item>@string/agency_17_zone_1</item>
+        <item>@string/agency_17_zone_2</item>
+        <item>@string/agency_17_zone_3</item>
+        <item>@string/agency_17_zone_4</item>
+        <item>@string/agency_17_zone_5</item>
+        <item>@string/agency_17_zone_6</item>
+    </array>
+
+    <!-- ZONES -->
+    <string-array name="agency_17_zone_1">
+        <item>101</item>
+        <item>102</item>
+        <item>103</item>
+        <item>104</item>
+        <item>105</item>
+        <item>106</item>
+        <item>107</item>
+        <item>108</item>
+        <item>109</item>
+        <item>110</item>
+        <item>111</item>
+        <item>112</item>
+        <item>114</item>
+        <item>115</item>
+        <item>116</item>
+        <item>120</item>
+        <item>121</item>
+        <item>122</item>
+        <item>123</item>
+        <item>140</item>
+    </string-array>
+    <string-array name="agency_17_zone_2">
+        <item>201</item>
+        <item>202</item>
+        <item>203</item>
+        <item>204</item>
+        <item>205</item>
+        <item>206</item>
+        <item>208</item>
+        <item>209</item>
+        <item>210</item>
+        <item>211</item>
+        <item>212</item>
+        <item>214</item>
+        <item>215</item>
+        <item>216</item>
+        <item>217</item>
+        <item>218</item>
+        <item>230</item>
+        <item>231</item>
+        <item>236</item>
+        <item>861</item>
+        <item>862</item>
+        <item>863</item>
+        <item>864</item>
+    </string-array>
+    <string-array name="agency_17_zone_3">
+        <item>301</item>
+        <item>302</item>
+        <item>303</item>
+        <item>305</item>
+        <item>306</item>
+        <item>307</item>
+        <item>310</item>
+        <item>311</item>
+        <item>312</item>
+        <item>314</item>
+        <item>315</item>
+        <item>316</item>
+        <item>318</item>
+        <item>319</item>
+        <item>321</item>
+        <item>332</item>
+        <item>334</item>
+        <item>335</item>
+        <item>336</item>
+    </string-array>
+    <string-array name="agency_17_zone_4">
+        <item>401</item>
+        <item>402</item>
+        <item>403</item>
+        <item>404</item>
+        <item>405</item>
+        <item>406</item>
+        <item>407</item>
+        <item>408</item>
+        <item>409</item>
+        <item>410</item>
+        <item>413</item>
+        <item>415</item>
+        <item>416</item>
+        <item>417</item>
+        <item>418</item>
+        <item>423</item>
+        <item>425</item>
+        <item>428</item>
+        <item>429</item>
+        <item>431</item>
+        <item>433</item>
+        <item>461</item>
+        <item>462</item>
+        <item>463</item>
+        <item>464</item>
+        <item>465</item>
+        <item>466</item>
+        <item>467</item>
+        <item>468</item>
+    </string-array>
+    <string-array name="agency_17_zone_5">
+        <item>501</item>
+        <item>502</item>
+        <item>503</item>
+        <item>504</item>
+        <item>506</item>
+        <item>507</item>
+        <item>511</item>
+        <item>512</item>
+        <item>514</item>
+        <item>543</item>
+    </string-array>
+    <string-array name="agency_17_zone_6">
+        <item>611</item>
+        <item>615</item>
+        <item>616</item>
+        <item>620</item>
+        <item>623</item>
+        <item>624</item>
+        <item>625</item>
+        <item>627</item>
+        <item>630</item>
+        <item>632</item>
+        <item>633</item>
+        <item>634</item>
+        <item>635</item>
+        <item>636</item>
+        <item>640</item>
+        <item>641</item>
+        <item>642</item>
+        <item>643</item>
+        <item>644</item>
+        <item>645</item>
+        <item>646</item>
+        <!-- <item>701</item> -->
+        <!-- <item>864</item> -->
+    </string-array>
+
+    <array name="agency_17_zones">
+        <item>@array/agency_17_zone_1</item>
+        <item>@array/agency_17_zone_2</item>
+        <item>@array/agency_17_zone_3</item>
+        <item>@array/agency_17_zone_4</item>
+        <item>@array/agency_17_zone_5</item>
+        <item>@array/agency_17_zone_6</item>
+    </array>
+
+    <!-- NAMES -->
     <!-- Trento Male routes -->
     <string name="agency_10_route_555">Trent - Malé</string>
     <string name="agency_10_route_556">Malé - Trent</string>
@@ -304,7 +593,7 @@
     <string name="agency_16_route_385_Rov">Mori - Villa Lagarina - Nogaredo</string>
     <string name="agency_16_route_482_Rov">Via Magazol - Ospedale - Via Magazol</string>
     <string name="agency_16_route_481_Rov">Brione - S. Giorgio - Lizzana - Podestà - Brione</string>
-    <string name="agency_16_route_470_Rov">C.so Rosmini - baldresca</string>
+    <string name="agency_16_route_470_Rov">C.so Rosmini - Baldresca</string>
     <string name="agency_16_route_471_Rov">Baldresca - C.so Rosmini - S. Giovanni Bosco</string>
     <string name="agency_16_route_457_Rov">Costa - C.so Rosmini</string>
     <string name="agency_16_route_456_Rov">P.le Orsi - C.so Rosmini - Costa</string>

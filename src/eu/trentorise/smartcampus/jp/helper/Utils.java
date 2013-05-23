@@ -64,8 +64,7 @@ public class Utils {
 		ImageView imgv = new ImageView(ctx);
 		String agencyIdString = Integer.toString(agencyId);
 
-		if (RoutesHelper.AGENCYIDS_BUSES.contains(agencyIdString)
-				|| RoutesHelper.AGENCYIDS_BUSES_SUBURBAN.contains(agencyIdString)) {
+		if (RoutesHelper.AGENCYIDS_BUSES.contains(agencyIdString)) {
 			imgv.setImageResource(R.drawable.ic_mt_bus);
 		} else if (RoutesHelper.AGENCYIDS_TRAINS.contains(agencyIdString)) {
 			imgv.setImageResource(R.drawable.ic_mt_train);

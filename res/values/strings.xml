@@ -171,7 +171,9 @@
     <string name="leg_delay">There is a delay:</string>
     
     <string name="broadcast_notifications_accident">Accidents</string>
-    <string name="broadcast_notifications_bus_delay">Bus delays</string>
+    <string name="broadcast_notifications_bus_trento_delay">Trento bus delays</string>
+    <string name="broadcast_notifications_bus_rovereto_delay">Rovereto bus delays</string>
+    <string name="broadcast_notifications_bus_suburban_delay">Suburban bus delays</string>
     <string name="broadcast_notifications_train_delay">Train delays</string>
     <string name="broadcast_notifications_road_works">Road work</string>
     <string name="broadcast_notifications_strike">Strikes</string>

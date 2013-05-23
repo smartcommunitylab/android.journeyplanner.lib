@@ -168,7 +168,9 @@
     <string name="leg_delay">Ritardo:</string>
     
     <string name="broadcast_notifications_accident">Incidente</string>
-    <string name="broadcast_notifications_bus_delay">Ritardo autobus</string>
+    <string name="broadcast_notifications_bus_trento_delay">Ritardo autobus di Trento</string>
+    <string name="broadcast_notifications_bus_rovereto_delay">Ritardo autobus di Rovereto</string>
+    <string name="broadcast_notifications_bus_suburban_delay">Ritardo autobus extraurbano</string>
     <string name="broadcast_notifications_train_delay">Ritardo treno</string>
     <string name="broadcast_notifications_road_works">Lavori in corso</string>
     <string name="broadcast_notifications_strike">Sciopero</string>

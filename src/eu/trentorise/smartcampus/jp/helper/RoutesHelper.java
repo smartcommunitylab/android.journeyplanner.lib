@@ -23,27 +23,20 @@ public class RoutesHelper {
 	public static final String AGENCYID_TRAIN_TNBDG = "6";
 	public static final String AGENCYID_TRAIN_TM = "10";
 	public static final String AGENCYID_BUS_TRENTO = "12";
-	// remember to add this agencyId
 	public static final String AGENCYID_BUS_ROVERETO = "16";
-	//
 	public static final String AGENCYID_BUS_SUBURBAN = "17";
-	public static final String AGENCYID_BUS_SUBURBAN_ZONE_1 = "17_1";
-	public static final String AGENCYID_BUS_SUBURBAN_ZONE_2 = "17_2";
-	public static final String AGENCYID_BUS_SUBURBAN_ZONE_3 = "17_3";
-	public static final String AGENCYID_BUS_SUBURBAN_ZONE_4 = "17_4";
-	public static final String AGENCYID_BUS_SUBURBAN_ZONE_5 = "17_5";
-	public static final String AGENCYID_BUS_SUBURBAN_ZONE_6 = "17_6";
+	// public static final String AGENCYID_BUS_SUBURBAN_ZONE_1 = "17_1";
+	// public static final String AGENCYID_BUS_SUBURBAN_ZONE_2 = "17_2";
+	// public static final String AGENCYID_BUS_SUBURBAN_ZONE_3 = "17_3";
+	// public static final String AGENCYID_BUS_SUBURBAN_ZONE_4 = "17_4";
+	// public static final String AGENCYID_BUS_SUBURBAN_ZONE_5 = "17_5";
+	// public static final String AGENCYID_BUS_SUBURBAN_ZONE_6 = "17_6";
 
 	public static final List<String> AGENCYIDS = Arrays.asList(AGENCYID_BUS_TRENTO, AGENCYID_BUS_ROVERETO, AGENCYID_TRAIN_BZVR,
-			AGENCYID_TRAIN_TM, AGENCYID_TRAIN_TNBDG, AGENCYID_BUS_SUBURBAN, AGENCYID_BUS_SUBURBAN_ZONE_1,
-			AGENCYID_BUS_SUBURBAN_ZONE_2, AGENCYID_BUS_SUBURBAN_ZONE_3, AGENCYID_BUS_SUBURBAN_ZONE_4,
-			AGENCYID_BUS_SUBURBAN_ZONE_5, AGENCYID_BUS_SUBURBAN_ZONE_6);
+			AGENCYID_TRAIN_TM, AGENCYID_TRAIN_TNBDG, AGENCYID_BUS_SUBURBAN);
 
-	public static final List<String> AGENCYIDS_BUSES = Arrays.asList(AGENCYID_BUS_TRENTO, AGENCYID_BUS_ROVERETO);
-
-	public static final List<String> AGENCYIDS_BUSES_SUBURBAN = Arrays.asList(AGENCYID_BUS_SUBURBAN_ZONE_1,
-			AGENCYID_BUS_SUBURBAN_ZONE_2, AGENCYID_BUS_SUBURBAN_ZONE_3, AGENCYID_BUS_SUBURBAN_ZONE_4,
-			AGENCYID_BUS_SUBURBAN_ZONE_5, AGENCYID_BUS_SUBURBAN_ZONE_6);
+	public static final List<String> AGENCYIDS_BUSES = Arrays.asList(AGENCYID_BUS_TRENTO, AGENCYID_BUS_ROVERETO,
+			AGENCYID_BUS_SUBURBAN);
 
 	public static final List<String> AGENCYIDS_TRAINS = Arrays.asList(AGENCYID_TRAIN_BZVR, AGENCYID_TRAIN_TM,
 			AGENCYID_TRAIN_TNBDG);
@@ -103,28 +96,25 @@ public class RoutesHelper {
 
 		Resources resources = ctx.getResources();
 
-		String[] agencyIds = new String[] {};
+		String[] agencyIds = new String[] { agencyId };
 		String[] lines = null;
 		TypedArray linesNames = null;
 		TypedArray icons = null;
 		TypedArray colors = null;
 
 		if (agencyId == AGENCYID_BUS_TRENTO) {
-			agencyIds = new String[] { agencyId };
 			lines = resources.getStringArray(R.array.smart_check_12_numbers);
 			// linesNames =
 			// resources.obtainTypedArray(R.array.smart_check_17_names);
 			icons = resources.obtainTypedArray(R.array.smart_check_12_icons);
 			colors = resources.obtainTypedArray(R.array.smart_check_12_colors);
 		} else if (agencyId == AGENCYID_BUS_ROVERETO) {
-			agencyIds = new String[] { agencyId };
 			lines = resources.getStringArray(R.array.smart_check_16_numbers);
 			// linesNames =
 			// resources.obtainTypedArray(R.array.smart_check_17_names);
 			icons = resources.obtainTypedArray(R.array.smart_check_16_icons);
 			colors = resources.obtainTypedArray(R.array.smart_check_16_colors);
 		} else if (agencyId == AGENCYID_BUS_SUBURBAN) {
-			agencyIds = AGENCYIDS_BUSES_SUBURBAN.toArray(new String[] {});
 			lines = resources.getStringArray(R.array.smart_check_17_zones);
 			linesNames = resources.obtainTypedArray(R.array.smart_check_17_names);
 			// icons = resources.obtainTypedArray(R.array.smart_check_12_icons);
@@ -144,23 +134,24 @@ public class RoutesHelper {
 
 		// get all-the-routes for a smartline
 		for (int index = 0; index < lines.length; index++) {
+			String line = lines[index];
 			// put them in the array
 			for (Route route : routes) {
 				//
-				if (validateRoute(agencyId, route, lines[index])) {
-					if (singleRoutesShorts.get(lines[index]) == null) {
-						singleRoutesShorts.put(lines[index], new ArrayList<String>());
-						singleRoutesLong.put(lines[index], new ArrayList<String>());
-						singleRoutesId.put(lines[index], new ArrayList<String>());
+				if (validateRoute(ctx, agencyId, route, line, index)) {
+					if (singleRoutesShorts.get(line) == null) {
+						singleRoutesShorts.put(line, new ArrayList<String>());
+						singleRoutesLong.put(line, new ArrayList<String>());
+						singleRoutesId.put(line, new ArrayList<String>());
 					}
-					singleRoutesShorts.get(lines[index]).add(route.getRouteShortName());
-					singleRoutesLong.get(lines[index]).add(route.getRouteLongName());
-					singleRoutesId.get(lines[index]).add(route.getId().getId());
+					singleRoutesShorts.get(line).add(route.getRouteShortName());
+					singleRoutesLong.get(line).add(route.getRouteLongName());
+					singleRoutesId.get(line).add(route.getId().getId());
 				}
 			}
 			SmartLine singleLine = new SmartLine((icons != null ? icons.getDrawable(index) : null),
-					(linesNames != null ? linesNames.getString(index) : lines[index]), colors.getColor(index, 0),
-					singleRoutesShorts.get(lines[index]), singleRoutesLong.get(lines[index]), singleRoutesId.get(lines[index]));
+					(linesNames != null ? linesNames.getString(index) : line), colors.getColor(index, 0),
+					singleRoutesShorts.get(line), singleRoutesLong.get(line), singleRoutesId.get(line));
 			busLines.add(singleLine);
 		}
 
@@ -190,17 +181,22 @@ public class RoutesHelper {
 		return route;
 	}
 
-	private static boolean validateRoute(String agencyId, Route route, String line) {
+	private static boolean validateRoute(Context mContext, String agencyId, Route route, String line, int index) {
+		boolean contains = false;
+
 		if (AGENCYID_BUS_TRENTO.equals(agencyId)) {
-			return (route.getId().getId().equalsIgnoreCase(line) || route.getId().getId().equalsIgnoreCase(line + "A") || route
-					.getId().getId().equalsIgnoreCase(line + "R"));
+			contains = route.getId().getId().equalsIgnoreCase(line) || route.getId().getId().equalsIgnoreCase(line + "A")
+					|| route.getId().getId().equalsIgnoreCase(line + "R");
 		} else if (AGENCYID_BUS_ROVERETO.equals(agencyId)) {
-			return (route.getRouteShortName().equals(line));
+			contains = route.getRouteShortName().equals(line);
 		} else if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
-			return (route.getId().getAgency().endsWith("_" + line));
+			TypedArray routesArrays = mContext.getResources().obtainTypedArray(R.array.agency_17_zones);
+			CharSequence[] routesShortNames = routesArrays.getTextArray(index);
+			contains = Arrays.asList(routesShortNames).contains(route.getRouteShortName());
+			routesArrays.recycle();
 		}
 
-		return false;
+		return contains;
 	}
 
 	/**
@@ -315,271 +311,8 @@ public class RoutesHelper {
 			});
 
 	/*
-	 * Trento suburban
+	 * Suburban
 	 */
-	private static final List<RouteDescriptor> RoutesDescriptorsList_17_zone_1 = Arrays.asList(new RouteDescriptor[] {
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "243_ExUr", R.string.agency_17_route_243_ExUr, "101"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "244_ExUr", R.string.agency_17_route_244_ExUr, "101"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "6_ExUr", R.string.agency_17_route_6_ExUr, "102"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "3_ExUr", R.string.agency_17_route_3_ExUr, "102"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "121_ExUr", R.string.agency_17_route_121_ExUr, "103"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "120_ExUr", R.string.agency_17_route_120_ExUr, "103"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "55_ExUr", R.string.agency_17_route_55_ExUr, "104"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "56_ExUr", R.string.agency_17_route_56_ExUr, "104"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "62_ExUr", R.string.agency_17_route_62_ExUr, "105"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "60_ExUr", R.string.agency_17_route_60_ExUr, "105"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "343_ExUr", R.string.agency_17_route_343_ExUr, "106"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "344_ExUr", R.string.agency_17_route_344_ExUr, "106"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "342_ExUr", R.string.agency_17_route_342_ExUr, "107"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "340_ExUr", R.string.agency_17_route_340_ExUr, "107"),
-			// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_1, "242_ExUr",
-			// R.string.agency_17_route_242_ExUr, "108"),
-			// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_1, "241_ExUr",
-			// R.string.agency_17_route_241_ExUr, "108"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "65_ExUr", R.string.agency_17_route_65_ExUr, "109"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "66_ExUr", R.string.agency_17_route_66_ExUr, "109"),
-			// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_1, "240_ExUr",
-			// R.string.agency_17_route_240_ExUr, "110"),
-			// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_1, "239_ExUr",
-			// R.string.agency_17_route_239_ExUr, "110"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "67_ExUr", R.string.agency_17_route_67_ExUr, "111"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "68_ExUr", R.string.agency_17_route_68_ExUr, "111"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "117_ExUr", R.string.agency_17_route_117_ExUr, "112"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "118_ExUr", R.string.agency_17_route_118_ExUr, "112"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "8_ExUr", R.string.agency_17_route_8_ExUr, "114"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "7_ExUr", R.string.agency_17_route_7_ExUr, "114"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "300_ExUr", R.string.agency_17_route_300_ExUr, "115"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "307_ExUr", R.string.agency_17_route_307_ExUr, "115"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "151_ExUr", R.string.agency_17_route_151_ExUr, "116"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "152_ExUr", R.string.agency_17_route_152_ExUr, "116"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "611_ExUr", R.string.agency_17_route_611_ExUr, "120"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "613_ExUr", R.string.agency_17_route_613_ExUr, "120"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "64_ExUr", R.string.agency_17_route_64_ExUr, "121"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "63_ExUr", R.string.agency_17_route_63_ExUr, "121"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "289_ExUr", R.string.agency_17_route_289_ExUr, "122"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "288_ExUr", R.string.agency_17_route_288_ExUr, "122"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "252_ExUr", R.string.agency_17_route_252_ExUr, "123"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "253_ExUr", R.string.agency_17_route_253_ExUr, "123"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "638_ExUr", R.string.agency_17_route_638_ExUr, "140"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_1, "639_ExUr", R.string.agency_17_route_639_ExUr, "140") });
-
-	private static final List<RouteDescriptor> RoutesDescriptorsList_17_zone_2 = Arrays.asList(new RouteDescriptor[] {
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "71_ExUr", R.string.agency_17_route_71_ExUr, "201"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "72_ExUr", R.string.agency_17_route_72_ExUr, "201"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "238_ExUr", R.string.agency_17_route_238_ExUr, "202"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "237_ExUr", R.string.agency_17_route_237_ExUr, "202"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "79_ExUr", R.string.agency_17_route_79_ExUr, "203"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "78_ExUr", R.string.agency_17_route_78_ExUr, "203"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "175_ExUr", R.string.agency_17_route_175_ExUr, "204"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "176_ExUr", R.string.agency_17_route_176_ExUr, "204"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "134_ExUr", R.string.agency_17_route_134_ExUr, "205"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "135_ExUr", R.string.agency_17_route_135_ExUr, "205"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "80_ExUr", R.string.agency_17_route_80_ExUr, "206"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "81_ExUr", R.string.agency_17_route_81_ExUr, "206"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "287_ExUr", R.string.agency_17_route_287_ExUr, "208"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "286_ExUr", R.string.agency_17_route_286_ExUr, "208"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "159_ExUr", R.string.agency_17_route_159_ExUr, "209"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "160_ExUr", R.string.agency_17_route_160_ExUr, "209"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "155_ExUr", R.string.agency_17_route_155_ExUr, "210"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "156_ExUr", R.string.agency_17_route_156_ExUr, "210"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "153_ExUr", R.string.agency_17_route_153_ExUr, "211"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "154_ExUr", R.string.agency_17_route_154_ExUr, "211"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "168_ExUr", R.string.agency_17_route_168_ExUr, "212"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "167_ExUr", R.string.agency_17_route_167_ExUr, "212"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "247_ExUr", R.string.agency_17_route_247_ExUr, "214"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "245_ExUr", R.string.agency_17_route_245_ExUr, "214"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "158_ExUr", R.string.agency_17_route_158_ExUr, "215"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "157_ExUr", R.string.agency_17_route_157_ExUr, "215"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "74_ExUr", R.string.agency_17_route_74_ExUr, "216"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "73_ExUr", R.string.agency_17_route_73_ExUr, "216"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "321_ExUr", R.string.agency_17_route_321_ExUr, "217"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "320_ExUr", R.string.agency_17_route_320_ExUr, "217"),
-			// 218?
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "229_ExUr", R.string.agency_17_route_229_ExUr, "230"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "230_ExUr", R.string.agency_17_route_230_ExUr, "230"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "637_ExUr", R.string.agency_17_route_637_ExUr, "231"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "636_ExUr", R.string.agency_17_route_636_ExUr, "231"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "565_ExUr", R.string.agency_17_route_565_ExUr, "236"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "566_ExUr", R.string.agency_17_route_566_ExUr, "236"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "420_ExUr", R.string.agency_17_route_420_ExUr, "861"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "423_ExUr", R.string.agency_17_route_423_ExUr, "862"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "417_ExUr", R.string.agency_17_route_417_ExUr, "863"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_2, "583_ExUr", R.string.agency_17_route_583_ExUr, "863")
-	// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_2, "418_ExUr",
-	// R.string.agency_17_route_418_ExUr, "864")
-			});
-
-	private static final List<RouteDescriptor> RoutesDescriptorsList_17_zone_3 = Arrays.asList(new RouteDescriptor[] {
-
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "110_ExUr", R.string.agency_17_route_110_ExUr, "301"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "111_ExUr", R.string.agency_17_route_111_ExUr, "301"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "181_ExUr", R.string.agency_17_route_181_ExUr, "302"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "182_ExUr", R.string.agency_17_route_182_ExUr, "302"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "187_ExUr", R.string.agency_17_route_187_ExUr, "303"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "186_ExUr", R.string.agency_17_route_186_ExUr, "303"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "231_ExUr", R.string.agency_17_route_231_ExUr, "305"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "232_ExUr", R.string.agency_17_route_232_ExUr, "305"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "196_ExUr", R.string.agency_17_route_196_ExUr, "306"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "197_ExUr", R.string.agency_17_route_197_ExUr, "306"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "201_ExUr", R.string.agency_17_route_201_ExUr, "307"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "200_ExUr", R.string.agency_17_route_200_ExUr, "307"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "314_ExUr", R.string.agency_17_route_314_ExUr, "310"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "315_ExUr", R.string.agency_17_route_315_ExUr, "310"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "194_ExUr", R.string.agency_17_route_194_ExUr, "311"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "195_ExUr", R.string.agency_17_route_195_ExUr, "311"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "215_ExUr", R.string.agency_17_route_215_ExUr, "312"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "216_ExUr", R.string.agency_17_route_216_ExUr, "312"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "203_ExUr", R.string.agency_17_route_203_ExUr, "314"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "204_ExUr", R.string.agency_17_route_204_ExUr, "314"),
-			// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_3, "198_ExUr",
-			// R.string.agency_17_route_198_ExUr, "315"),
-			// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_3, "199_ExUr",
-			// R.string.agency_17_route_199_ExUr, "315"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "191_ExUr", R.string.agency_17_route_191_ExUr, "316"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "190_ExUr", R.string.agency_17_route_190_ExUr, "316"),
-			// 318?
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "233_ExUr", R.string.agency_17_route_233_ExUr, "319"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "234_ExUr", R.string.agency_17_route_234_ExUr, "319"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "205_ExUr", R.string.agency_17_route_205_ExUr, "321"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "634_ExUr", R.string.agency_17_route_634_ExUr, "332"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "635_ExUr", R.string.agency_17_route_635_ExUr, "332"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "507_ExUr", R.string.agency_17_route_507_ExUr, "334"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "503_ExUr", R.string.agency_17_route_503_ExUr, "335"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "581_ExUr", R.string.agency_17_route_581_ExUr, "336"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_3, "580_ExUr", R.string.agency_17_route_580_ExUr, "336") });
-
-	private static final List<RouteDescriptor> RoutesDescriptorsList_17_zone_4 = Arrays.asList(new RouteDescriptor[] {
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "520_ExUr", R.string.agency_17_route_520_ExUr, "401"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "521_ExUr", R.string.agency_17_route_521_ExUr, "401"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "69_ExUr", R.string.agency_17_route_69_ExUr, "402"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "70_ExUr", R.string.agency_17_route_70_ExUr, "402"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "494_ExUr", R.string.agency_17_route_494_ExUr, "403"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "495_ExUr", R.string.agency_17_route_495_ExUr, "403"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "290_ExUr", R.string.agency_17_route_290_ExUr, "404"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "291_ExUr", R.string.agency_17_route_291_ExUr, "404"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "523_ExUr", R.string.agency_17_route_523_ExUr, "405"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "522_ExUr", R.string.agency_17_route_522_ExUr, "405"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "169_ExUr", R.string.agency_17_route_169_ExUr, "406"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "170_ExUr", R.string.agency_17_route_170_ExUr, "406"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "184_ExUr", R.string.agency_17_route_184_ExUr, "407"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "185_ExUr", R.string.agency_17_route_185_ExUr, "407"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "86_ExUr", R.string.agency_17_route_86_ExUr, "408"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "87_ExUr", R.string.agency_17_route_87_ExUr, "408"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "133_ExUr", R.string.agency_17_route_133_ExUr, "409"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "132_ExUr", R.string.agency_17_route_132_ExUr, "409"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "98_ExUr", R.string.agency_17_route_98_ExUr, "410"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "99_ExUr", R.string.agency_17_route_99_ExUr, "410"),
-			// 413?
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "90_ExUr", R.string.agency_17_route_90_ExUr, "415"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "91_ExUr", R.string.agency_17_route_91_ExUr, "415"),
-			// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_4, "306_ExUr",
-			// R.string.agency_17_route_306_ExUr, "416"),
-			// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_4, "305_ExUr",
-			// R.string.agency_17_route_305_ExUr, "416"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "179_ExUr", R.string.agency_17_route_179_ExUr, "417"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "180_ExUr", R.string.agency_17_route_180_ExUr, "417"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "178_ExUr", R.string.agency_17_route_178_ExUr, "418"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "177_ExUr", R.string.agency_17_route_177_ExUr, "418"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "189_ExUr", R.string.agency_17_route_189_ExUr, "423"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "188_ExUr", R.string.agency_17_route_188_ExUr, "423"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "561_ExUr", R.string.agency_17_route_561_ExUr, "425"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "309_ExUr", R.string.agency_17_route_309_ExUr, "425"),
-			// 428 ?
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "84_ExUr", R.string.agency_17_route_84_ExUr, "429"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "85_ExUr", R.string.agency_17_route_85_ExUr, "429"),
-			// 431 ?
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "564_ExUr", R.string.agency_17_route_564_ExUr, "433"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "550_ExUr", R.string.agency_17_route_550_ExUr, "461"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "549_ExUr", R.string.agency_17_route_549_ExUr, "461"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "551_ExUr", R.string.agency_17_route_551_ExUr, "462"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "560_ExUr", R.string.agency_17_route_560_ExUr, "462"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "556_ExUr", R.string.agency_17_route_556_ExUr, "463"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "557_ExUr", R.string.agency_17_route_557_ExUr, "463"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "555_ExUr", R.string.agency_17_route_555_ExUr, "464"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "554_ExUr", R.string.agency_17_route_554_ExUr, "464"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "563_ExUr", R.string.agency_17_route_563_ExUr, "465"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "562_ExUr", R.string.agency_17_route_562_ExUr, "465"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "552_ExUr", R.string.agency_17_route_552_ExUr, "466"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "553_ExUr", R.string.agency_17_route_553_ExUr, "466"),
-			// 467 ?
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_4, "640_ExUr", R.string.agency_17_route_640_ExUr, "468") });
-
-	private static final List<RouteDescriptor> RoutesDescriptorsList_17_zone_5 = Arrays.asList(new RouteDescriptor[] {
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "102_ExUr", R.string.agency_17_route_102_ExUr, "501"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "103_ExUr", R.string.agency_17_route_103_ExUr, "501"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "619_ExUr", R.string.agency_17_route_619_ExUr, "502"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "618_ExUr", R.string.agency_17_route_618_ExUr, "502"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "248_ExUr", R.string.agency_17_route_248_ExUr, "503"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "249_ExUr", R.string.agency_17_route_249_ExUr, "503"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "107_ExUr", R.string.agency_17_route_107_ExUr, "504"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "106_ExUr", R.string.agency_17_route_106_ExUr, "504"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "251_ExUr", R.string.agency_17_route_251_ExUr, "506"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "250_ExUr", R.string.agency_17_route_250_ExUr, "506"),
-			// 507 ?
-			// 511 ?
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "108_ExUr", R.string.agency_17_route_108_ExUr, "512"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "109_ExUr", R.string.agency_17_route_109_ExUr, "512"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "123_ExUr", R.string.agency_17_route_123_ExUr, "514"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_5, "124_ExUr", R.string.agency_17_route_124_ExUr, "514")
-	// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_5, "439_ExUr",
-	// R.string.agency_17_route_439_ExUr, "543")
-			});
-
-	private static final List<RouteDescriptor> RoutesDescriptorsList_17_zone_6 = Arrays.asList(new RouteDescriptor[] {
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "346_ExUr", R.string.agency_17_route_346_ExUr, "611"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "345_ExUr", R.string.agency_17_route_345_ExUr, "611"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "395_ExUr", R.string.agency_17_route_395_ExUr, "615"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "396_ExUr", R.string.agency_17_route_396_ExUr, "615"),
-			// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_6, "387_ExUr",
-			// R.string.agency_17_route_387_ExUr, "616"),
-			// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_6, "386_ExUr",
-			// R.string.agency_17_route_386_ExUr, "616"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "367_ExUr", R.string.agency_17_route_367_ExUr, "620"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "366_ExUr", R.string.agency_17_route_366_ExUr, "620"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "350_ExUr", R.string.agency_17_route_350_ExUr, "623"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "349_ExUr", R.string.agency_17_route_349_ExUr, "623"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "356_ExUr", R.string.agency_17_route_356_ExUr, "624"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "354_ExUr", R.string.agency_17_route_354_ExUr, "624"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "384_ExUr", R.string.agency_17_route_384_ExUr, "625"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "383_ExUr", R.string.agency_17_route_383_ExUr, "625"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "368_ExUr", R.string.agency_17_route_368_ExUr, "627"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "369_ExUr", R.string.agency_17_route_369_ExUr, "627"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "375_ExUr", R.string.agency_17_route_375_ExUr, "630"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "376_ExUr", R.string.agency_17_route_376_ExUr, "630"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "365_ExUr", R.string.agency_17_route_365_ExUr, "632"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "364_ExUr", R.string.agency_17_route_364_ExUr, "632"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "379_ExUr", R.string.agency_17_route_379_ExUr, "633"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "378_ExUr", R.string.agency_17_route_378_ExUr, "633"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "358_ExUr", R.string.agency_17_route_358_ExUr, "634"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "357_ExUr", R.string.agency_17_route_357_ExUr, "634"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "362_ExUr", R.string.agency_17_route_362_ExUr, "635"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "363_ExUr", R.string.agency_17_route_363_ExUr, "635"),
-			// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_6, "382_ExUr",
-			// R.string.agency_17_route_382_ExUr, "636"),
-			// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_6, "381_ExUr",
-			// R.string.agency_17_route_381_ExUr, "636"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "325_ExUr", R.string.agency_17_route_325_ExUr, "640"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "324_ExUr", R.string.agency_17_route_324_ExUr, "640"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "330_ExUr", R.string.agency_17_route_330_ExUr, "641"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "331_ExUr", R.string.agency_17_route_331_ExUr, "641"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "327_ExUr", R.string.agency_17_route_327_ExUr, "642"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "326_ExUr", R.string.agency_17_route_326_ExUr, "642"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "335_ExUr", R.string.agency_17_route_335_ExUr, "643"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "334_ExUr", R.string.agency_17_route_334_ExUr, "643"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "329_ExUr", R.string.agency_17_route_329_ExUr, "644"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "328_ExUr", R.string.agency_17_route_328_ExUr, "644"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "336_ExUr", R.string.agency_17_route_336_ExUr, "645"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "337_ExUr", R.string.agency_17_route_337_ExUr, "645"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "332_ExUr", R.string.agency_17_route_332_ExUr, "646"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN_ZONE_6, "333_ExUr", R.string.agency_17_route_333_ExUr, "646"),
-	// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_6, "391_ExUr",
-	// R.string.agency_17_route_391_ExUr, "701"),
-	// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_6, "392_ExUr",
-	// R.string.agency_17_route_392_ExUr, "701")
-	// new RouteDescriptor(AGENCYID_BUS_EXTRAURBAN_ZONE_6, "418_ExUr",
-	// R.string.agency_17_route_418_ExUr, "864")
-			});
-
 	private static final List<RouteDescriptor> RoutesDescriptorsList_17 = Arrays.asList(new RouteDescriptor[] {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "243_ExUr", R.string.agency_17_route_243_ExUr, "101"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "244_ExUr", R.string.agency_17_route_244_ExUr, "101"),
@@ -595,12 +328,16 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "344_ExUr", R.string.agency_17_route_344_ExUr, "106"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "342_ExUr", R.string.agency_17_route_342_ExUr, "107"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "340_ExUr", R.string.agency_17_route_340_ExUr, "107"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "242_ExUr", R.string.agency_17_route_242_ExUr, "108"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "241_ExUr", R.string.agency_17_route_241_ExUr, "108"),
+			// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "242_ExUr",
+			// R.string.agency_17_route_242_ExUr, "108"),
+			// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "241_ExUr",
+			// R.string.agency_17_route_241_ExUr, "108"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "65_ExUr", R.string.agency_17_route_65_ExUr, "109"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "66_ExUr", R.string.agency_17_route_66_ExUr, "109"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "240_ExUr", R.string.agency_17_route_240_ExUr, "110"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "239_ExUr", R.string.agency_17_route_239_ExUr, "110"),
+			// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "240_ExUr",
+			// R.string.agency_17_route_240_ExUr, "110"),
+			// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "239_ExUr",
+			// R.string.agency_17_route_239_ExUr, "110"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "67_ExUr", R.string.agency_17_route_67_ExUr, "111"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "68_ExUr", R.string.agency_17_route_68_ExUr, "111"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "117_ExUr", R.string.agency_17_route_117_ExUr, "112"),
@@ -651,12 +388,19 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "73_ExUr", R.string.agency_17_route_73_ExUr, "216"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "321_ExUr", R.string.agency_17_route_321_ExUr, "217"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "320_ExUr", R.string.agency_17_route_320_ExUr, "217"),
+			// 218?
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "229_ExUr", R.string.agency_17_route_229_ExUr, "230"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "230_ExUr", R.string.agency_17_route_230_ExUr, "230"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "637_ExUr", R.string.agency_17_route_637_ExUr, "231"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "636_ExUr", R.string.agency_17_route_636_ExUr, "231"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "565_ExUr", R.string.agency_17_route_565_ExUr, "236"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "566_ExUr", R.string.agency_17_route_566_ExUr, "236"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "420_ExUr", R.string.agency_17_route_420_ExUr, "861"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "423_ExUr", R.string.agency_17_route_423_ExUr, "862"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "417_ExUr", R.string.agency_17_route_417_ExUr, "863"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "583_ExUr", R.string.agency_17_route_583_ExUr, "863"),
+			// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "418_ExUr",
+			// R.string.agency_17_route_418_ExUr, "864")
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "110_ExUr", R.string.agency_17_route_110_ExUr, "301"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "111_ExUr", R.string.agency_17_route_111_ExUr, "301"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "181_ExUr", R.string.agency_17_route_181_ExUr, "302"),
@@ -677,10 +421,13 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "216_ExUr", R.string.agency_17_route_216_ExUr, "312"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "203_ExUr", R.string.agency_17_route_203_ExUr, "314"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "204_ExUr", R.string.agency_17_route_204_ExUr, "314"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "198_ExUr", R.string.agency_17_route_198_ExUr, "315"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "199_ExUr", R.string.agency_17_route_199_ExUr, "315"),
+			// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "198_ExUr",
+			// R.string.agency_17_route_198_ExUr, "315"),
+			// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "199_ExUr",
+			// R.string.agency_17_route_199_ExUr, "315"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "191_ExUr", R.string.agency_17_route_191_ExUr, "316"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "190_ExUr", R.string.agency_17_route_190_ExUr, "316"),
+			// 318?
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "233_ExUr", R.string.agency_17_route_233_ExUr, "319"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "234_ExUr", R.string.agency_17_route_234_ExUr, "319"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "205_ExUr", R.string.agency_17_route_205_ExUr, "321"),
@@ -710,10 +457,13 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "132_ExUr", R.string.agency_17_route_132_ExUr, "409"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "98_ExUr", R.string.agency_17_route_98_ExUr, "410"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "99_ExUr", R.string.agency_17_route_99_ExUr, "410"),
+			// 413?
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "90_ExUr", R.string.agency_17_route_90_ExUr, "415"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "91_ExUr", R.string.agency_17_route_91_ExUr, "415"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "306_ExUr", R.string.agency_17_route_306_ExUr, "416"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "305_ExUr", R.string.agency_17_route_305_ExUr, "416"),
+			// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "306_ExUr",
+			// R.string.agency_17_route_306_ExUr, "416"),
+			// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "305_ExUr",
+			// R.string.agency_17_route_305_ExUr, "416"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "179_ExUr", R.string.agency_17_route_179_ExUr, "417"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "180_ExUr", R.string.agency_17_route_180_ExUr, "417"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "178_ExUr", R.string.agency_17_route_178_ExUr, "418"),
@@ -722,8 +472,10 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "188_ExUr", R.string.agency_17_route_188_ExUr, "423"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "561_ExUr", R.string.agency_17_route_561_ExUr, "425"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "309_ExUr", R.string.agency_17_route_309_ExUr, "425"),
+			// 428 ?
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "84_ExUr", R.string.agency_17_route_84_ExUr, "429"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "85_ExUr", R.string.agency_17_route_85_ExUr, "429"),
+			// 431 ?
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "564_ExUr", R.string.agency_17_route_564_ExUr, "433"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "550_ExUr", R.string.agency_17_route_550_ExUr, "461"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "549_ExUr", R.string.agency_17_route_549_ExUr, "461"),
@@ -737,6 +489,7 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "562_ExUr", R.string.agency_17_route_562_ExUr, "465"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "552_ExUr", R.string.agency_17_route_552_ExUr, "466"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "553_ExUr", R.string.agency_17_route_553_ExUr, "466"),
+			// 467 ?
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "640_ExUr", R.string.agency_17_route_640_ExUr, "468"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "102_ExUr", R.string.agency_17_route_102_ExUr, "501"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "103_ExUr", R.string.agency_17_route_103_ExUr, "501"),
@@ -748,11 +501,14 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "106_ExUr", R.string.agency_17_route_106_ExUr, "504"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "251_ExUr", R.string.agency_17_route_251_ExUr, "506"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "250_ExUr", R.string.agency_17_route_250_ExUr, "506"),
+			// 507 ?
+			// 511 ?
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "108_ExUr", R.string.agency_17_route_108_ExUr, "512"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "109_ExUr", R.string.agency_17_route_109_ExUr, "512"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "123_ExUr", R.string.agency_17_route_123_ExUr, "514"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "124_ExUr", R.string.agency_17_route_124_ExUr, "514"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "439_ExUr", R.string.agency_17_route_439_ExUr, "543"),
+			// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "439_ExUr",
+			// R.string.agency_17_route_439_ExUr, "543")
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "346_ExUr", R.string.agency_17_route_346_ExUr, "611"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "345_ExUr", R.string.agency_17_route_345_ExUr, "611"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "395_ExUr", R.string.agency_17_route_395_ExUr, "615"),
@@ -794,14 +550,14 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "336_ExUr", R.string.agency_17_route_336_ExUr, "645"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "337_ExUr", R.string.agency_17_route_337_ExUr, "645"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "332_ExUr", R.string.agency_17_route_332_ExUr, "646"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "333_ExUr", R.string.agency_17_route_333_ExUr, "646"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "391_ExUr", R.string.agency_17_route_391_ExUr, "701"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "392_ExUr", R.string.agency_17_route_392_ExUr, "701"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "420_ExUr", R.string.agency_17_route_420_ExUr, "861"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "423_ExUr", R.string.agency_17_route_423_ExUr, "862"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "417_ExUr", R.string.agency_17_route_417_ExUr, "863"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "583_ExUr", R.string.agency_17_route_583_ExUr, "863"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "418_ExUr", R.string.agency_17_route_418_ExUr, "864") });
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "333_ExUr", R.string.agency_17_route_333_ExUr, "646")
+	// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "391_ExUr",
+	// R.string.agency_17_route_391_ExUr, "701"),
+	// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "392_ExUr",
+	// R.string.agency_17_route_392_ExUr, "701")
+	// new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "418_ExUr",
+	// R.string.agency_17_route_418_ExUr, "864")
+			});
 
 	public static final Map<String, List<RouteDescriptor>> ROUTES = new HashMap<String, List<RouteDescriptor>>() {
 		private static final long serialVersionUID = 8472504007546826470L;
@@ -811,13 +567,7 @@ public class RoutesHelper {
 			put(AGENCYID_TRAIN_BZVR, RoutesDescriptorsList_5);
 			put(AGENCYID_TRAIN_TNBDG, RoutesDescriptorsList_6);
 			put(AGENCYID_BUS_ROVERETO, RoutesDescriptorsList_16);
-			// put(AGENCYID_BUS_EXTRAURBAN, RoutesDescriptorsList_17);
-			put(AGENCYID_BUS_SUBURBAN_ZONE_1, RoutesDescriptorsList_17_zone_1);
-			put(AGENCYID_BUS_SUBURBAN_ZONE_2, RoutesDescriptorsList_17_zone_2);
-			put(AGENCYID_BUS_SUBURBAN_ZONE_3, RoutesDescriptorsList_17_zone_3);
-			put(AGENCYID_BUS_SUBURBAN_ZONE_4, RoutesDescriptorsList_17_zone_4);
-			put(AGENCYID_BUS_SUBURBAN_ZONE_5, RoutesDescriptorsList_17_zone_5);
-			put(AGENCYID_BUS_SUBURBAN_ZONE_6, RoutesDescriptorsList_17_zone_6);
+			put(AGENCYID_BUS_SUBURBAN, RoutesDescriptorsList_17);
 		}
 	};
 

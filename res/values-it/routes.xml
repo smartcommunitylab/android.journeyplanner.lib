@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Trento Male routes -->
     <string name="agency_10_route_555">Trento - Malé</string>
     <string name="agency_10_route_556">Malé - Trento</string>
+
+    <!-- Bolzano Verona routes -->
     <string name="agency_5_route_BV_R1_G">Bolzano - Verona</string>
     <string name="agency_5_route_BV_R1_R">Verona - Bolzano</string>
+
+    <!-- Trento Bassano routes -->
     <string name="agency_6_route_TB_R2_G">Trento - Bassano D.G.</string>
     <string name="agency_6_route_TB_R2_R">Bassano D.G. - Trento</string>
 
