@@ -34,6 +34,7 @@ import eu.trentorise.smartcampus.ac.authenticator.AMSCAccessProvider;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 
 public class BroadcastNotificationsFragment extends FeedbackFragment {
@@ -51,7 +52,7 @@ public class BroadcastNotificationsFragment extends FeedbackFragment {
 		super.onStart();
 		ListView list = (ListView) getSherlockActivity().findViewById(R.id.bn_options_list);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getSherlockActivity(), android.R.layout.simple_list_item_1,
-				getResources().getStringArray(R.array.broadcast_notifications_array));
+				JPParamsHelper.getBroadcastNotificationsOptions());
 		list.setAdapter(adapter);
 
 		list.setOnItemClickListener(new OnItemClickListener() {

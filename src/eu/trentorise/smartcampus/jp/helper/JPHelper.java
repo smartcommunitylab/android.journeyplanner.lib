@@ -92,7 +92,7 @@ public class JPHelper {
 	protected JPHelper(Context mContext) {
 		super();
 		JPHelper.mContext = mContext;
-		setProtocolCarrier(new ProtocolCarrier(mContext, Config.APP_TOKEN));
+		setProtocolCarrier(new ProtocolCarrier(mContext, JPParamsHelper.getAppToken()));
 
 		// LocationManager locationManager = (LocationManager)
 		// mContext.getSystemService(Context.LOCATION_SERVICE);
@@ -107,6 +107,7 @@ public class JPHelper {
 
 	public static void init(Context mContext) {
 		instance = new JPHelper(mContext);
+		JPParamsHelper.init(mContext);
 	}
 
 	public static boolean isInitialized() {
@@ -124,7 +125,8 @@ public class JPHelper {
 			req.setMethod(Method.POST);
 			req.setBody(json);
 
-			MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+			MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+					getAuthToken());
 
 			List<?> its = JSONUtils.getFullMapper().readValue(res.getBody(), List.class);
 			for (Object it : its) {
@@ -145,7 +147,7 @@ public class JPHelper {
 			req.setMethod(Method.POST);
 			req.setBody(json);
 
-			JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+			JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
 		}
 	}
 
@@ -155,7 +157,8 @@ public class JPHelper {
 				+ Config.CALL_ITINERARY);
 		req.setMethod(Method.GET);
 
-		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+				getAuthToken());
 		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObjects(res.getBody(), BasicItinerary.class);
 
 	}
@@ -166,7 +169,7 @@ public class JPHelper {
 					+ Config.CALL_ITINERARY + "/" + id);
 			req.setMethod(Method.DELETE);
 
-			JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+			JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
 		}
 	}
 
@@ -180,7 +183,7 @@ public class JPHelper {
 			req.setMethod(Method.GET);
 			req.setBody("");
 
-			res = JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+			res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
 
 		}
 		// se cambiato restituisce il valore del monitor
@@ -196,7 +199,7 @@ public class JPHelper {
 			req.setMethod(Method.GET);
 			req.setBody("");
 
-			res = JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+			res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
 
 		}
 		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), Boolean.class);
@@ -214,7 +217,8 @@ public class JPHelper {
 				+ Config.CALL_BUS_ROUTES + "/" + agencyId);
 		req.setMethod(Method.GET);
 
-		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+				getAuthToken());
 
 		List<?> routes = JSONUtils.getFullMapper().readValue(res.getBody(), List.class);
 		for (Object r : routes) {
@@ -247,7 +251,7 @@ public class JPHelper {
 		//
 		// MessageResponse res =
 		// JPHelper.instance.getProtocolCarrier().invokeSync(req,
-		// Config.APP_TOKEN, getAuthToken());
+		// JPParamsHelper.getAppToken(), getAuthToken());
 		//
 		// //get alle the routes and order them
 		// List<?> routes =
@@ -294,7 +298,8 @@ public class JPHelper {
 				+ Config.CALL_BUS_STOPS + "/" + agencyId + "/" + routeId);
 		req.setMethod(Method.GET);
 
-		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+				getAuthToken());
 
 		List<?> stops = JSONUtils.getFullMapper().readValue(res.getBody(), List.class);
 		for (Object r : stops) {
@@ -314,7 +319,8 @@ public class JPHelper {
 				+ Config.CALL_BUS_STOPTIMES + "/" + agencyId + "/" + routeId + "/" + stopId);
 		req.setMethod(Method.GET);
 
-		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+				getAuthToken());
 
 		List<?> stoptimes = JSONUtils.getFullMapper().readValue(res.getBody(), List.class);
 		for (Object r : stoptimes) {
@@ -348,7 +354,7 @@ public class JPHelper {
 			req.setMethod(Method.POST);
 			req.setBody(json);
 
-			JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+			JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
 		}
 	}
 
@@ -409,7 +415,7 @@ public class JPHelper {
 			}
 			req.setBody(json);
 
-			JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+			JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
 			return true;
 		}
 		return false;
@@ -421,7 +427,7 @@ public class JPHelper {
 					+ Config.CALL_RECUR + "/" + id);
 			req.setMethod(Method.DELETE);
 
-			JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+			JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
 		}
 	}
 
@@ -430,7 +436,7 @@ public class JPHelper {
 				+ Config.CALL_ITINERARY + "/" + objectId);
 		req.setMethod(Method.GET);
 
-		MessageResponse res = instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+		MessageResponse res = instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
 		if (res.getBody() != null && res.getBody().length() != 0) {
 			return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), BasicItinerary.class);
 		} else {
@@ -438,7 +444,7 @@ public class JPHelper {
 					+ "/" + objectId);
 			req.setMethod(Method.GET);
 
-			res = instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+			res = instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
 			req.setTargetAddress(Config.TARGET_ADDRESS + Config.CALL_GET_RECUR + "/" + objectId);
 			return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(),
 					BasicRecurrentJourney.class);
@@ -479,7 +485,8 @@ public class JPHelper {
 		}
 		req.setBody(json);
 
-		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+				getAuthToken());
 		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), RecurrentJourney.class);
 		// return
 		// eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(exammpleRouteString,
@@ -508,7 +515,7 @@ public class JPHelper {
 			}
 			req.setBody(json);
 
-			JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+			JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
 			return true;
 		}
 		return false;
@@ -520,7 +527,8 @@ public class JPHelper {
 				+ Config.CALL_GET_ALL_RECUR);
 		req.setMethod(Method.GET);
 
-		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+				getAuthToken());
 		// return
 		// eu.trentorise.smartcampus.android.common.Utils.convertJSONToObjects(myJourneysString,
 		// BasicRecurrentJourney.class);
@@ -559,7 +567,8 @@ public class JPHelper {
 		req.setMethod(Method.GET);
 		req.setQuery("complex=true");
 
-		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, Config.APP_TOKEN, getAuthToken());
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+				getAuthToken());
 
 		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), TimeTable.class);
 	}
@@ -596,7 +605,8 @@ public class JPHelper {
 		String queryString = "filter=" + queryStrObject;
 		request.setQuery(queryString);
 
-		MessageResponse response = getInstance().protocolCarrier.invokeSync(request, Config.APP_TOKEN, getAuthToken());
+		MessageResponse response = getInstance().protocolCarrier.invokeSync(request, JPParamsHelper.getAppToken(),
+				getAuthToken());
 		String body = response.getBody();
 		if (body == null || body.trim().length() == 0) {
 			return Collections.emptyList();
@@ -637,7 +647,8 @@ public class JPHelper {
 		request.setMethod(Method.GET);
 		request.setQuery("complex=true");
 
-		MessageResponse response = getInstance().protocolCarrier.invokeSync(request, Config.APP_TOKEN, getAuthToken());
+		MessageResponse response = getInstance().protocolCarrier.invokeSync(request, JPParamsHelper.getAppToken(),
+				getAuthToken());
 		String body = response.getBody();
 		if (body == null || body.trim().length() == 0) {
 			return Collections.emptyList();
@@ -697,7 +708,8 @@ public class JPHelper {
 		MessageRequest request = new MessageRequest(GlobalConfig.getAppUrl(getInstance().mContext), url);
 		request.setMethod(Method.GET);
 
-		MessageResponse response = getInstance().protocolCarrier.invokeSync(request, Config.APP_TOKEN, getAuthToken());
+		MessageResponse response = getInstance().protocolCarrier.invokeSync(request, JPParamsHelper.getAppToken(),
+				getAuthToken());
 		String body = response.getBody();
 		if (body == null || body.trim().length() == 0) {
 			return Collections.emptyList();

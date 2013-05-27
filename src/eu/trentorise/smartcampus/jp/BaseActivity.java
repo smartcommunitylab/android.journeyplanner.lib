@@ -25,12 +25,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 
 public class BaseActivity extends FeedbackFragmentActivity {
 
@@ -85,18 +83,18 @@ public class BaseActivity extends FeedbackFragmentActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == SCAccessProvider.SC_AUTH_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-	        	String token = data.getExtras().getString(AccountManager.KEY_AUTHTOKEN);
-	        	if (token == null) {
-	    			JPHelper.endAppFailure(this, R.string.app_failure_security);
-	        	} else {
-	        		initData();
-	        	}
+				String token = data.getExtras().getString(AccountManager.KEY_AUTHTOKEN);
+				if (token == null) {
+					JPHelper.endAppFailure(this, R.string.app_failure_security);
+				} else {
+					initData();
+				}
 			} else if (resultCode == RESULT_CANCELED) {
 				JPHelper.endAppFailure(this, R.string.token_required);
 			}
 		}
 	}
-	
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
@@ -104,7 +102,7 @@ public class BaseActivity extends FeedbackFragmentActivity {
 
 	@Override
 	public String getAppToken() {
-		return Config.APP_TOKEN;
+		return JPParamsHelper.getAppToken();
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.R.layout;
 import eu.trentorise.smartcampus.jp.custom.SmartCheckListAdapter;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 
@@ -34,13 +35,8 @@ public class SmartCheckListFragment extends FeedbackFragment {
 	public void onStart() {
 		super.onStart();
 		ListView optionsListView = (ListView) getSherlockActivity().findViewById(R.id.smart_check_list);
-		SmartCheckListAdapter adapter = new SmartCheckListAdapter(getSherlockActivity(), layout.smart_option_row);
-
-		String[] optionsList = getSherlockActivity().getResources().getStringArray(R.array.smart_checks_list);
-		for (int opt = 0; opt < optionsList.length; opt++) {
-			adapter.add(optionsList[opt]);
-		}
-
+		SmartCheckListAdapter adapter = new SmartCheckListAdapter(getSherlockActivity(), layout.smart_option_row,
+				JPParamsHelper.getSmartCheckOptions());
 		optionsListView.setAdapter(adapter);
 
 		optionsListView.setOnItemClickListener(new OnItemClickListener() {

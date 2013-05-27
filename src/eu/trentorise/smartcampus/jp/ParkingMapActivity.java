@@ -47,6 +47,7 @@ import eu.trentorise.smartcampus.jp.custom.map.ParkingObjectMapItemTapListener;
 import eu.trentorise.smartcampus.jp.custom.map.ParkingsInfoDialog;
 import eu.trentorise.smartcampus.jp.custom.map.ParkingsItemizedOverlay;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.model.Sparking;
 
 public class ParkingMapActivity extends FeedbackFragmentActivity implements ParkingObjectMapItemTapListener {
@@ -54,7 +55,7 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 	public final static String ARG_PARKINGS = "parkings";
 	public final static String ARG_PARKING_FOCUSED = "parking_focused";
 	public final static int REQUEST_CODE = 1986;
-	
+
 	private final static int FOCUSED_ZOOM = 18;
 
 	private MapView mapView = null;
@@ -230,7 +231,7 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 
 	@Override
 	public String getAppToken() {
-		return Config.APP_TOKEN;
+		return JPParamsHelper.getAppToken();
 	}
 
 	@Override

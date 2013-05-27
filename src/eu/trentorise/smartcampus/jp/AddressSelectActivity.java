@@ -20,26 +20,16 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.location.Address;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.v4.app.FragmentTransaction;
-import android.text.method.ScrollingMovementMethod;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -50,10 +40,9 @@ import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActiv
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.android.map.InfoDialog;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 
 public class AddressSelectActivity extends FeedbackFragmentActivity {
-
-	
 
 	private MapView mapView = null;
 
@@ -84,7 +73,7 @@ public class AddressSelectActivity extends FeedbackFragmentActivity {
 	}
 
 	private void setContent() {
-		
+
 		mapView = new MapView(this, getResources().getString(R.string.maps_api_key));
 		// mapView = MapManager.getMapView();
 		// setContentView(R.layout.mapcontainer);
@@ -108,7 +97,7 @@ public class AddressSelectActivity extends FeedbackFragmentActivity {
 		listOfOverlays.add(mapOverlay);
 
 		Toast.makeText(this, R.string.address_select_toast, Toast.LENGTH_LONG).show();
-		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this, 
+		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
 				(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
 	}
 
@@ -120,7 +109,7 @@ public class AddressSelectActivity extends FeedbackFragmentActivity {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 	}
-	
+
 	private Timer timer = new Timer();
 	private TimerTask task = null;
 
@@ -146,13 +135,12 @@ public class AddressSelectActivity extends FeedbackFragmentActivity {
 					task.cancel();
 				long duration = event.getEventTime() - event.getDownTime();
 				if (duration > 1000) {
-					//call the dialog box
+					// call the dialog box
 					GeoPoint p = mapView.getProjection().fromPixels((int) event.getX(), (int) event.getY());
 					List<Address> addresses = new SCGeocoder(mapView.getContext()).findAddressesAsync(p);
 
-					
 					if (addresses != null && !addresses.isEmpty()) {
-						new InfoDialog(AddressSelectActivity.this,addresses.get(0)).show(getSupportFragmentManager(), "me");
+						new InfoDialog(AddressSelectActivity.this, addresses.get(0)).show(getSupportFragmentManager(), "me");
 
 					} else {
 						Address address = new Address(Locale.getDefault());
@@ -161,7 +149,7 @@ public class AddressSelectActivity extends FeedbackFragmentActivity {
 						String addressLine = "LON " + Double.toString(address.getLongitude()) + ", LAT "
 								+ Double.toString(address.getLatitude());
 						address.setAddressLine(0, addressLine);
-						new InfoDialog(AddressSelectActivity.this,addresses.get(0)).show(getSupportFragmentManager(), "me");
+						new InfoDialog(AddressSelectActivity.this, addresses.get(0)).show(getSupportFragmentManager(), "me");
 					}
 
 				}
@@ -174,7 +162,7 @@ public class AddressSelectActivity extends FeedbackFragmentActivity {
 
 	@Override
 	public String getAppToken() {
-		return Config.APP_TOKEN;
+		return JPParamsHelper.getAppToken();
 	}
 
 	@Override
@@ -182,5 +170,4 @@ public class AddressSelectActivity extends FeedbackFragmentActivity {
 		return JPHelper.getAuthToken();
 	}
 
-	
 }

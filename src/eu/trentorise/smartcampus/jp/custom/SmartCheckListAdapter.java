@@ -20,6 +20,18 @@ public class SmartCheckListAdapter extends ArrayAdapter<String> {
 		this.layoutResourceId = layoutResourceId;
 	}
 
+	public SmartCheckListAdapter(Context context, int layoutResourceId, String[] objects) {
+		super(context, layoutResourceId, objects);
+		this.context = context;
+		this.layoutResourceId = layoutResourceId;
+
+		// if (objects != null) {
+		// for (int i = 0; i < objects.length; i++) {
+		// this.add(objects[i]);
+		// }
+		// }
+	}
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View row = convertView;

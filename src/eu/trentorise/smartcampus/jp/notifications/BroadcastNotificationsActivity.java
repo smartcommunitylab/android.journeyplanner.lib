@@ -22,35 +22,39 @@ import android.support.v4.app.FragmentManager;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 
 public class BroadcastNotificationsActivity extends FeedbackFragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.empty_layout_jp);
-		
+
 		getSupportFragmentManager().popBackStack("notifications", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-//		ActionBar.Tab tab = getSupportActionBar().newTab().setText(R.string.tab_broadcast);
-//		tab.setTabListener(new TabListener<BroadcastNotificationsFragment>(this, Config.PLAN_NEW_FRAGMENT_TAG,
-//				BroadcastNotificationsFragment.class, Config.mainlayout));
-//		getSupportActionBar().addTab(tab);
+		// ActionBar.Tab tab =
+		// getSupportActionBar().newTab().setText(R.string.tab_broadcast);
+		// tab.setTabListener(new
+		// TabListener<BroadcastNotificationsFragment>(this,
+		// Config.PLAN_NEW_FRAGMENT_TAG,
+		// BroadcastNotificationsFragment.class, Config.mainlayout));
+		// getSupportActionBar().addTab(tab);
 
-//		tab = getSupportActionBar().newTab().setText(R.string.tab_news);
-//		tab.setTabListener(new TabListener<NewsFragment>(this, Config.MY_JOURNEYS_FRAGMENT_TAG, NewsFragment.class,
-//				Config.mainlayout));
-//		getSupportActionBar().addTab(tab);
+		// tab = getSupportActionBar().newTab().setText(R.string.tab_news);
+		// tab.setTabListener(new TabListener<NewsFragment>(this,
+		// Config.MY_JOURNEYS_FRAGMENT_TAG, NewsFragment.class,
+		// Config.mainlayout));
+		// getSupportActionBar().addTab(tab);
 
 		if (getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD)
 			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		
+
 		android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 		SherlockFragment fragment = new BroadcastNotificationsFragment();
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -67,7 +71,6 @@ public class BroadcastNotificationsActivity extends FeedbackFragmentActivity {
 		getSupportActionBar().setTitle(R.string.title_broadcast);
 	}
 
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
@@ -75,7 +78,7 @@ public class BroadcastNotificationsActivity extends FeedbackFragmentActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
@@ -83,7 +86,7 @@ public class BroadcastNotificationsActivity extends FeedbackFragmentActivity {
 
 	@Override
 	public String getAppToken() {
-		return Config.APP_TOKEN;
+		return JPParamsHelper.getAppToken();
 	}
 
 	@Override

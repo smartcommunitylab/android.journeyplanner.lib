@@ -23,19 +23,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.jp.custom.TabListener;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 
 public class ProfileActivity extends FeedbackFragmentActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.empty_layout_jp);
 
 		// getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -97,7 +97,7 @@ public class ProfileActivity extends FeedbackFragmentActivity {
 
 	@Override
 	public String getAppToken() {
-		return Config.APP_TOKEN;
+		return JPParamsHelper.getAppToken();
 	}
 
 	@Override

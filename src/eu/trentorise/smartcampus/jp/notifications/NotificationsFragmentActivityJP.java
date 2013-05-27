@@ -6,9 +6,9 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
-import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 
 public class NotificationsFragmentActivityJP extends FeedbackFragmentActivity {
 
@@ -39,7 +39,7 @@ public class NotificationsFragmentActivityJP extends FeedbackFragmentActivity {
 
 	@Override
 	public String getAppToken() {
-		return Config.APP_TOKEN;
+		return JPParamsHelper.getAppToken();
 	}
 
 	@Override

@@ -25,15 +25,12 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-
 public class Config {
-
-	public static final String APP_TOKEN = "journeyplanner";
 
 	public static int mainlayout = android.R.id.content;
 
 	public static final String TARGET_ADDRESS = "/smartcampus-journeyplanner-web/rest";
-	
+
 	public static final String CALL_PLANSINGLEJOURNEY = "/plansinglejourney";
 	public static final String CALL_ITINERARY = "/eu.trentorise.smartcampus.journeyplanner.sync.BasicItinerary";
 	public static final String CALL_RECUR = "/eu.trentorise.smartcampus.journeyplanner.sync.BasicRecurrentJourneyParameters";
@@ -41,7 +38,7 @@ public class Config {
 	public static final String CALL_PLAN_RECUR = "/planrecurrent";
 	public static final String CALL_GET_RECUR = "/eu.trentorise.smartcampus.journeyplanner.sync.BasicRecurrentJourney";
 	public static final String CALL_GET_ALL_RECUR = "/eu.trentorise.smartcampus.journeyplanner.sync.BasicRecurrentJourney";
-	
+
 	public static final String CALL_SAVE_RECUR = "/eu.trentorise.smartcampus.journeyplanner.sync.BasicRecurrentJourney";
 
 	public static final String CALL_MONITOR = "/monitoritinerary";
@@ -59,39 +56,65 @@ public class Config {
 	public static final String CALL_GET_LIMITED_TIMETABLE = "/getlimitedtimetable";
 	public static final String CALL_GET_PARKINGS = "/getparkings";
 	public static final String CALL_GET_PARKINGS_BY_AGENCY = "/getparkingsbyagency";
-	
-	public static final long ALWAYS_DATE = 9999999999999L; //constant used for "always" option
+
+	public static final long ALWAYS_DATE = 9999999999999L; // constant used for
+															// "always" option
 	// public static final TType[] TTYPES_ALLOWED = new TType[] { TType.BICYCLE,
 	// TType.BUS, TType.CAR, TType.TRAIN,
 	// TType.TRANSIT, TType.WALK };
-//	public static final TType[] TTYPES_ALLOWED = new TType[] { TType.CAR, TType.BICYCLE, TType.TRANSIT,
-//			TType.SHAREDBIKE, TType.SHAREDBIKE_WITHOUT_STATION, TType.CARWITHPARKING, TType.SHAREDCAR,
-//			TType.SHAREDCAR_WITHOUT_STATION, TType.WALK };// TType.values();
+	// public static final TType[] TTYPES_ALLOWED = new TType[] { TType.CAR,
+	// TType.BICYCLE, TType.TRANSIT,
+	// TType.SHAREDBIKE, TType.SHAREDBIKE_WITHOUT_STATION, TType.CARWITHPARKING,
+	// TType.SHAREDCAR,
+	// TType.SHAREDCAR_WITHOUT_STATION, TType.WALK };// TType.values();
 
+	public static final TType[] TTYPES_ALLOWED = new TType[] { TType.TRANSIT, TType.CAR, TType.WALK, TType.BICYCLE,
+			TType.SHAREDCAR_WITHOUT_STATION, TType.SHAREDBIKE_WITHOUT_STATION };
 
-	public static final TType[] TTYPES_ALLOWED = new TType[] { TType.TRANSIT, TType.CAR,  TType.WALK, TType.BICYCLE
-		 ,  TType.SHAREDCAR_WITHOUT_STATION, TType.SHAREDBIKE_WITHOUT_STATION};
-
-	public static final Set<TType> CAR_SET =new HashSet<TType>() {{add(TType.CAR); add(TType.CARWITHPARKING); }};
-	public static final Set<TType> BICYCLE_SET =new HashSet<TType>() {{add(TType.BICYCLE); }};
-	public static final Set<TType> TRANSIT_SET =new HashSet<TType>() {{add(TType.TRANSIT); }};
-	public static final Set<TType> SHAREDBIKE_SET =new HashSet<TType>() {{add(TType.SHAREDBIKE_WITHOUT_STATION); }};
-	public static final Set<TType> SHAREDCAR_SET =new HashSet<TType>() {{add(TType.SHAREDCAR_WITHOUT_STATION); }};
-	public static final Set<TType> WALK_SET =new HashSet<TType>() {{add(TType.WALK); }};
-
-	public static  HashMap<TType,Set<TType>> TTYPES_MAPPED = new HashMap<TType,Set<TType>>() {
+	public static final Set<TType> CAR_SET = new HashSet<TType>() {
 		{
-		put(TType.CAR, Collections.unmodifiableSet(CAR_SET));
-		put(TType.BICYCLE, Collections.unmodifiableSet(BICYCLE_SET));
-		put(TType.TRANSIT, Collections.unmodifiableSet(TRANSIT_SET));
-		put(TType.SHAREDBIKE_WITHOUT_STATION, Collections.unmodifiableSet(SHAREDBIKE_SET));
-		put(TType.SHAREDCAR_WITHOUT_STATION, Collections.unmodifiableSet(SHAREDCAR_SET));
-		put(TType.WALK, Collections.unmodifiableSet(WALK_SET));
+			add(TType.CAR);
+			add(TType.CARWITHPARKING);
+		}
+	};
+	public static final Set<TType> BICYCLE_SET = new HashSet<TType>() {
+		{
+			add(TType.BICYCLE);
+		}
+	};
+	public static final Set<TType> TRANSIT_SET = new HashSet<TType>() {
+		{
+			add(TType.TRANSIT);
+		}
+	};
+	public static final Set<TType> SHAREDBIKE_SET = new HashSet<TType>() {
+		{
+			add(TType.SHAREDBIKE_WITHOUT_STATION);
+		}
+	};
+	public static final Set<TType> SHAREDCAR_SET = new HashSet<TType>() {
+		{
+			add(TType.SHAREDCAR_WITHOUT_STATION);
+		}
+	};
+	public static final Set<TType> WALK_SET = new HashSet<TType>() {
+		{
+			add(TType.WALK);
+		}
+	};
+
+	public static HashMap<TType, Set<TType>> TTYPES_MAPPED = new HashMap<TType, Set<TType>>() {
+		{
+			put(TType.CAR, Collections.unmodifiableSet(CAR_SET));
+			put(TType.BICYCLE, Collections.unmodifiableSet(BICYCLE_SET));
+			put(TType.TRANSIT, Collections.unmodifiableSet(TRANSIT_SET));
+			put(TType.SHAREDBIKE_WITHOUT_STATION, Collections.unmodifiableSet(SHAREDBIKE_SET));
+			put(TType.SHAREDCAR_WITHOUT_STATION, Collections.unmodifiableSet(SHAREDCAR_SET));
+			put(TType.WALK, Collections.unmodifiableSet(WALK_SET));
 
 		}
 	};
 
-	
 	public static final RType[] RTYPES_ALLOWED = new RType[] { RType.fastest, RType.leastChanges, RType.leastWalking };
 
 	public static final TType[] TTYPES_DEFAULT = new TType[] { TType.TRANSIT };
@@ -107,7 +130,6 @@ public class Config {
 
 	public static final String MY_RECUR_JOURNEYS_FRAGMENT_TAG = "myrecurjourneysfragment";
 	public static final String MY_RECUR_JOURNEY_FRAGMENT_TAG = "myrecurjourneyfragment";
-
 
 	public static final String PROFILE_FRAGMENT_TAG = "profile";
 	public static final String FAVORITES_FRAGMENT_TAG = "favorites";
@@ -143,15 +165,16 @@ public class Config {
 	// public static final String USER_PREFS_RTYPE_SAFEST =
 	// RType.safest.toString();
 
-	public static final SimpleDateFormat FORMAT_DATE_SMARTPLANNER = new SimpleDateFormat("MM/dd/yyyy",Locale.ENGLISH);
-	public static final SimpleDateFormat FORMAT_TIME_SMARTPLANNER = new SimpleDateFormat("hh:mmaa",Locale.ENGLISH);
-	public static final SimpleDateFormat FORMAT_DATE_UI = new SimpleDateFormat("dd/MM/yy",Locale.ENGLISH);
-	//public static final SimpleDateFormat FORMAT_DATE_UI = new SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH);
-	public static final SimpleDateFormat FORMAT_TIME_UI = new SimpleDateFormat("HH:mm",Locale.ENGLISH);
+	public static final SimpleDateFormat FORMAT_DATE_SMARTPLANNER = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+	public static final SimpleDateFormat FORMAT_TIME_SMARTPLANNER = new SimpleDateFormat("hh:mmaa", Locale.ENGLISH);
+	public static final SimpleDateFormat FORMAT_DATE_UI = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
+	// public static final SimpleDateFormat FORMAT_DATE_UI = new
+	// SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH);
+	public static final SimpleDateFormat FORMAT_TIME_UI = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
 	public static final String USER_PREFS_FAVORITES = "favorites";
 
 	protected static final long MAX_RECUR_INTERVAL = 2 * 60 * 60 * 1000;
-	
+
 	public static final int PAST_MINUTES_SPAN = -5; // has to be negative
 
 	// parameters for the Province of Trento
@@ -163,9 +186,5 @@ public class Config {
 	public static final String TN_REGION = "it";
 	public static final String TN_COUNTRY = "IT";
 	public static final String TN_ADM_AREA = "TN";
-	
-	
-	
-
 
 }
