@@ -106,8 +106,8 @@ public class JPHelper {
 	}
 
 	public static void init(Context mContext) {
-		instance = new JPHelper(mContext);
 		JPParamsHelper.init(mContext);
+		instance = new JPHelper(mContext);
 	}
 
 	public static boolean isInitialized() {
