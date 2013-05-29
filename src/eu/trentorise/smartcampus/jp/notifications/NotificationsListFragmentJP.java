@@ -57,11 +57,30 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 	public void onResume() {
 		super.onResume();
 
+		// instantiate again JPHelper if needed
+		if (!JPHelper.isInitialized()) {
+			JPHelper.init(getSherlockActivity());
+		}
+		
+		// instantiate again NotificationsHelper if needed
+		String appToken = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_APP_TOKEN);
+		String syncDbName = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_SYNC_DB_NAME);
+		String syncService = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_SYNC_SERVICE);
+		String authority = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_AUTHORITY);
+
+		if (!NotificationsHelper.isInstantiated() && appToken != null && syncDbName != null && syncService != null
+				&& authority != null) {
+			NotificationsHelper.init(getSherlockActivity(), appToken, syncDbName, syncService, authority);
+		}
+
 		loadNotifications();
 	}
 
 	private void loadNotifications() {
 		List<Notification> notificationsList = NotificationsHelper.getNotifications(getNotificationFilter(), 0, -1, 0);
+
+		Log.e(this.getClass().getName().substring(this.getClass().getName().lastIndexOf(".") + 1), "List size: "
+				+ notificationsList.size());
 
 		TextView listEmptyTextView = (TextView) getView().findViewById(R.id.jp_list_text_empty);
 

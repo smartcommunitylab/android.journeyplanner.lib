@@ -92,6 +92,9 @@ public class JPHelper {
 	protected JPHelper(Context mContext) {
 		super();
 		JPHelper.mContext = mContext;
+		
+		JPParamsHelper.init(mContext);
+		
 		setProtocolCarrier(new ProtocolCarrier(mContext, JPParamsHelper.getAppToken()));
 
 		// LocationManager locationManager = (LocationManager)
@@ -436,7 +439,7 @@ public class JPHelper {
 				+ Config.CALL_ITINERARY + "/" + objectId);
 		req.setMethod(Method.GET);
 
-		MessageResponse res = instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
 		if (res.getBody() != null && res.getBody().length() != 0) {
 			return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), BasicItinerary.class);
 		} else {
