@@ -73,10 +73,12 @@ public class JPParamsHelper {
 		List<Integer> optionsFromAssets = (List<Integer>) getInstance().getParamsAsset().get(key);
 		if (optionsFromAssets != null && !optionsFromAssets.isEmpty()) {
 			for (Integer index : optionsFromAssets) {
-				try {
-					filteredOptions.add(options[index - 1]);
-				} catch (Exception e) {
-					Log.e(TAG, e.getMessage());
+				if (index != null) {
+					try {
+						filteredOptions.add(options[index - 1]);
+					} catch (Exception e) {
+						Log.e(TAG, e.getMessage());
+					}
 				}
 			}
 		}
