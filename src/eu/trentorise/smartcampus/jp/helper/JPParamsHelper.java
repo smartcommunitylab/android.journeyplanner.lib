@@ -22,6 +22,8 @@ public class JPParamsHelper {
 	public static final String KEY_APP_TOKEN = "app_token";
 	public static final String KEY_SMARTCHECK_OPTIONS = "smartcheck_options";
 	public static final String KEY_BROADCAST_NOTIFICATIONS_OPTIONS = "broadcast_notifications_options";
+	public static final String KEY_CENTER_MAP = "center_map";
+	public static final String KEY_ZOOM_MAP = "zoom_map";
 
 	private Map<Object, Object> paramsAsset;
 
@@ -65,7 +67,21 @@ public class JPParamsHelper {
 	public static String[] getSmartCheckOptions() {
 		return getFilteredResource(R.array.smart_checks_list, KEY_SMARTCHECK_OPTIONS);
 	}
-
+	
+	/*
+	 * MAP
+	 */
+	public static int getZoomLevelMap(){
+		return (Integer) getInstance().getParamsAsset().get(KEY_ZOOM_MAP);
+	}
+	
+	public static List<Double> getCenterMap(){
+		return (List<Double>) getInstance().getParamsAsset().get(KEY_CENTER_MAP);
+	}
+	
+	/*
+	 * Private methods
+	 */
 	private static String[] getFilteredResource(int resource, String key) {
 		List<String> filteredOptions = new ArrayList<String>();
 		String[] options = mContext.getResources().getStringArray(resource);
@@ -86,4 +102,5 @@ public class JPParamsHelper {
 		return filteredOptions.toArray(new String[] {});
 	}
 
+	
 }

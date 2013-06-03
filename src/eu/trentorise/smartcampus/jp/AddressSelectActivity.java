@@ -39,6 +39,7 @@ import eu.trentorise.smartcampus.android.common.SCGeocoder;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.android.map.InfoDialog;
+import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 
@@ -84,10 +85,10 @@ public class AddressSelectActivity extends FeedbackFragmentActivity {
 
 		mapView.setClickable(true);
 		mapView.setBuiltInZoomControls(true);
-		mapView.getController().setZoom(15);
+		mapView.getController().setZoom(MapManager.ZOOM_DEFAULT);
 		GeoPoint me = null;// MapManager.requestMyLocation(this);
 		if (me == null) {
-			me = new GeoPoint((int) (46.0696727540531 * 1E6), (int) (11.1212700605392 * 1E6));
+			me = MapManager.DEFAULT_POINT;
 		}
 		// TODO correct for final version
 		mapView.getController().animateTo(me);

@@ -24,17 +24,28 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
 public class MapManager {
 
-	public static final int ZOOM_DEFAULT = 15;
 	private static MapView mapView;
 
-	private static GeoPoint trento = new GeoPoint((int) (46.0696727540531 * 1E6), (int) (11.1212700605392 * 1E6));
+	public static int ZOOM_DEFAULT = 15;
+	public static GeoPoint DEFAULT_POINT = new GeoPoint((int) (46.0696727540531 * 1E6), (int) (11.1212700605392 * 1E6)); // Trento
 
-	public static GeoPoint trento() {
-		return trento;
+	public static void initWithParams() {
+		int zoom = JPParamsHelper.getZoomLevelMap();
+		if (zoom != 0) {
+			ZOOM_DEFAULT = zoom;
+		}
+
+		List<Double> centerMap = JPParamsHelper.getCenterMap();
+		if (centerMap != null) {
+			Double latitute = centerMap.get(0);
+			Double longitude = centerMap.get(1);
+			DEFAULT_POINT = new GeoPoint((int) (latitute * 1E6), (int) (longitude * 1E6));
+		}
 	}
 
 	public static MapView getMapView() {
@@ -45,7 +56,6 @@ public class MapManager {
 		MapManager.mapView = mapView;
 		MapManager.mapView.setClickable(true);
 		MapManager.mapView.setBuiltInZoomControls(true);
-
 	}
 
 	public static GeoPoint requestMyLocation(Context ctx) {
