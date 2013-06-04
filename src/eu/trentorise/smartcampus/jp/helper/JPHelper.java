@@ -19,7 +19,6 @@ import it.sayservice.platform.smartplanner.data.message.Itinerary;
 import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Stop;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
@@ -61,6 +60,7 @@ import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 import eu.trentorise.smartcampus.jp.custom.data.TimeTable;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.model.ObjectFilter;
+import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 import eu.trentorise.smartcampus.jp.model.SmartCheckRoute;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 import eu.trentorise.smartcampus.jp.model.SmartCheckTime;
@@ -93,10 +93,10 @@ public class JPHelper {
 	protected JPHelper(Context mContext) {
 		super();
 		JPHelper.mContext = mContext;
-		
+
 		JPParamsHelper.init(mContext);
 		MapManager.initWithParams();
-		
+
 		setProtocolCarrier(new ProtocolCarrier(mContext, JPParamsHelper.getAppToken()));
 
 		// LocationManager locationManager = (LocationManager)
@@ -441,7 +441,8 @@ public class JPHelper {
 				+ Config.CALL_ITINERARY + "/" + objectId);
 		req.setMethod(Method.GET);
 
-		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+				getAuthToken());
 		if (res.getBody() != null && res.getBody().length() != 0) {
 			return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), BasicItinerary.class);
 		} else {
@@ -699,7 +700,7 @@ public class JPHelper {
 		return objects;
 	}
 
-	public static List<Parking> getParkings(String parkingAgencyId) throws Exception {
+	public static List<ParkingSerial> getParkings(String parkingAgencyId) throws Exception {
 
 		getInstance();
 		String url = Config.TARGET_ADDRESS;
@@ -720,8 +721,8 @@ public class JPHelper {
 			return Collections.emptyList();
 		}
 
-		List<Parking> objects = eu.trentorise.smartcampus.android.common.Utils.convertJSON(body,
-				new TypeReference<List<Parking>>() {
+		List<ParkingSerial> objects = eu.trentorise.smartcampus.android.common.Utils.convertJSON(body,
+				new TypeReference<List<ParkingSerial>>() {
 				});
 
 		return objects;

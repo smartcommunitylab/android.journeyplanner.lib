@@ -15,7 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
@@ -29,8 +28,9 @@ import com.google.android.maps.GeoPoint;
 
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
+import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
-public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
+public class SmartCheckParkingsAdapter extends ArrayAdapter<ParkingSerial> {
 
 	private Context mContext;
 	private int layoutResourceId;
@@ -59,11 +59,11 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<Parking> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Parking parking = getItem(position);
+		ParkingSerial parking = getItem(position);
 		return buildParking(mContext, layoutResourceId, myLocation, parking, convertView, parent);
 	}
 
-	public static View buildParking(Context mContext, int layoutResourceId, Location myLocation, Parking parking,
+	public static View buildParking(Context mContext, int layoutResourceId, Location myLocation, ParkingSerial parking,
 			View convertView, ViewGroup parent) {
 
 		View row = convertView;

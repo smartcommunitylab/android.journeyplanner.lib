@@ -1,7 +1,5 @@
 package eu.trentorise.smartcampus.jp;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +24,7 @@ import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater
 import eu.trentorise.smartcampus.jp.custom.SmartCheckParkingsAdapter;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckParkingsProcessor;
-import eu.trentorise.smartcampus.jp.model.Sparking;
+import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
 public class SmartCheckParkingsFragment extends SherlockListFragment {
 
@@ -73,13 +71,13 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 		setListAdapter(adapter);
 
 		// LOAD
-		new SCAsyncTask<Void, Void, List<Parking>>(getSherlockActivity(), new SmartCheckParkingsProcessor(
+		new SCAsyncTask<Void, Void, List<ParkingSerial>>(getSherlockActivity(), new SmartCheckParkingsProcessor(
 				getSherlockActivity(), adapter, JPHelper.getLocationHelper().getLocation(), parkingAid)).execute();
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		Parking parking = adapter.getItem(position);
+		ParkingSerial parking = adapter.getItem(position);
 		goToParkingsMap(parking);
 	}
 
@@ -128,20 +126,17 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 		}
 	}
 
-	private void goToParkingsMap(Parking focus) {
+	private void goToParkingsMap(ParkingSerial focus) {
 		Intent intent = new Intent(getSherlockActivity(), ParkingMapActivity.class);
 
-		ArrayList<Sparking> spl = new ArrayList<Sparking>();
+		ArrayList<ParkingSerial> spl = new ArrayList<ParkingSerial>();
 		for (int i = 0; i < adapter.getCount(); i++) {
-			Parking p = adapter.getItem(i);
-			Sparking s = new Sparking(p);
-			spl.add(s);
+			spl.add(adapter.getItem(i));
 		}
 		intent.putExtra(ParkingMapActivity.ARG_PARKINGS, spl);
 
 		if (focus != null) {
-			Sparking focusSparking = new Sparking(focus);
-			intent.putExtra(ParkingMapActivity.ARG_PARKING_FOCUSED, focusSparking);
+			intent.putExtra(ParkingMapActivity.ARG_PARKING_FOCUSED, focus);
 		}
 
 		startActivity(intent);

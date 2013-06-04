@@ -16,8 +16,6 @@
 
 package eu.trentorise.smartcampus.jp.custom.map;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-
 import java.util.Collection;
 
 import android.app.Activity;
@@ -25,9 +23,10 @@ import android.app.Activity;
 import com.google.android.maps.MapView;
 
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
+import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public abstract class ParkingsMapLoadProcessor extends AbstractAsyncTaskProcessor<Void, Collection<Parking>> {
+public abstract class ParkingsMapLoadProcessor extends AbstractAsyncTaskProcessor<Void, Collection<ParkingSerial>> {
 
 	protected ParkingsItemizedOverlay overlay = null;
 	protected MapView mapView = null;
@@ -39,14 +38,14 @@ public abstract class ParkingsMapLoadProcessor extends AbstractAsyncTaskProcesso
 	}
 
 	@Override
-	public Collection<Parking> performAction(Void... params) throws SecurityException, Exception {
+	public Collection<ParkingSerial> performAction(Void... params) throws SecurityException, Exception {
 		return getObjects();
 	}
 
 	@Override
-	public void handleResult(Collection<Parking> objects) {
+	public void handleResult(Collection<ParkingSerial> objects) {
 		if (objects != null) {
-			for (Parking o : objects) {
+			for (ParkingSerial o : objects) {
 				overlay.addOverlay(o);
 			}
 			overlay.populateAll();
@@ -54,6 +53,6 @@ public abstract class ParkingsMapLoadProcessor extends AbstractAsyncTaskProcesso
 		}
 	}
 
-	protected abstract Collection<Parking> getObjects() throws SecurityException, Exception;
+	protected abstract Collection<ParkingSerial> getObjects() throws SecurityException, Exception;
 
 }

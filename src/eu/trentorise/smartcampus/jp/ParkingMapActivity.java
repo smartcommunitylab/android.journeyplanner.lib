@@ -15,8 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +47,7 @@ import eu.trentorise.smartcampus.jp.custom.map.ParkingsInfoDialog;
 import eu.trentorise.smartcampus.jp.custom.map.ParkingsItemizedOverlay;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
-import eu.trentorise.smartcampus.jp.model.Sparking;
+import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
 public class ParkingMapActivity extends FeedbackFragmentActivity implements ParkingObjectMapItemTapListener {
 
@@ -62,8 +61,8 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 	private MyLocationOverlay mMyLocationOverlay = null;
 	ParkingsItemizedOverlay mItemizedoverlay = null;
 
-	private ArrayList<Parking> parkingsList;
-	private Parking focusedParking;
+	private ArrayList<ParkingSerial> parkingsList;
+	private ParkingSerial focusedParking;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,16 +71,11 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 		setContentView(R.layout.mapcontainer_jp);
 
 		if (getIntent().getSerializableExtra(ARG_PARKINGS) != null) {
-			ArrayList<Sparking> sparkingList = (ArrayList<Sparking>) getIntent().getSerializableExtra(ARG_PARKINGS);
-			parkingsList = new ArrayList<Parking>();
-			for (Sparking sp : sparkingList) {
-				parkingsList.add(sp.getParking());
-			}
+			parkingsList = (ArrayList<ParkingSerial>) getIntent().getSerializableExtra(ARG_PARKINGS);
 		}
 
 		if (getIntent().getSerializableExtra(ARG_PARKING_FOCUSED) != null) {
-			Sparking sparking = (Sparking) getIntent().getSerializableExtra(ARG_PARKING_FOCUSED);
-			focusedParking = sparking.getParking();
+			focusedParking = (ParkingSerial) getIntent().getSerializableExtra(ARG_PARKING_FOCUSED);
 		}
 
 		ActionBar actionBar = getSupportActionBar();
@@ -174,7 +168,7 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 		// });
 
 		// LOAD
-		for (Parking o : parkingsList) {
+		for (ParkingSerial o : parkingsList) {
 			mItemizedoverlay.addOverlay(o);
 		}
 		mItemizedoverlay.populateAll();
@@ -208,23 +202,19 @@ public class ParkingMapActivity extends FeedbackFragmentActivity implements Park
 	}
 
 	@Override
-	public void onParkingObjectTap(Parking parking) {
+	public void onParkingObjectTap(ParkingSerial parking) {
 		ParkingsInfoDialog parkingsInfoDialog = new ParkingsInfoDialog();
 		Bundle args = new Bundle();
-		args.putSerializable(ParkingsInfoDialog.ARG_PARKING, new Sparking(parking));
+		args.putSerializable(ParkingsInfoDialog.ARG_PARKING, parking);
 		parkingsInfoDialog.setArguments(args);
 		parkingsInfoDialog.show(getSupportFragmentManager(), "parking_selected");
 	}
 
 	@Override
-	public void onParkingObjectsTap(List<Parking> parkingsList) {
-		ArrayList<Sparking> sparkingList = new ArrayList<Sparking>();
-		for (Parking p : parkingsList) {
-			sparkingList.add(new Sparking(p));
-		}
+	public void onParkingObjectsTap(List<ParkingSerial> parkingsList) {
 		ParkingsInfoDialog parkingsInfoDialog = new ParkingsInfoDialog();
 		Bundle args = new Bundle();
-		args.putSerializable(ParkingsInfoDialog.ARG_PARKINGS, sparkingList);
+		args.putSerializable(ParkingsInfoDialog.ARG_PARKINGS, (Serializable) parkingsList);
 		parkingsInfoDialog.setArguments(args);
 		parkingsInfoDialog.show(getSupportFragmentManager(), "parking_selected");
 	}

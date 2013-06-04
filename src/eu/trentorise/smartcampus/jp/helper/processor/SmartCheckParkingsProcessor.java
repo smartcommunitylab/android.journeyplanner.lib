@@ -15,8 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.helper.processor;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -31,22 +29,23 @@ import com.google.android.maps.GeoPoint;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
+import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void, List<Parking>> {
+public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void, List<ParkingSerial>> {
 
-	private ArrayAdapter<Parking> adapter;
+	private ArrayAdapter<ParkingSerial> adapter;
 	private Location myLocation;
 	private String parkingAid;
 
-	private Comparator<Parking> parkingNameComparator = new Comparator<Parking>() {
-		public int compare(Parking p1, Parking p2) {
+	private Comparator<ParkingSerial> parkingNameComparator = new Comparator<ParkingSerial>() {
+		public int compare(ParkingSerial p1, ParkingSerial p2) {
 			return p1.getName().toString().compareTo(p2.getName().toString());
 		}
 	};
 
-	private Comparator<Parking> parkingDistanceComparator = new Comparator<Parking>() {
-		public int compare(Parking p1, Parking p2) {
+	private Comparator<ParkingSerial> parkingDistanceComparator = new Comparator<ParkingSerial>() {
+		public int compare(ParkingSerial p1, ParkingSerial p2) {
 			Location p1Location = new Location("");
 			p1Location.setLatitude(p1.getPosition()[0]);
 			p1Location.setLongitude(p1.getPosition()[1]);
@@ -61,8 +60,8 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 		}
 	};
 
-	public SmartCheckParkingsProcessor(SherlockFragmentActivity activity, ArrayAdapter<Parking> adapter, GeoPoint myLocation,
-			String parkingAid) {
+	public SmartCheckParkingsProcessor(SherlockFragmentActivity activity, ArrayAdapter<ParkingSerial> adapter,
+			GeoPoint myLocation, String parkingAid) {
 		super(activity);
 		this.adapter = adapter;
 
@@ -77,26 +76,26 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 	}
 
 	@Override
-	public List<Parking> performAction(Void... params) throws SecurityException, Exception {
+	public List<ParkingSerial> performAction(Void... params) throws SecurityException, Exception {
 		return JPHelper.getParkings(parkingAid);
 	}
 
 	@Override
-	public void handleResult(List<Parking> result) {
+	public void handleResult(List<ParkingSerial> result) {
 		// order: firsts with data
-		List<Parking> parkingsWithData = new ArrayList<Parking>();
-		List<Parking> parkingsWithoutData = new ArrayList<Parking>();
+		List<ParkingSerial> parkingsWithData = new ArrayList<ParkingSerial>();
+		List<ParkingSerial> parkingsWithoutData = new ArrayList<ParkingSerial>();
 
-		for (Parking parking : result) {
+		for (ParkingSerial parking : result) {
 			parking.setName(ParkingsHelper.getParkingName(parking));
-			if (parking.isMonitored()) {
+			if (parking.isMonitored() != null && parking.isMonitored()) {
 				parkingsWithData.add(parking);
 			} else {
 				parkingsWithoutData.add(parking);
 			}
 		}
 
-		Comparator<Parking> comparator = parkingNameComparator;
+		Comparator<ParkingSerial> comparator = parkingNameComparator;
 		if (myLocation != null) {
 			comparator = parkingDistanceComparator;
 		}
@@ -106,11 +105,11 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 
 		adapter.clear();
 
-		for (Parking parking : parkingsWithData) {
+		for (ParkingSerial parking : parkingsWithData) {
 			adapter.add(parking);
 		}
 
-		for (Parking parking : parkingsWithoutData) {
+		for (ParkingSerial parking : parkingsWithoutData) {
 			adapter.add(parking);
 		}
 

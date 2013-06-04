@@ -1,24 +1,24 @@
 package eu.trentorise.smartcampus.jp.helper;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
 public class ParkingsHelper {
 
 	public static final String PARKING_AID_TRENTO = "COMUNE_DI_TRENTO";
 	public static final String PARKING_AID_ROVERETO = "COMUNE_DI_ROVERETO";
 
+	public static final int PARKING_NOT_MONITORED_OLD = -2;
 	public static final int PARKING_UNAVAILABLE = -1;
 	public static final int PARKING_FULL = 0;
 	public static final int PARKING_LOW_AVAIL = 5;
 	public static final int PARKING_HIGH_AVAIL = 20;
 
-	public static int getParkingColor(Parking parking) {
+	public static int getParkingColor(ParkingSerial parking) {
 		int color = R.color.parking_blue;
 
 		if (parking.isMonitored()) {
@@ -37,7 +37,7 @@ public class ParkingsHelper {
 		return color;
 	}
 
-	public static int getParkingMarker(Parking parking) {
+	public static int getParkingMarker(ParkingSerial parking) {
 		int marker = R.drawable.marker_parking;
 
 		if (parking.isMonitored()) {
@@ -56,7 +56,7 @@ public class ParkingsHelper {
 		return marker;
 	}
 
-	public static String getParkingName(Parking parking) {
+	public static String getParkingName(ParkingSerial parking) {
 		String parkingName = parkingsNames.get(parking.getName());
 		if (parkingName != null) {
 			return parkingName;
@@ -81,6 +81,7 @@ public class ParkingsHelper {
 		map.put("via Fersina - Trento", "Parcheggio Ghiaie via Fersina");
 		map.put("via Maccani - Trento", "Parcheggio Campo Coni via E. Maccani");
 		map.put("via Roggia Grande,16 - Trento", "Garage Autorimessa Europa");
+		map.put("via Roggia Grande,16-Trento", "Garage Autorimessa Europa");
 		map.put("via Torre Verde, 40 - Trento", "Garage Torre Verde");
 		map.put("via valentina Zambra - Trento", "Garage Parcheggio Palazzo Onda");
 		parkingsNames = Collections.unmodifiableMap(map);

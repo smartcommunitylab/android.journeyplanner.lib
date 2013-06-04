@@ -15,8 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom.map;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,6 +39,7 @@ import com.google.android.maps.Projection;
 
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
+import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
 public class ParkingsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 
@@ -48,7 +47,7 @@ public class ParkingsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	private final static int densityY = 5;
 
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
-	private ArrayList<Parking> mObjects = new ArrayList<Parking>();
+	private ArrayList<ParkingSerial> mObjects = new ArrayList<ParkingSerial>();
 	private Set<OverlayItem> mGeneric = new HashSet<OverlayItem>();
 
 	private SparseArray<int[]> item2group = new SparseArray<int[]>();
@@ -89,7 +88,7 @@ public class ParkingsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 		this.listener = listener;
 	}
 
-	public void addOverlay(Parking parking) {
+	public void addOverlay(ParkingSerial parking) {
 		if (parking.getPosition() != null) {
 			GeoPoint point = new GeoPoint((int) (parking.getPosition()[0] * 1E6), (int) (parking.getPosition()[1] * 1E6));
 			OverlayItem overlayitem = new OverlayItem(point, parking.getName(), "");
@@ -176,7 +175,7 @@ public class ParkingsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 							List<OverlayItem> list = grid.get(coords[0]).get(coords[1]);
 							if (list.size() > 1) {
 								if (mMapView.getZoomLevel() == mMapView.getMaxZoomLevel()) {
-									List<Parking> objects = new ArrayList<Parking>(list.size());
+									List<ParkingSerial> objects = new ArrayList<ParkingSerial>(list.size());
 									for (OverlayItem item : list) {
 										int idx = mOverlays.indexOf(item);
 										if (idx > 0)

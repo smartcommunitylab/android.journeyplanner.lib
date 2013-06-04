@@ -15,8 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom.map;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -38,15 +36,15 @@ import eu.trentorise.smartcampus.android.common.navigation.NavigationHelper;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.SmartCheckParkingsAdapter;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
-import eu.trentorise.smartcampus.jp.model.Sparking;
+import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
 public class ParkingsInfoDialog extends SherlockDialogFragment {
 
 	public static final String ARG_PARKING = "parking";
 	public static final String ARG_PARKINGS = "parkings";
-	private Parking parking;
+	private ParkingSerial parking;
 	private Location myLocation;
-	private List<Parking> parkingsList;
+	private List<ParkingSerial> parkingsList;
 
 	// private RadioGroup parkingsRadioGroup;
 
@@ -58,16 +56,8 @@ public class ParkingsInfoDialog extends SherlockDialogFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Sparking sparking = (Sparking) this.getArguments().getSerializable(ARG_PARKING);
-		this.parking = sparking.getParking();
-
-		ArrayList<Sparking> sparkingsList = (ArrayList<Sparking>) this.getArguments().getSerializable(ARG_PARKINGS);
-		if (sparkingsList != null) {
-			this.parkingsList = new ArrayList<Parking>();
-			for (Sparking sp : sparkingsList) {
-				parkingsList.add(sp.getParking());
-			}
-		}
+		this.parking = (ParkingSerial) this.getArguments().getSerializable(ARG_PARKING);
+		parkingsList = (ArrayList<ParkingSerial>) this.getArguments().getSerializable(ARG_PARKINGS);
 
 		GeoPoint myGeoPoint = JPHelper.getLocationHelper().getLocation();
 		myLocation = new Location("");
@@ -95,7 +85,7 @@ public class ParkingsInfoDialog extends SherlockDialogFragment {
 
 		if (parkingsList != null) {
 			// multiple stops
-			Parking firstParking = parkingsList.get(0);
+			ParkingSerial firstParking = parkingsList.get(0);
 			View parkingView = SmartCheckParkingsAdapter.buildParking(getSherlockActivity(), R.layout.smartcheckparking_row,
 					myLocation, firstParking, null, null);
 

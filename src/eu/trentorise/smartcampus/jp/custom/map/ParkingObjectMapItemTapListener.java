@@ -15,14 +15,14 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom.map;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-
 import java.util.List;
+
+import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
 public interface ParkingObjectMapItemTapListener {
 
-	public void onParkingObjectTap(Parking o);
+	public void onParkingObjectTap(ParkingSerial o);
 
-	public void onParkingObjectsTap(List<Parking> list);
+	public void onParkingObjectsTap(List<ParkingSerial> list);
 
 }
