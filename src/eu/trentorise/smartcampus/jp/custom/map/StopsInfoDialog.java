@@ -18,6 +18,7 @@ package eu.trentorise.smartcampus.jp.custom.map;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -81,11 +82,13 @@ public class StopsInfoDialog extends SherlockDialogFragment {
 		if (stopObjectsList != null) {
 			// multiple stops
 			stopsRadioGroup = (RadioGroup) getDialog().findViewById(R.id.mapdialogmulti_rg);
-			stopsRadioGroup.removeAllViews();
+			//stopsRadioGroup.removeAllViews();
 			for (SmartCheckStop stop : stopObjectsList) {
 				RadioButton rb = new RadioButton(getSherlockActivity());
 				rb.setTag(stop);
 				rb.setText(stop.getTitle());
+//				rb.setTextColor(getResources().getColor(R.color.radio_text_dialog));
+				//rb.setTextAppearance(getSherlockActivity(), R.style.RadioTextDialog);
 				stopsRadioGroup.addView(rb);
 			}
 			stopsRadioGroup.getChildAt(0).setSelected(true);

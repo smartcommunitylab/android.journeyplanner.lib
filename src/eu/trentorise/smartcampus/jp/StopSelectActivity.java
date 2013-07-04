@@ -55,7 +55,6 @@ import eu.trentorise.smartcampus.jp.custom.map.StopsInfoDialog;
 import eu.trentorise.smartcampus.jp.custom.map.StopsInfoDialog.OnDetailsClick;
 import eu.trentorise.smartcampus.jp.custom.map.StopsItemizedOverlay;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
-import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 import eu.trentorise.smartcampus.jp.model.Square;
 
@@ -91,8 +90,9 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 		String[] bundleAgencyIds = getIntent().getStringArrayExtra(ARG_AGENCY_IDS);
 		if (bundleAgencyIds != null) {
 			selectedAgencyIds = bundleAgencyIds;
-		}
 
+		}
+		cache = null;
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true); // back arrow
 		actionBar.setDisplayUseLogoEnabled(false); // system logo
@@ -120,7 +120,8 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
 				(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp));
 
-		mapView = new BetterMapView(this, getResources().getString(R.string.maps_api_key), StopSelectActivity.this);
+		mapView = new BetterMapView(this, getResources().getString(R.string.maps_api_key));
+		mapView.setOnMapChanged(StopSelectActivity.this);
 
 		// mapView = MapManager.getMapView();
 		// setContentView(R.layout.mapcontainer);
@@ -131,7 +132,7 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 
 		mapView.setClickable(true);
 		mapView.setBuiltInZoomControls(true);
-		mapView.getController().setZoom(15);
+		mapView.getController().setZoom(17);
 
 		List<Overlay> listOfOverlays = mapView.getOverlays();
 		mItemizedoverlay = new StopsItemizedOverlay(this, mapView);
@@ -166,45 +167,22 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 		listOfOverlays.add(mMyLocationOverlay);
 		mMyLocationOverlay.runOnFirstFix(new Runnable() {
 			public void run() {
-				mapView.getController().animateTo(mMyLocationOverlay.getMyLocation());
 				double[] location_old = new double[2];
 				location_old[0] = mapView.getMapCenter().getLatitudeE6() / 1e6;
 				location_old[1] = mapView.getMapCenter().getLongitudeE6() / 1e6;
+				// cache = new Square(location_old,
+				mapView.getDiagonalLenght();
 				// load with radius? Not for now.
-				if (active != null)
-					active.cancel(true);
-				active = new StopsAsyncTask(selectedAgencyIds, smartCheckStopMap, mItemizedoverlay, null, location_old, mapView
+//				if (active != null)
+//					active.cancel(true);
+				active = new StopsAsyncTask(selectedAgencyIds,  mItemizedoverlay, location_old, mapView
 						.getDiagonalLenght(), mapView, StopSelectActivity.this);
 
 				active.execute();
+				mapView.getController().animateTo(mMyLocationOverlay.getMyLocation());
+
 			}
 		});
-
-		// // LOAD
-		// new SCAsyncTask<Void, Void, Collection<SmartCheckStop>>(this,
-		// new StopsMapLoadProcessor(this, mItemizedoverlay, mapView) {
-		// @Override
-		// protected Collection<SmartCheckStop> getObjects() {
-		// List<SmartCheckStop> list = new ArrayList<SmartCheckStop>();
-		// if (selectedAgencyIds != null) {
-		// for (int i = 0; i < selectedAgencyIds.length; i++) {
-		// try {
-		// list.addAll(JPHelper.getStops(Integer.toString(selectedAgencyIds[i]),
-		// null));
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-		// }
-		// } else {
-		// try {
-		// list.addAll(JPHelper.getStops(null, null));
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-		// }
-		// return list;
-		// }
-		// }).execute();
 
 	}
 
@@ -254,7 +232,7 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 
 	@Override
 	public String getAppToken() {
-		return JPParamsHelper.getAppToken();
+		return Config.APP_TOKEN;
 	}
 
 	@Override
@@ -282,15 +260,18 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 		final double[] location = { center.getLatitudeE6() / 1e6, center.getLongitudeE6() / 1e6 };
 		final double diagonal = mapView.getDiagonalLenght();
 
-		if (cache == null || cache.mLat != location[0] || cache.mLong != location[1]) {
-			if (active != null)
-				active.cancel(true);
+		// if (cache == null || cache.getLat() != location[0]
+		// || cache.getLong() != location[1]) {
+		Square s = new Square(location, diagonal);
+		if (cache == null || cache.compareTo(s)) {
+//			if (active != null)
+//				active.cancel(true);
 			setSupportProgressBarIndeterminateVisibility(true);
-			active = new StopsAsyncTask(selectedAgencyIds, smartCheckStopMap, mItemizedoverlay, cache, location, diagonal,
-					mapView, this);
+			active = new StopsAsyncTask(selectedAgencyIds,  mItemizedoverlay, location, diagonal, mapView,
+					this);
 			active.execute();
-
 		}
+		// }
 	}
 
 	@Override
@@ -298,26 +279,30 @@ public class StopSelectActivity extends FeedbackFragmentActivity implements Stop
 		Log.i("where", "DiagonalLenght: " + diagonalLenght + "\nCenter Long: " + center.getLongitudeE6() / 1e6 + " Lat: "
 				+ center.getLatitudeE6() / 1e6);
 		final double[] location = { center.getLatitudeE6() / 1e6, center.getLongitudeE6() / 1e6 };
-		if (cache == null || diagonalLenght > cache.mDiagonal) {
-			if (active != null)
-				active.cancel(true);
+		// if (cache == null || diagonalLenght > cache.getDiagonal()) {
+		Square s = new Square(location, diagonalLenght);
+		if (cache == null || cache.compareTo(s)) {
+//			if (active != null)
+//				active.cancel(true);
 			setSupportProgressBarIndeterminateVisibility(true);
-			active = new StopsAsyncTask(selectedAgencyIds, smartCheckStopMap, mItemizedoverlay, cache, location,
-					diagonalLenght, mapView, this);
+			active = new StopsAsyncTask(selectedAgencyIds,  mItemizedoverlay, location, diagonalLenght,
+					mapView, this);
 			active.execute();
-
 		}
+
+		// }
 	}
 
 	@Override
 	public void onStopLoadingFinished(boolean result, double[] location, double diagonal) {
-		setSupportProgressBarIndeterminateVisibility(false);
+
 		if (result) {
 			if (cache != null)
-				cache.union(new Square(location, (int) diagonal));
+				cache.add(new Square(location, diagonal));
 			else
-				cache = new Square(location, (int) diagonal);
+				cache = new Square(location, diagonal);
 		}
+		setSupportProgressBarIndeterminateVisibility(false);
 	}
 
 }

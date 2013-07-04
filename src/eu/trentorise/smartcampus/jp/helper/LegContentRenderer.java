@@ -107,7 +107,7 @@ public class LegContentRenderer {
 			}
 		} else if (tType.equals(TType.BUS)) {
 			// TODO
-			to += " (" + this.ctx.getString(R.string.leg_bus_line) + " " + bold(leg.getTransport().getRouteId()) + ")";
+			to += " (" + this.ctx.getString(R.string.leg_bus_line) + " " + bold(RoutesHelper.getShortNameByRouteIdAndAgencyID(leg.getTransport().getRouteId(),leg.getTransport().getAgencyId())) + ")";
 		} else if (tType.equals(TType.TRAIN)) {
 			to += " (" + this.ctx.getString(R.string.leg_bus_line) + " " + bold(leg.getTransport().getTripId()) + ")";
 		}

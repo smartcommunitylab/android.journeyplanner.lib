@@ -18,21 +18,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@android:color/white">
 
     <LinearLayout
         android:id="@+id/parkings_dialog_entry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        android:background="@android:color/white">
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal" 
+        android:background="@android:color/white">
 
         <Button
             android:id="@+id/parkings_dialog_close"

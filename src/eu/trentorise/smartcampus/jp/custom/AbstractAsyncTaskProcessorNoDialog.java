@@ -46,7 +46,6 @@ public abstract class AbstractAsyncTaskProcessorNoDialog<Params, Result> impleme
 	
 	@Override
 	public void handleConnectionError() {
-		// TODO Auto-generated method stub
 		HandleExceptionHelper.showDialogConnectivity(activity);
 		
 	}

@@ -39,7 +39,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.jp.Config;
-import eu.trentorise.smartcampus.jp.PlanRecurJourneyFragment;
+import eu.trentorise.smartcampus.jp.MonitorJourneyFragment;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.MyItinerariesListAdapter.MonitorMyItineraryProcessor;
 import eu.trentorise.smartcampus.jp.custom.data.BasicItinerary;

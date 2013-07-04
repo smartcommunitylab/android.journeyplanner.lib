@@ -8,6 +8,8 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Projection;
 
+import eu.trentorise.smartcampus.jp.custom.map.MapCache;
+
 public class BetterMapView extends MapView {
 	public interface OnMapChanged {
 		public void onCenterChanged(GeoPoint center);
@@ -18,11 +20,23 @@ public class BetterMapView extends MapView {
 	private OnMapChanged mOnMapChanged;
 	private GeoPoint mCenter;
 	private double mDiagonal;
-
-	public BetterMapView(Context arg0, String arg1, OnMapChanged listener) {
-		super(arg0, arg1);
-		this.mOnMapChanged = listener;
+	private static MapCache cache;
+	
+	public BetterMapView(Context mContext, String arg1) {
+		super(mContext, arg1);
 	}
+
+	public OnMapChanged getOnMapChanged() {
+		return mOnMapChanged;
+	}
+
+
+
+	public void setOnMapChanged(OnMapChanged mOnMapChanged) {
+		this.mOnMapChanged = mOnMapChanged;
+	}
+
+
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -58,6 +72,12 @@ public class BetterMapView extends MapView {
 
 	public double getDiagonalLenght() {
 		return mDiagonal;
+	}
+
+	public MapCache getCache() {
+		if (cache == null)
+			cache = new MapCache();
+		return cache;
 	}
 
 }

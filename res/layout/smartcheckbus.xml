@@ -15,65 +15,79 @@
   limitations under the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="8dp" >
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_alignParentLeft="true" -->
+    <!-- android:layout_alignParentTop="true" -->
+    <!-- android:orientation="vertical" > -->
+
+
+    <!-- <RelativeLayout -->
+    <!-- android:id="@+id/smart_check_bus_choose_stop_layout" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:padding="20dp" > -->
+
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/smart_check_bus_choose_stop_label" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:text="@string/smart_check_bus_choose_stop_text" /> -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/imageView1" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_alignParentRight="true" -->
+    <!-- android:layout_centerVertical="true" -->
+    <!-- android:src="@drawable/ic_fwd" /> -->
+    <!-- </RelativeLayout> -->
+
+
+    <!-- <View -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="1dip" -->
+    <!-- android:background="@color/sc_light_gray" /> -->
+
+
+    <!-- <RelativeLayout -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:paddingLeft="20dp" -->
+    <!-- android:paddingRight="20dp" -->
+    <!-- android:paddingTop="20dp" > -->
+
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/smart_check_bus_choose_lines_label" -->
+    <!-- style="@style/label_jp" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:paddingLeft="8dp" -->
+    <!-- android:paddingRight="8dp" -->
+    <!-- android:text="@string/smart_check_bus_choose_line_text" /> -->
+
+    <GridView
+        android:id="@+id/smart_check_grid"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical" >
+        android:layout_marginTop="8dp"
+        android:fadeScrollbars="false"
+        android:gravity="center"
+        android:numColumns="4"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="4dp" >
+    </GridView>
+    <!-- android:layout_below="@+id/smart_check_bus_choose_lines_label" -->
 
-        <RelativeLayout
-            android:id="@+id/smart_check_bus_choose_stop_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp" >
-
-            <TextView
-                android:id="@+id/smart_check_bus_choose_stop_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/smart_check_bus_choose_stop_text" />
-
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_fwd" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:background="@color/sc_light_gray" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="20dp" >
-
-            <TextView
-                android:id="@+id/smart_check_bus_choose_lines_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/smart_check_bus_choose_line_text" />
-
-            <GridView
-                android:id="@+id/smart_check_grid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/smart_check_bus_choose_lines_label"
-                android:columnWidth="60dp"
-                android:numColumns="auto_fit" >
-            </GridView>
-        </RelativeLayout>
-    </LinearLayout>
+    <!-- </RelativeLayout> -->
+    <!-- </LinearLayout> -->
 
 </RelativeLayout>

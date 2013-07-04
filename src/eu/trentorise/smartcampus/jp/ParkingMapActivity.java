@@ -49,7 +49,7 @@ import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
-public class ParkingMapActivity extends FeedbackFragmentActivity implements ParkingObjectMapItemTapListener {
+public class ParkingMapActivity extends BaseActivity implements ParkingObjectMapItemTapListener {
 
 	public final static String ARG_PARKINGS = "parkings";
 	public final static String ARG_PARKING_FOCUSED = "parking_focused";

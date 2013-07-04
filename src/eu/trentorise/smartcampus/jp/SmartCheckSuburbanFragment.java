@@ -2,34 +2,40 @@ package eu.trentorise.smartcampus.jp;
 
 import java.util.List;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.SmartCheckSuburbanZonesAdapter;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
-import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
 public class SmartCheckSuburbanFragment extends FeedbackFragment {
+
+	protected static final String PARAM_AID = "agencyid";
+
 	private ListView routesListView;
 	private SmartCheckSuburbanZonesAdapter adapter;
 
-	private SmartCheckStop selectedStop = null;
+	private String agencyId = RoutesHelper.AGENCYID_BUS_SUBURBAN;
+//
+//	private SmartCheckStop selectedStop = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if (savedInstanceState != null && savedInstanceState.containsKey(PARAM_AID)) {
+			this.agencyId = savedInstanceState.getString(PARAM_AID);
+		} else if (getArguments() != null && getArguments().containsKey(PARAM_AID)) {
+			this.agencyId = getArguments().getString(PARAM_AID);
+		}
 	}
 
 	@Override
@@ -45,7 +51,7 @@ public class SmartCheckSuburbanFragment extends FeedbackFragment {
 
 		// get routes from Constants
 		adapter = new SmartCheckSuburbanZonesAdapter(getSherlockActivity(), android.R.layout.simple_list_item_1);
-		List<SmartLine> smartZones = RoutesHelper.getSmartLines(getSherlockActivity(), RoutesHelper.AGENCYID_BUS_SUBURBAN);
+		List<SmartLine> smartZones = RoutesHelper.getSmartLines(getSherlockActivity(), agencyId);
 		for (int i = 0; i < smartZones.size(); i++) {
 			adapter.add(smartZones.get(i));
 		}
@@ -61,53 +67,56 @@ public class SmartCheckSuburbanFragment extends FeedbackFragment {
 				b.putString(SmartCheckBusDirectionFragment.PARAM_AGENCY, RoutesHelper.AGENCYID_BUS_SUBURBAN);
 				fragment.setArguments(b);
 				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-				fragmentTransaction.replace(Config.mainlayout, fragment);
-				fragmentTransaction.addToBackStack(null);
+				fragmentTransaction.replace(Config.mainlayout, fragment, "lines");
+				fragmentTransaction.addToBackStack(fragment.getTag());
 				fragmentTransaction.commit();
 			}
 		});
 
-		RelativeLayout chooseStop = (RelativeLayout) getSherlockActivity().findViewById(
-				R.id.smart_check_train_choose_stop_layout);
-
-		chooseStop.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(getSherlockActivity(), StopSelectActivity.class);
-				intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS, new String[] { RoutesHelper.AGENCYID_BUS_SUBURBAN });
-				startActivityForResult(intent, StopSelectActivity.REQUEST_CODE);
-			}
-		});
+		// RelativeLayout chooseStop = (RelativeLayout)
+		// getSherlockActivity().findViewById(
+		// R.id.smart_check_train_choose_stop_layout);
+		//
+		// chooseStop.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// Intent intent = new Intent(getSherlockActivity(),
+		// StopSelectActivity.class);
+		// intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS, new String[] {
+		// RoutesHelper.AGENCYID_BUS_SUBURBAN });
+		// startActivityForResult(intent, StopSelectActivity.REQUEST_CODE);
+		// }
+		// });
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent result) {
-		super.onActivityResult(requestCode, resultCode, result);
-
-		if (requestCode == StopSelectActivity.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-			if (result.getExtras().containsKey(StopSelectActivity.ARG_STOP)) {
-				selectedStop = (SmartCheckStop) result.getSerializableExtra(StopSelectActivity.ARG_STOP);
-			}
-		}
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-		if (selectedStop != null) {
-			FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
-			Fragment fragment = new SmartCheckStopFragment();
-			Bundle args = new Bundle();
-			args.putSerializable(SmartCheckStopFragment.ARG_STOP, selectedStop);
-			fragment.setArguments(args);
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			fragmentTransaction.replace(Config.mainlayout, fragment);
-			fragmentTransaction.addToBackStack(null);
-			// fragmentTransaction.commitAllowingStateLoss();
-			fragmentTransaction.commit();
-			selectedStop = null;
-		}
-	}
+//	@Override
+//	public void onActivityResult(int requestCode, int resultCode, Intent result) {
+//		super.onActivityResult(requestCode, resultCode, result);
+//
+//		if (requestCode == StopSelectActivity.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+//			if (result.getExtras().containsKey(StopSelectActivity.ARG_STOP)) {
+//				selectedStop = (SmartCheckStop) result.getSerializableExtra(StopSelectActivity.ARG_STOP);
+//			}
+//		}
+//	}
+//
+//	@Override
+//	public void onResume() {
+//		super.onResume();
+//
+//		if (selectedStop != null) {
+//			FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
+//			Fragment fragment = new SmartCheckStopFragment();
+//			Bundle args = new Bundle();
+//			args.putSerializable(SmartCheckStopFragment.ARG_STOP, selectedStop);
+//			fragment.setArguments(args);
+//			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//			fragmentTransaction.replace(Config.mainlayout, fragment);
+//			fragmentTransaction.addToBackStack(null);
+//			// fragmentTransaction.commitAllowingStateLoss();
+//			fragmentTransaction.commit();
+//			selectedStop = null;
+//		}
+//	}
 
 }

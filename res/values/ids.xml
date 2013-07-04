@@ -27,5 +27,9 @@
     
     <item name="menu_item_notifications" type="id"/>
     <item name="delays_row" type="id" />
-
+    <item name="type_row" type="id" />
+    
+    <item name="menu_item_help" type="id"/>
+    <item name="menu_item_tutorial" type="id"/>
+    
 </resources>

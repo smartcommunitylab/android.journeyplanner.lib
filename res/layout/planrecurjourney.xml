@@ -16,347 +16,328 @@
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
 
-    <LinearLayout
-        android:id="@+id/LinearLayout1"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:gravity="top"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/recurr_next"
+        android:layout_alignParentTop="true" >
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" >
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp" >
+
+            <LinearLayout
+                android:id="@+id/myitinerary_toggle_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical" >
+
+                <ToggleButton
+                    android:id="@+id/myitinerary_toggle"
+                    android:layout_width="64dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_monitor_off"
+                    android:focusable="false"
+                    android:textOff=""
+                    android:textOn="" />
+
+                <TextView
+                    android:id="@+id/myitinerary_monitor_label"
+                    style="@style/label_jp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="@string/monitor_on" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/plannew_location_label"
+                style="@style/label_jp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/plan_location" />
+
+            <LinearLayout
+                android:id="@+id/plannew_from_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <AutoCompleteTextView
+                    android:id="@+id/plannew_from_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/plan_from" />
+
+                <ImageButton
+                    android:id="@+id/plannew_from_opt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/plan_from"
+                    android:src="@drawable/ic_position" />
+
+                <ImageButton
+                    android:id="@+id/plannew_from_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/plan_from"
+                    android:src="@drawable/ic_fav_star" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/plannew_to_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusableInTouchMode="false"
+                android:gravity="center_vertical" >
+
+                <AutoCompleteTextView
+                    android:id="@+id/plannew_to_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/plan_to" />
+
+                <ImageButton
+                    android:id="@+id/plannew_to_opt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/plan_from"
+                    android:src="@drawable/ic_position" />
+
+                <ImageButton
+                    android:id="@+id/plannew_to_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/plan_to"
+                    android:src="@drawable/ic_fav_star" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/label_jp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/plan_timing" />
+
+            <LinearLayout
+                android:id="@+id/plannew_when_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" >
+
+                <EditText
+                    android:id="@+id/recur_time_from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/recur_time_from"
+                    android:inputType="time" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/separator" />
+
+                <EditText
+                    android:id="@+id/recur_time_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/recur_time_to"
+                    android:inputType="time" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/plannew_when_date_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <EditText
+                    android:id="@+id/recur_date_from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/recur_date_from"
+                    android:inputType="date" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/separator" />
+
+                <EditText
+                    android:id="@+id/recur_date_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/recur_date_to"
+                    android:inputType="date" />
+
+                <CheckBox
+                    android:id="@+id/always_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/always" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/plannew_schedule_label"
+                style="@style/label_jp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/plan_schedule" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:gravity="top"
-                android:orientation="vertical"
-                android:padding="10dp" >
+                android:orientation="vertical" >
 
                 <LinearLayout
-                    android:id="@+id/myitinerary_toggle_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical" >
-
-                    <ToggleButton
-                        android:id="@+id/myitinerary_toggle"
-                        android:layout_width="60dp"
-                        android:layout_height="25dp"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/ic_monitor_off"
-                        android:focusable="false"
-                        android:textOff=""
-                        android:textOn="" />
-
-                    <TextView
-                        android:id="@+id/myitinerary_monitor_label"
-                        style="@style/label_jp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/monitor_on" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/plannew_location_label"
-                    style="@style/label_jp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/plan_location" />
-
-                <LinearLayout
-                    android:id="@+id/plannew_from_ll"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="bottom"
-                    android:orientation="horizontal"
-                    android:paddingTop="10dp" >
-
-                    <AutoCompleteTextView
-                        android:id="@+id/plannew_from_text"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="@string/plan_from"
-                        android:textColor="@android:color/primary_text_light" />
-
-                    <ImageButton
-                        android:id="@+id/plannew_from_opt"
-                        android:layout_width="41dp"
-                        android:layout_height="41dp"
-                        android:contentDescription="@string/plan_from"
-                        android:src="@drawable/ic_position" />
-
-                    <ImageButton
-                        android:id="@+id/plannew_from_star"
-                        android:layout_width="41dp"
-                        android:layout_height="41dp"
-                        android:contentDescription="@string/plan_from"
-                        android:src="@drawable/ic_star" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/plannew_to_ll"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:focusableInTouchMode="false"
-                    android:gravity="bottom"
-                    android:paddingTop="10dp" >
-
-                    <AutoCompleteTextView
-                        android:id="@+id/plannew_to_text"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="@string/plan_to"
-                        android:textColor="@android:color/primary_text_light" />
-
-                    <ImageButton
-                        android:id="@+id/plannew_to_opt"
-                        android:layout_width="41dp"
-                        android:layout_height="41dp"
-                        android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/plan_from"
-                        android:src="@drawable/ic_position" />
-
-                    <ImageButton
-                        android:id="@+id/plannew_to_star"
-                        android:layout_width="41dp"
-                        android:layout_height="41dp"
-                        android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/plan_to"
-                        android:src="@drawable/ic_star" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/TextView01"
-                    style="@style/label_jp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plan_timing" />
-
-                <LinearLayout
-                    android:id="@+id/plannew_when_ll"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:paddingTop="10dp" >
-
-                    <EditText
-                        android:id="@+id/recur_time_from"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:focusableInTouchMode="false"
-                        android:hint="@string/recur_time_from"
-                        android:inputType="time" />
-
-                    <TextView
-                        android:id="@+id/textView1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="@string/separator" />
-
-                    <EditText
-                        android:id="@+id/recur_time_to"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:focusableInTouchMode="false"
-                        android:hint="@string/recur_time_to"
-                        android:inputType="time" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/plannew_when_date_ll"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:paddingTop="10dp" >
-
-                    <EditText
-                        android:id="@+id/recur_date_from"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:focusableInTouchMode="false"
-                        android:hint="@string/recur_date_from"
-                        android:inputType="date" />
-
-                    <TextView
-                        android:id="@+id/TextView03"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="@string/separator" />
-
-                    <EditText
-                        android:id="@+id/recur_date_to"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:focusableInTouchMode="false"
-                        android:hint="@string/recur_date_to"
-                        android:inputType="time" />
-
-                    <CheckBox
-                        android:id="@+id/always_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/always" 
-                        />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/plannew_schedule_label"
-                    style="@style/label_jp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/plan_schedule" />
-
-               <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-					<LinearLayout
-	                    android:layout_width="match_parent"
-	                    android:layout_height="wrap_content"
-	                    android:orientation="horizontal" >
-	                    
-	                    <ToggleButton
-	                        android:id="@+id/monday_toggle"
-	                        android:layout_width="48dp"
-	                        android:layout_height="wrap_content"
-	                        android:background="@drawable/btn_toggle_bg"
-	                        android:textOff="@string/monday_short"
-	                        android:textOn="@string/monday_short" 
-	                        android:layout_margin="3dp"/>
-	
-	                    <ToggleButton
-	                        android:id="@+id/tuesday_toggle"
-	                        android:layout_width="48dp"
-	                        android:layout_height="wrap_content"
-	                        android:textOn="@string/tuesday_short" 
-	                        android:textOff="@string/tuesday_short"
-	                        android:background="@drawable/btn_toggle_bg"
-	                        android:layout_margin="3dp" />
-	
-	                    <ToggleButton
-	                        android:id="@+id/wednesday_toggle"
-	                        android:layout_width="48dp"
-	                        android:layout_height="wrap_content"
-	                        android:textOn="@string/wednesday_short" 
-	                        android:textOff="@string/wednesday_short"
-	                        android:background="@drawable/btn_toggle_bg" 
-	                        android:layout_margin="3dp"/>
-	
-	                    <ToggleButton
-	                        android:id="@+id/thursday_toggle"
-	                        android:layout_width="48dp"
-	                        android:layout_height="wrap_content"
-	                        android:textOn="@string/thursday_short"
-	                        android:textOff="@string/thursday_short" 
-	                        android:background="@drawable/btn_toggle_bg"
-	                        android:layout_margin="3dp"/>
-                    </LinearLayout>
-                    <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
                     android:orientation="horizontal" >
-                    
-	                    <ToggleButton
-	                        android:id="@+id/friday_toggle"
-	                        android:layout_width="48dp"
-	                        android:layout_height="wrap_content"
-	                        android:textOn="@string/friday_short" 
-	                        android:textOff="@string/friday_short" 
-	                        android:background="@drawable/btn_toggle_bg"
-	                        android:layout_margin="3dp"/>
-	                    
-	                    <ToggleButton
-	                        android:id="@+id/saturday_toggle"
-	                        android:layout_width="48dp"
-	                        android:layout_height="wrap_content"
-	                        android:textOn="@string/saturday_short" 
-	                        android:textOff="@string/saturday_short"
-	                        android:background="@drawable/btn_toggle_bg"
-	                        android:layout_margin="3dp"/>
-	
-	                    <ToggleButton
-	                        android:id="@+id/sunday_toggle"
-	                        android:layout_width="48dp"
-	                        android:layout_height="wrap_content"
-	                        android:textOn="@string/sunday_short" 
-	                        android:textOff="@string/sunday_short" 
-	                        android:background="@drawable/btn_toggle_bg"
-	                        android:layout_margin="3dp"/>
-               		 </LinearLayout>
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/plannew_options"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical" >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/plan_custom_prefs"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@android:color/black" />
 
                     <ToggleButton
-                        android:id="@+id/plannew_options_toggle"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/monday_toggle"
+                        android:layout_width="48dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:checked="false"
-                        android:textOff="@string/plan_custom_prefs_on"
-                        android:textOn="@string/plan_custom_prefs_off" />
+                        android:layout_margin="4dp"
+                        android:background="@drawable/btn_toggle_bg"
+                        android:textOff="@string/monday_short"
+                        android:textOn="@string/monday_short" />
+
+                    <ToggleButton
+                        android:id="@+id/tuesday_toggle"
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/btn_toggle_bg"
+                        android:textOff="@string/tuesday_short"
+                        android:textOn="@string/tuesday_short" />
+
+                    <ToggleButton
+                        android:id="@+id/wednesday_toggle"
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/btn_toggle_bg"
+                        android:textOff="@string/wednesday_short"
+                        android:textOn="@string/wednesday_short" />
+
+                    <ToggleButton
+                        android:id="@+id/thursday_toggle"
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/btn_toggle_bg"
+                        android:textOff="@string/thursday_short"
+                        android:textOn="@string/thursday_short" />
                 </LinearLayout>
 
-                <include
-                    android:id="@+id/plannew_userprefs"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    layout="@layout/userprefs" />
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:orientation="horizontal" >
+
+                    <ToggleButton
+                        android:id="@+id/friday_toggle"
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/btn_toggle_bg"
+                        android:textOff="@string/friday_short"
+                        android:textOn="@string/friday_short" />
+
+                    <ToggleButton
+                        android:id="@+id/saturday_toggle"
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/btn_toggle_bg"
+                        android:textOff="@string/saturday_short"
+                        android:textOn="@string/saturday_short" />
+
+                    <ToggleButton
+                        android:id="@+id/sunday_toggle"
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/btn_toggle_bg"
+                        android:textOff="@string/sunday_short"
+                        android:textOn="@string/sunday_short" />
+                </LinearLayout>
             </LinearLayout>
-        </ScrollView>
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/recurr_next"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/plannew_options"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/recurr_next" />
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical" >
+
+                <!-- android:textAppearance="@android:style/TextAppearance.Medium" -->
+
+                <TextView
+                    style="@style/label_jp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/plan_custom_prefs" />
+
+                <ToggleButton
+                    android:id="@+id/plannew_options_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:checked="false"
+                    android:textOff="@string/plan_custom_prefs_on"
+                    android:textOn="@string/plan_custom_prefs_off" />
+            </LinearLayout>
+
+            <include
+                android:id="@+id/plannew_userprefs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/userprefs" />
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/recurr_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/recurr_next" />
 
 </RelativeLayout>

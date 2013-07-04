@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -50,12 +51,12 @@ public class TimePickerDialogFragment extends SherlockDialogFragment implements 
 
 		final Calendar c = Calendar.getInstance();
 		// if (getArguments() != null && getArguments().containsKey(DATA)) {
-		// try {
-		// Date d =
-		// Config.FORMAT_TIME_UI.parse((String)getArguments().getString(DATA));
-		// c.setTime(d);
-		// } catch (ParseException e) {
-		// }
+		 try {
+		 Date d = Config.FORMAT_TIME_UI.parse((String)getArguments().getString(DATA));
+		 c.setTime(d);
+		 } catch (ParseException e) {
+			 e.printStackTrace();
+		 }
 		// }
 
 		if (getTimeEditText().getTag() != null) {

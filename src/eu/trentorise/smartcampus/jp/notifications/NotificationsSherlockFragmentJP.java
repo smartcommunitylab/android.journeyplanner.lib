@@ -13,7 +13,7 @@ public class NotificationsSherlockFragmentJP extends SherlockFragment {
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		MenuItem item = menu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_notifications, 0, R.string.notifications_unread);
-		item.setIcon(R.drawable.ic_start_notification);
+		item.setIcon(R.drawable.ic_menu_notifications);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		super.onPrepareOptionsMenu(menu);
 	}

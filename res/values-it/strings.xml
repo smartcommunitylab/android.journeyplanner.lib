@@ -21,7 +21,7 @@
     <string name="placeholder">&#8230;</string>
     <string name="app_name">ViaggiaTrento</string>
     <string name="btn_planjourney">Pianifica\nviaggio</string>
-    <string name="btn_monitorrecurrent">I miei viaggi</string>
+    <string name="btn_monitorrecurrent">Monitoraggio tratte abituali</string>
     <string name="btn_broadcast">Invia\nsegnalazioni</string>
     <string name="btn_myprofile">Preferenze</string>
     <string name="btn_smartcheck">Info in tempo reale</string>
@@ -34,6 +34,10 @@
     <string name="tab_myjourneys">I miei viaggi</string>
     <string name="tab_profile">Preferenze viaggio</string>
     <string name="tab_favorites">I miei luoghi</string>
+    <string name="tab_map">Mappa</string>
+    <string name="tab_lines">Linee</string>
+    <string name="tab_zones">Zone</string>
+    <string name="tab_parkings">Parcheggi</string>
     <string name="dialog_itineraryname_hint">Nome dell\'itinerario</string>
     <string name="plan_location">Dove</string>
     <string name="plan_datetime">Quando</string>
@@ -42,6 +46,7 @@
     <string name="plan_schedule">Giorni</string>
     <string name="plan_from">Da&#8230;</string>
     <string name="plan_to">A&#8230;</string>
+    <string name="plan_address">Indirizzo&#8230;</string>
     <string name="plan_date">Data</string>
     <string name="plan_time">Ora</string>
     <string name="plan_search">Vai</string>
@@ -85,9 +90,11 @@
     <string name="datetime_before_now">Non puoi pianificare un viaggio nel passato!</string>
     <string name="datetime_to_before_from">Data e/o orario di fine sono precedenti a quelle di inizio!</string>
     <string name="no_days_selected">Devi selezionare almeno un giorno in cui viaggiare!</string>
-    <string name="favorites_empty">Scegli l\'indirizzo</string>
+    <string name="favorites_empty_address">Scegli un indirizzo valido</string>
     <string name="favorites_saved">Aggiunto ai preferiti</string>
     <string name="favorites_title">Preferiti</string>
+    <string name="favorites_add_confirmation">Vuoi aggiungere\n\n%s\n\nai tuoi luoghi preferiti?</string>
+    <string name="favorites_empty_list">Non hai ancora aggiunto luoghi preferiti</string>
     <string name="address_dlg_current">Posizione attuale</string>
     <string name="address_dlg_map">Da mappa</string>
     <string name="address_dlg_favorites">I miei luoghi</string>
@@ -131,11 +138,12 @@
     <string name="label_to">A:</string>
     <string name="label_days">Giorni:</string>
     <string name="menu_item_edit">Modifica</string>
-    <string name="btn_monitorsaved">Controlla\nviaggi salvati</string>
+    <string name="btn_monitorsaved">Viaggi salvati</string>
     <string name="title_saved_journey">I miei viaggi</string>
     <string name="title_plan_journey">Pianifica viaggio</string>
-    <string name="tab_myoneoffjourneys">VIAGGIO SINGOLO</string>
-    <string name="tab_myrecjourneys">VIAGGIO ABITUALE</string>
+    <string name="title_monitor_journey">Monitoraggio</string>
+    <string name="tab_myoneoffjourneys">VIAGGI</string>
+    <string name="tab_myrecjourneys">MONITORAGGI</string>
     <!-- days of the week -->
     <string name="monday">Lun</string>
     <string name="tuesday">Mar</string>
@@ -152,13 +160,14 @@
     <string name="smart_check_train_choose_stop_text">Scegli la fermata:</string>
     <string name="smart_check_train_choose_line_text">Scegli la linea:</string>
     <string name="choose_direction_label">Scegli la direzione:</string>
+    <string name="typeLabel">Tipo</string>   
     <string name="delaysLabel">Ritardi</string>
     <string name="dayLabel">Giorni</string>
     <string name="loading_dialog_label">Creazione tabella &#8230;</string>
     
     <string name="leg_from">da</string>
     <string name="leg_to">a</string>
-    <string name="leg_pick_bike">prendi una bicicletta a</string>
+    <string name="leg_bike_pick_up">prendi una bicicletta a</string>
     <string name="leg_bike_leave">lascia la bicicletta a</string>
     <string name="leg_car_pick_up">prendi un\'auto a</string>
     <string name="leg_car_leave">lascia l\'auto a</string>
@@ -223,6 +232,7 @@
     
     <string name="toast_position">Posizione</string>
     <string name="toast_deleted">%s eliminata</string>
+    <string name="toast_position_deleted">Posizione %s eliminata</string>
     <string name="toast_alert_sent">Segnalazione inviata</string>
     <string name="toast_prefs_saved">Preferenze salvate!</string>
     <string name="toast_notification_sent">La tua notifica è stata inviata!</string>
@@ -261,5 +271,15 @@
     <string name="friday_short">V</string>
     <string name="saturday_short">S</string>
     <string name="sunday_short">D</string>
+    <string name="tt_previous">  Precedente </string>  
+    <string name="tt_today">  Oggi </string>
+    <string name="tt_next">  Prossimo  </string>
     
+    <string name="info_save_new_journey"> Salvando questo itinerario, sarai informato di eventuali ritardi o problemi che lo possano influenzare.</string>
+    <string name="info_save_rec_journey">  Scegli le linee dei mezzi pubblici che ti interessa monitorare, ossia per le quali vuoi essere informato in caso di ritardi.</string>
+    
+    <string name="menu_help">Aiuto</string>
+    <string name="menu_tutorial">Tour guidato</string>
+    
+    <string name="url_help">http://www.smartcampuslab.it/vivitrentoapp_it/</string>
 </resources>

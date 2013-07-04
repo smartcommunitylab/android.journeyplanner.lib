@@ -16,9 +16,7 @@
 package eu.trentorise.smartcampus.jp;
 
 import it.sayservice.platform.smartplanner.data.message.TType;
-
 import java.util.Arrays;
-
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +41,7 @@ public class BaseActivity extends FeedbackFragmentActivity {
 			JPHelper.endAppFailure(this, R.string.app_failure_setup);
 		}
 	}
+	
 
 	protected void initData() {
 	}
@@ -77,6 +76,10 @@ public class BaseActivity extends FeedbackFragmentActivity {
 			initializeSharedPreferences();
 		}
 	}
+	
+
+	
+
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

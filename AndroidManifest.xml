@@ -31,15 +31,15 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
+    
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:launchMode="singleTask"
         android:logo="@drawable/ic_logo"
-        android:theme="@style/Theme.journeyplanner" >
+        android:theme="@style/Theme.Journeyplanner" >
         <uses-library android:name="com.google.android.maps" />
-
+        
         <activity
             android:name=".HomeActivity"
             android:configChanges="orientation|screenSize"
@@ -61,23 +61,23 @@
         <activity
             android:name=".AddressSelectActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.journeyplanner" />
+            android:theme="@style/Theme.Journeyplanner" />
         <activity
             android:name=".StopSelectActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.journeyplanner" />
+            android:theme="@style/Theme.Journeyplanner" />
         <activity
             android:name=".ParkingMapActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.journeyplanner" />
+            android:theme="@style/Theme.Journeyplanner" />
         <activity
             android:name=".LegMapActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.journeyplanner" />
+            android:theme="@style/Theme.Journeyplanner" />
         <activity
             android:name=".PlanJourneyActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.journeyplanner"
+            android:theme="@style/Theme.Journeyplanner"
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="eu.trentorise.smartcampus.jp.NAVIGATE" />
@@ -86,21 +86,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PlanRecurJourneyActivity"
+            android:name=".MonitorJourneyActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.journeyplanner"
+            android:theme="@style/Theme.Journeyplanner"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".SavedJourneyActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.journeyplanner"
+            android:theme="@style/Theme.Journeyplanner"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".ViewActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.journeyplanner"
+            android:theme="@style/Theme.Journeyplanner"
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="eu.trentorise.smartcampus.VIEW" />
@@ -113,15 +113,15 @@
         <activity
             android:name=".notifications.NotificationsActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.journeyplanner" />
+            android:theme="@style/Theme.Journeyplanner" />
         <activity
             android:name=".ProfileActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.journeyplanner" />
+            android:theme="@style/Theme.Journeyplanner" />
         <activity
             android:name=".notifications.BroadcastNotificationsActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.journeyplanner" />
+            android:theme="@style/Theme.Journeyplanner" />
         <activity
             android:name=".SmartCheckActivity"
             android:configChanges="orientation|screenSize"
@@ -130,7 +130,7 @@
         <activity
             android:name=".Launcher"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.journeyplanner"
+            android:theme="@style/Theme.Journeyplanner"
             android:windowSoftInputMode="stateHidden" >
         </activity>
     </application>

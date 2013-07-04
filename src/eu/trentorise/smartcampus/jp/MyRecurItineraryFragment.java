@@ -192,9 +192,9 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 		if (item.getItemId() == R.id.menu_item_edit) {
 			// toggle the monitor
 			FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
-			Fragment fragment = new PlanRecurJourneyFragment();
+			Fragment fragment = new MonitorJourneyFragment();
 			Bundle b = new Bundle();
-			b.putSerializable(PlanRecurJourneyFragment.PARAMS, params);
+			b.putSerializable(MonitorJourneyFragment.PARAMS, params);
 			fragment.setArguments(b);
 			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 			fragmentTransaction.replace(Config.mainlayout, fragment, Config.PLAN_NEW_RECUR_FRAGMENT_TAG);
@@ -235,9 +235,9 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		if (getSherlockActivity().getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_TABS) {
-			getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		}
+//		if (getSherlockActivity().getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_TABS) {
+//			getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+//		}
 
 		return inflater.inflate(R.layout.myrecitinerary, container, false);
 	}
@@ -379,7 +379,7 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 
 			} else {
 				noitems.setVisibility(View.VISIBLE);
-
+				saveLayout.setVisibility(View.GONE);
 			}
 		}
 	}

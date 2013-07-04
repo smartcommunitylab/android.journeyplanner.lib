@@ -1,7 +1,9 @@
 package eu.trentorise.smartcampus.jp.helper;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import eu.trentorise.smartcampus.jp.R;
@@ -18,6 +20,29 @@ public class ParkingsHelper {
 	public static final int PARKING_LOW_AVAIL = 5;
 	public static final int PARKING_HIGH_AVAIL = 20;
 
+	private static ParkingSerial focusedParking = null;
+
+	private static List<ParkingSerial> parkingsCache = new ArrayList<ParkingSerial>();
+
+	public static ParkingSerial getFocusedParking() {
+		return focusedParking;
+	}
+
+	public static void setFocusedParking(ParkingSerial focusedParking) {
+		ParkingsHelper.focusedParking = focusedParking;
+	}
+
+	public static List<ParkingSerial> getParkingsCache() {
+		return parkingsCache;
+	}
+
+	public static void setParkingsCache(List<ParkingSerial> parkingsCache) {
+		ParkingsHelper.parkingsCache = parkingsCache;
+	}
+
+	/*
+	 * DATA AND CONFIG
+	 */
 	public static int getParkingColor(ParkingSerial parking) {
 		int color = R.color.parking_blue;
 

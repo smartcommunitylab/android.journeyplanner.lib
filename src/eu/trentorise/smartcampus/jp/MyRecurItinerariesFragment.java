@@ -29,7 +29,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
@@ -67,6 +66,7 @@ public class MyRecurItinerariesFragment extends FeedbackFragment {
 
 		ListView myJourneysList = (ListView) getView().findViewById(
 				R.id.myitineraries_list);
+		 myItineraries = new ArrayList<BasicRecurrentJourney>();
 		adapter = new MyRecurItinerariesListAdapter(getSherlockActivity(),
 				R.layout.recur_itinerarychoices_row, myItineraries);
 		myJourneysList.setAdapter(adapter);

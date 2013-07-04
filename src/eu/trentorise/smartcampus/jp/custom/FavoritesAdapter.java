@@ -18,6 +18,7 @@ package eu.trentorise.smartcampus.jp.custom;
 import it.sayservice.platform.smartplanner.data.message.Position;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -35,13 +36,11 @@ import eu.trentorise.smartcampus.jp.R;
 public class FavoritesAdapter extends ArrayAdapter<Position> {
 	private Context context;
 	private int layoutResourceId;
-	private UserPrefsHolder prefsHolder;
 
 	public FavoritesAdapter(Context context, int layoutResourceId, UserPrefsHolder holder) {
 		super(context, layoutResourceId, holder.getFavorites() == null ? new ArrayList<Position>() : holder.getFavorites());
 		this.context = context;
 		this.layoutResourceId = layoutResourceId;
-		this.prefsHolder = holder;
 	}
 
 	@Override
@@ -58,26 +57,31 @@ public class FavoritesAdapter extends ArrayAdapter<Position> {
 			holder.deleteButton = (ImageButton) row.findViewById(R.id.favorites_del);
 
 			row.setTag(holder);
-		} else
+		} else {
 			holder = (DataHolder) row.getTag();
+		}
 
-		holder.favoriteTextView.setText(prefsHolder.getFavorites().get(position).getName());
+		holder.favoriteTextView.setText(getItem(position).getName());
 		holder.deleteButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Position p = prefsHolder.getFavorites().get(position);
-				prefsHolder.getFavorites().remove(position);
+				Position p = getItem(position);
+				remove(p);
+
+				List<Position> updatedPositions = new ArrayList<Position>();
+				for (int i = 0; i < getCount(); i++) {
+					updatedPositions.add(getItem(i));
+				}
 
 				SharedPreferences userPrefs = context.getSharedPreferences(Config.USER_PREFS, Context.MODE_PRIVATE);
-				String json = Utils.convertToJSON(prefsHolder.getFavorites());
+				String json = Utils.convertToJSON(updatedPositions);
 				SharedPreferences.Editor prefsEditor = userPrefs.edit();
 				prefsEditor.putString(Config.USER_PREFS_FAVORITES, json);
 				prefsEditor.commit();
 
 				remove(p);
 				notifyDataSetChanged();
-				Toast.makeText(getContext(),
-						context.getString(R.string.toast_position) + " " + p.getName() + " " + context.getString(R.string.toast_deleted),
+				Toast.makeText(getContext(), context.getString(R.string.toast_position_deleted, p.getName()),
 						Toast.LENGTH_SHORT).show();
 			}
 		});

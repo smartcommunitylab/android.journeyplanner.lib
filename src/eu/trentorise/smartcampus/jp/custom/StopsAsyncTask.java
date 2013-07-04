@@ -2,67 +2,58 @@ package eu.trentorise.smartcampus.jp.custom;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import android.os.AsyncTask;
-
-import com.google.android.maps.MapView;
-
+import android.util.Log;
 import eu.trentorise.smartcampus.jp.custom.map.StopsItemizedOverlay;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
-import eu.trentorise.smartcampus.jp.model.Square;
 
 public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 
 	public interface OnStopLoadingFinished {
-		public void onStopLoadingFinished(boolean result,double[] location,double diagonal);
+		public void onStopLoadingFinished(boolean result, double[] location, double diagonal);
 	}
 
+	private final String TAG = "StopsAsyncTask";
 	private OnStopLoadingFinished mOnStopLoadingFinished;
 
 	// private Collection<SmartCheckStop> list;
-	private Map<String, SmartCheckStop> smartCheckStopMap;
-	private StopsItemizedOverlay overlay;
+//	private Map<String, SmartCheckStop> smartCheckStopMap;
+//	private StopsItemizedOverlay overlay;
 	private double diagonal;
 	private double[] location;
-	private MapView mapView;
+	private BetterMapView mapView;
 	private String[] selectedAgencyIds;
-	private StopsItemizedOverlay old_overlay;
-	private Square cache;
+//	private StopsItemizedOverlay old_overlay;
 
-	public StopsAsyncTask(String[] selectedAgencyIds, Map<String, SmartCheckStop> smartCheckStopMap,
-			StopsItemizedOverlay overlay,Square cache, double[] location, double diagonal, MapView mapView, OnStopLoadingFinished listener) {
+	public StopsAsyncTask( String[] selectedAgencyIds, StopsItemizedOverlay overlay, double[] location,
+			double diagonal, BetterMapView mapView, OnStopLoadingFinished listener) {
 		super();
-		this.overlay = overlay;
+//		this.overlay = overlay;
 		this.mapView = mapView;
 		this.diagonal = diagonal;
 		this.location = location;
 		this.mOnStopLoadingFinished = listener;
 		// this.list = new ArrayList<SmartCheckStop>();
-		this.smartCheckStopMap = smartCheckStopMap;
-
+//		this.smartCheckStopMap = smartCheckStopMap;
 		this.selectedAgencyIds = selectedAgencyIds;
-		this.cache=cache;
 	}
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		old_overlay = overlay;
+//	@Override
+//	protected void onPreExecute() {
+//		super.onPreExecute();
+//		old_overlay = overlay;
+//
+//	}
+//
 
-	}
-
-	@Override
-	protected void onCancelled() {
-		super.onCancelled();
-		this.onPostExecute(false);
-	}
 
 	@Override
 	protected Boolean doInBackground(Object... params) {
 		// params[0]=location
 		// params[1]=radius
+
 		try {
 			List<SmartCheckStop> stops = new ArrayList<SmartCheckStop>();
 			if (selectedAgencyIds != null) {
@@ -82,45 +73,51 @@ public class StopsAsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean> {
 			}
 
 			for (SmartCheckStop stop : stops) {
-				if (!smartCheckStopMap.containsKey(stop.getId())) {
-					smartCheckStopMap.put(stop.getId(), stop);
-					// list.add(stop);
+				if (isCancelled()) {
+					Log.e(TAG, "doInbackground if cancelled==true ");
+					break;
 				}
+				else if (mapView.getCache().addStop(stop)){
+					getItemizedOverlay().addOverlay(stop);
+				}
+//				else if (!smartCheckStopMap.containsKey(stop.getId())) {
+//					smartCheckStopMap.put(stop.getId(), stop);
+//					// list.add(stop);
+//					// publishProgress(stop);
+//					getItemizedOverlay().addOverlay(stop);
+//					Log.e(TAG, "add overlay " + stop);
+//
+//				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
-		return true;
+		return !isCancelled();
 	}
 
-	@Override
-	protected void onProgressUpdate(SmartCheckStop... values) {
-		super.onProgressUpdate(values);
-		// overlay.addOverlay(values[0]);
+	private StopsItemizedOverlay getItemizedOverlay() {
+		return (StopsItemizedOverlay)mapView.getOverlays().get(0);
 	}
+
+
 
 	@Override
 	protected void onPostExecute(Boolean result) {
 		super.onPostExecute(result);
-		if (result) {
-			//overlay.clearMarkers();
-			// for (SmartCheckStop o : list) {
-			Square s;
-			for (SmartCheckStop o : smartCheckStopMap.values()) {
-				s = new Square(o.getLocation(),diagonal);
-				if(cache==null ||overlay.size()<=0 || cache.compareTo(s)<0)
-					overlay.addOverlay(o);
-				s=null;
-			}
-			overlay.populateAll();
-			mapView.invalidate();
-			// list.clear();
-		} else {
-			overlay = old_overlay;
+//		if (!result) {
+//			overlay = old_overlay;
+//		}
+		getItemizedOverlay().populateAll();
+		mapView.postInvalidate();
+
+		
+//		String o1 = overlay.toString();
+//		String o2 = ((StopsItemizedOverlay) getItemizedOverlay()).toString();
+//		Log.e(TAG, "Is the same overlay? " + o2.equalsIgnoreCase(o1));
+
+		if (mOnStopLoadingFinished != null) {
+			mOnStopLoadingFinished.onStopLoadingFinished(result, location, diagonal);
 		}
-
-		mOnStopLoadingFinished.onStopLoadingFinished(result,location,diagonal);
 	}
-
 }

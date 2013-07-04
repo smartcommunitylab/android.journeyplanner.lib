@@ -4,18 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
@@ -79,8 +76,8 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 					b.putParcelable(SmartCheckBusDirectionFragment.PARAM_LINE, busLines.get(position));
 					fragment.setArguments(b);
 					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-					fragmentTransaction.replace(Config.mainlayout, fragment);
-					fragmentTransaction.addToBackStack(null);
+					fragmentTransaction.replace(Config.mainlayout, fragment, "lines");
+					fragmentTransaction.addToBackStack(fragment.getTag());
 					fragmentTransaction.commit();
 				} else {
 					// call directly the
@@ -96,25 +93,27 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 					b.putParcelable(SmartCheckTTFragment.PARAM_SMARTLINE, param);
 					fragment.setArguments(b);
 					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-					fragmentTransaction.replace(Config.mainlayout, fragment);
-					fragmentTransaction.addToBackStack(null);
+					fragmentTransaction.replace(Config.mainlayout, fragment, "lines");
+					fragmentTransaction.addToBackStack(fragment.getTag());
 					fragmentTransaction.commit();
 				}
 			}
 
 		});
 
-		RelativeLayout chooseStop = (RelativeLayout) getSherlockActivity()
-				.findViewById(R.id.smart_check_bus_choose_stop_layout);
-
-		chooseStop.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(getSherlockActivity(), StopSelectActivity.class);
-				intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS, new String[] { agencyId });
-				startActivityForResult(intent, StopSelectActivity.REQUEST_CODE);
-			}
-		});
+		// RelativeLayout chooseStop = (RelativeLayout) getSherlockActivity()
+		// .findViewById(R.id.smart_check_bus_choose_stop_layout);
+		//
+		// chooseStop.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// Intent intent = new Intent(getSherlockActivity(),
+		// StopSelectActivity.class);
+		// intent.putExtra(StopSelectActivity.ARG_AGENCY_IDS, new String[] {
+		// agencyId });
+		// startActivityForResult(intent, StopSelectActivity.REQUEST_CODE);
+		// }
+		// });
 	}
 
 	public class GetBusDirectionsProcessor extends AbstractAsyncTaskProcessor<String, List<SmartLine>> {

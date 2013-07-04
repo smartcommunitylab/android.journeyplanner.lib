@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 
-public class ParkingSerial implements Serializable {
+public class ParkingSerial implements Serializable, LocatedObject {
 	private static final long serialVersionUID = -6427540022630812734L;
 
 	private String name;
@@ -74,6 +74,11 @@ public class ParkingSerial implements Serializable {
 
 	public void setMonitored(Boolean monitored) {
 		this.monitored = monitored;
+	}
+
+	@Override
+	public double[] location() {
+		return getPosition();
 	}
 
 }

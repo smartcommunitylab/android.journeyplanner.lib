@@ -27,6 +27,8 @@ import java.util.Set;
 
 public class Config {
 
+	public static final String APP_TOKEN = "journeyplanner";
+
 	public static int mainlayout = android.R.id.content;
 
 	public static final String TARGET_ADDRESS = "/smartcampus-journeyplanner-web/rest";
@@ -53,6 +55,7 @@ public class Config {
 	public static final String CALL_ALERT_SUBMIT = "/submitalert";
 	public static final String CALL_GET_BUS_TIME_BY_ROUTE = "/getbustimes";
 	public static final String CALL_GET_TRANSIT_TIME_BY_ROUTE = "/gettransittimes";
+	public static final String CALL_GET_DELAY_TIME_BY_ROUTE = "/gettransitdelays";
 	public static final String CALL_GET_LIMITED_TIMETABLE = "/getlimitedtimetable";
 	public static final String CALL_GET_PARKINGS = "/getparkings";
 	public static final String CALL_GET_PARKINGS_BY_AGENCY = "/getparkingsbyagency";

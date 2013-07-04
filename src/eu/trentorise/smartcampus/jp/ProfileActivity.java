@@ -30,7 +30,7 @@ import eu.trentorise.smartcampus.jp.custom.TabListener;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 
-public class ProfileActivity extends FeedbackFragmentActivity {
+public class ProfileActivity extends BaseActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,22 +58,6 @@ public class ProfileActivity extends FeedbackFragmentActivity {
 		}
 	}
 
-	public void favoriteDeletionHandler(View target) {
-		TextView textView = null;
-		ViewGroup row = (ViewGroup) target.getParent();
-		for (int itemPos = 0; itemPos < row.getChildCount(); itemPos++) {
-			View view = row.getChildAt(itemPos);
-			if (view instanceof TextView) {
-				textView = (TextView) view;
-				break;
-			}
-		}
-		if (textView != null) {
-			String favorite = textView.getText().toString();
-			Toast.makeText(this, favorite + getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
-		}
-	}
-
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -93,6 +77,22 @@ public class ProfileActivity extends FeedbackFragmentActivity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+	}
+
+	public void favoriteDeletionHandler(View target) {
+		TextView textView = null;
+		ViewGroup row = (ViewGroup) target.getParent();
+		for (int itemPos = 0; itemPos < row.getChildCount(); itemPos++) {
+			View view = row.getChildAt(itemPos);
+			if (view instanceof TextView) {
+				textView = (TextView) view;
+				break;
+			}
+		}
+		if (textView != null) {
+			String favorite = textView.getText().toString();
+			Toast.makeText(this, favorite + getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override

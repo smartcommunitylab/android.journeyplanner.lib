@@ -24,7 +24,7 @@
     <string name="placeholder">&#8230;</string>
     <string name="app_name">ViaggiaTrento</string>
     <string name="btn_planjourney">Plan\njourney</string>
-    <string name="btn_monitorrecurrent">Monitor recurrent\njourney</string>
+    <string name="btn_monitorrecurrent">Monitoring setup</string>
     <string name="btn_broadcast">Submit\nan alert</string>
     <string name="btn_myprofile">Preferences</string>
     <string name="btn_smartcheck">Real time info</string>
@@ -37,6 +37,10 @@
     <string name="tab_myjourneys">My journeys</string>
     <string name="tab_profile">Preferences</string>
     <string name="tab_favorites">My locations</string>
+    <string name="tab_map">Map</string>
+    <string name="tab_lines">Lines</string>
+    <string name="tab_zones">Zones</string>
+    <string name="tab_parkings">Parkings</string>
     <string name="dialog_itineraryname_hint">Journey name</string>
     <string name="plan_location">Location</string>
     <string name="plan_datetime">Departure</string>
@@ -45,6 +49,7 @@
     <string name="plan_schedule">Schedule</string>
     <string name="plan_from">From&#8230;</string>
     <string name="plan_to">To&#8230;</string>
+    <string name="plan_address">Address&#8230;</string>
     <string name="plan_date">Date</string>
     <string name="plan_time">Time</string>
     <string name="plan_search">Go</string>
@@ -88,9 +93,11 @@
     <string name="datetime_before_now">You cannot plan a journey in the past!</string>
     <string name="datetime_to_before_from">End date/time is before or equal to start date/time!</string>
     <string name="no_days_selected">No days are selected!</string>
-    <string name="favorites_empty">Select an address</string>
+    <string name="favorites_empty_address">Select a valid address</string>
     <string name="favorites_saved">Added to favorites</string>
     <string name="favorites_title">Favorites</string>
+    <string name="favorites_add_confirmation">Do you want to add\n\n%s\n\nto your favorite places?</string>
+    <string name="favorites_empty_list">You have no favorite places yet</string>
     <string name="address_dlg_current">Current location</string>
     <string name="address_dlg_map">Point on map</string>
     <string name="address_dlg_favorites">Favorite places</string>
@@ -136,9 +143,10 @@
     <string name="menu_item_edit">Edit</string>
     <string name="btn_monitorsaved">Saved \njourneys</string>
     <string name="title_saved_journey">Saved journeys</string>
-    <string name="title_plan_journey">Plan</string>
-    <string name="tab_myoneoffjourneys">SINGLE JOURNEY</string>
-    <string name="tab_myrecjourneys">RECURRING JOURNEY</string>
+    <string name="title_plan_journey">Plan new journey</string>
+    <string name="title_monitor_journey">Monitor journey</string>
+    <string name="tab_myoneoffjourneys">JOURNEYS</string>
+    <string name="tab_myrecjourneys">MONITORING</string>
     <!-- days of the week -->
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
@@ -155,6 +163,7 @@
     <string name="smart_check_train_choose_stop_text">Select stop:</string>
     <string name="smart_check_train_choose_line_text">Select line:</string>
     <string name="choose_direction_label">Select direction:</string>
+    <string name="typeLabel">Type</string>
     <string name="delaysLabel">Delays</string>
     <string name="dayLabel">Day</string>
     <string name="loading_dialog_label">Creating timetable &#8230;</string>
@@ -228,6 +237,7 @@
         
     <string name="toast_position">Position</string>
     <string name="toast_deleted">%s deleted</string>
+    <string name="toast_position_deleted">Position %s deleted</string>
     <string name="toast_alert_sent">Alert submitted</string>
     <string name="toast_prefs_saved">Preferences saved successfully!</string>
     <string name="toast_notification_sent">Your notification has been sent!</string>
@@ -266,5 +276,17 @@
     <string name="friday_short">F</string>
     <string name="saturday_short">S</string>
     <string name="sunday_short">S</string>
+   
+    <string name="tt_previous">  Previous </string>  
+    <string name="tt_today">  Today </string>
+    <string name="tt_next">  Next  </string>
+
+    <string name="info_save_new_journey">By saving this itinerary you will be notified about any delays or problems that might affect it.</string>
+    <string name="info_save_rec_journey">Choose the transit lines you would like to monitor, i.e. those for which you want to be notified in case of delays.</string>
+    
+    <string name="menu_help">Help</string>
+    <string name="menu_tutorial">Tutorial</string>
+    
+    <string name="url_help">http://www.smartcampuslab.it/vivitrentoapp/</string>
     
 </resources>

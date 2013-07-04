@@ -49,7 +49,6 @@ import android.widget.TableLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.actionbarsherlock.app.SherlockFragment;
 import com.google.android.maps.GeoPoint;
 
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper;
@@ -61,6 +60,7 @@ import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.android.map.InfoDialog;
 import eu.trentorise.smartcampus.jp.custom.UserPrefsHolder;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.PrefsHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.PlanNewJourneyProcessor;
 
@@ -245,16 +245,19 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			@Override
 			public void onClick(View v) {
 				DialogFragment f = TimePickerDialogFragment.newInstance((EditText) v);
-				// f.setArguments(TimePickerDialogFragment.prepareData(timeEditText.toString()));
+				 f.setArguments(TimePickerDialogFragment.prepareData(timeEditText.toString()));
 				f.show(getSherlockActivity().getSupportFragmentManager(), "timePicker");
 			}
 		});
 	}
 
 	protected void setUpLocationControls() {
+		List<Double> mapcenter = JPParamsHelper.getCenterMap();
+		double[] refLoc = mapcenter == null? null : new double[]{mapcenter.get(0),mapcenter.get(1)};
+
 		AutoCompleteTextView fromEditText = (AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text);
 		GeocodingAutocompletionHelper fromAutocompletionHelper = new GeocodingAutocompletionHelper(getSherlockActivity(),
-				fromEditText, Config.TN_REGION, Config.TN_COUNTRY, Config.TN_ADM_AREA);
+				fromEditText, Config.TN_REGION, Config.TN_COUNTRY, Config.TN_ADM_AREA, refLoc);
 		fromAutocompletionHelper.setOnAddressSelectedListener(new OnAddressSelectedListener() {
 			@Override
 			public void onAddressSelected(Address address) {
@@ -267,7 +270,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 
 		AutoCompleteTextView toEditText = (AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text);
 		GeocodingAutocompletionHelper toAutocompletionHelper = new GeocodingAutocompletionHelper(getSherlockActivity(),
-				toEditText, Config.TN_REGION, Config.TN_COUNTRY, Config.TN_ADM_AREA);
+				toEditText, Config.TN_REGION, Config.TN_COUNTRY, Config.TN_ADM_AREA, refLoc);
 		toAutocompletionHelper.setOnAddressSelectedListener(new OnAddressSelectedListener() {
 			@Override
 			public void onAddressSelected(Address address) {
@@ -302,12 +305,13 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			public void onClick(View v) {
 				String fromString = ((AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text)).getText()
 						.toString().trim();
-				if (fromString.length() > 0 && !isFavorite(fromString)) {
-					addToFavorites(FROM);
-					toggleStar(fromFavBtn, true);
+				if (fromString.length() == 0 || isFavorite(fromString)) {
+					createFavoritesDialog(FROM);
+					// Toast.makeText(getActivity(), R.string.from_field_empty,
+					// Toast.LENGTH_SHORT).show();
 				} else {
-					Toast.makeText(getActivity(), R.string.from_field_empty, Toast.LENGTH_SHORT).show();
-					return;
+					// TODO: dialog to confirm
+					createFavoritesConfirmDialog(FROM);
 				}
 			}
 		});
@@ -319,12 +323,13 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			public void onClick(View v) {
 				String toString = ((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text)).getText().toString()
 						.trim();
-				if (toString.length() > 0 && !isFavorite(toString)) {
-					addToFavorites(TO);
-					toggleStar(toFavBtn, true);
+				if (toString.length() == 0 || isFavorite(toString)) {
+					createFavoritesDialog(TO);
+					// Toast.makeText(getActivity(), R.string.to_field_empty,
+					// Toast.LENGTH_SHORT).show();
 				} else {
-					Toast.makeText(getActivity(), R.string.to_field_empty, Toast.LENGTH_SHORT).show();
-					return;
+					// TODO: dialog to confirm
+					createFavoritesConfirmDialog(TO);
 				}
 			}
 		});
@@ -393,14 +398,11 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		}
 
 		final View userPrefsLayout = (View) getView().findViewById(R.id.plannew_userprefs);
-
 		PrefsHelper.buildUserPrefsView(getSherlockActivity(), userPrefsHolder, userPrefsLayout);
 
 		ToggleButton useCustomPrefsToggleBtn = (ToggleButton) getView().findViewById(R.id.plannew_options_toggle);
-
 		if (useCustomPrefsToggleBtn.isChecked()) {
 			userPrefsLayout.setVisibility(View.VISIBLE);
-
 		} else {
 			userPrefsLayout.setVisibility(View.GONE);
 		}
@@ -410,33 +412,11 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked) {
 					userPrefsLayout.setVisibility(View.VISIBLE);
-
 				} else {
 					userPrefsLayout.setVisibility(View.GONE);
 				}
 			}
 		});
-	}
-
-	protected Position addToFavorites(String src) {
-		Position position = null;
-		if (FROM.equals(src)) {
-			position = fromPosition;
-		} else if (TO.equals(src)) {
-			position = toPosition;
-		} else {
-			return null;
-		}
-		if (position == null) {
-			Toast.makeText(getActivity(), R.string.favorites_empty, Toast.LENGTH_SHORT).show();
-		} else {
-			if (saveFavorite(position, userPrefsHolder)) {
-				Toast.makeText(getActivity(), R.string.favorites_saved, Toast.LENGTH_SHORT).show();
-				return position;
-			}
-		}
-
-		return null;
 	}
 
 	@Override
@@ -489,7 +469,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 				if (address.getAddressLine(0).equalsIgnoreCase(p.getName())
 						|| (address.getLatitude() == Double.parseDouble(p.getLat()) && address.getLongitude() == Double
 								.parseDouble(p.getLon()))) {
-					imgBtn.setImageResource(R.drawable.ic_star_active);
+					imgBtn.setImageResource(R.drawable.ic_fav_star_active);
 					imgBtn.setTag(true);
 				}
 			}
@@ -498,10 +478,16 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 
 	private AlertDialog createPositionDialog(final String field) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
-		final CharSequence[] items = (userPrefsHolder.getFavorites() != null && !userPrefsHolder.getFavorites().isEmpty()) ? new CharSequence[] {
-				getString(R.string.address_dlg_current), getString(R.string.address_dlg_map),
-				getString(R.string.address_dlg_favorites) }
-				: new CharSequence[] { getString(R.string.address_dlg_current), getString(R.string.address_dlg_map) };
+		// final CharSequence[] items = (userPrefsHolder.getFavorites() != null
+		// && !userPrefsHolder.getFavorites().isEmpty()) ? new CharSequence[] {
+		// getString(R.string.address_dlg_current),
+		// getString(R.string.address_dlg_map),
+		// getString(R.string.address_dlg_favorites) }
+		// : new CharSequence[] { getString(R.string.address_dlg_current),
+		// getString(R.string.address_dlg_map) };
+
+		final CharSequence[] items = new CharSequence[] { getString(R.string.address_dlg_current),
+				getString(R.string.address_dlg_map) };
 
 		builder.setTitle(getString(R.string.address_dlg_title));
 		builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -520,9 +506,9 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 					intent.putExtra("field", field);
 					startActivityForResult(intent, InfoDialog.RESULT_SELECTED);
 					break;
-				case 2:
-					createFavoritesDialog(field);
-					break;
+				// case 2:
+				// createFavoritesDialog(field);
+				// break;
 				default:
 					break;
 				}
@@ -550,13 +536,14 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 
 	protected void createFavoritesDialog(final String field) {
 		if (userPrefsHolder != null && userPrefsHolder.getFavorites() != null && !userPrefsHolder.getFavorites().isEmpty()) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
-			builder.setTitle(getString(R.string.favorites_title));
 			final List<Position> list = userPrefsHolder.getFavorites();
 			String[] items = new String[list.size()];
 			for (int i = 0; i < items.length; i++) {
 				items[i] = list.get(i).getName();
 			}
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
+			builder.setTitle(getString(R.string.favorites_title));
 
 			builder.setItems(items, new DialogInterface.OnClickListener() {
 				@Override
@@ -569,19 +556,74 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 					address.setAddressLine(0, p.getName());
 					savePosition(address, field);
 
-					if (field.equalsIgnoreCase(FROM)) {
+					if (FROM.equalsIgnoreCase(field)) {
 						ImageButton ibtn = (ImageButton) getView().findViewById(R.id.plannew_from_star);
-						ibtn.setImageResource(R.drawable.ic_star_active);
+						ibtn.setImageResource(R.drawable.ic_fav_star_active);
 						ibtn.setTag(true);
-					} else if (field.equalsIgnoreCase(TO)) {
+					} else if (TO.equalsIgnoreCase(field)) {
 						ImageButton ibtn = (ImageButton) getView().findViewById(R.id.plannew_to_star);
-						ibtn.setImageResource(R.drawable.ic_star_active);
+						ibtn.setImageResource(R.drawable.ic_fav_star_active);
 						ibtn.setTag(true);
 					}
 				}
 			});
+
 			builder.create().show();
+		} else {
+			Toast.makeText(getActivity(), R.string.favorites_empty_list, Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	protected void createFavoritesConfirmDialog(final String field) {
+		final Position position;
+		if (FROM.equals(field)) {
+			position = fromPosition;
+		} else if (TO.equals(field)) {
+			position = toPosition;
+		} else {
+			position = null;
+		}
+
+		if (position != null) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
+			builder.setTitle(getString(R.string.favorites_title));
+			builder.setMessage(getString(R.string.favorites_add_confirmation, position.getName()));
+
+			builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+
+			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Position savedPosition = addToFavorites(position);
+					if (savedPosition != null) {
+						toggleStar(field, true);
+						dialog.dismiss();
+					}
+				}
+			});
+
+			builder.create().show();
+		} else {
+			Toast.makeText(getActivity(), R.string.favorites_empty_address, Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	protected Position addToFavorites(Position position) {
+		if (position == null) {
+			Toast.makeText(getActivity(), R.string.favorites_empty_address, Toast.LENGTH_SHORT).show();
+		} else {
+			if (saveFavorite(position, userPrefsHolder)) {
+				Toast.makeText(getActivity(), R.string.favorites_saved, Toast.LENGTH_SHORT).show();
+				return position;
+			}
+		}
+
+		return null;
 	}
 
 	private boolean saveFavorite(Position position, UserPrefsHolder holder) {
@@ -613,22 +655,36 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		return false;
 	}
 
-	private void toggleStar(ImageButton btn, Boolean isActive) {
-		if (isActive != null) {
-			btn.setTag(isActive);
-			if (isActive) {
-				btn.setImageResource(R.drawable.ic_star_active);
+	private void toggleStar(ImageButton btn, Boolean setActive) {
+		if (setActive != null) {
+			btn.setTag(setActive);
+			if (setActive) {
+				btn.setImageResource(R.drawable.ic_fav_star_active);
 			} else {
-				btn.setImageResource(R.drawable.ic_star);
+				btn.setImageResource(R.drawable.ic_fav_star);
 			}
 		} else {
 			if ((Boolean) btn.getTag()) {
 				btn.setTag(false);
-				btn.setImageResource(R.drawable.ic_star);
+				btn.setImageResource(R.drawable.ic_fav_star);
 			} else {
 				btn.setTag(true);
-				btn.setImageResource(R.drawable.ic_star_active);
+				btn.setImageResource(R.drawable.ic_fav_star_active);
 			}
+		}
+	}
+
+	private void toggleStar(String field, Boolean setActive) {
+		ImageButton ibtn = null;
+
+		if (FROM.equalsIgnoreCase(field)) {
+			ibtn = (ImageButton) getView().findViewById(R.id.plannew_from_star);
+		} else if (TO.equalsIgnoreCase(field)) {
+			ibtn = (ImageButton) getView().findViewById(R.id.plannew_to_star);
+		}
+
+		if (ibtn != null) {
+			toggleStar(ibtn, null);
 		}
 	}
 

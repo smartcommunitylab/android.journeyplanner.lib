@@ -16,8 +16,10 @@
 package eu.trentorise.smartcampus.jp;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
 
 import eu.trentorise.smartcampus.jp.custom.TabListener;
@@ -32,7 +34,6 @@ public class PlanJourneyActivity extends BaseActivity {
 		getSupportActionBar().setTitle(R.string.title_plan_journey);
 	}
 
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
@@ -41,36 +42,47 @@ public class PlanJourneyActivity extends BaseActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.empty_layout_jp);
 
 		// getSupportActionBar().setDisplayShowTitleEnabled(false);
 		// getSupportActionBar().removeAllTabs();
 
-		// New journey
-		ActionBar.Tab tab = getSupportActionBar().newTab().setText(R.string.tab_myoneoffjourneys);
-		tab.setTabListener(new TabListener<PlanNewJourneyFragment>(this, Config.PLAN_NEW_FRAGMENT_TAG,
-				PlanNewJourneyFragment.class, Config.mainlayout));
-		getSupportActionBar().addTab(tab);
+		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		SherlockFragment fragment = new PlanNewJourneyFragment();
+		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.replace(Config.mainlayout, fragment);
+		fragmentTransaction.commit();
 
-		// new recur journeys
-//		tab = getSupportActionBar().newTab().setText(R.string.tab_myjourneys);
-//		tab.setTabListener(new TabListener<MyItinerariesFragment>(this, Config.MY_JOURNEYS_FRAGMENT_TAG,
-//				MyItinerariesFragment.class, Config.mainlayout));
-//		getSupportActionBar().addTab(tab);
-		
-		tab = getSupportActionBar().newTab().setText(R.string.tab_myrecjourneys);
-		tab.setTabListener(new TabListener<PlanRecurJourneyFragment>(this, Config.PLAN_NEW_RECUR_FRAGMENT_TAG,
-				PlanRecurJourneyFragment.class, Config.mainlayout));
-		getSupportActionBar().addTab(tab);
+		// // New journey
+		// ActionBar.Tab tab =
+		// getSupportActionBar().newTab().setText(R.string.tab_myoneoffjourneys);
+		// tab.setTabListener(new TabListener<PlanNewJourneyFragment>(this,
+		// Config.PLAN_NEW_FRAGMENT_TAG,
+		// PlanNewJourneyFragment.class, Config.mainlayout));
+		// getSupportActionBar().addTab(tab);
 
-		if (getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_TABS) {
-			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		}
+		// // new recur journeys
+		// tab =
+		// getSupportActionBar().newTab().setText(R.string.tab_myjourneys);
+		// tab.setTabListener(new TabListener<MyItinerariesFragment>(this,
+		// Config.MY_JOURNEYS_FRAGMENT_TAG,
+		// MyItinerariesFragment.class, Config.mainlayout));
+		// getSupportActionBar().addTab(tab);
+
+		// tab =
+		// getSupportActionBar().newTab().setText(R.string.tab_myrecjourneys);
+		// tab.setTabListener(new TabListener<PlanRecurJourneyFragment>(this,
+		// Config.PLAN_NEW_RECUR_FRAGMENT_TAG,
+		// PlanRecurJourneyFragment.class, Config.mainlayout));
+		// getSupportActionBar().addTab(tab);
+		//
+		// if (getSupportActionBar().getNavigationMode() !=
+		// ActionBar.NAVIGATION_MODE_TABS) {
+		// getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		// }
 	}
 }

@@ -16,6 +16,8 @@
 package eu.trentorise.smartcampus.jp.custom.map;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +30,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 
@@ -45,7 +48,7 @@ public class StopsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	private final static int densityX = 5;
 	private final static int densityY = 5;
 
-	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+	private List<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	private ArrayList<SmartCheckStop> mObjects = new ArrayList<SmartCheckStop>();
 	private Set<OverlayItem> mGeneric = new HashSet<OverlayItem>();
 
@@ -96,10 +99,25 @@ public class StopsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 			drawable.setBounds(-drawable.getIntrinsicWidth() / 2, -drawable.getIntrinsicHeight(),
 					drawable.getIntrinsicWidth() / 2, 0);
 			overlayitem.setMarker(drawable);
-
-			mOverlays.add(overlayitem);
-			mObjects.add(o);
+			boolean check = false;
+			for (OverlayItem item : mOverlays) {
+				if (item.getPoint().getLatitudeE6() == point.getLatitudeE6()
+						&& point.getLongitudeE6() == item.getPoint().getLongitudeE6()) {
+					check = true;
+					break;
+				}
+			}
+			if (!check) {
+				mOverlays.add(overlayitem);
+				mObjects.add(o);
+			}
 			// populate();
+		}
+	}
+
+	public void addAllOverlays(Collection<SmartCheckStop> list) {
+		for (SmartCheckStop o : list) {
+			addOverlay(o);
 		}
 	}
 
@@ -182,7 +200,7 @@ public class StopsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 									}
 									listener.onStopObjectsTap(objects);
 								} else {
-									MapManager.fitMapWithOverlays(list, mMapView);
+//									MapManager.fitMapWithOverlays(list, mMapView);
 								}
 								return super.onTap(index);
 							}
@@ -255,18 +273,22 @@ public class StopsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 				int endY = startY + (densityY + 1) * step;
 
 				int idx = 0;
-				for (OverlayItem m : mOverlays) {
-					if (!mGeneric.contains(m) && m.getPoint().getLongitudeE6() >= startX
-							&& m.getPoint().getLongitudeE6() <= endX && m.getPoint().getLatitudeE6() >= startY
-							&& m.getPoint().getLatitudeE6() <= endY) {
-						int binX = Math.abs(m.getPoint().getLongitudeE6() - startX) / step;
-						int binY = Math.abs(m.getPoint().getLatitudeE6() - startY) / step;
+				try {
+					for (OverlayItem m : mOverlays) {
+						if (!mGeneric.contains(m) && m.getPoint().getLongitudeE6() >= startX
+								&& m.getPoint().getLongitudeE6() <= endX && m.getPoint().getLatitudeE6() >= startY
+								&& m.getPoint().getLatitudeE6() <= endY) {
+							int binX = Math.abs(m.getPoint().getLongitudeE6() - startX) / step;
+							int binY = Math.abs(m.getPoint().getLatitudeE6() - startY) / step;
 
-						item2group.put(idx, new int[] { binX, binY });
-						grid.get(binX).get(binY).add(m); // just push the
-															// reference
+							item2group.put(idx, new int[] { binX, binY });
+							grid.get(binX).get(binY).add(m); // just push the
+																// reference
+						}
+						idx++;
 					}
-					idx++;
+				} catch (ConcurrentModificationException ex) {
+					Log.e(getClass().getCanonicalName(), ex.toString());
 				}
 
 				if (mapView.getZoomLevel() == mapView.getMaxZoomLevel()) {
@@ -346,12 +368,13 @@ public class StopsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 
 		Paint paint = new Paint();
 		paint.setTextAlign(Paint.Align.CENTER);
-		paint.setTextSize(20);
+		int scaledTextSize = mContext.getResources().getDimensionPixelSize(R.dimen.mapIconTextSize);
+		paint.setTextSize(scaledTextSize);
 		paint.setAntiAlias(true);
 		paint.setARGB(255, 255, 255, 255);
 		// show text to the right of the icon
-		canvas.drawText("" + markerList.size(), ptScreenCoord.x, ptScreenCoord.y - 23, paint);
-	}
+		int scaledSize = mContext.getResources().getDimensionPixelSize(R.dimen.mapIconText);
+		canvas.drawText("" + markerList.size(), ptScreenCoord.x, ptScreenCoord.y - scaledSize, paint);	}
 
 	private void drawSingle(Canvas canvas, MapView mapView, List<OverlayItem> markerList) {
 		for (OverlayItem item : markerList) {

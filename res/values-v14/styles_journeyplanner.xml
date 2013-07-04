@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     File created by the Android Action Bar Style Generator
+
+     Copyright (C) 2011 The Android Open Source Project
+     Copyright (C) 2012 readyState Software Ltd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <style name="Theme.Journeyplanner" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_journeyplanner</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Journeyplanner</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Journeyplanner</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Journeyplanner</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Journeyplanner</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Journeyplanner</item>
+        <item name="android:actionModeBackground">@drawable/cab_background_top_journeyplanner</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_journeyplanner</item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Journeyplanner</item>
+
+        <!-- Light.DarkActionBar specific -->
+        <item name="android:actionBarWidgetTheme">@style/Theme.Journeyplanner.Widget</item>
+
+        <!-- Android Holo Colors -->
+        <item name="android:editTextStyle">@style/EditTextJourneyplanner</item>
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewJourneyplanner</item>
+        <item name="android:checkboxStyle">@style/CheckBoxJourneyplanner</item>
+        <item name="android:radioButtonStyle">@style/RadioButtonJourneyplanner</item>
+        <item name="android:buttonStyle">@style/ButtonJourneyplanner</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonJourneyplanner</item>
+        <item name="android:spinnerStyle">@style/SpinnerJourneyplanner</item>
+        <item name="android:dropDownSpinnerStyle">@style/SpinnerJourneyplanner.DropDown</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemJourneyplanner</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarJourneyplanner</item>
+        <item name="android:seekBarStyle">@style/SeekBarJourneyplanner</item>
+        <item name="android:buttonStyleToggle">@style/ToggleJourneyplanner</item>
+        <item name="android:listViewStyle">@style/ListViewJourneyplanner</item>
+        <item name="android:listViewWhiteStyle">@style/ListViewJourneyplanner.White</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItemJourneyplanner</item>
+    </style>
+
+    <style name="ActionBar.Solid.Journeyplanner" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/ab_solid_journeyplanner</item>
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_journeyplanner</item>
+        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_journeyplanner</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Journeyplanner</item>
+    </style>
+
+    <style name="ActionBar.Transparent.Journeyplanner" parent="@style/Widget.Sherlock.ActionBar">
+        <item name="android:background">@drawable/ab_transparent_journeyplanner</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Journeyplanner</item>
+    </style>
+
+    <!-- this style is only referenced in a Light.DarkActionBar based theme -->
+    <style name="Theme.Journeyplanner.Widget" parent="@style/Theme.Sherlock">
+        <item name="android:popupMenuStyle">@style/PopupMenu.Journeyplanner</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Journeyplanner</item>
+    </style>
+
+    <!-- Android Holo Colors -->
+    <style name="EditTextJourneyplanner" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/edit_text_holo_light_journeyplanner</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="AutoCompleteTextViewJourneyplanner" parent="android:Widget.AutoCompleteTextView">
+        <item name="android:dropDownSelector">@drawable/list_selector_holo_light_journeyplanner</item>
+        <item name="android:background">@drawable/edit_text_holo_light_journeyplanner</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="CheckBoxJourneyplanner" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/btn_check_holo_light_journeyplanner</item>
+    </style>
+
+    <style name="RadioButtonJourneyplanner" parent="android:Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/btn_radio_holo_light_journeyplanner</item>
+    </style>
+
+    <style name="ButtonJourneyplanner" parent="android:Widget.Button">
+        <item name="android:background">@drawable/btn_default_holo_light_journeyplanner</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="ImageButtonJourneyplanner" parent="android:Widget.ImageButton">
+        <item name="android:background">@drawable/btn_default_holo_light_journeyplanner</item>
+    </style>
+
+    <style name="SpinnerJourneyplanner" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/spinner_background_holo_light_journeyplanner</item>
+        <item name="android:dropDownSelector">@drawable/list_selector_holo_light_journeyplanner</item>
+    </style>
+
+    <style name="SpinnerJourneyplanner.DropDown">
+        <item name="android:spinnerMode">dropdown</item>
+    </style>
+
+    <style name="SpinnerDropDownItemJourneyplanner" parent="android:Widget.DropDownItem.Spinner">
+        <item name="android:checkMark">@drawable/btn_radio_holo_light_journeyplanner</item>
+    </style>
+
+    <style name="ProgressBarJourneyplanner" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_holo_light_journeyplanner</item>
+        <item name="android:indeterminateDrawable">@drawable/progress_indeterminate_horizontal_holo_light_journeyplanner</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
+    <style name="SeekBarJourneyplanner" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light_journeyplanner</item>
+        <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_holo_light_journeyplanner</item>
+        <item name="android:minHeight">13dip</item>
+        <item name="android:maxHeight">13dip</item>
+        <item name="android:thumb">@drawable/scrubber_control_selector_holo_light_journeyplanner</item>
+        <item name="android:thumbOffset">16dip</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+    </style>
+
+    <style name="ToggleJourneyplanner" parent="android:Widget.Button.Toggle">
+        <item name="android:background">@drawable/btn_toggle_holo_light_journeyplanner</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="ListViewJourneyplanner" parent="android:Widget.ListView">
+        <item name="android:listSelector">@drawable/list_selector_holo_light_journeyplanner</item>
+    </style>
+
+    <style name="ListViewJourneyplanner.White" parent="android:Widget.ListView.White">
+        <item name="android:listSelector">@drawable/list_selector_holo_light_journeyplanner</item>
+    </style>
+
+    <style name="SpinnerItemJourneyplanner" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">#000000</item>
+    </style>
+
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+	<string name="jp_first_launch">Benvenuto! La nostra app ti aiuterà a pianificare viaggi e tenere sotto controllo i tuoi spostamenti abituali a Trento.</string>
+    <string name="jp_plan_tut">Pianifica qui il tuo prossimo viaggio</string>
+    <string name="jp_monitor_tut">Imposta le tratte che percorri abitualmente per essere informato di eventuali ritardi!</string>
+    <string name="jp_watch_tut">Tieni d’occhio i tuoi viaggi abituali</string>
+    <string name="jp_send_tut">Segnala ritardi, incidenti o deviazioni </string>
+    <string name="jp_info_tut">Consulta le gli orari di bus e treni e verifica la disponibilità di parcheggi</string>
+    <string name="jp_notif_tut">Verifica che il tuo autobus o il tuo treno siano in orario! </string>
+    <string name="jp_prefs_tut">Configura qui le tue impostazioni predefinite</string>
+    
+</resources>

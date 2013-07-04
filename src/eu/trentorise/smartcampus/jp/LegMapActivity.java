@@ -22,22 +22,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.res.Configuration;
+import android.graphics.Paint;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.Display;
 import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.maps.MapView;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
-import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
-import eu.trentorise.smartcampus.jp.custom.map.LegsOverlay;
 
-public class LegMapActivity extends FeedbackFragmentActivity {
-
-	private MapView mapView = null;
+public class LegMapActivity extends BaseActivity {
 
 	public static final String ACTIVE_POS = "aPOS";
 	public static final String POLYLINES = "polylines";
@@ -45,6 +49,10 @@ public class LegMapActivity extends FeedbackFragmentActivity {
 
 	private List<String> polylines;
 	private int activePos;
+	private int index;
+
+	private GoogleMap mMap = null;
+	private List<List<LatLng>> legsPoints = new ArrayList<List<LatLng>>();
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
@@ -58,17 +66,8 @@ public class LegMapActivity extends FeedbackFragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.map);
-		if (savedInstanceState != null) {
-			polylines = (List<String>) savedInstanceState.getSerializable(POLYLINES);
-			activePos = savedInstanceState.getInt(ACTIVE_POS);
-		} else if (getIntent() != null) {
-			List<Leg> legs = (List<Leg>) getIntent().getSerializableExtra(LEGS);
-			if (legs != null) {
-				polylines = legs2polylines(legs);
-			}
-			activePos = getIntent().getIntExtra(ACTIVE_POS, -1);
-		}
+		// setContentView(R.layout.map);
+		setContentView(R.layout.mapcontainer_jp_v2);
 
 		// getSupportActionBar().setDisplayShowTitleEnabled(false);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -76,8 +75,43 @@ public class LegMapActivity extends FeedbackFragmentActivity {
 		if (getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD) {
 			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		}
-		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
-				(RelativeLayout) findViewById(R.id.map_relativelayout_jp));
+
+		if (savedInstanceState != null) {
+			polylines = (List<String>) savedInstanceState.getSerializable(POLYLINES);
+			activePos = savedInstanceState.getInt(ACTIVE_POS);
+		}
+		if (((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap() != null) {
+
+			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+			mMap.setMyLocationEnabled(true);
+
+			FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
+					(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp_v2));
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		if (getIntent() != null) {
+			List<Leg> legs = (List<Leg>) getIntent().getSerializableExtra(LEGS);
+			if (legs != null) {
+				polylines = legs2polylines(legs);
+			}
+			activePos = getIntent().getIntExtra(ACTIVE_POS, -1);
+		}
+
+		// LegsOverlay legsOverlay = new LegsOverlay(polylines, activePos,
+		// getApplicationContext());
+		// legsOverlay.adaptMap(mapView.getController());
+		// mapView.getOverlays().add(legsOverlay);
+		if (mMap != null) {
+			mMap.clear();
+			setPath(polylines, activePos);
+			adaptMap(mMap);
+			draw(mMap);
+		}
 	}
 
 	@Override
@@ -89,17 +123,6 @@ public class LegMapActivity extends FeedbackFragmentActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		mapView = (MapView) findViewById(R.id.mapview);
-		mapView.getOverlays().clear();
-
-		LegsOverlay legsOverlay = new LegsOverlay(polylines, activePos, getApplicationContext());
-		legsOverlay.adaptMap(mapView.getController());
-		mapView.getOverlays().add(legsOverlay);
 	}
 
 	protected boolean isRouteDisplayed() {
@@ -133,6 +156,159 @@ public class LegMapActivity extends FeedbackFragmentActivity {
 	public String getAuthToken() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/*
+	 * UTILITIES FOR LEGS
+	 */
+	private void setPath(List<String> polylines, int index) {
+		for (String polyline : polylines) {
+			List<LatLng> legPoints = decodePolyline(polyline);
+			legsPoints.add(legPoints);
+		}
+
+		this.index = index;
+	}
+
+	private List<LatLng> decodePolyline(String encoded) {
+		List<LatLng> polyline = new ArrayList<LatLng>();
+
+		int index = 0, len = encoded.length();
+		int lat = 0, lng = 0;
+
+		while (index < len) {
+			int b, shift = 0, result = 0;
+			do {
+				b = encoded.charAt(index++) - 63;
+				result |= (b & 0x1f) << shift;
+				shift += 5;
+			} while (b >= 0x20);
+			int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+			lat += dlat;
+
+			shift = 0;
+			result = 0;
+			if (index >= len) {
+				break;
+			}
+			do {
+				b = encoded.charAt(index++) - 63;
+				result |= (b & 0x1f) << shift;
+				shift += 5;
+			} while (b >= 0x20);
+			int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+			lng += dlng;
+
+			LatLng p = new LatLng((double) lat / 1E5, (double) lng / 1E5);
+			polyline.add(p);
+		}
+
+		return polyline;
+	}
+
+	private void adaptMap(GoogleMap map) {
+		double minLatitude = 81;
+		double maxLatitude = (-81);
+		double minLongitude = 181;
+		double maxLongitude = (-181);
+
+		List<LatLng> points = new ArrayList<LatLng>();
+
+		// zoom on active leg
+		if (index >= 0 && index < legsPoints.size()) {
+			points.addAll(legsPoints.get(index));
+		} else if (index == -1) {
+			// zoom on start
+			points.add(legsPoints.get(0).get(0));
+		} else if (index == legsPoints.size()) {
+			// zoom on stop
+			List<LatLng> legPoints = legsPoints.get(legsPoints.size() - 1);
+			points.add(legPoints.get(legPoints.size() - 1));
+		} else {
+			// zoom on all itinerary
+			for (List<LatLng> list : legsPoints) {
+				points.addAll(list);
+			}
+		}
+
+		for (LatLng point : points) {
+			double latitude = point.latitude;
+			double longitude = point.longitude;
+
+			if (latitude != 0 && longitude != 0) {
+				minLatitude = (minLatitude > latitude) ? latitude : minLatitude;
+				maxLatitude = (maxLatitude < latitude) ? latitude : maxLatitude;
+				minLongitude = (minLongitude > longitude) ? longitude : minLongitude;
+				maxLongitude = (maxLongitude < longitude) ? longitude : maxLongitude;
+			}
+		}
+
+		if (points.size() == 1) {
+			map.animateCamera(CameraUpdateFactory.newLatLngZoom(points.get(0), 18), 1, null);
+		} else {
+			LatLng northeast = new LatLng(maxLatitude, maxLongitude);
+			LatLng southwest = new LatLng(minLatitude, minLongitude);
+			LatLngBounds llb = LatLngBounds.builder().include(southwest).include(northeast).build();
+
+			Display display = getWindowManager().getDefaultDisplay();
+			map.moveCamera(CameraUpdateFactory.newLatLngBounds(llb, display.getWidth() - 48, display.getHeight(), 16));
+		}
+	}
+
+	private boolean draw(GoogleMap map) {
+		for (int i = 0; i < legsPoints.size(); i++) {
+			// default
+			int color = getApplicationContext().getResources().getColor(R.color.path);
+			if (i < index) {
+				// past
+				color = getApplicationContext().getResources().getColor(R.color.path_done);
+			} else if (i == index) {
+				// actual
+				color = getApplicationContext().getResources().getColor(R.color.path_actual);
+			}
+
+			List<LatLng> legPoints = legsPoints.get(i);
+			if (i != index) {
+				drawPath(map, legPoints, color);
+			}
+
+			// markers
+			// start
+			if (i == 0) {
+				LatLng startLatLng = legPoints.get(0);
+				map.addMarker(new MarkerOptions().position(startLatLng).icon(
+						BitmapDescriptorFactory.fromResource(R.drawable.ic_start)));
+			}
+
+			// stop
+			if (i == (legsPoints.size() - 1)) {
+				LatLng stopLatLng = legPoints.get(legPoints.size() - 1);
+				map.addMarker(new MarkerOptions().position(stopLatLng).icon(
+						BitmapDescriptorFactory.fromResource(R.drawable.ic_stop)));
+			}
+		}
+		if (index == -1)// show start leg
+			drawPath(map, legsPoints.get(index + 1),
+					getApplicationContext().getResources().getColor(R.color.path_actual));
+		else if (index == legsPoints.size())// show end leg
+			drawPath(map, legsPoints.get(legsPoints.size() - 1),
+					getApplicationContext().getResources().getColor(R.color.path_actual));
+		else
+			drawPath(map, legsPoints.get(index), getApplicationContext().getResources().getColor(R.color.path_actual));
+
+		return true;
+	}
+
+	private void drawPath(GoogleMap map, List<LatLng> points, int color) {
+		// int x1 = -1, y1 = -1, x2 = -1, y2 = -1;
+		Paint paint = new Paint();
+		paint.setColor(color);
+		paint.setStyle(Paint.Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(6);
+
+		PolylineOptions po = new PolylineOptions().addAll(points).width(6).color(color);
+		Polyline pl = map.addPolyline(po);
+		pl.setVisible(true);
 	}
 
 }
