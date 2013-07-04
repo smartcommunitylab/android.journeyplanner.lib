@@ -52,6 +52,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:inputType="textPostalAddress"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"
                     android:ems="10"
                     android:hint="@string/plan_from" />
 
@@ -85,6 +88,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:inputType="textPostalAddress"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
                     android:ems="10"
                     android:hint="@string/plan_to" />
 
