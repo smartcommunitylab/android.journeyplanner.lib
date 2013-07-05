@@ -73,7 +73,25 @@ public class HomeActivity extends BaseActivity {
 			JPHelper.disableFirstLaunch(this);
 		}
 	}
+	private Tutorial getFirstValidTutorial() {
+		Tutorial t = JPHelper.getLastTutorialNotShowed(this);
+		/*if smartcampus (no notif) salta notifiche (setta a true notif*/
+		ApplicationInfo ai;
+		try {
+			ai = getPackageManager().getApplicationInfo(
+					getPackageName(), PackageManager.GET_META_DATA);
+			Bundle aBundle = ai.metaData;
+			if (aBundle.getBoolean("hidden-notification")&& t!=null && t.equals(t.NOTIF))
+			{ JPHelper.setTutorialAsShowed(this, t);
+				t =JPHelper.getLastTutorialNotShowed(this);
 
+			}
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return t;
+	}
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -142,7 +160,8 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void showTutorials() {
-		JPHelper.Tutorial t = JPHelper.getLastTutorialNotShowed(this);
+		JPHelper.Tutorial t = getFirstValidTutorial();
+
 		String title = "", msg = "";
 		boolean isLast = false;
 		int id = R.id.btn_myprofile;

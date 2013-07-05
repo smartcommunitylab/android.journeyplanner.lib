@@ -843,6 +843,11 @@ public class JPHelper {
 		}
 	}
 	
+	public static void setTutorialAsShowed(Context ctx,Tutorial t){
+		Editor edit = getTutorialPreferences(ctx).edit();
+		edit.putBoolean(t.toString(), true);
+		edit.commit();
+	}
 	/**
 	 * With this method you can get the last tutorial that was not showed
 	 * @param ctx the activity 
