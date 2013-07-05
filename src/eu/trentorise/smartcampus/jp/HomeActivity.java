@@ -54,8 +54,19 @@ public class HomeActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ApplicationInfo ai;
+			try {
+				ai = getPackageManager().getApplicationInfo(
+						getPackageName(), PackageManager.GET_META_DATA);
 
-		setContentView(R.layout.home);
+			Bundle aBundle = ai.metaData;
+			if (aBundle.getBoolean("hidden-notification"))
+					setContentView(R.layout.home_no_notif);
+			else setContentView(R.layout.home);
+			} catch (NameNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		if (getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD)
 			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
