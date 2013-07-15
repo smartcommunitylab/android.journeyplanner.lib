@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.app.SherlockMapFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
@@ -19,14 +24,14 @@ import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.custom.map.ParkingsInfoDialog;
-import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckParkingMapProcessor;
 import eu.trentorise.smartcampus.jp.model.LocatedObject;
 import eu.trentorise.smartcampus.jp.model.ParkingSerial;
+import eu.trentorise.smartcampus.jp.notifications.NotificationsSherlockFragmentJP;
 
-public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implements OnCameraChangeListener, OnMarkerClickListener {
+public class SmartCheckParkingMapV2Fragment extends SherlockMapFragment implements OnCameraChangeListener, OnMarkerClickListener {
 
 	protected static final String PARAM_AID = "parkingAgencyId";
 	public final static String ARG_PARKING_FOCUSED = "parking_focused";
@@ -51,6 +56,7 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 		super.onCreate(savedInstanceState);
 		mActivity = (SherlockFragmentActivity) getActivity();
 		setHasOptionsMenu(true);
+
 	}
 
 	@Override
@@ -123,6 +129,56 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 	}
 
 	@Override
+	public void onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		// TODO Auto-generated method stub
+		super.onPrepareOptionsMenu(menu);
+		menu.clear();
+		MenuItem item = menu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_list, 1,
+				R.string.menu_item_parking_list);
+		item.setIcon(R.drawable.map);
+		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		super.onPrepareOptionsMenu(menu);
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.menu_item_list) {
+			goToParkingsList(null);
+			return true;
+		} else {
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	private void goToParkingsList(ParkingSerial focus) {
+		// Intent intent = new Intent(getSherlockActivity(),
+		// ParkingMapActivity.class);
+		//
+		// ArrayList<ParkingSerial> spl = new ArrayList<ParkingSerial>();
+		// for (int i = 0; i < adapter.getCount(); i++) {
+		// spl.add(adapter.getItem(i));
+		// }
+		// intent.putExtra(ParkingMapActivity.ARG_PARKINGS, spl);
+		//
+		// if (focus != null) {
+		// ParkingsHelper.setFocusedParking(focus);
+		// }
+		//
+		// getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);
+
+		// if (focus != null) {
+		// intent.putExtra(ParkingMapActivity.ARG_PARKING_FOCUSED, focus);
+		// }
+
+		// startActivity(intent);
+		FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+		SmartCheckParkingsFragment fragment = new SmartCheckParkingsFragment();
+		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.replace(this.getId(), fragment, "parkings");
+		fragmentTransaction.addToBackStack(fragment.getTag());
+		fragmentTransaction.commit();
+	}
+	@Override
 	public void onCameraChange(CameraPosition position) {
 		if (zoomLevel != position.zoom) {
 			zoomLevel = position.zoom;
@@ -173,7 +229,7 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 
 	private GoogleMap getSupportMap() {
 		if (mMap == null) {
-			mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(Config.mainlayout)).getMap();
+			mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(this.getId())).getMap();
 		}
 		return mMap;
 	}

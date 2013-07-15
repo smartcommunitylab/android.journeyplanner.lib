@@ -58,7 +58,6 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements OnCam
 		}
 
 		Log.e(getClass().getSimpleName(), "onCreate");
-
 		setHasOptionsMenu(true);
 	}
 

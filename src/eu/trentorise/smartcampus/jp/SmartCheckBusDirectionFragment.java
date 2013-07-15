@@ -105,7 +105,7 @@ public class SmartCheckBusDirectionFragment extends FeedbackFragment {
 				b.putParcelable(SmartCheckTTFragment.PARAM_SMARTLINE, smartLineParam);
 				fragment.setArguments(b);
 				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-				fragmentTransaction.replace(Config.mainlayout, fragment, "lines");
+				fragmentTransaction.replace(SmartCheckBusDirectionFragment.this.getId(), fragment, "lines");
 				fragmentTransaction.addToBackStack(fragment.getTag());
 				fragmentTransaction.commit();
 			}

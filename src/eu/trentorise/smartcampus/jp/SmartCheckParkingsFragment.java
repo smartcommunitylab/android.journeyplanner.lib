@@ -6,6 +6,7 @@ import android.database.DataSetObserver;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +15,19 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.SherlockListFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.SmartCheckParkingsAdapter;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
-import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckParkingsProcessor;
 import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
 public class SmartCheckParkingsFragment extends SherlockListFragment {
 
-	protected static final String PARAM_AID = "parkingAgencyId";
+	public static final String PARAM_AID = "parkingAgencyId";
 	private String parkingAid;
 
 	private SmartCheckParkingsAdapter adapter;
@@ -57,24 +59,25 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 		adapter.registerDataSetObserver(new DataSetObserver() {
 			@Override
 			public void onChanged() {
-				if (getView()!=null){
-				TextView smartcheckRoutesMsg = (TextView) getView().findViewById(R.id.smartcheck_parkings_none);
-				if (adapter.getCount() == 0) {
-					smartcheckRoutesMsg.setVisibility(View.VISIBLE);
-				} else {
-					smartcheckRoutesMsg.setVisibility(View.GONE);
+				if (getView() != null) {
+					TextView smartcheckRoutesMsg = (TextView) getView().findViewById(R.id.smartcheck_parkings_none);
+					if (adapter.getCount() == 0) {
+						smartcheckRoutesMsg.setVisibility(View.VISIBLE);
+					} else {
+						smartcheckRoutesMsg.setVisibility(View.GONE);
+					}
+					super.onChanged();
 				}
-				super.onChanged();
-			}
 			}
 		});
 
 		setListAdapter(adapter);
 
 		// LOAD
-		//getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
-		loader = new SCAsyncTask<Void, Void, List<ParkingSerial>>(getSherlockActivity(), new SmartCheckParkingsProcessor(
-				getSherlockActivity(), adapter, JPHelper.getLocationHelper().getLocation(), parkingAid));
+		// getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
+		loader = new SCAsyncTask<Void, Void, List<ParkingSerial>>(getSherlockActivity(),
+				new SmartCheckParkingsProcessor(getSherlockActivity(), adapter, JPHelper.getLocationHelper()
+						.getLocation(), parkingAid));
 		loader.execute();
 	}
 
@@ -113,51 +116,37 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 			loader.cancel(true);
 		}
 		SherlockFragmentActivity sfa = getSherlockActivity();
-		if (sfa!=null)
+		if (sfa != null)
 			sfa.setSupportProgressBarIndeterminateVisibility(false);
 	}
 
-	// @Override
-	// public void onPrepareOptionsMenu(Menu menu) {
-	// menu.clear();
-	// MenuItem item = menu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_map, 1,
-	// R.string.menu_item_parking_map);
-	// item.setIcon(R.drawable.map);
-	// item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-	// super.onPrepareOptionsMenu(menu);
-	// }
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		menu.clear();
+		MenuItem item = menu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_map, 1,
+				R.string.menu_item_parking_map);
+		item.setIcon(R.drawable.map);
+		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		super.onPrepareOptionsMenu(menu);
+	}
 
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// if (item.getItemId() == R.id.menu_item_map) {
-	// goToParkingsMap(null);
-	// return true;
-	// } else {
-	// return super.onOptionsItemSelected(item);
-	// }
-	// }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.menu_item_map) {
+			goToParkingsMap(null);
+			return true;
+		} else {
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
 	private void goToParkingsMap(ParkingSerial focus) {
-		// Intent intent = new Intent(getSherlockActivity(),
-		// ParkingMapActivity.class);
-		//
-		// ArrayList<ParkingSerial> spl = new ArrayList<ParkingSerial>();
-		// for (int i = 0; i < adapter.getCount(); i++) {
-		// spl.add(adapter.getItem(i));
-		// }
-		// intent.putExtra(ParkingMapActivity.ARG_PARKINGS, spl);
-
-		if (focus != null) {
-			ParkingsHelper.setFocusedParking(focus);
-		}
-
-		getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);
-
-		// if (focus != null) {
-		// intent.putExtra(ParkingMapActivity.ARG_PARKING_FOCUSED, focus);
-		// }
-
-		// startActivity(intent);
+		FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
+		SmartCheckParkingMapV2Fragment fragment = new SmartCheckParkingMapV2Fragment();
+		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.replace(this.getId(), fragment, "parkings");
+		fragmentTransaction.addToBackStack(fragment.getTag());
+		fragmentTransaction.commit();
 	}
 
 	/*

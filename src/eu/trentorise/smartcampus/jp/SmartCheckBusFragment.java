@@ -27,7 +27,7 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class SmartCheckBusFragment extends FeedbackFragment {
 
-	protected static final String PARAM_AID = "agencyid";
+	public static final String PARAM_AID = "agencyid";
 	private String agencyId;
 
 	private GridView busGridView;
@@ -76,7 +76,7 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 					b.putParcelable(SmartCheckBusDirectionFragment.PARAM_LINE, busLines.get(position));
 					fragment.setArguments(b);
 					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-					fragmentTransaction.replace(Config.mainlayout, fragment, "lines");
+					fragmentTransaction.replace(SmartCheckBusFragment.this.getId(), fragment, "lines");
 					fragmentTransaction.addToBackStack(fragment.getTag());
 					fragmentTransaction.commit();
 				} else {
@@ -93,7 +93,7 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 					b.putParcelable(SmartCheckTTFragment.PARAM_SMARTLINE, param);
 					fragment.setArguments(b);
 					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-					fragmentTransaction.replace(Config.mainlayout, fragment, "lines");
+					fragmentTransaction.replace(SmartCheckBusFragment.this.getId(), fragment, "lines");
 					fragmentTransaction.addToBackStack(fragment.getTag());
 					fragmentTransaction.commit();
 				}

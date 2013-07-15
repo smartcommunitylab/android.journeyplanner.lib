@@ -389,7 +389,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 
 		@Override
 		public void handleResult(TimeTable result) {
-			if (mProgressBar.isShown())
+			if (mProgressBar!=null && mProgressBar.isShown())
 				toggleProgressDialog();
 			try {
 				reloadTimeTable(actualTimeTable);

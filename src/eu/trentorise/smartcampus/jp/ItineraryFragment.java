@@ -161,6 +161,9 @@ public class ItineraryFragment extends FeedbackFragment {
 				dialog.show();
 			}
 		});
+		
+		//for muse app
+		saveItineraryBtn.setVisibility(View.GONE);
 	}
 
 }
