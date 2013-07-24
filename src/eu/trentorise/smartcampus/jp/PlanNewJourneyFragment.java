@@ -214,7 +214,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 
 				SCAsyncTask<SingleJourney, Void, List<Itinerary>> task = new SCAsyncTask<SingleJourney, Void, List<Itinerary>>(
 						getSherlockActivity(), new PlanNewJourneyProcessor(getSherlockActivity(), sj,
-								PlanNewJourneyFragment.this.getTag()));
+								PlanNewJourneyFragment.this.getTag(),PlanNewJourneyFragment.this));
 				task.execute(sj);
 			}
 		});

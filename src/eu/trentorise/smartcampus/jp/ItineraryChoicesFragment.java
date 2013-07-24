@@ -119,7 +119,7 @@ public class ItineraryChoicesFragment extends FeedbackFragment {
 						.beginTransaction();
 				Fragment fragment = ItineraryFragment.newInstance(singleJourney, adapter.getItem(position));
 				// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-				fragmentTransaction.replace(Config.mainlayout, fragment, ItineraryChoicesFragment.this.getTag());
+				fragmentTransaction.replace(ItineraryChoicesFragment.this.getId(), fragment, ItineraryChoicesFragment.this.getTag());
 				fragmentTransaction.addToBackStack(fragment.getTag());
 				fragmentTransaction.commit();
 			}

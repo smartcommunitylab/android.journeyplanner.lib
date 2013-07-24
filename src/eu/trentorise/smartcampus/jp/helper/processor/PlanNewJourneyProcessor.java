@@ -27,6 +27,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.ItineraryChoicesFragment;
+import eu.trentorise.smartcampus.jp.PlanNewJourneyFragment;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
@@ -35,11 +36,13 @@ public class PlanNewJourneyProcessor extends AbstractAsyncTaskProcessor<SingleJo
 
 	private SingleJourney singleJourney;
 	private String mTag;
-
-	public PlanNewJourneyProcessor(SherlockFragmentActivity activity, SingleJourney singleJourney, String mTag) {
+	private PlanNewJourneyFragment fragment;
+	
+	public PlanNewJourneyProcessor(SherlockFragmentActivity activity, SingleJourney singleJourney, String mTag, PlanNewJourneyFragment fragment) {
 		super(activity);
 		this.singleJourney = singleJourney;
 		this.mTag = mTag;
+		this.fragment = fragment;
 	}
 
 	@Override
@@ -52,7 +55,7 @@ public class PlanNewJourneyProcessor extends AbstractAsyncTaskProcessor<SingleJo
 		FragmentTransaction fragmentTransaction = ((SherlockFragmentActivity)activity).getSupportFragmentManager().beginTransaction();
 		Fragment fragment = ItineraryChoicesFragment.newInstance(singleJourney, itineraries);
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		fragmentTransaction.replace(Config.mainlayout, fragment, mTag);
+		fragmentTransaction.replace(this.fragment.getId(), fragment, mTag);
 		fragmentTransaction.addToBackStack(fragment.getTag());
 		fragmentTransaction.commit();
 	}
