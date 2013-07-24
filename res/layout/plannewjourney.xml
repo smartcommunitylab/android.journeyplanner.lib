@@ -52,12 +52,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:inputType="textPostalAddress"
-                    android:imeOptions="actionNext"
-                    android:singleLine="true"
-                    android:textColor="#000000"
                     android:ems="10"
-                    android:hint="@string/plan_from" />
+                    android:hint="@string/plan_from"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPostalAddress"
+                    android:singleLine="true"
+                    android:textColor="#000000" />
 
                 <ImageButton
                     android:id="@+id/plannew_from_opt"
@@ -66,7 +66,6 @@
                     android:layout_marginLeft="8dp"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/plan_from"
-                    
                     android:src="@drawable/ic_position" />
 
                 <ImageButton
@@ -90,11 +89,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:inputType="textPostalAddress"
-                    android:imeOptions="actionDone"
-                    android:singleLine="true"
                     android:ems="10"
-                    android:hint="@string/plan_to" />
+                    android:hint="@string/plan_to"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPostalAddress"
+                    android:singleLine="true"
+                    android:textColor="#000000" />
 
                 <ImageButton
                     android:id="@+id/plannew_to_opt"
