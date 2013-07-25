@@ -397,6 +397,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			userPrefsHolder = PrefsHelper.sharedPreferences2Holder(userPrefs);
 		}
 
+			
 		final View userPrefsLayout = (View) getView().findViewById(R.id.plannew_userprefs);
 		PrefsHelper.buildUserPrefsView(getSherlockActivity(), userPrefsHolder, userPrefsLayout);
 

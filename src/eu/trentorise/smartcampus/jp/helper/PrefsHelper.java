@@ -143,7 +143,10 @@ public class PrefsHelper {
 			list = eu.trentorise.smartcampus.android.common.Utils.convertJSONToObjects(addressString, Position.class);
 		}
 
-		return new UserPrefsHolder(list, rType, tTypesList.toArray(new TType[] {}));
+		TType[] ttdefault = new TType[2];
+		ttdefault[0] = TType.TRANSIT;
+		ttdefault[1] = TType.WALK;
+		return new UserPrefsHolder(list, rType, ttdefault);
 	}
 
 	public static UserPrefsHolder userPrefsViews2Holder(TableLayout tTypesTableLayout, RadioGroup rTypesRadioGroup,
