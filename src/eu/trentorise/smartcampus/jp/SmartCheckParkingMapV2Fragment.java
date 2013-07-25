@@ -135,7 +135,7 @@ public class SmartCheckParkingMapV2Fragment extends SherlockMapFragment implemen
 		menu.clear();
 		MenuItem item = menu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_list, 1,
 				R.string.menu_item_parking_list);
-		item.setIcon(R.drawable.ic_menu_parkings);
+		item.setIcon(R.drawable.ic_parkings_white);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		super.onPrepareOptionsMenu(menu);
 

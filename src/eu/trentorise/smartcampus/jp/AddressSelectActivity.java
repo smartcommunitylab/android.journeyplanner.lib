@@ -106,7 +106,9 @@ public class AddressSelectActivity extends BaseActivity implements OnMapLongClic
 			String addressLine = "LON " + Double.toString(address.getLongitude()) + ", LAT "
 					+ Double.toString(address.getLatitude());
 			address.setAddressLine(0, addressLine);
-			new InfoDialog(AddressSelectActivity.this, addresses.get(0)).show(getSupportFragmentManager(), "me");
+			if (addresses.get(0)!=null)
+				new InfoDialog(AddressSelectActivity.this, addresses.get(0)).show(getSupportFragmentManager(), "me");
+			
 		}
 	}
 
