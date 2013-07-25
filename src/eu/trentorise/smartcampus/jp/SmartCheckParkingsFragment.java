@@ -75,9 +75,8 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 
 		// LOAD
 		// getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
-		loader = new SCAsyncTask<Void, Void, List<ParkingSerial>>(getSherlockActivity(),
-				new SmartCheckParkingsProcessor(getSherlockActivity(), adapter, JPHelper.getLocationHelper()
-						.getLocation(), parkingAid));
+		loader = new SCAsyncTask<Void, Void, List<ParkingSerial>>(getSherlockActivity(), new SmartCheckParkingsProcessor(
+				getSherlockActivity(), adapter, JPHelper.getLocationHelper().getLocation(), parkingAid));
 		loader.execute();
 	}
 
@@ -123,8 +122,7 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
-		MenuItem item = menu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_map, 1,
-				R.string.menu_item_parking_map);
+		MenuItem item = menu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_map, 1, R.string.menu_item_parking_map);
 		item.setIcon(R.drawable.map);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		super.onPrepareOptionsMenu(menu);
@@ -143,6 +141,13 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 	private void goToParkingsMap(ParkingSerial focus) {
 		FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
 		SmartCheckParkingMapV2Fragment fragment = new SmartCheckParkingMapV2Fragment();
+
+		if (focus != null) {
+			Bundle bundle = new Bundle();
+			bundle.putSerializable(SmartCheckParkingMapV2Fragment.ARG_PARKING_FOCUSED, focus);
+			fragment.setArguments(bundle);
+		}
+
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		fragmentTransaction.replace(this.getId(), fragment, "parkings");
 		fragmentTransaction.addToBackStack(fragment.getTag());
