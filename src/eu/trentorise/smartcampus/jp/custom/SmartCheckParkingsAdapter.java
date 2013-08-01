@@ -105,8 +105,10 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<ParkingSerial> {
 				holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_full));
 			} else if (parking.getSlotsAvailable() == ParkingsHelper.PARKING_UNAVAILABLE) {
 				// data unavailable
-				holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail, "?",
-						parking.getSlotsTotal()));
+				// holder.parkingStatus.setText(mContext.getString(R.string.smart_check_parking_avail,
+				// "?",
+				// parking.getSlotsTotal()));
+				holder.parkingStatus.setText(Integer.toString(parking.getSlotsTotal()));
 			}
 		} else {
 			// not monitored
