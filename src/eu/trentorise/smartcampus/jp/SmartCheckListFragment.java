@@ -257,6 +257,32 @@ public class SmartCheckListFragment extends FeedbackFragment {
 					actionBar.addTab(tab);
 
 					actionBar.selectTab(actionBar.getTabAt(0));
+				} else if (optionName.contentEquals(getResources().getString(R.string.smart_check_list_alerts_rovereto))) {
+					// Rovereto alerts
+					actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+					actionBar.removeAllTabs();
+
+					// List
+					ActionBar.Tab tab = actionBar.newTab();
+					tab.setText(R.string.tab_lines);
+					tab.setTabListener(new TabListener<SmartCheckAlertsFragment>(getSherlockActivity(), "lines",
+							SmartCheckAlertsFragment.class, null));
+					Bundle bundle = new Bundle();
+					bundle.putString(SmartCheckAlertsFragment.PARAM_AID, ParkingsHelper.PARKING_AID_ROVERETO);
+					tab.setTag(bundle);
+					actionBar.addTab(tab);
+
+					// Map
+					tab = actionBar.newTab();
+					tab.setText(R.string.tab_map);
+					tab.setTabListener(new TabListener<SmartCheckParkingMapV2Fragment>(getSherlockActivity(), "map",
+							SmartCheckParkingMapV2Fragment.class, null));
+					bundle = new Bundle();
+					bundle.putString(SmartCheckParkingMapV2Fragment.PARAM_AID, ParkingsHelper.PARKING_AID_ROVERETO);
+					tab.setTag(bundle);
+					actionBar.addTab(tab);
+
+					actionBar.selectTab(actionBar.getTabAt(0));
 				} else {
 					// Toast available soon
 					Toast.makeText(getSherlockActivity(), R.string.tmp, Toast.LENGTH_SHORT).show();

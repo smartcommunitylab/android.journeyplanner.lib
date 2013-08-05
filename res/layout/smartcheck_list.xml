@@ -5,7 +5,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/smartcheck_parkings_none"
+        android:id="@+id/smartcheck_none"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="6dip"

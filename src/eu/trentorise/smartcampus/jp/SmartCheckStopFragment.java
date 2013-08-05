@@ -33,7 +33,7 @@ public class SmartCheckStopFragment extends SherlockListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		adapter = new SmartCheckRoutesListAdapter(getSherlockActivity(), R.layout.smartchecktrip);
+		adapter = new SmartCheckRoutesListAdapter(getSherlockActivity(), R.layout.smartcheck_trip);
 		adapter.registerDataSetObserver(new DataSetObserver() {
 			@Override
 			public void onChanged() {
@@ -62,7 +62,7 @@ public class SmartCheckStopFragment extends SherlockListFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.smartcheckstop, container, false);
+		return inflater.inflate(R.layout.smartcheck_stop, container, false);
 	}
 
 	@Override

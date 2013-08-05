@@ -49,7 +49,7 @@ public class SmartCheckBusDirectionFragment extends FeedbackFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.smartcheckdirection, container, false);
+		return inflater.inflate(R.layout.smartcheck_direction, container, false);
 	}
 
 	@Override

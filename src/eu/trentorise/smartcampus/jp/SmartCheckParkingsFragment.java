@@ -52,13 +52,13 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 		// actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		setHasOptionsMenu(true);
 
-		adapter = new SmartCheckParkingsAdapter(getSherlockActivity(), R.layout.smartcheckparking_row);
+		adapter = new SmartCheckParkingsAdapter(getSherlockActivity(), R.layout.smartcheck_parking_row);
 		adapter.setMyLocation(JPHelper.getLocationHelper().getLocation());
 		adapter.registerDataSetObserver(new DataSetObserver() {
 			@Override
 			public void onChanged() {
 				if (getView()!=null){
-				TextView smartcheckRoutesMsg = (TextView) getView().findViewById(R.id.smartcheck_parkings_none);
+				TextView smartcheckRoutesMsg = (TextView) getView().findViewById(R.id.smartcheck_none);
 				if (adapter.getCount() == 0) {
 					smartcheckRoutesMsg.setVisibility(View.VISIBLE);
 				} else {
@@ -86,7 +86,7 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.smartcheckparkings, container, false);
+		return inflater.inflate(R.layout.smartcheck_list, container, false);
 	}
 
 	@Override

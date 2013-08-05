@@ -192,6 +192,7 @@
     <string name="smart_check_list_train_timetable">Orario treni</string>
     <string name="smart_check_list_parking_trento">Disponibilità parcheggi Trento</string>
     <string name="smart_check_list_parking_rovereto">Disponibilità parcheggi Rovereto</string>
+    <string name="smart_check_list_alerts_rovereto">Ordinanze Rovereto</string>
     
     <string name="smart_check_stops_type_mobility">Mobilità</string>
     <string name="smart_check_stops_delay">ritardo %s\'</string>
@@ -204,6 +205,7 @@
     
     <string name="smart_check_routes_empty">Nessuna corsa</string>
     <string name="smart_check_parkings_empty">Nessun parcheggio</string>
+    <string name="smart_check_alerts_empty">Nessuna ordinanza</string>
     
     <string name="ttype_transit">Mezzi pubblici</string>
     <string name="ttype_car">Auto</string>

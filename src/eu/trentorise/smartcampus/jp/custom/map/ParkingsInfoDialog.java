@@ -86,14 +86,14 @@ public class ParkingsInfoDialog extends SherlockDialogFragment {
 		if (parkingsList != null) {
 			// multiple stops
 			ParkingSerial firstParking = parkingsList.get(0);
-			View parkingView = SmartCheckParkingsAdapter.buildParking(getSherlockActivity(), R.layout.smartcheckparking_row,
+			View parkingView = SmartCheckParkingsAdapter.buildParking(getSherlockActivity(), R.layout.smartcheck_parking_row,
 					myLocation, firstParking, null, null);
 
 			LinearLayout entryLayout = (LinearLayout) getDialog().findViewById(R.id.parkings_dialog_entry);
 			entryLayout.addView(parkingView, 0);
 		} else if (parking != null) {
 			// single stop
-			View parkingView = SmartCheckParkingsAdapter.buildParking(getSherlockActivity(), R.layout.smartcheckparking_row,
+			View parkingView = SmartCheckParkingsAdapter.buildParking(getSherlockActivity(), R.layout.smartcheck_parking_row,
 					myLocation, parking, null, null);
 
 			LinearLayout entryLayout = (LinearLayout) getDialog().findViewById(R.id.parkings_dialog_entry);

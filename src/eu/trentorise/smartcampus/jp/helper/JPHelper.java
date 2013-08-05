@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.jp.helper;
 
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoad;
 import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
@@ -770,7 +771,6 @@ public class JPHelper {
 	}
 
 	public static List<ParkingSerial> getParkings(String parkingAgencyId) throws Exception {
-
 		getInstance();
 		String url = Config.TARGET_ADDRESS;
 
@@ -794,6 +794,17 @@ public class JPHelper {
 				new TypeReference<List<ParkingSerial>>() {
 				});
 
+		return objects;
+	}
+	
+	public static List<AlertRoad> getAlertRoads(String agencyId) {
+		List<AlertRoad> objects = new ArrayList<AlertRoad>();
+		
+		/*
+		 * TODO: DEVELOPMENT ONLY
+		 */
+		
+		
 		return objects;
 	}
 

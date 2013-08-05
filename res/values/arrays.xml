@@ -34,6 +34,7 @@
         <item>@string/smart_check_list_train_timetable</item>
         <item>@string/smart_check_list_parking_trento</item>
         <item>@string/smart_check_list_parking_rovereto</item>
+        <item>@string/smart_check_list_alerts_rovereto</item>
     </string-array>
 
 </resources>

@@ -47,7 +47,7 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.smartcheckbus, container, false);
+		return inflater.inflate(R.layout.smartcheck_bus, container, false);
 	}
 
 	@Override
