@@ -135,7 +135,9 @@ public class PrefsHelper {
 				tTypesList.add(tType);
 			}
 		}
-
+		//add by default transit if the preferences are not set
+		if (tTypesList.size()==0)
+			tTypesList.addAll(Config.TRANSIT_SET);
 		String addressString = userPrefs.getString(Config.USER_PREFS_FAVORITES, null);
 		List<Position> list = new ArrayList<Position>();
 
