@@ -93,7 +93,8 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 
 		for (ParkingSerial parking : result) {
 			parking.setName(ParkingsHelper.getParkingName(parking));
-			if (parking.isMonitored() != null && parking.isMonitored()) {
+			if (parking.isMonitored() != null && parking.isMonitored()
+					&& parking.getSlotsAvailable() != ParkingsHelper.PARKING_UNAVAILABLE) {
 				parkingsWithData.add(parking);
 			} else {
 				parkingsWithoutData.add(parking);
@@ -125,7 +126,7 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 
 		// save in cache
 		ParkingsHelper.setParkingsCache(orderedList);
-		
+
 		mActivity.setSupportProgressBarIndeterminateVisibility(false);
 	}
 

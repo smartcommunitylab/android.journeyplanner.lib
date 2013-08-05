@@ -58,6 +58,8 @@ public class TypesView extends TTView {
 			 return  "E";
 		if (text.toLowerCase().startsWith("i"))
 			return "IC";
+		if (text.toLowerCase().startsWith("fa"))
+			return "FA";
 		return text;
 	}
 
