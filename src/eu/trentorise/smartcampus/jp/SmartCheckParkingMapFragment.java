@@ -81,9 +81,9 @@ public class SmartCheckParkingMapFragment extends FeedbackFragment implements Pa
 			focusedParking = (ParkingSerial) getArguments().getSerializable(ARG_PARKING_FOCUSED);
 		}
 
-		if (ParkingsHelper.getFocusedParking() != null && ParkingsHelper.getFocusedParking() != focusedParking) {
-			focusedParking = ParkingsHelper.getFocusedParking();
-			ParkingsHelper.setFocusedParking(null);
+		if (ParkingsHelper.getFocused() != null && ParkingsHelper.getFocused() != focusedParking) {
+			focusedParking = ParkingsHelper.getFocused();
+			ParkingsHelper.setFocused(null);
 		}
 
 		final ViewGroup parent = (ViewGroup) mapView.getParent();
@@ -129,12 +129,12 @@ public class SmartCheckParkingMapFragment extends FeedbackFragment implements Pa
 		mapView.getController().setZoom(JPParamsHelper.getZoomLevelMap() + 2);
 
 		// LOAD
-		if (ParkingsHelper.getParkingsCache().isEmpty()) {
+		if (ParkingsHelper.getCache().isEmpty()) {
 //			new SCAsyncTask<Void, Void, List<ParkingSerial>>(getSherlockActivity(), new SmartCheckParkingMapProcessor(
 //					getSherlockActivity(), mapView, mItemizedoverlay, parkingAid)).execute();
 		} else {
 			mItemizedoverlay.clearMarkers();
-			mItemizedoverlay.addAllOverlays(ParkingsHelper.getParkingsCache());
+			mItemizedoverlay.addAllOverlays(ParkingsHelper.getCache());
 			mItemizedoverlay.populateAll();
 			mapView.postInvalidate();
 		}

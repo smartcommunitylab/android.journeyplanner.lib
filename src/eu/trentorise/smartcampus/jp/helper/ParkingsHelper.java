@@ -2,10 +2,12 @@ package eu.trentorise.smartcampus.jp.helper;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.location.Location;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
@@ -20,23 +22,25 @@ public class ParkingsHelper {
 	public static final int PARKING_LOW_AVAIL = 5;
 	public static final int PARKING_HIGH_AVAIL = 20;
 
+	private static Location myLocation;
+
 	private static ParkingSerial focusedParking = null;
 
 	private static List<ParkingSerial> parkingsCache = new ArrayList<ParkingSerial>();
 
-	public static ParkingSerial getFocusedParking() {
+	public static ParkingSerial getFocused() {
 		return focusedParking;
 	}
 
-	public static void setFocusedParking(ParkingSerial focusedParking) {
+	public static void setFocused(ParkingSerial focusedParking) {
 		ParkingsHelper.focusedParking = focusedParking;
 	}
 
-	public static List<ParkingSerial> getParkingsCache() {
+	public static List<ParkingSerial> getCache() {
 		return parkingsCache;
 	}
 
-	public static void setParkingsCache(List<ParkingSerial> parkingsCache) {
+	public static void setCache(List<ParkingSerial> parkingsCache) {
 		ParkingsHelper.parkingsCache = parkingsCache;
 	}
 
@@ -88,6 +92,40 @@ public class ParkingsHelper {
 		} else {
 			return parking.getName();
 		}
+	}
+
+	/*
+	 * Comparators
+	 */
+	private static Comparator<ParkingSerial> parkingNameComparator = new Comparator<ParkingSerial>() {
+		public int compare(ParkingSerial p1, ParkingSerial p2) {
+			return p1.getName().toString().compareTo(p2.getName().toString());
+		}
+	};
+
+	private static Comparator<ParkingSerial> parkingDistanceComparator = new Comparator<ParkingSerial>() {
+		public int compare(ParkingSerial p1, ParkingSerial p2) {
+			Location p1Location = new Location("");
+			p1Location.setLatitude(p1.getPosition()[0]);
+			p1Location.setLongitude(p1.getPosition()[1]);
+			float p1distance = myLocation.distanceTo(p1Location);
+
+			Location p2Location = new Location("");
+			p2Location.setLatitude(p2.getPosition()[0]);
+			p2Location.setLongitude(p2.getPosition()[1]);
+			float p2distance = myLocation.distanceTo(p2Location);
+
+			return ((Float) p1distance).compareTo((Float) p2distance);
+		}
+	};
+
+	public static Comparator<ParkingSerial> getParkingNameComparator() {
+		return parkingNameComparator;
+	}
+
+	public static Comparator<ParkingSerial> getParkingDistanceComparator(Location myLocation) {
+		ParkingsHelper.myLocation = myLocation;
+		return parkingDistanceComparator;
 	}
 
 	private static final Map<String, String> parkingsNames;

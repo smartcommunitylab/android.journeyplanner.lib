@@ -19,27 +19,26 @@ import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.custom.map.ParkingsInfoDialog;
-import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
-import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
-import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckParkingMapProcessor;
+import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckAlertRoadsMapProcessor;
+import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 import eu.trentorise.smartcampus.jp.model.LocatedObject;
 import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
-public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implements OnCameraChangeListener, OnMarkerClickListener {
+public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements OnCameraChangeListener, OnMarkerClickListener {
 
-	protected static final String PARAM_AID = "parkingAgencyId";
-	public final static String ARG_PARKING_FOCUSED = "parking_focused";
+	protected static final String PARAM_AID = "alertsAgencyId";
+	public final static String ARG_ALERT_FOCUSED = "alert_focused";
 	public final static int REQUEST_CODE = 1986;
 
 	private final static int FOCUSED_ZOOM = 18;
 
 	private SherlockFragmentActivity mActivity;
 
-	private String parkingAid;
+	private String agencyId;
 
-	// private ArrayList<ParkingSerial> parkingsList;
-	private ParkingSerial focusedParking;
+	private AlertRoadLoc focusedAlert;
 
 	private LatLng centerLatLng = new LatLng(JPParamsHelper.getCenterMap().get(0), JPParamsHelper.getCenterMap().get(1));
 	private float zoomLevel = JPParamsHelper.getZoomLevelMap() - 3;
@@ -65,16 +64,16 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 
 		// get arguments
 		if (getArguments() != null && getArguments().containsKey(PARAM_AID)) {
-			parkingAid = getArguments().getString(PARAM_AID);
+			agencyId = getArguments().getString(PARAM_AID);
 		}
 
-		if (getArguments() != null && getArguments().containsKey(ARG_PARKING_FOCUSED)) {
-			focusedParking = (ParkingSerial) getArguments().getSerializable(ARG_PARKING_FOCUSED);
+		if (getArguments() != null && getArguments().containsKey(ARG_ALERT_FOCUSED)) {
+			focusedAlert = (AlertRoadLoc) getArguments().getSerializable(ARG_ALERT_FOCUSED);
 		}
 
-		if (ParkingsHelper.getFocused() != null && ParkingsHelper.getFocused() != focusedParking) {
-			focusedParking = ParkingsHelper.getFocused();
-			ParkingsHelper.setFocused(null);
+		if (AlertRoadsHelper.getFocused() != null && AlertRoadsHelper.getFocused() != focusedAlert) {
+			focusedAlert = AlertRoadsHelper.getFocused();
+			AlertRoadsHelper.setFocused(null);
 		}
 
 		if (getSupportMap() == null)
@@ -89,11 +88,12 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 		// show my location
 		getSupportMap().setMyLocationEnabled(true);
 
-		if (focusedParking != null) {
+		if (focusedAlert != null) {
 			zoomLevel--;
 			getSupportMap().moveCamera(
-					CameraUpdateFactory.newLatLngZoom(new LatLng(focusedParking.location()[0], focusedParking.location()[1]),
-							FOCUSED_ZOOM));
+					CameraUpdateFactory.newLatLngZoom(
+							new LatLng(Double.parseDouble(focusedAlert.getRoad().getLat()), Double.parseDouble(focusedAlert
+									.getRoad().getLon())), FOCUSED_ZOOM));
 		} else {
 			getSupportMap().moveCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, zoomLevel));
 
@@ -128,13 +128,13 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 			zoomLevel = position.zoom;
 		}
 
-		if (ParkingsHelper.getCache().isEmpty()) {
-			new SCAsyncTask<Void, Void, List<ParkingSerial>>(mActivity, new SmartCheckParkingMapProcessor(mActivity,
-					getSupportMap(), parkingAid)).execute();
+		if (AlertRoadsHelper.getCache().isEmpty()) {
+			new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(mActivity, new SmartCheckAlertRoadsMapProcessor(mActivity,
+					getSupportMap(), agencyId)).execute();
 		} else {
 			getSupportMap().clear();
 			MapManager.ClusteringHelper.render(getSupportMap(),
-					MapManager.ClusteringHelper.cluster(mActivity, getSupportMap(), ParkingsHelper.getCache()));
+					MapManager.ClusteringHelper.cluster(mActivity, getSupportMap(), AlertRoadsHelper.getCache()));
 		}
 	}
 
@@ -149,22 +149,24 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 		}
 
 		if (list.size() > 1 && getSupportMap().getCameraPosition().zoom == getSupportMap().getMaxZoomLevel()) {
-			ParkingsInfoDialog parkingsInfoDialog = new ParkingsInfoDialog();
-			Bundle args = new Bundle();
-			args.putSerializable(ParkingsInfoDialog.ARG_PARKINGS, (ArrayList) list);
-			parkingsInfoDialog.setArguments(args);
-			parkingsInfoDialog.show(mActivity.getSupportFragmentManager(), "parking_selected");
+			// ParkingsInfoDialog parkingsInfoDialog = new ParkingsInfoDialog();
+			// Bundle args = new Bundle();
+			// args.putSerializable(ParkingsInfoDialog.ARG_PARKINGS, (ArrayList)
+			// list);
+			// parkingsInfoDialog.setArguments(args);
+			// parkingsInfoDialog.show(mActivity.getSupportFragmentManager(),
+			// "parking_selected");
 		} else if (list.size() > 1) {
-			// getSupportMap().animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),
-			// zoomLevel + 1));
+			getSupportMap().animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), zoomLevel + 1));
 			MapManager.fitMapWithOverlays(list, getSupportMap());
 		} else {
-			ParkingSerial parking = (ParkingSerial) list.get(0);
-			ParkingsInfoDialog parkingsInfoDialog = new ParkingsInfoDialog();
-			Bundle args = new Bundle();
-			args.putSerializable(ParkingsInfoDialog.ARG_PARKING, parking);
-			parkingsInfoDialog.setArguments(args);
-			parkingsInfoDialog.show(mActivity.getSupportFragmentManager(), "parking_selected");
+			// ParkingSerial parking = (ParkingSerial) list.get(0);
+			// ParkingsInfoDialog parkingsInfoDialog = new ParkingsInfoDialog();
+			// Bundle args = new Bundle();
+			// args.putSerializable(ParkingsInfoDialog.ARG_PARKING, parking);
+			// parkingsInfoDialog.setArguments(args);
+			// parkingsInfoDialog.show(mActivity.getSupportFragmentManager(),
+			// "parking_selected");
 		}
 		// // default behavior
 		// return false;

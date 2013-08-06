@@ -15,6 +15,7 @@ import com.actionbarsherlock.app.ActionBar;
 
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.TabListener;
+import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
@@ -264,21 +265,21 @@ public class SmartCheckListFragment extends FeedbackFragment {
 
 					// List
 					ActionBar.Tab tab = actionBar.newTab();
-					tab.setText(R.string.tab_lines);
+					tab.setText(R.string.tab_alerts);
 					tab.setTabListener(new TabListener<SmartCheckAlertsFragment>(getSherlockActivity(), "lines",
 							SmartCheckAlertsFragment.class, null));
 					Bundle bundle = new Bundle();
-					bundle.putString(SmartCheckAlertsFragment.PARAM_AID, ParkingsHelper.PARKING_AID_ROVERETO);
+					bundle.putString(SmartCheckAlertsFragment.PARAM_AID, AlertRoadsHelper.ALERTS_AID_ROVERETO);
 					tab.setTag(bundle);
 					actionBar.addTab(tab);
 
 					// Map
 					tab = actionBar.newTab();
 					tab.setText(R.string.tab_map);
-					tab.setTabListener(new TabListener<SmartCheckParkingMapV2Fragment>(getSherlockActivity(), "map",
-							SmartCheckParkingMapV2Fragment.class, null));
+					tab.setTabListener(new TabListener<SmartCheckAlertsMapV2Fragment>(getSherlockActivity(), "map",
+							SmartCheckAlertsMapV2Fragment.class, null));
 					bundle = new Bundle();
-					bundle.putString(SmartCheckParkingMapV2Fragment.PARAM_AID, ParkingsHelper.PARKING_AID_ROVERETO);
+					bundle.putString(SmartCheckAlertsMapV2Fragment.PARAM_AID, AlertRoadsHelper.ALERTS_AID_ROVERETO);
 					tab.setTag(bundle);
 					actionBar.addTab(tab);
 

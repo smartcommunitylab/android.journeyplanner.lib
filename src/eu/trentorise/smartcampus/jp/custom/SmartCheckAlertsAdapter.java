@@ -15,7 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom;
 
-import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoad;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoadType;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
@@ -23,13 +23,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
 
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
+import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 
-public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoad> {
+public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoadLoc> {
 
 	private Context mContext;
 	private int layoutResourceId;
@@ -58,11 +62,11 @@ public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoad> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		AlertRoad alertRoad = getItem(position);
+		AlertRoadLoc alertRoad = getItem(position);
 		return buildAlertRoad(mContext, layoutResourceId, myLocation, alertRoad, convertView, parent);
 	}
 
-	public static View buildAlertRoad(Context mContext, int layoutResourceId, Location myLocation, AlertRoad alertRoad,
+	public static View buildAlertRoad(Context mContext, int layoutResourceId, Location myLocation, AlertRoadLoc alertRoad,
 			View convertView, ViewGroup parent) {
 
 		View row = convertView;
@@ -73,30 +77,46 @@ public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoad> {
 			row = inflater.inflate(layoutResourceId, parent, false);
 
 			holder = new AlertRoadHolder();
-			holder.alertRoadType = (TextView) row.findViewById(R.id.smartcheck_alert_type);
+			// holder.alertRoadType = (TextView)
+			// row.findViewById(R.id.smartcheck_alert_type);
 			holder.alertRoadStreet = (TextView) row.findViewById(R.id.smartcheck_alert_street);
 			holder.alertRoadDescription = (TextView) row.findViewById(R.id.smartcheck_alert_description);
+			holder.alertRoadTypes = (LinearLayout) row.findViewById(R.id.smartcheck_alert_types);
 
 			row.setTag(holder);
 		} else {
 			holder = (AlertRoadHolder) row.getTag();
 		}
 
-		// type
-		holder.alertRoadType.setText(alertRoad.getType().toString());
-
 		// street
 		holder.alertRoadStreet.setText(alertRoad.getRoad().getStreet());
 
 		// description
-		holder.alertRoadDescription.setText("TO DO");
+		holder.alertRoadDescription.setText(alertRoad.getDescription());
+
+		// type
+		holder.alertRoadTypes.removeAllViews();
+		if (alertRoad.getChangeTypes().length > 0) {
+			for (AlertRoadType type : alertRoad.getChangeTypes()) {
+				ImageView typeImageView = new ImageView(mContext);
+				typeImageView.setImageResource(AlertRoadsHelper.getDrawableResourceByType(type));
+				// LinearLayout.LayoutParams params = new
+				// LinearLayout.LayoutParams(24, 24);
+				// typeImageView.setLayoutParams(params);
+				holder.alertRoadTypes.addView(typeImageView);
+			}
+			holder.alertRoadTypes.setVisibility(View.VISIBLE);
+		} else {
+			holder.alertRoadTypes.setVisibility(View.GONE);
+		}
 
 		return row;
 	}
 
 	public static class AlertRoadHolder {
-		TextView alertRoadType;
+		// TextView alertRoadType;
 		TextView alertRoadStreet;
 		TextView alertRoadDescription;
+		LinearLayout alertRoadTypes;
 	}
 }

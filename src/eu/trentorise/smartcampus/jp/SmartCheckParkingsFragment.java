@@ -57,22 +57,22 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 		adapter.registerDataSetObserver(new DataSetObserver() {
 			@Override
 			public void onChanged() {
-				if (getView()!=null){
-				TextView smartcheckRoutesMsg = (TextView) getView().findViewById(R.id.smartcheck_none);
-				if (adapter.getCount() == 0) {
-					smartcheckRoutesMsg.setVisibility(View.VISIBLE);
-				} else {
-					smartcheckRoutesMsg.setVisibility(View.GONE);
+				if (getView() != null) {
+					TextView smartcheckRoutesMsg = (TextView) getView().findViewById(R.id.smartcheck_none);
+					if (adapter.getCount() == 0) {
+						smartcheckRoutesMsg.setVisibility(View.VISIBLE);
+					} else {
+						smartcheckRoutesMsg.setVisibility(View.GONE);
+					}
+					super.onChanged();
 				}
-				super.onChanged();
-			}
 			}
 		});
 
 		setListAdapter(adapter);
 
 		// LOAD
-		//getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
+		// getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
 		loader = new SCAsyncTask<Void, Void, List<ParkingSerial>>(getSherlockActivity(), new SmartCheckParkingsProcessor(
 				getSherlockActivity(), adapter, JPHelper.getLocationHelper().getLocation(), parkingAid));
 		loader.execute();
@@ -81,7 +81,7 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		ParkingSerial parking = adapter.getItem(position);
-		goToParkingsMap(parking);
+		goToMap(parking);
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 			loader.cancel(true);
 		}
 		SherlockFragmentActivity sfa = getSherlockActivity();
-		if (sfa!=null)
+		if (sfa != null)
 			sfa.setSupportProgressBarIndeterminateVisibility(false);
 	}
 
@@ -137,27 +137,12 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 	// }
 	// }
 
-	private void goToParkingsMap(ParkingSerial focus) {
-		// Intent intent = new Intent(getSherlockActivity(),
-		// ParkingMapActivity.class);
-		//
-		// ArrayList<ParkingSerial> spl = new ArrayList<ParkingSerial>();
-		// for (int i = 0; i < adapter.getCount(); i++) {
-		// spl.add(adapter.getItem(i));
-		// }
-		// intent.putExtra(ParkingMapActivity.ARG_PARKINGS, spl);
-
+	private void goToMap(ParkingSerial focus) {
 		if (focus != null) {
-			ParkingsHelper.setFocusedParking(focus);
+			ParkingsHelper.setFocused(focus);
 		}
 
 		getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);
-
-		// if (focus != null) {
-		// intent.putExtra(ParkingMapActivity.ARG_PARKING_FOCUSED, focus);
-		// }
-
-		// startActivity(intent);
 	}
 
 	/*

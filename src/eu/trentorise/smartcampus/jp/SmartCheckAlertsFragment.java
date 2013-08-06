@@ -1,7 +1,5 @@
 package eu.trentorise.smartcampus.jp;
 
-import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoad;
-
 import java.util.List;
 
 import android.database.DataSetObserver;
@@ -18,15 +16,17 @@ import com.actionbarsherlock.app.SherlockListFragment;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.SmartCheckAlertsAdapter;
+import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckAlertRoadsProcessor;
+import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 
 public class SmartCheckAlertsFragment extends SherlockListFragment {
 
 	protected static final String PARAM_AID = "alertRoadsAgencyId";
 	private String agencyId;
 	private SmartCheckAlertsAdapter adapter;
-	private SCAsyncTask<Void, Void, List<AlertRoad>> loader;
+	private SCAsyncTask<Void, Void, List<AlertRoadLoc>> loader;
 
 	public SmartCheckAlertsFragment() {
 	}
@@ -66,15 +66,15 @@ public class SmartCheckAlertsFragment extends SherlockListFragment {
 
 		// LOAD
 		// getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
-		loader = new SCAsyncTask<Void, Void, List<AlertRoad>>(getSherlockActivity(), new SmartCheckAlertRoadsProcessor(
+		loader = new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(getSherlockActivity(), new SmartCheckAlertRoadsProcessor(
 				getSherlockActivity(), adapter, agencyId));
 		loader.execute();
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		AlertRoad alertRoad = adapter.getItem(position);
-		// goToParkingsMap(parking);
+		AlertRoadLoc alertRoad = adapter.getItem(position);
+		goToMap(alertRoad);
 	}
 
 	@Override
@@ -120,9 +120,9 @@ public class SmartCheckAlertsFragment extends SherlockListFragment {
 	// }
 	// }
 
-	private void goToMap(AlertRoad focus) {
+	private void goToMap(AlertRoadLoc focus) {
 		if (focus != null) {
-			// ParkingsHelper.setFocusedParking(focus);
+			AlertRoadsHelper.setFocused(focus);
 		}
 
 		getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);

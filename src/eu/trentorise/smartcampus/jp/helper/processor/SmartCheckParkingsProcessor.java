@@ -23,7 +23,6 @@ import java.util.List;
 import android.location.Location;
 import android.widget.ArrayAdapter;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.maps.GeoPoint;
 
@@ -39,28 +38,6 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 	private ArrayAdapter<ParkingSerial> adapter;
 	private Location myLocation;
 	private String parkingAid;
-
-	private Comparator<ParkingSerial> parkingNameComparator = new Comparator<ParkingSerial>() {
-		public int compare(ParkingSerial p1, ParkingSerial p2) {
-			return p1.getName().toString().compareTo(p2.getName().toString());
-		}
-	};
-
-	private Comparator<ParkingSerial> parkingDistanceComparator = new Comparator<ParkingSerial>() {
-		public int compare(ParkingSerial p1, ParkingSerial p2) {
-			Location p1Location = new Location("");
-			p1Location.setLatitude(p1.getPosition()[0]);
-			p1Location.setLongitude(p1.getPosition()[1]);
-			float p1distance = myLocation.distanceTo(p1Location);
-
-			Location p2Location = new Location("");
-			p2Location.setLatitude(p2.getPosition()[0]);
-			p2Location.setLongitude(p2.getPosition()[1]);
-			float p2distance = myLocation.distanceTo(p2Location);
-
-			return ((Float) p1distance).compareTo((Float) p2distance);
-		}
-	};
 
 	public SmartCheckParkingsProcessor(SherlockFragmentActivity activity, ArrayAdapter<ParkingSerial> adapter,
 			GeoPoint myLocation, String parkingAid) {
@@ -101,9 +78,9 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 			}
 		}
 
-		Comparator<ParkingSerial> comparator = parkingNameComparator;
+		Comparator<ParkingSerial> comparator = ParkingsHelper.getParkingNameComparator();
 		if (myLocation != null) {
-			comparator = parkingDistanceComparator;
+			comparator = ParkingsHelper.getParkingDistanceComparator(myLocation);
 		}
 
 		Collections.sort(parkingsWithData, comparator);
@@ -125,7 +102,7 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 		adapter.notifyDataSetChanged();
 
 		// save in cache
-		ParkingsHelper.setParkingsCache(orderedList);
+		ParkingsHelper.setCache(orderedList);
 
 		mActivity.setSupportProgressBarIndeterminateVisibility(false);
 	}

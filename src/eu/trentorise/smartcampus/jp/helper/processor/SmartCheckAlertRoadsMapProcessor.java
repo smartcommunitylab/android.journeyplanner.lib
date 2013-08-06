@@ -17,26 +17,24 @@ package eu.trentorise.smartcampus.jp.helper.processor;
 
 import java.util.List;
 
-import android.widget.ArrayAdapter;
-
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.google.android.gms.maps.GoogleMap;
 
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
-import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
+import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class SmartCheckAlertRoadsProcessor extends AbstractAsyncTaskProcessor<Void, List<AlertRoadLoc>> {
+public class SmartCheckAlertRoadsMapProcessor extends AbstractAsyncTaskProcessor<Void, List<AlertRoadLoc>> {
 
 	private SherlockFragmentActivity mActivity;
-	private ArrayAdapter<AlertRoadLoc> adapter;
 	private String agencyId;
+	private GoogleMap map;
 
-	public SmartCheckAlertRoadsProcessor(SherlockFragmentActivity activity, ArrayAdapter<AlertRoadLoc> adapter, String agencyId) {
+	public SmartCheckAlertRoadsMapProcessor(SherlockFragmentActivity activity, GoogleMap map, String agencyId) {
 		super(activity);
-		this.mActivity = activity;
-		this.adapter = adapter;
+		this.map = map;
 		this.agencyId = agencyId;
 	}
 
@@ -48,19 +46,7 @@ public class SmartCheckAlertRoadsProcessor extends AbstractAsyncTaskProcessor<Vo
 
 	@Override
 	public void handleResult(List<AlertRoadLoc> result) {
-		// Collections.sort(result, AlertRoadsHelper.getStreetNameComparator());
-
-		adapter.clear();
-		for (AlertRoadLoc parking : result) {
-			adapter.add(parking);
-		}
-
-		adapter.notifyDataSetChanged();
-
-		// save in cache
-		AlertRoadsHelper.setCache(result);
-
-		mActivity.setSupportProgressBarIndeterminateVisibility(false);
+		MapManager.ClusteringHelper.render(map, MapManager.ClusteringHelper.cluster(mActivity, map, result));
 	}
 
 }
