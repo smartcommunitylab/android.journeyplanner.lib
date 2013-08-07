@@ -37,7 +37,8 @@ public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoadLoc> {
 
 	private Context mContext;
 	private int layoutResourceId;
-	private Location myLocation;
+
+	// private Location myLocation;
 
 	public SmartCheckAlertsAdapter(Context context, int layoutResourceId) {
 		super(context, layoutResourceId);
@@ -45,29 +46,29 @@ public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoadLoc> {
 		this.layoutResourceId = layoutResourceId;
 	}
 
-	public void setMyLocation(Location location) {
-		this.myLocation = location;
-	}
-
-	public void setMyLocation(GeoPoint geoPoint) {
-		if (geoPoint != null) {
-			Location location = new Location("");
-			location.setLatitude(geoPoint.getLatitudeE6() / 1e6);
-			location.setLongitude(geoPoint.getLongitudeE6() / 1e6);
-			this.myLocation = location;
-		} else {
-			this.myLocation = null;
-		}
-	}
+	// public void setMyLocation(Location location) {
+	// this.myLocation = location;
+	// }
+	//
+	// public void setMyLocation(GeoPoint geoPoint) {
+	// if (geoPoint != null) {
+	// Location location = new Location("");
+	// location.setLatitude(geoPoint.getLatitudeE6() / 1e6);
+	// location.setLongitude(geoPoint.getLongitudeE6() / 1e6);
+	// this.myLocation = location;
+	// } else {
+	// this.myLocation = null;
+	// }
+	// }
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		AlertRoadLoc alertRoad = getItem(position);
-		return buildAlertRoad(mContext, layoutResourceId, myLocation, alertRoad, convertView, parent);
+		return buildAlertRoad(mContext, layoutResourceId, alertRoad, convertView, parent);
 	}
 
-	public static View buildAlertRoad(Context mContext, int layoutResourceId, Location myLocation, AlertRoadLoc alertRoad,
-			View convertView, ViewGroup parent) {
+	public static View buildAlertRoad(Context mContext, int layoutResourceId, AlertRoadLoc alertRoad, View convertView,
+			ViewGroup parent) {
 
 		View row = convertView;
 		AlertRoadHolder holder = null;

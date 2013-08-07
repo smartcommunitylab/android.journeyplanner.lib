@@ -30,7 +30,6 @@ import android.graphics.Rect;
 import android.location.Location;
 import android.util.Log;
 import android.util.SparseArray;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,9 +43,11 @@ import com.google.android.maps.MapView;
 
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.BetterMapView;
+import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
+import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 import eu.trentorise.smartcampus.jp.model.LocatedObject;
 import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
@@ -276,7 +277,9 @@ public class MapManager {
 			if (item instanceof SmartCheckStop) {
 				markerIcon = R.drawable.marker_poi_mobility;
 			} else if (item instanceof ParkingSerial) {
-				markerIcon = ParkingsHelper.getParkingMarker((ParkingSerial) item);
+				markerIcon = ParkingsHelper.getMarker((ParkingSerial) item);
+			} else if (item instanceof AlertRoadLoc) {
+				markerIcon = AlertRoadsHelper.getMarker((AlertRoadLoc) item);
 			}
 
 			MarkerOptions marker = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(markerIcon))
@@ -292,6 +295,8 @@ public class MapManager {
 			int markerIcon = R.drawable.marker_poi_generic;
 			if (item instanceof ParkingSerial) {
 				markerIcon = R.drawable.marker_parking_cluster;
+			} else if (item instanceof AlertRoadLoc) {
+				markerIcon = R.drawable.marker_alert_generic;
 			}
 
 			BitmapDescriptor bd = BitmapDescriptorFactory.fromBitmap(writeOnMarker(mContext, markerIcon,

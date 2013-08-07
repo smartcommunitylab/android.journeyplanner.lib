@@ -34,17 +34,31 @@ public class AlertRoadsHelper {
 	}
 
 	public static int getDrawableResourceByType(AlertRoadType type) {
-		int drawable = R.drawable.ic_alert;
+		int drawable = R.drawable.ic_menu_alert_other;
 
 		if (AlertRoadType.ROAD_BLOCK.equals(type)) {
-			drawable = R.drawable.ic_alert;
+			drawable = R.drawable.ic_menu_alert_road_block;
 		} else if (AlertRoadType.PARKING_BLOCK.equals(type)) {
-			drawable = R.drawable.ic_alert;
+			drawable = R.drawable.ic_menu_alert_parking_block;
 		} else if (AlertRoadType.DRIVE_CHANGE.equals(type)) {
-			drawable = R.drawable.ic_alert;
+			drawable = R.drawable.ic_menu_alert_other;
 		}
 
 		return drawable;
+	}
+
+	public static int getMarker(AlertRoadLoc alert) {
+		int marker = R.drawable.marker_alert_other;
+
+		if (alert.getChangeTypes().length == 1) {
+			if (AlertRoadType.ROAD_BLOCK.equals(alert.getChangeTypes()[0])) {
+				marker = R.drawable.marker_alert_road_block;
+			} else if (AlertRoadType.PARKING_BLOCK.equals(alert.getChangeTypes()[0])) {
+				marker = R.drawable.marker_alert_parking_block;
+			}
+		}
+
+		return marker;
 	}
 
 	/*

@@ -47,7 +47,7 @@ public class ParkingsHelper {
 	/*
 	 * DATA AND CONFIG
 	 */
-	public static int getParkingColor(ParkingSerial parking) {
+	public static int getColor(ParkingSerial parking) {
 		int color = R.color.parking_blue;
 
 		if (parking.isMonitored()) {
@@ -66,7 +66,7 @@ public class ParkingsHelper {
 		return color;
 	}
 
-	public static int getParkingMarker(ParkingSerial parking) {
+	public static int getMarker(ParkingSerial parking) {
 		int marker = R.drawable.marker_parking;
 
 		if (parking.isMonitored()) {
@@ -85,7 +85,7 @@ public class ParkingsHelper {
 		return marker;
 	}
 
-	public static String getParkingName(ParkingSerial parking) {
+	public static String getName(ParkingSerial parking) {
 		String parkingName = parkingsNames.get(parking.getName());
 		if (parkingName != null) {
 			return parkingName;

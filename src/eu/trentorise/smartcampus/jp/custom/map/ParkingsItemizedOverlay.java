@@ -94,7 +94,7 @@ public class ParkingsItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 			GeoPoint point = new GeoPoint((int) (parking.getPosition()[0] * 1E6), (int) (parking.getPosition()[1] * 1E6));
 			OverlayItem overlayitem = new OverlayItem(point, parking.getName(), "");
 
-			Drawable drawable = mContext.getResources().getDrawable(ParkingsHelper.getParkingMarker(parking));
+			Drawable drawable = mContext.getResources().getDrawable(ParkingsHelper.getMarker(parking));
 			drawable.setBounds(-drawable.getIntrinsicWidth() / 2, -drawable.getIntrinsicHeight(),
 					drawable.getIntrinsicWidth() / 2, 0);
 			overlayitem.setMarker(drawable);

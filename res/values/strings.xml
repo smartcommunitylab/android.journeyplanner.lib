@@ -207,6 +207,7 @@
     <string name="smart_check_parking_full">full</string>
     <string name="smart_check_parking_dialog_title">Parking</string>
     <string name="smart_check_parking_dialog_directions">Directions</string>
+    <string name="smart_check_alerts_dialog_title">Alerts</string>
     
     <string name="smart_check_routes_empty">No routes</string>
     <string name="smart_check_parkings_empty">No parkings</string>

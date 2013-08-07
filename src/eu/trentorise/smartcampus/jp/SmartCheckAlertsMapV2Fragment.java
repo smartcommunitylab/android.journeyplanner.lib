@@ -1,6 +1,5 @@
 package eu.trentorise.smartcampus.jp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
@@ -18,13 +17,11 @@ import com.google.android.gms.maps.model.Marker;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
-import eu.trentorise.smartcampus.jp.custom.map.ParkingsInfoDialog;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckAlertRoadsMapProcessor;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 import eu.trentorise.smartcampus.jp.model.LocatedObject;
-import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
 public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements OnCameraChangeListener, OnMarkerClickListener {
 

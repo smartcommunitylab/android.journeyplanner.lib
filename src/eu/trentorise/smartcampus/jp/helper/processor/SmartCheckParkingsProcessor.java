@@ -69,7 +69,7 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 		List<ParkingSerial> parkingsWithoutData = new ArrayList<ParkingSerial>();
 
 		for (ParkingSerial parking : result) {
-			parking.setName(ParkingsHelper.getParkingName(parking));
+			parking.setName(ParkingsHelper.getName(parking));
 			if (parking.isMonitored() != null && parking.isMonitored()
 					&& parking.getSlotsAvailable() != ParkingsHelper.PARKING_UNAVAILABLE) {
 				parkingsWithData.add(parking);

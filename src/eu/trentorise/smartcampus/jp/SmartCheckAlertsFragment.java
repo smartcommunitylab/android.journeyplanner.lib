@@ -17,7 +17,6 @@ import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.SmartCheckAlertsAdapter;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
-import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckAlertRoadsProcessor;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 
@@ -44,7 +43,7 @@ public class SmartCheckAlertsFragment extends SherlockListFragment {
 		setHasOptionsMenu(true);
 
 		adapter = new SmartCheckAlertsAdapter(getSherlockActivity(), R.layout.smartcheck_alert_row);
-		adapter.setMyLocation(JPHelper.getLocationHelper().getLocation());
+		// adapter.setMyLocation(JPHelper.getLocationHelper().getLocation());
 		adapter.registerDataSetObserver(new DataSetObserver() {
 			@Override
 			public void onChanged() {

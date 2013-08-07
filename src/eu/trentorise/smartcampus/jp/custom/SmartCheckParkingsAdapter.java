@@ -85,7 +85,7 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<ParkingSerial> {
 		}
 
 		// name
-		String parkingName = ParkingsHelper.getParkingName(parking);
+		String parkingName = ParkingsHelper.getName(parking);
 		holder.parkingName.setText(parkingName);
 
 		// description
@@ -115,7 +115,7 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<ParkingSerial> {
 			holder.parkingStatus.setText(Integer.toString(parking.getSlotsTotal()));
 		}
 
-		holder.parkingStatus.setTextColor(mContext.getResources().getColor(ParkingsHelper.getParkingColor(parking)));
+		holder.parkingStatus.setTextColor(mContext.getResources().getColor(ParkingsHelper.getColor(parking)));
 
 		// distance
 		if (myLocation != null) {
