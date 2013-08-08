@@ -18,7 +18,6 @@ package eu.trentorise.smartcampus.jp.custom;
 import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoadType;
 import android.app.Activity;
 import android.content.Context;
-import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +25,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.google.android.maps.GeoPoint;
-
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
@@ -101,9 +97,10 @@ public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoadLoc> {
 			for (AlertRoadType type : alertRoad.getChangeTypes()) {
 				ImageView typeImageView = new ImageView(mContext);
 				typeImageView.setImageResource(AlertRoadsHelper.getDrawableResourceByType(type));
-				// LinearLayout.LayoutParams params = new
-				// LinearLayout.LayoutParams(24, 24);
-				// typeImageView.setLayoutParams(params);
+				final float scale = mContext.getResources().getDisplayMetrics().density;
+				int pixels = (int) (24 * scale + 0.5f);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(pixels, pixels);
+				typeImageView.setLayoutParams(params);
 				holder.alertRoadTypes.addView(typeImageView);
 			}
 			holder.alertRoadTypes.setVisibility(View.VISIBLE);

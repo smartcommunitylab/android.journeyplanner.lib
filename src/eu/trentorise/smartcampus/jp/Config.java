@@ -172,8 +172,7 @@ public class Config {
 	public static final SimpleDateFormat FORMAT_DATE_SMARTPLANNER = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 	public static final SimpleDateFormat FORMAT_TIME_SMARTPLANNER = new SimpleDateFormat("hh:mmaa", Locale.ENGLISH);
 	public static final SimpleDateFormat FORMAT_DATE_UI = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
-	// public static final SimpleDateFormat FORMAT_DATE_UI = new
-	// SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH);
+	public static final SimpleDateFormat FORMAT_DATE_UI_LONG = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
 	public static final SimpleDateFormat FORMAT_TIME_UI = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
 	public static final String USER_PREFS_FAVORITES = "favorites";
 

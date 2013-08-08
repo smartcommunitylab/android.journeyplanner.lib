@@ -4,6 +4,8 @@ import java.util.List;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +75,19 @@ public class SmartCheckAlertsFragment extends SherlockListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		AlertRoadLoc alertRoad = adapter.getItem(position);
-		goToMap(alertRoad);
+
+		FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+		Fragment fragment = new SmartCheckAlertDetailsFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(SmartCheckAlertDetailsFragment.ARG_ALERT, alertRoad);
+		fragment.setArguments(args);
+		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.addToBackStack(fragment.getTag());
+		fragmentTransaction.replace(Config.mainlayout, fragment, "map");
+		// fragmentTransaction.commitAllowingStateLoss();
+		fragmentTransaction.commit();
+
+		// goToMap(alertRoad);
 	}
 
 	@Override

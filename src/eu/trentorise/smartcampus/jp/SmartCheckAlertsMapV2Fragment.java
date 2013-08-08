@@ -1,8 +1,11 @@
 package eu.trentorise.smartcampus.jp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -16,6 +19,8 @@ import com.google.android.gms.maps.model.Marker;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
+import eu.trentorise.smartcampus.jp.custom.map.AlertRoadsInfoDialog;
+import eu.trentorise.smartcampus.jp.custom.map.AlertRoadsInfoDialog.OnDetailsClick;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
@@ -23,7 +28,8 @@ import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckAlertRoadsMapProc
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 import eu.trentorise.smartcampus.jp.model.LocatedObject;
 
-public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements OnCameraChangeListener, OnMarkerClickListener {
+public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements OnCameraChangeListener, OnMarkerClickListener,
+		OnDetailsClick {
 
 	protected static final String PARAM_AID = "alertsAgencyId";
 	public final static String ARG_ALERT_FOCUSED = "alert_focused";
@@ -146,28 +152,39 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 		}
 
 		if (list.size() > 1 && getSupportMap().getCameraPosition().zoom == getSupportMap().getMaxZoomLevel()) {
-			// ParkingsInfoDialog parkingsInfoDialog = new ParkingsInfoDialog();
-			// Bundle args = new Bundle();
-			// args.putSerializable(ParkingsInfoDialog.ARG_PARKINGS, (ArrayList)
-			// list);
-			// parkingsInfoDialog.setArguments(args);
-			// parkingsInfoDialog.show(mActivity.getSupportFragmentManager(),
-			// "parking_selected");
+			AlertRoadsInfoDialog infoDialog = new AlertRoadsInfoDialog(this);
+			Bundle args = new Bundle();
+			args.putSerializable(AlertRoadsInfoDialog.ARG_ALERTSLIST, (ArrayList) list);
+			infoDialog.setArguments(args);
+			infoDialog.show(mActivity.getSupportFragmentManager(), "alert_selected");
 		} else if (list.size() > 1) {
 			getSupportMap().animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), zoomLevel + 1));
 			MapManager.fitMapWithOverlays(list, getSupportMap());
 		} else {
-			// ParkingSerial parking = (ParkingSerial) list.get(0);
-			// ParkingsInfoDialog parkingsInfoDialog = new ParkingsInfoDialog();
-			// Bundle args = new Bundle();
-			// args.putSerializable(ParkingsInfoDialog.ARG_PARKING, parking);
-			// parkingsInfoDialog.setArguments(args);
-			// parkingsInfoDialog.show(mActivity.getSupportFragmentManager(),
-			// "parking_selected");
+			AlertRoadLoc alert = (AlertRoadLoc) list.get(0);
+			AlertRoadsInfoDialog infoDialog = new AlertRoadsInfoDialog(this);
+			Bundle args = new Bundle();
+			args.putSerializable(AlertRoadsInfoDialog.ARG_ALERT, alert);
+			infoDialog.setArguments(args);
+			infoDialog.show(mActivity.getSupportFragmentManager(), "alert_selected");
 		}
 		// // default behavior
 		// return false;
 		return true;
+	}
+
+	@Override
+	public void OnDialogDetailsClick(AlertRoadLoc alert) {
+		FragmentTransaction fragmentTransaction = mActivity.getSupportFragmentManager().beginTransaction();
+		Fragment fragment = new SmartCheckAlertDetailsFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(SmartCheckAlertDetailsFragment.ARG_ALERT, alert);
+		fragment.setArguments(args);
+		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.addToBackStack(fragment.getTag());
+		fragmentTransaction.replace(Config.mainlayout, fragment, "map");
+		// fragmentTransaction.commitAllowingStateLoss();
+		fragmentTransaction.commit();
 	}
 
 	private GoogleMap getSupportMap() {

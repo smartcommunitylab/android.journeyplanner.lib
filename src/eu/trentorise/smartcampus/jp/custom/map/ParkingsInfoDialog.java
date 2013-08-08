@@ -71,9 +71,9 @@ public class ParkingsInfoDialog extends SherlockDialogFragment {
 		View view = null;
 
 		if (parkingsList != null) {
-			view = inflater.inflate(R.layout.parkings_dialog_multi, container, false);
+			view = inflater.inflate(R.layout.smartcheck_parkings_dialog_multi, container, false);
 		} else {
-			view = inflater.inflate(R.layout.parkings_dialog, container, false);
+			view = inflater.inflate(R.layout.smartcheck_parkings_dialog, container, false);
 		}
 
 		return view;

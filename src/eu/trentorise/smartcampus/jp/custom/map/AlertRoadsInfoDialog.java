@@ -17,35 +17,41 @@ package eu.trentorise.smartcampus.jp.custom.map;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import android.location.Address;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.TextUtils.TruncateAt;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 
-import eu.trentorise.smartcampus.android.common.navigation.NavigationHelper;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.SmartCheckAlertsAdapter;
-import eu.trentorise.smartcampus.jp.custom.SmartCheckParkingsAdapter;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 
+@SuppressLint("ValidFragment")
 public class AlertRoadsInfoDialog extends SherlockDialogFragment {
+
+	public interface OnDetailsClick {
+		public void OnDialogDetailsClick(AlertRoadLoc alert);
+	}
 
 	public static final String ARG_ALERT = "alert";
 	public static final String ARG_ALERTSLIST = "alertslist";
 	private AlertRoadLoc alertRoad;
 	private List<AlertRoadLoc> alertRoadsList;
+	private RadioGroup radioGroup;
+	private OnDetailsClick listener;
 
-	// private RadioGroup parkingsRadioGroup;
-
-	public AlertRoadsInfoDialog() {
+	public AlertRoadsInfoDialog(OnDetailsClick listener) {
+		this.listener = listener;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,9 +69,10 @@ public class AlertRoadsInfoDialog extends SherlockDialogFragment {
 		View view = null;
 
 		if (alertRoadsList != null) {
-			view = inflater.inflate(R.layout.parkings_dialog_multi, container, false); // TODO
+			view = inflater.inflate(R.layout.smartcheck_alerts_dialog_multi, container, false);
+			getDialog().setTitle(alertRoadsList.get(0).getRoad().getStreet());
 		} else {
-			view = inflater.inflate(R.layout.parkings_dialog, container, false); // TODO
+			view = inflater.inflate(R.layout.smartcheck_alerts_dialog, container, false);
 		}
 
 		return view;
@@ -76,23 +83,32 @@ public class AlertRoadsInfoDialog extends SherlockDialogFragment {
 		super.onStart();
 
 		if (alertRoadsList != null) {
-			// multiple stops
-			AlertRoadLoc firstParking = alertRoadsList.get(0);
-			View rowiew = SmartCheckAlertsAdapter.buildAlertRoad(getSherlockActivity(), R.layout.smartcheck_alert_row,
-					firstParking, null, null);
+			// multiple
+			radioGroup = (RadioGroup) getDialog().findViewById(R.id.smartcheck_alerts_dialog_multi_rg);
+			radioGroup.removeAllViews();
+			for (int i = 0; i < alertRoadsList.size(); i++) {
+				AlertRoadLoc alertRoad = alertRoadsList.get(i);
+				RadioButton rb = new RadioButton(getSherlockActivity());
+				rb.setTag(alertRoad);
+				rb.setText(alertRoad.getDescription());
+				rb.setMaxLines(3);
+				rb.setEllipsize(TruncateAt.END);
 
-			LinearLayout entryLayout = (LinearLayout) getDialog().findViewById(R.id.parkings_dialog_entry); // TODO
-			entryLayout.addView(rowiew, 0);
+				radioGroup.addView(rb);
+				if (i == 0) {
+					radioGroup.check(rb.getId());
+				}
+			}
 		} else if (alertRoad != null) {
-			// single stop
+			// single
 			View rowView = SmartCheckAlertsAdapter.buildAlertRoad(getSherlockActivity(), R.layout.smartcheck_alert_row,
-					alertRoad, null, null); // TODO
+					alertRoad, null, null);
 
-			LinearLayout entryLayout = (LinearLayout) getDialog().findViewById(R.id.parkings_dialog_entry); // TODO
+			LinearLayout entryLayout = (LinearLayout) getDialog().findViewById(R.id.smartcheck_alerts_dialog_entry);
 			entryLayout.addView(rowView, 0);
 		}
 
-		Button btn_cancel = (Button) getDialog().findViewById(R.id.parkings_dialog_close); // TODO
+		Button btn_cancel = (Button) getDialog().findViewById(R.id.smartcheck_alerts_dialog_close);
 		btn_cancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -100,11 +116,20 @@ public class AlertRoadsInfoDialog extends SherlockDialogFragment {
 			}
 		});
 
-		Button btn_ok = (Button) getDialog().findViewById(R.id.parkings_dialog_directions); // TODO
+		Button btn_ok = (Button) getDialog().findViewById(R.id.smartcheck_alerts_dialog_details);
 		btn_ok.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO : open details
+				AlertRoadLoc alert = null;
+
+				if (alertRoadsList != null) {
+					RadioButton selectedRb = (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+					alert = (AlertRoadLoc) selectedRb.getTag();
+				} else if (alertRoad != null) {
+					alert = alertRoad;
+				}
+
+				listener.OnDialogDetailsClick(alert);
 
 				getDialog().dismiss();
 			}
