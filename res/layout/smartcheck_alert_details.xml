@@ -16,29 +16,52 @@
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@android:color/background_light"
         android:orientation="vertical"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingTop="8dp" >
 
-        <TextView
-            android:id="@+id/smartcheck_alertdetails_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="false" />
+            android:orientation="horizontal" >
 
-        <LinearLayout
-            android:id="@+id/smartcheck_alertdetails_types"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingTop="4dp" >
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/smartcheck_alertdetails_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textIsSelectable="false" />
+
+                <LinearLayout
+                    android:id="@+id/smartcheck_alertdetails_types"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="4dp" >
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/smartcheck_alertdetails_gotomap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/empty"
+                android:src="@drawable/ic_menu_map_pink" />
         </LinearLayout>
 
         <TextView

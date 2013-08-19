@@ -1,6 +1,7 @@
 package eu.trentorise.smartcampus.jp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.os.Bundle;
@@ -35,7 +36,8 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 	public final static String ARG_ALERT_FOCUSED = "alert_focused";
 	public final static int REQUEST_CODE = 1986;
 
-	private final static int FOCUSED_ZOOM = 18;
+	private final static int ZOOM_FOCUSED = 18;
+	private final static int ZOOM_DEFAULT = JPParamsHelper.getZoomLevelMap() - 3;;
 
 	private SherlockFragmentActivity mActivity;
 
@@ -44,7 +46,6 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 	private AlertRoadLoc focusedAlert;
 
 	private LatLng centerLatLng = new LatLng(JPParamsHelper.getCenterMap().get(0), JPParamsHelper.getCenterMap().get(1));
-	private float zoomLevel = JPParamsHelper.getZoomLevelMap() - 3;
 
 	private GoogleMap mMap;
 
@@ -52,6 +53,12 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mActivity = (SherlockFragmentActivity) getActivity();
+
+		// get arguments
+		if (getArguments() != null && getArguments().containsKey(PARAM_AID)) {
+			agencyId = getArguments().getString(PARAM_AID);
+		}
+
 		setHasOptionsMenu(true);
 	}
 
@@ -65,20 +72,6 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 	public void onResume() {
 		super.onResume();
 
-		// get arguments
-		if (getArguments() != null && getArguments().containsKey(PARAM_AID)) {
-			agencyId = getArguments().getString(PARAM_AID);
-		}
-
-		if (getArguments() != null && getArguments().containsKey(ARG_ALERT_FOCUSED)) {
-			focusedAlert = (AlertRoadLoc) getArguments().getSerializable(ARG_ALERT_FOCUSED);
-		}
-
-		if (AlertRoadsHelper.getFocused() != null && AlertRoadsHelper.getFocused() != focusedAlert) {
-			focusedAlert = AlertRoadsHelper.getFocused();
-			AlertRoadsHelper.setFocused(null);
-		}
-
 		if (getSupportMap() == null)
 			return;
 
@@ -91,14 +84,22 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 		// show my location
 		getSupportMap().setMyLocationEnabled(true);
 
+		if (getArguments() != null && getArguments().containsKey(ARG_ALERT_FOCUSED)) {
+			focusedAlert = (AlertRoadLoc) getArguments().getSerializable(ARG_ALERT_FOCUSED);
+		}
+
+		if (AlertRoadsHelper.getFocused() != null && AlertRoadsHelper.getFocused() != focusedAlert) {
+			focusedAlert = AlertRoadsHelper.getFocused();
+			AlertRoadsHelper.setFocused(null);
+		}
+
 		if (focusedAlert != null) {
-			zoomLevel--;
 			getSupportMap().moveCamera(
 					CameraUpdateFactory.newLatLngZoom(
 							new LatLng(Double.parseDouble(focusedAlert.getRoad().getLat()), Double.parseDouble(focusedAlert
-									.getRoad().getLon())), FOCUSED_ZOOM));
+									.getRoad().getLon())), ZOOM_FOCUSED));
 		} else {
-			getSupportMap().moveCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, zoomLevel));
+			getSupportMap().moveCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, ZOOM_DEFAULT));
 
 			// // move to my location
 			// if (JPHelper.getLocationHelper().getLocation() != null) {
@@ -127,17 +128,24 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 
 	@Override
 	public void onCameraChange(CameraPosition position) {
-		if (zoomLevel != position.zoom) {
-			zoomLevel = position.zoom;
-		}
+		// if (zoomLevel != position.zoom) {
+		// zoomLevel = position.zoom;
+		// }
 
 		if (AlertRoadsHelper.getCache().isEmpty()) {
 			new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(mActivity, new SmartCheckAlertRoadsMapProcessor(mActivity,
 					getSupportMap(), agencyId)).execute();
 		} else {
 			getSupportMap().clear();
-			MapManager.ClusteringHelper.render(getSupportMap(),
-					MapManager.ClusteringHelper.cluster(mActivity, getSupportMap(), AlertRoadsHelper.getCache()));
+
+			if (focusedAlert != null) {
+				MapManager.ClusteringHelper.render(getSupportMap(),
+						MapManager.ClusteringHelper.cluster(mActivity, getSupportMap(), Arrays.asList(focusedAlert)));
+				focusedAlert = null;
+			} else {
+				MapManager.ClusteringHelper.render(getSupportMap(),
+						MapManager.ClusteringHelper.cluster(mActivity, getSupportMap(), AlertRoadsHelper.getCache()));
+			}
 		}
 	}
 
@@ -158,7 +166,8 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 			infoDialog.setArguments(args);
 			infoDialog.show(mActivity.getSupportFragmentManager(), "alert_selected");
 		} else if (list.size() > 1) {
-			getSupportMap().animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), zoomLevel + 1));
+			getSupportMap().animateCamera(
+					CameraUpdateFactory.newLatLngZoom(marker.getPosition(), getSupportMap().getCameraPosition().zoom + 1));
 			MapManager.fitMapWithOverlays(list, getSupportMap());
 		} else {
 			AlertRoadLoc alert = (AlertRoadLoc) list.get(0);
@@ -182,7 +191,8 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 		fragment.setArguments(args);
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		fragmentTransaction.addToBackStack(fragment.getTag());
-		fragmentTransaction.replace(Config.mainlayout, fragment, "map");
+		// fragmentTransaction.replace(Config.mainlayout, fragment, "map");
+		fragmentTransaction.add(Config.mainlayout, fragment, "map");
 		// fragmentTransaction.commitAllowingStateLoss();
 		fragmentTransaction.commit();
 	}

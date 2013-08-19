@@ -50,18 +50,6 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mActivity = (SherlockFragmentActivity) getActivity();
-		setHasOptionsMenu(true);
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		FeedbackFragmentInflater.inflateHandleButton(getActivity(), getView());
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
 
 		// get arguments
 		if (getArguments() != null && getArguments().containsKey(PARAM_AID)) {
@@ -76,6 +64,19 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 			focusedParking = ParkingsHelper.getFocused();
 			ParkingsHelper.setFocused(null);
 		}
+
+		setHasOptionsMenu(true);
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		FeedbackFragmentInflater.inflateHandleButton(getActivity(), getView());
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
 
 		if (getSupportMap() == null)
 			return;

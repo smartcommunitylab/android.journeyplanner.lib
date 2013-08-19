@@ -7,10 +7,13 @@ import java.util.Date;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
@@ -37,11 +40,12 @@ public class SmartCheckAlertDetailsFragment extends FeedbackFragment {
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onResume() {
+		super.onResume();
 
 		TextView title = (TextView) getView().findViewById(R.id.smartcheck_alertdetails_title);
 		LinearLayout typesLayout = (LinearLayout) getView().findViewById(R.id.smartcheck_alertdetails_types);
+		ImageButton goToMapBtn = (ImageButton) getView().findViewById(R.id.smartcheck_alertdetails_gotomap);
 		TextView description = (TextView) getView().findViewById(R.id.smartcheck_alertdetails_description);
 
 		// title
@@ -62,6 +66,16 @@ public class SmartCheckAlertDetailsFragment extends FeedbackFragment {
 		} else {
 			typesLayout.setVisibility(View.GONE);
 		}
+
+		// go to map
+		goToMapBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Toast.makeText(getSherlockActivity(), "TODO",
+				// Toast.LENGTH_SHORT).show();
+				goToMap();
+			}
+		});
 
 		// description
 		description.setText(alert.getDescription());
@@ -105,5 +119,13 @@ public class SmartCheckAlertDetailsFragment extends FeedbackFragment {
 			note.setVisibility(View.VISIBLE);
 		}
 
+	}
+
+	private void goToMap() {
+		if (alert != null) {
+			AlertRoadsHelper.setFocused(alert);
+
+			getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);
+		}
 	}
 }

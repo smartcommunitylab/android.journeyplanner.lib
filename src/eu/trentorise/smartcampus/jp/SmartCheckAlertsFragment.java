@@ -83,11 +83,9 @@ public class SmartCheckAlertsFragment extends SherlockListFragment {
 		fragment.setArguments(args);
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		fragmentTransaction.addToBackStack(fragment.getTag());
-		fragmentTransaction.replace(Config.mainlayout, fragment, "map");
+		fragmentTransaction.add(Config.mainlayout, fragment, "map");
 		// fragmentTransaction.commitAllowingStateLoss();
 		fragmentTransaction.commit();
-
-		// goToMap(alertRoad);
 	}
 
 	@Override
@@ -132,13 +130,5 @@ public class SmartCheckAlertsFragment extends SherlockListFragment {
 	// return super.onOptionsItemSelected(item);
 	// }
 	// }
-
-	private void goToMap(AlertRoadLoc focus) {
-		if (focus != null) {
-			AlertRoadsHelper.setFocused(focus);
-		}
-
-		getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);
-	}
 
 }
