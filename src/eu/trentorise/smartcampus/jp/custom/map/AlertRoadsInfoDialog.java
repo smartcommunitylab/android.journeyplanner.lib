@@ -20,14 +20,14 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.text.TextUtils.TruncateAt;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
@@ -50,6 +50,8 @@ public class AlertRoadsInfoDialog extends SherlockDialogFragment {
 	private RadioGroup radioGroup;
 	private OnDetailsClick listener;
 
+	private ListView alertsListView;
+
 	public AlertRoadsInfoDialog(OnDetailsClick listener) {
 		this.listener = listener;
 	}
@@ -68,12 +70,8 @@ public class AlertRoadsInfoDialog extends SherlockDialogFragment {
 		getDialog().setTitle(R.string.smart_check_alerts_dialog_title);
 		View view = null;
 
-		if (alertRoadsList != null) {
-			view = inflater.inflate(R.layout.smartcheck_alerts_dialog_multi, container, false);
-			getDialog().setTitle(alertRoadsList.get(0).getRoad().getStreet());
-		} else {
-			view = inflater.inflate(R.layout.smartcheck_alerts_dialog, container, false);
-		}
+		view = inflater.inflate(R.layout.smartcheck_alerts_dialog_list, container, false);
+		alertsListView = (ListView) view.findViewById(R.id.smartcheck_alerts_dialog_listView);
 
 		return view;
 	}
@@ -82,31 +80,24 @@ public class AlertRoadsInfoDialog extends SherlockDialogFragment {
 	public void onStart() {
 		super.onStart();
 
+		final SmartCheckAlertsAdapter adapter = new SmartCheckAlertsAdapter(getSherlockActivity(),
+				R.layout.smartcheck_alert_row);
+		alertsListView.setAdapter(adapter);
+
 		if (alertRoadsList != null) {
-			// multiple
-			radioGroup = (RadioGroup) getDialog().findViewById(R.id.smartcheck_alerts_dialog_multi_rg);
-			radioGroup.removeAllViews();
-			for (int i = 0; i < alertRoadsList.size(); i++) {
-				AlertRoadLoc alertRoad = alertRoadsList.get(i);
-				RadioButton rb = new RadioButton(getSherlockActivity());
-				rb.setTag(alertRoad);
-				rb.setText(alertRoad.getDescription());
-				rb.setMaxLines(3);
-				rb.setEllipsize(TruncateAt.END);
-
-				radioGroup.addView(rb);
-				if (i == 0) {
-					radioGroup.check(rb.getId());
-				}
-			}
+			adapter.addAll(alertRoadsList);
 		} else if (alertRoad != null) {
-			// single
-			View rowView = SmartCheckAlertsAdapter.buildAlertRoad(getSherlockActivity(), R.layout.smartcheck_alert_row,
-					alertRoad, null, null);
-
-			LinearLayout entryLayout = (LinearLayout) getDialog().findViewById(R.id.smartcheck_alerts_dialog_entry);
-			entryLayout.addView(rowView, 0);
+			adapter.add(alertRoad);
 		}
+
+		alertsListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View v, int position, long id) {
+				AlertRoadLoc alert = adapter.getItem(position);
+				listener.OnDialogDetailsClick(alert);
+				getDialog().dismiss();
+			}
+		});
 
 		Button btn_cancel = (Button) getDialog().findViewById(R.id.smartcheck_alerts_dialog_close);
 		btn_cancel.setOnClickListener(new OnClickListener() {
@@ -115,25 +106,5 @@ public class AlertRoadsInfoDialog extends SherlockDialogFragment {
 				getDialog().dismiss();
 			}
 		});
-
-		Button btn_ok = (Button) getDialog().findViewById(R.id.smartcheck_alerts_dialog_details);
-		btn_ok.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				AlertRoadLoc alert = null;
-
-				if (alertRoadsList != null) {
-					RadioButton selectedRb = (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
-					alert = (AlertRoadLoc) selectedRb.getTag();
-				} else if (alertRoad != null) {
-					alert = alertRoad;
-				}
-
-				listener.OnDialogDetailsClick(alert);
-
-				getDialog().dismiss();
-			}
-		});
-
 	}
 }

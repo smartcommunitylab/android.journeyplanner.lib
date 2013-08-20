@@ -81,9 +81,9 @@ public class SmartCheckAlertsFragment extends SherlockListFragment {
 		Bundle args = new Bundle();
 		args.putSerializable(SmartCheckAlertDetailsFragment.ARG_ALERT, alertRoad);
 		fragment.setArguments(args);
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+		fragmentTransaction.replace(Config.mainlayout, fragment, "lines");
 		fragmentTransaction.addToBackStack(fragment.getTag());
-		fragmentTransaction.add(Config.mainlayout, fragment, "map");
 		// fragmentTransaction.commitAllowingStateLoss();
 		fragmentTransaction.commit();
 	}

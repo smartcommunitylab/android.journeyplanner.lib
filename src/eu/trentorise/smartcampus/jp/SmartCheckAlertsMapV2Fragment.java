@@ -7,6 +7,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -164,7 +165,7 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 			Bundle args = new Bundle();
 			args.putSerializable(AlertRoadsInfoDialog.ARG_ALERTSLIST, (ArrayList) list);
 			infoDialog.setArguments(args);
-			infoDialog.show(mActivity.getSupportFragmentManager(), "alert_selected");
+			infoDialog.show(mActivity.getSupportFragmentManager(), "dialog");
 		} else if (list.size() > 1) {
 			getSupportMap().animateCamera(
 					CameraUpdateFactory.newLatLngZoom(marker.getPosition(), getSupportMap().getCameraPosition().zoom + 1));
@@ -175,7 +176,7 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 			Bundle args = new Bundle();
 			args.putSerializable(AlertRoadsInfoDialog.ARG_ALERT, alert);
 			infoDialog.setArguments(args);
-			infoDialog.show(mActivity.getSupportFragmentManager(), "alert_selected");
+			infoDialog.show(mActivity.getSupportFragmentManager(), "dialog");
 		}
 		// // default behavior
 		// return false;
@@ -189,10 +190,10 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 		Bundle args = new Bundle();
 		args.putSerializable(SmartCheckAlertDetailsFragment.ARG_ALERT, alert);
 		fragment.setArguments(args);
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		fragmentTransaction.addToBackStack(fragment.getTag());
-		// fragmentTransaction.replace(Config.mainlayout, fragment, "map");
+		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+		fragmentTransaction.hide(this);
 		fragmentTransaction.add(Config.mainlayout, fragment, "map");
+		fragmentTransaction.addToBackStack(fragment.getTag());
 		// fragmentTransaction.commitAllowingStateLoss();
 		fragmentTransaction.commit();
 	}
@@ -200,6 +201,7 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 	private GoogleMap getSupportMap() {
 		if (mMap == null) {
 			mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(Config.mainlayout)).getMap();
+			Log.e("getSupportMap", "Map was null");
 		}
 		return mMap;
 	}

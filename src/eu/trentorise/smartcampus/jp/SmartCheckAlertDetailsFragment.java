@@ -5,6 +5,8 @@ import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoadType;
 import java.util.Date;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -124,8 +126,19 @@ public class SmartCheckAlertDetailsFragment extends FeedbackFragment {
 	private void goToMap() {
 		if (alert != null) {
 			AlertRoadsHelper.setFocused(alert);
+			// getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);
 
-			getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);
+			FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
+			Fragment fragment = new SmartCheckAlertsMapV2Fragment();
+			// Bundle args = new Bundle();
+			// args.putSerializable(SmartCheckAlertDetailsFragment.ARG_ALERT,
+			// alert);
+			// fragment.setArguments(args);
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			fragmentTransaction.replace(Config.mainlayout, fragment, "lines");
+			fragmentTransaction.addToBackStack(fragment.getTag());
+			// fragmentTransaction.commitAllowingStateLoss();
+			fragmentTransaction.commit();
 		}
 	}
 }
