@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
@@ -94,7 +93,7 @@ public class SmartCheckAlertDetailsFragment extends FeedbackFragment {
 			TextView time = (TextView) getView().findViewById(R.id.smartcheck_alertdetails_time);
 			String from = Config.FORMAT_DATE_UI_LONG.format(new Date(alert.getFrom()));
 			String to = Config.FORMAT_DATE_UI_LONG.format(new Date(alert.getTo()));
-			time.setText(from + " - " + to);
+			time.setText(getString(R.string.smart_check_alerts_time, from, to));
 			time.setVisibility(View.VISIBLE);
 		}
 
@@ -102,7 +101,8 @@ public class SmartCheckAlertDetailsFragment extends FeedbackFragment {
 		if (alert.getRoad().getFromNumber() != null && alert.getRoad().getFromNumber().length() > 0
 				&& alert.getRoad().getToNumber() != null && alert.getRoad().getToNumber().length() > 0) {
 			TextView numbers = (TextView) getView().findViewById(R.id.smartcheck_alertdetails_numbers);
-			numbers.setText(alert.getRoad().getFromNumber() + " - " + alert.getRoad().getToNumber());
+			numbers.setText(getString(R.string.smart_check_alerts_numbers, alert.getRoad().getFromNumber(), alert.getRoad()
+					.getToNumber()));
 			numbers.setVisibility(View.VISIBLE);
 		}
 
@@ -110,12 +110,13 @@ public class SmartCheckAlertDetailsFragment extends FeedbackFragment {
 		if (alert.getRoad().getFromIntersection() != null && alert.getRoad().getFromIntersection().length() > 0
 				&& alert.getRoad().getToIntersection() != null && alert.getRoad().getToIntersection().length() > 0) {
 			TextView intersections = (TextView) getView().findViewById(R.id.smartcheck_alertdetails_intersections);
-			intersections.setText(alert.getRoad().getFromNumber() + " - " + alert.getRoad().getToNumber());
+			intersections.setText(getString(R.string.smart_check_alerts_intersections, capitalize(alert.getRoad()
+					.getFromIntersection()), capitalize(alert.getRoad().getToIntersection())));
 			intersections.setVisibility(View.VISIBLE);
 		}
 
 		// note
-		if (alert.getNote() != null && alert.getNote().length() > 0) {
+		if (alert.getNote() != null && alert.getNote().trim().length() > 0 && !alert.getNote().trim().startsWith("-")) {
 			TextView note = (TextView) getView().findViewById(R.id.smartcheck_alertdetails_note);
 			note.setText(alert.getNote());
 			note.setVisibility(View.VISIBLE);
@@ -140,5 +141,18 @@ public class SmartCheckAlertDetailsFragment extends FeedbackFragment {
 			// fragmentTransaction.commitAllowingStateLoss();
 			fragmentTransaction.commit();
 		}
+	}
+
+	private String capitalize(String s) {
+		String capitalized = "";
+		String[] splitted = s.split(" ");
+		for (int i = 0; i < splitted.length; i++) {
+			if (i > 0) {
+				capitalized += " ";
+			}
+			String word = splitted[i];
+			capitalized += word.substring(0, 1).toUpperCase() + word.substring(1);
+		}
+		return capitalized;
 	}
 }

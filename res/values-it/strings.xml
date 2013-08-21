@@ -205,6 +205,9 @@
     <string name="smart_check_parking_dialog_directions">Indicazioni stradali</string>
     <string name="smart_check_alerts_dialog_title">Ordinanze</string>
     <string name="smart_check_alerts_dialog_ok">Dettagli</string>
+    <string name="smart_check_alerts_time">dal %1$s al %2$s</string>
+    <string name="smart_check_alerts_numbers">dal n. %1$s al n. %2$s</string>
+    <string name="smart_check_alerts_intersections">dall\'intersezione con %1$s all\'intersezione con %2$s</string>
     
     <string name="smart_check_routes_empty">Nessuna corsa</string>
     <string name="smart_check_parkings_empty">Nessun parcheggio</string>
