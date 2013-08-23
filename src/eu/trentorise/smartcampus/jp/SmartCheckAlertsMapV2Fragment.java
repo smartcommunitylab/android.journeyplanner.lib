@@ -1,13 +1,11 @@
 package eu.trentorise.smartcampus.jp;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,14 +19,12 @@ import com.google.android.gms.maps.model.Marker;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
-import eu.trentorise.smartcampus.jp.custom.map.AlertRoadsInfoDialog;
 import eu.trentorise.smartcampus.jp.custom.map.AlertRoadsInfoDialog.OnDetailsClick;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckAlertRoadsMapProcessor;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
-import eu.trentorise.smartcampus.jp.model.LocatedObject;
 
 public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements OnCameraChangeListener, OnMarkerClickListener,
 		OnDetailsClick {
@@ -133,9 +129,10 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 		// zoomLevel = position.zoom;
 		// }
 
-		if (AlertRoadsHelper.getCache().isEmpty()) {
+		if (AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK) == null
+				|| AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK).isEmpty()) {
 			new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(mActivity, new SmartCheckAlertRoadsMapProcessor(mActivity,
-					getSupportMap(), agencyId)).execute();
+					getSupportMap(), agencyId, null, null, AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK, false)).execute();
 		} else {
 			getSupportMap().clear();
 
@@ -144,40 +141,17 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 						MapManager.ClusteringHelper.cluster(mActivity, getSupportMap(), Arrays.asList(focusedAlert)));
 				focusedAlert = null;
 			} else {
-				MapManager.ClusteringHelper.render(getSupportMap(),
-						MapManager.ClusteringHelper.cluster(mActivity, getSupportMap(), AlertRoadsHelper.getCache()));
+				MapManager.ClusteringHelper.render(
+						getSupportMap(),
+						MapManager.ClusteringHelper.cluster(mActivity, getSupportMap(),
+								AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK)));
 			}
 		}
 	}
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		String id = marker.getTitle();
-
-		List<LocatedObject> list = MapManager.ClusteringHelper.getFromGridId(id);
-
-		if (list == null || list.isEmpty()) {
-			return true;
-		}
-
-		if (list.size() > 1 && getSupportMap().getCameraPosition().zoom == getSupportMap().getMaxZoomLevel()) {
-			AlertRoadsInfoDialog infoDialog = new AlertRoadsInfoDialog(this);
-			Bundle args = new Bundle();
-			args.putSerializable(AlertRoadsInfoDialog.ARG_ALERTSLIST, (ArrayList) list);
-			infoDialog.setArguments(args);
-			infoDialog.show(mActivity.getSupportFragmentManager(), "dialog");
-		} else if (list.size() > 1) {
-			getSupportMap().animateCamera(
-					CameraUpdateFactory.newLatLngZoom(marker.getPosition(), getSupportMap().getCameraPosition().zoom + 1));
-			MapManager.fitMapWithOverlays(list, getSupportMap());
-		} else {
-			AlertRoadLoc alert = (AlertRoadLoc) list.get(0);
-			AlertRoadsInfoDialog infoDialog = new AlertRoadsInfoDialog(this);
-			Bundle args = new Bundle();
-			args.putSerializable(AlertRoadsInfoDialog.ARG_ALERT, alert);
-			infoDialog.setArguments(args);
-			infoDialog.show(mActivity.getSupportFragmentManager(), "dialog");
-		}
+		AlertRoadsHelper.staticOnMarkerClick(mActivity, getSupportMap(), marker, this);
 		// // default behavior
 		// return false;
 		return true;
@@ -201,7 +175,6 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 	private GoogleMap getSupportMap() {
 		if (mMap == null) {
 			mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(Config.mainlayout)).getMap();
-			Log.e("getSupportMap", "Map was null");
 		}
 		return mMap;
 	}

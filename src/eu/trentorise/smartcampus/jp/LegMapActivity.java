@@ -24,6 +24,7 @@ import java.util.List;
 import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.widget.RelativeLayout;
 
@@ -31,28 +32,43 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
+import eu.trentorise.smartcampus.jp.custom.map.MapManager;
+import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
+import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckAlertRoadsMapProcessor;
+import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 
-public class LegMapActivity extends BaseActivity {
+public class LegMapActivity extends BaseActivity implements OnCameraChangeListener, OnMarkerClickListener {
 
 	public static final String ACTIVE_POS = "aPOS";
 	public static final String POLYLINES = "polylines";
 	public static final String LEGS = "legs";
+	public static final String DATE = "date";
 
 	private List<String> polylines;
 	private int activePos;
 	private int index;
 
 	private GoogleMap mMap = null;
+	private float zoomLevel;
 	private List<List<LatLng>> legsPoints = new ArrayList<List<LatLng>>();
+	private long date;
+
+	private List<AlertRoadLoc> filteredList = new ArrayList<AlertRoadLoc>();
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
@@ -80,19 +96,25 @@ public class LegMapActivity extends BaseActivity {
 			polylines = (List<String>) savedInstanceState.getSerializable(POLYLINES);
 			activePos = savedInstanceState.getInt(ACTIVE_POS);
 		}
-		if (((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap() != null) {
 
-			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-			mMap.setMyLocationEnabled(true);
-
-			FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
-					(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp_v2));
-		}
+		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
+				(RelativeLayout) findViewById(R.id.mapcontainer_relativelayout_jp_v2));
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		if (getSupportMap() == null)
+			return;
+
+		getSupportMap().getUiSettings().setRotateGesturesEnabled(false);
+		getSupportMap().getUiSettings().setTiltGesturesEnabled(false);
+		getSupportMap().setOnCameraChangeListener(this);
+		getSupportMap().setOnMarkerClickListener(this);
+
+		// show my location
+		getSupportMap().setMyLocationEnabled(true);
 
 		if (getIntent() != null) {
 			List<Leg> legs = (List<Leg>) getIntent().getSerializableExtra(LEGS);
@@ -100,18 +122,92 @@ public class LegMapActivity extends BaseActivity {
 				polylines = legs2polylines(legs);
 			}
 			activePos = getIntent().getIntExtra(ACTIVE_POS, -1);
+
+			date = getIntent().getLongExtra(DATE, 0);
 		}
 
-		// LegsOverlay legsOverlay = new LegsOverlay(polylines, activePos,
-		// getApplicationContext());
-		// legsOverlay.adaptMap(mapView.getController());
-		// mapView.getOverlays().add(legsOverlay);
-		if (mMap != null) {
-			mMap.clear();
+		if (getSupportMap() != null) {
+			getSupportMap().clear();
 			setPath(polylines, activePos);
-			adaptMap(mMap);
-			draw(mMap);
+			adaptMap(getSupportMap());
+			draw(getSupportMap());
 		}
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (getSupportMap() != null) {
+			getSupportMap().setMyLocationEnabled(false);
+			getSupportMap().setOnCameraChangeListener(null);
+			getSupportMap().setOnMarkerClickListener(null);
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		// reset cache
+		if (JPParamsHelper.isAlertroadsVisibleOnPlanning()) {
+			AlertRoadsHelper.setCache(AlertRoadsHelper.ALERTS_CACHE_PLAN, new ArrayList<AlertRoadLoc>());
+		}
+		super.onDestroy();
+	}
+
+	@Override
+	public void onCameraChange(CameraPosition position) {
+		if (JPParamsHelper.isAlertroadsVisibleOnPlanning() && JPParamsHelper.getAlertroadsAgencyId() != null) {
+			// alerts
+			if (AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN) == null
+					|| AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN).isEmpty()) {
+				Log.e("DATE IN MILLIS!", Long.toString(date));
+				new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(this, new SmartCheckAlertRoadsMapProcessor(this,
+						getSupportMap(), JPParamsHelper.getAlertroadsAgencyId(), (date > 0 ? date : null), null,
+						JPParamsHelper.getAlertroadsAgencyId(), true)).execute();
+			} else {
+				List<AlertRoadLoc> newFilteredList = filterByProjection(getSupportMap(),
+						AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN));
+
+				// re-render only if new alerts has to be re
+				if (!filteredList.equals(newFilteredList) || (position.zoom != zoomLevel)) {
+					zoomLevel = position.zoom;
+					filteredList = newFilteredList;
+					getSupportMap().clear();
+					draw(getSupportMap());
+					MapManager.ClusteringHelper.render(getSupportMap(),
+							MapManager.ClusteringHelper.cluster(this, getSupportMap(), filteredList));
+				}
+			}
+		}
+	}
+
+	public static List<AlertRoadLoc> filterByProjection(GoogleMap gMap, List<AlertRoadLoc> alerts) {
+		List<AlertRoadLoc> filteredList = new ArrayList<AlertRoadLoc>();
+
+		for (AlertRoadLoc alert : alerts) {
+			if (gMap.getProjection().getVisibleRegion().latLngBounds.contains(new LatLng(Double.parseDouble(alert.getRoad()
+					.getLat()), Double.parseDouble(alert.getRoad().getLon())))) {
+				filteredList.add(alert);
+			}
+		}
+
+		return filteredList;
+	}
+
+	@Override
+	public boolean onMarkerClick(Marker marker) {
+		if (JPParamsHelper.isAlertroadsVisibleOnPlanning()) {
+			AlertRoadsHelper.staticOnMarkerClick(this, getSupportMap(), marker, null);
+		}
+		// // default behavior
+		// return false;
+		return true;
+	}
+
+	private GoogleMap getSupportMap() {
+		if (mMap == null) {
+			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+		}
+		return mMap;
 	}
 
 	@Override
@@ -148,13 +244,11 @@ public class LegMapActivity extends BaseActivity {
 
 	@Override
 	public String getAppToken() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getAuthToken() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -288,8 +382,7 @@ public class LegMapActivity extends BaseActivity {
 			}
 		}
 		if (index == -1)// show start leg
-			drawPath(map, legsPoints.get(index + 1),
-					getApplicationContext().getResources().getColor(R.color.path_actual));
+			drawPath(map, legsPoints.get(index + 1), getApplicationContext().getResources().getColor(R.color.path_actual));
 		else if (index == legsPoints.size())// show end leg
 			drawPath(map, legsPoints.get(legsPoints.size() - 1),
 					getApplicationContext().getResources().getColor(R.color.path_actual));

@@ -90,14 +90,16 @@ public class AlertRoadsInfoDialog extends SherlockDialogFragment {
 			adapter.add(alertRoad);
 		}
 
-		alertsListView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> adapterView, View v, int position, long id) {
-				AlertRoadLoc alert = adapter.getItem(position);
-				listener.OnDialogDetailsClick(alert);
-				getDialog().dismiss();
-			}
-		});
+		if (listener != null) {
+			alertsListView.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> adapterView, View v, int position, long id) {
+					AlertRoadLoc alert = adapter.getItem(position);
+					listener.OnDialogDetailsClick(alert);
+					getDialog().dismiss();
+				}
+			});
+		}
 
 		Button btn_cancel = (Button) getDialog().findViewById(R.id.smartcheck_alerts_dialog_close);
 		btn_cancel.setOnClickListener(new OnClickListener() {

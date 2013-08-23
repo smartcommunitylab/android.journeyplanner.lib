@@ -20,6 +20,8 @@ public class JPParamsHelper {
 
 	/* json parameters in assets/params_js.js */
 	public static final String KEY_APP_TOKEN = "app_token";
+	public static final String KEY_ALERTROADS_PLANNING = "alertroads_in_planning";
+	public static final String KEY_ALERTROADS_PLANNING_AGENCYID = "alertroads_in_planning_agencyid";
 	public static final String KEY_SMARTCHECK_OPTIONS = "smartcheck_options";
 	public static final String KEY_BROADCAST_NOTIFICATIONS_OPTIONS = "broadcast_notifications_options";
 	public static final String KEY_CENTER_MAP = "center_map";
@@ -60,6 +62,25 @@ public class JPParamsHelper {
 		return returnToken;
 	}
 
+	public static boolean isAlertroadsVisibleOnPlanning() {
+		Boolean alertsVisible = (Boolean) getInstance().getParamsAsset().get(KEY_ALERTROADS_PLANNING);
+		if (alertsVisible != null && alertsVisible == true) {
+			return true;
+		}
+		return false;
+	}
+
+	public static String getAlertroadsAgencyId() {
+		String aid = null;
+		String paramAgencyId = (String) getInstance().getParamsAsset().get(KEY_ALERTROADS_PLANNING_AGENCYID);
+		if (paramAgencyId != null
+				&& (AlertRoadsHelper.ALERTS_AID_ROVERETO.equals(paramAgencyId) || AlertRoadsHelper.ALERTS_AID_TRENTO
+						.equals(paramAgencyId))) {
+			aid = paramAgencyId;
+		}
+		return aid;
+	}
+
 	public static String[] getBroadcastNotificationsOptions() {
 		return getFilteredResource(R.array.broadcast_notifications_array, KEY_BROADCAST_NOTIFICATIONS_OPTIONS);
 	}
@@ -67,18 +88,18 @@ public class JPParamsHelper {
 	public static String[] getSmartCheckOptions() {
 		return getFilteredResource(R.array.smart_checks_list, KEY_SMARTCHECK_OPTIONS);
 	}
-	
+
 	/*
 	 * MAP
 	 */
-	public static int getZoomLevelMap(){
+	public static int getZoomLevelMap() {
 		return (Integer) getInstance().getParamsAsset().get(KEY_ZOOM_MAP);
 	}
-	
-	public static List<Double> getCenterMap(){
+
+	public static List<Double> getCenterMap() {
 		return (List<Double>) getInstance().getParamsAsset().get(KEY_CENTER_MAP);
 	}
-	
+
 	/*
 	 * Private methods
 	 */
@@ -102,5 +123,4 @@ public class JPParamsHelper {
 		return filteredOptions.toArray(new String[] {});
 	}
 
-	
 }

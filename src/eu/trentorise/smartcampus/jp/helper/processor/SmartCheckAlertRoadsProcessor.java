@@ -58,7 +58,7 @@ public class SmartCheckAlertRoadsProcessor extends AbstractAsyncTaskProcessor<Vo
 		adapter.notifyDataSetChanged();
 
 		// save in cache
-		AlertRoadsHelper.setCache(result);
+		AlertRoadsHelper.setCache(AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK, result);
 
 		mActivity.setSupportProgressBarIndeterminateVisibility(false);
 	}

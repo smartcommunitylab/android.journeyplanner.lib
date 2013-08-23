@@ -19,6 +19,7 @@ import it.sayservice.platform.smartplanner.data.message.Itinerary;
 import it.sayservice.platform.smartplanner.data.message.Leg;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.List;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +36,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.actionbarsherlock.app.SherlockFragment;
-
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.DialogHandler;
@@ -64,7 +63,8 @@ public class ItineraryFragment extends FeedbackFragment {
 	@Override
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
-		if (singleJourney != null) arg0.putSerializable(JOURNEY, singleJourney);
+		if (singleJourney != null)
+			arg0.putSerializable(JOURNEY, singleJourney);
 		if (itinerary != null) {
 			arg0.putSerializable(ITINERARY, itinerary);
 		}
@@ -78,9 +78,12 @@ public class ItineraryFragment extends FeedbackFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(JOURNEY)) singleJourney = (SingleJourney) savedInstanceState.get(JOURNEY);
-			if (savedInstanceState.containsKey(ITINERARY)) itinerary = (Itinerary) savedInstanceState.get(ITINERARY);
-			if (savedInstanceState.containsKey(LEGS)) legs = (List<Leg>) savedInstanceState.get(LEGS);
+			if (savedInstanceState.containsKey(JOURNEY))
+				singleJourney = (SingleJourney) savedInstanceState.get(JOURNEY);
+			if (savedInstanceState.containsKey(ITINERARY))
+				itinerary = (Itinerary) savedInstanceState.get(ITINERARY);
+			if (savedInstanceState.containsKey(LEGS))
+				legs = (List<Leg>) savedInstanceState.get(LEGS);
 		}
 	}
 
@@ -105,8 +108,7 @@ public class ItineraryFragment extends FeedbackFragment {
 
 		if (legsListView.getHeaderViewsCount() == 0) {
 			// HEADER (before setAdapter or it won't work!)
-			ViewGroup startLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg,
-					null);
+			ViewGroup startLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, null);
 			TextView startLegTimeTextView = (TextView) startLayout.findViewById(R.id.leg_time);
 			startLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getStartime())));
 			TextView startLegDescTextView = (TextView) startLayout.findViewById(R.id.leg_description);
@@ -114,18 +116,16 @@ public class ItineraryFragment extends FeedbackFragment {
 			legsListView.addHeaderView(startLayout);
 
 			// FOOTER (before setAdapter or it won't work!)
-			ViewGroup endLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg,
-					null);
+			ViewGroup endLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, null);
 			TextView endLegTimeTextView = (TextView) endLayout.findViewById(R.id.leg_time);
-			endLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary
-					.getEndtime())));
+			endLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getEndtime())));
 			TextView endLegDescTextView = (TextView) endLayout.findViewById(R.id.leg_description);
 			endLegDescTextView.setText(singleJourney.getTo().getName());
 			legsListView.addFooterView(endLayout);
 		}
 
-		legsListView.setAdapter(new LegsListAdapter(getSherlockActivity(), R.layout.itinerary_leg, singleJourney
-				.getFrom(), singleJourney.getTo(), legs));
+		legsListView.setAdapter(new LegsListAdapter(getSherlockActivity(), R.layout.itinerary_leg, singleJourney.getFrom(),
+				singleJourney.getTo(), legs));
 
 		legsListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -133,6 +133,12 @@ public class ItineraryFragment extends FeedbackFragment {
 				Intent i = new Intent(getActivity(), LegMapActivity.class);
 				if (legs != null) {
 					i.putExtra(LegMapActivity.LEGS, new ArrayList<Leg>(legs));
+					try {
+						long date = Config.FORMAT_DATE_SMARTPLANNER.parse(singleJourney.getDate()).getTime();
+						i.putExtra(LegMapActivity.DATE, date);
+					} catch (ParseException e) {
+						Log.e(ItineraryFragment.class.getSimpleName(), e.getMessage());
+					}
 				}
 				i.putExtra(LegMapActivity.ACTIVE_POS, position - 1);
 				getActivity().startActivity(i);
