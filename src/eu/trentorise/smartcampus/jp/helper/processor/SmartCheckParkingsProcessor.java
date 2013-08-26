@@ -64,40 +64,56 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 	public void handleResult(List<ParkingSerial> result) {
 		List<ParkingSerial> orderedList = new ArrayList<ParkingSerial>();
 
-		// order: firsts with data
-		List<ParkingSerial> parkingsWithData = new ArrayList<ParkingSerial>();
-		List<ParkingSerial> parkingsWithoutData = new ArrayList<ParkingSerial>();
-
-		for (ParkingSerial parking : result) {
-			parking.setName(ParkingsHelper.getName(parking));
-			if (parking.isMonitored() != null && parking.isMonitored()
-					&& parking.getSlotsAvailable() != ParkingsHelper.PARKING_UNAVAILABLE) {
-				parkingsWithData.add(parking);
-			} else {
-				parkingsWithoutData.add(parking);
-			}
-		}
-
 		Comparator<ParkingSerial> comparator = ParkingsHelper.getParkingNameComparator();
 		if (myLocation != null) {
 			comparator = ParkingsHelper.getParkingDistanceComparator(myLocation);
 		}
 
-		Collections.sort(parkingsWithData, comparator);
-		Collections.sort(parkingsWithoutData, comparator);
+		/*
+		 * order: firsts with data
+		 */
+		// List<ParkingSerial> parkingsWithData = new
+		// ArrayList<ParkingSerial>();
+		// List<ParkingSerial> parkingsWithoutData = new
+		// ArrayList<ParkingSerial>();
+		//
+		// for (ParkingSerial parking : result) {
+		// parking.setName(ParkingsHelper.getName(parking));
+		// if (parking.isMonitored() != null && parking.isMonitored()
+		// && parking.getSlotsAvailable() != ParkingsHelper.PARKING_UNAVAILABLE)
+		// {
+		// parkingsWithData.add(parking);
+		// } else {
+		// parkingsWithoutData.add(parking);
+		// }
+		// }
+		//
+		// Collections.sort(parkingsWithData, comparator);
+		// Collections.sort(parkingsWithoutData, comparator);
+		//
+		// for (ParkingSerial parking : parkingsWithData) {
+		// orderedList.add(parking);
+		// }
+		//
+		// for (ParkingSerial parking : parkingsWithoutData) {
+		// orderedList.add(parking);
+		// }
+		//
+		// adapter.clear();
+		// for (ParkingSerial parking : orderedList) {
+		// adapter.add(parking);
+		// }
 
-		for (ParkingSerial parking : parkingsWithData) {
-			orderedList.add(parking);
-		}
-
-		for (ParkingSerial parking : parkingsWithoutData) {
-			orderedList.add(parking);
-		}
+		/*
+		 * order: all the same
+		 */
+		Collections.sort(result, comparator);
 
 		adapter.clear();
-		for (ParkingSerial parking : orderedList) {
+		for (ParkingSerial parking : result) {
 			adapter.add(parking);
 		}
+		orderedList = result;
 
 		adapter.notifyDataSetChanged();
 

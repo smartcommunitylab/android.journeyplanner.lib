@@ -72,7 +72,7 @@ public class ParkingsHelper {
 		if (parking.isMonitored()) {
 			if (parking.getSlotsAvailable() == PARKING_UNAVAILABLE) {
 				// data unavailable
-				marker = R.drawable.marker_parking_red;
+				// marker = R.drawable.marker_parking_red;
 			} else if (parking.getSlotsAvailable() <= PARKING_LOW_AVAIL) {
 				marker = R.drawable.marker_parking_red;
 			} else if (parking.getSlotsAvailable() > PARKING_LOW_AVAIL && parking.getSlotsAvailable() <= PARKING_HIGH_AVAIL) {
