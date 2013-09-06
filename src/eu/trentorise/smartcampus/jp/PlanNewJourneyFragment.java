@@ -75,6 +75,11 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 
 	protected Position fromPosition;
 	protected Position toPosition;
+	protected String date;
+	protected String time;
+	protected Date fromDate;
+	protected Date fromTime;
+	
 	protected UserPrefsHolder userPrefsHolder;
 
 	protected boolean fromFav = false;
@@ -171,11 +176,13 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			@Override
 			public void onClick(View v) {
 				// user preferences
-				ToggleButton useCustomPrefsToggleBtn = (ToggleButton) getView().findViewById(R.id.plannew_options_toggle);
+				ToggleButton useCustomPrefsToggleBtn = (ToggleButton) getView().findViewById(
+						R.id.plannew_options_toggle);
 				View userPrefsLayout = (View) getView().findViewById(R.id.plannew_userprefs);
 
 				if (useCustomPrefsToggleBtn.isChecked()) {
-					TableLayout tTypesTableLayout = (TableLayout) userPrefsLayout.findViewById(R.id.transporttypes_table);
+					TableLayout tTypesTableLayout = (TableLayout) userPrefsLayout
+							.findViewById(R.id.transporttypes_table);
 					RadioGroup rTypesRadioGroup = (RadioGroup) userPrefsLayout.findViewById(R.id.routetypes_radioGroup);
 					userPrefsHolder = PrefsHelper.userPrefsViews2Holder(tTypesTableLayout, rTypesRadioGroup, userPrefs);
 				} else {
@@ -219,16 +226,24 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			}
 		});
 		// hide keyboard if it is still open
-		InputMethodManager imm = (InputMethodManager) getSherlockActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		InputMethodManager imm = (InputMethodManager) getSherlockActivity().getSystemService(
+				Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(searchBtn.getWindowToken(), 0);
 	}
 
 	protected void setUpTimingControls() {
 		Date now = new Date();
-
 		final EditText dateEditText = (EditText) getView().findViewById(R.id.plannew_date);
-		dateEditText.setTag(now);
-		dateEditText.setText(Config.FORMAT_DATE_UI.format(now));
+		
+		/*check if date and time are stored*/
+		if (fromDate == null) {
+			dateEditText.setTag(now);
+			dateEditText.setText(Config.FORMAT_DATE_UI.format(now));
+		} else {
+			dateEditText.setTag(fromDate);
+			dateEditText.setText(Config.FORMAT_DATE_UI.format(fromDate));
+		}
+
 		dateEditText.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -239,25 +254,32 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		});
 
 		final EditText timeEditText = (EditText) getView().findViewById(R.id.plannew_time);
-		timeEditText.setTag(now);
-		timeEditText.setText(Config.FORMAT_TIME_UI.format(now));
+		if (fromTime == null) {
+			timeEditText.setTag(now);
+			timeEditText.setText(Config.FORMAT_TIME_UI.format(now));
+		} else {
+			timeEditText.setTag(fromTime);
+			timeEditText.setText(Config.FORMAT_TIME_UI.format(fromTime));
+		}
 		timeEditText.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				DialogFragment f = TimePickerDialogFragment.newInstance((EditText) v);
-				 f.setArguments(TimePickerDialogFragment.prepareData(timeEditText.toString()));
+				f.setArguments(TimePickerDialogFragment.prepareData(timeEditText.toString()));
 				f.show(getSherlockActivity().getSupportFragmentManager(), "timePicker");
+				
 			}
 		});
+		fromDate = fromTime = now;
 	}
 
 	protected void setUpLocationControls() {
 		List<Double> mapcenter = JPParamsHelper.getCenterMap();
-		double[] refLoc = mapcenter == null? null : new double[]{mapcenter.get(0),mapcenter.get(1)};
+		double[] refLoc = mapcenter == null ? null : new double[] { mapcenter.get(0), mapcenter.get(1) };
 
 		AutoCompleteTextView fromEditText = (AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text);
-		GeocodingAutocompletionHelper fromAutocompletionHelper = new GeocodingAutocompletionHelper(getSherlockActivity(),
-				fromEditText, Config.TN_REGION, Config.TN_COUNTRY, Config.TN_ADM_AREA, refLoc);
+		GeocodingAutocompletionHelper fromAutocompletionHelper = new GeocodingAutocompletionHelper(
+				getSherlockActivity(), fromEditText, Config.TN_REGION, Config.TN_COUNTRY, Config.TN_ADM_AREA, refLoc);
 		fromAutocompletionHelper.setOnAddressSelectedListener(new OnAddressSelectedListener() {
 			@Override
 			public void onAddressSelected(Address address) {
@@ -321,8 +343,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		toFavBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String toString = ((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text)).getText().toString()
-						.trim();
+				String toString = ((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text)).getText()
+						.toString().trim();
 				if (toString.length() == 0 || isFavorite(toString)) {
 					createFavoritesDialog(TO);
 					// Toast.makeText(getActivity(), R.string.to_field_empty,
@@ -338,8 +360,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		fromEditText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {
-				boolean fav = isFavorite(((AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text)).getText()
-						.toString());
+				boolean fav = isFavorite(((AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text))
+						.getText().toString());
 				toggleStar(fromFavBtn, fav);
 			}
 
@@ -355,8 +377,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		toEditText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {
-				boolean fav = isFavorite(((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text)).getText()
-						.toString());
+				boolean fav = isFavorite(((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text))
+						.getText().toString());
 				toggleStar(toFavBtn, fav);
 			}
 
@@ -378,11 +400,16 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		// JPHelper.getLocationHelper().stop();
 
 		// hide keyboard if it is still open
-		InputMethodManager imm = (InputMethodManager) getSherlockActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		InputMethodManager imm = (InputMethodManager) getSherlockActivity().getSystemService(
+				Context.INPUT_METHOD_SERVICE);
 		EditText timeEditText = (EditText) getView().findViewById(R.id.plannew_time);
 		if (timeEditText != null) {
 			imm.hideSoftInputFromWindow(timeEditText.getWindowToken(), 0);
 		}
+		/*save date and time for future use*/
+		 fromDate = (Date) getView().findViewById(R.id.plannew_date).getTag();
+		 fromTime = (Date) getView().findViewById(R.id.plannew_time).getTag();
+
 	}
 
 	@Override
@@ -535,7 +562,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 	}
 
 	protected void createFavoritesDialog(final String field) {
-		if (userPrefsHolder != null && userPrefsHolder.getFavorites() != null && !userPrefsHolder.getFavorites().isEmpty()) {
+		if (userPrefsHolder != null && userPrefsHolder.getFavorites() != null
+				&& !userPrefsHolder.getFavorites().isEmpty()) {
 			final List<Position> list = userPrefsHolder.getFavorites();
 			String[] items = new String[list.size()];
 			for (int i = 0; i < items.length; i++) {
