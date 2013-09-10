@@ -406,10 +406,11 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		if (timeEditText != null) {
 			imm.hideSoftInputFromWindow(timeEditText.getWindowToken(), 0);
 		}
-		/*save date and time for future use*/
-		 fromDate = (Date) getView().findViewById(R.id.plannew_date).getTag();
-		 fromTime = (Date) getView().findViewById(R.id.plannew_time).getTag();
-
+		if (getView() != null && getView().findViewById(R.id.plannew_date) != null) {
+			/*save date and time for future use*/
+			 fromDate = (Date) getView().findViewById(R.id.plannew_date).getTag();
+			 fromTime = (Date) getView().findViewById(R.id.plannew_time).getTag();
+		}
 	}
 
 	@Override
