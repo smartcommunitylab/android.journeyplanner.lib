@@ -68,7 +68,7 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// call the fragment with the bus direction
-				if (busLines.get(position).getRoutesLong().size() != 1) {
+				if (busLines.get(position).getRoutesLong() != null && busLines.get(position).getRoutesLong().size() != 1) {
 					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
 							.beginTransaction();
 					Fragment fragment = new SmartCheckBusDirectionFragment();

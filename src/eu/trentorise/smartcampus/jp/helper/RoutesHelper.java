@@ -268,7 +268,9 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "16A", R.string.agency_12_route_16A, "16"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "16R", R.string.agency_12_route_16R, "16"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "17A", R.string.agency_12_route_17A, "17"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "17R", R.string.agency_12_route_17R, "17") });
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "17R", R.string.agency_12_route_17R, "17"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "FUTSA", R.string.agency_12_route_FUTSA, "Funivia"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "FUTSR", R.string.agency_12_route_FUTSR, "Funivia") });
 
 	/*
 	 * Trento - Male'

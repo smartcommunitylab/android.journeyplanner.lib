@@ -3,6 +3,7 @@ package eu.trentorise.smartcampus.jp;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -80,7 +81,11 @@ public class SmartCheckBusDirectionFragment extends FeedbackFragment {
 			busLine.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Large);
 		}
 
-		busLine.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
+		if (Color.WHITE == smartLine.getColor()) {
+			busLine.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_black));
+		} else {
+			busLine.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
+		}
 
 		SmartCheckDirectionAdapter adapter = new SmartCheckDirectionAdapter(getSherlockActivity(), layout.smart_direction_row);
 		for (String routeLong : smartLine.getRoutesLong()) {

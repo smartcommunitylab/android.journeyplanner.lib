@@ -14,6 +14,7 @@ import java.util.Map;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -142,17 +143,22 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 			lineNumber.setTextSize(17);
 		}
 		lineNumber.setText(params.getLine());
-		lineNumber.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
 		lineNumber.setBackgroundColor(params.getColor());
 		TextView lineDay = (TextView) getSherlockActivity().findViewById(R.id.lineDay);
-		lineDay.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
 		lineDay.setBackgroundColor(params.getColor());
+
+		if (Color.WHITE == params.getColor()) {
+			lineNumber.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_black));
+			lineDay.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_black));
+		} else {
+			lineNumber.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
+			lineDay.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
+		}
 		// set the buttons for navigation
 
 		// today
 		Button todayButton = (Button) getView().findViewById(R.id.button_today);
 		todayButtonCheck();
-
 		todayButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -169,7 +175,11 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 		});
 
 		Button previousButton = (Button) getView().findViewById(R.id.button_previous);
-		previousButton.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
+		if (Color.WHITE == params.getColor()) {
+			previousButton.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_black));
+		} else {
+			previousButton.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
+		}
 		((GradientDrawable) previousButton.getBackground()).setColor(params.getColor());
 
 		previousButton.setOnTouchListener(new OnTouchListener() {
@@ -209,7 +219,11 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 		});
 
 		Button nextButton = (Button) getView().findViewById(R.id.button_next);
-		nextButton.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
+		if (Color.WHITE == params.getColor()) {
+			nextButton.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_black));
+		} else {
+			nextButton.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
+		}
 		((GradientDrawable) nextButton.getBackground()).setColor(params.getColor());
 		nextButton.setOnTouchListener(new OnTouchListener() {
 
@@ -281,6 +295,11 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 			// ((ColorDrawable)
 			// todayButton.getBackground()).setColor(params.getColor());
 			gd.setColor(params.getColor());
+			if (Color.WHITE == params.getColor()) {
+				todayButton.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_black));
+			} else {
+				todayButton.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
+			}
 		}
 		todayButton.invalidate();
 
@@ -607,7 +626,11 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 		TextView lineDay = (TextView) getSherlockActivity().findViewById(R.id.lineDay);
 		if (lineDay != null) {
 			lineDay.setText(dateFormat.format(actualDate));
-			lineDay.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
+			if (Color.WHITE == params.getColor()) {
+				lineDay.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_black));
+			} else {
+				lineDay.setTextColor(getSherlockActivity().getResources().getColor(R.color.transparent_white));
+			}
 			lineDay.setBackgroundColor(params.getColor());
 		}
 

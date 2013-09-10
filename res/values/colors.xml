@@ -27,6 +27,7 @@
     <color name="path_done">#cc00ffff</color>
     <color name="path_actual">#ccff0000</color>
     <color name="transparent_white">#bbffffff</color>
+    <color name="transparent_black">#bb000000</color>
     <color name="tt_gray_1">#888888</color>
     <color name="tt_gray_2">#666666</color>
     <color name="tt_red">#D80000</color>
