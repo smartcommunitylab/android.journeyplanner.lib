@@ -548,6 +548,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 		} else {
 			container.setVisibility(View.GONE);
 			getSherlockActivity().findViewById(R.id.ttempty).setVisibility(View.VISIBLE);
+			refreshDayTextView(0);
 			return;
 		}
 		// stop list
