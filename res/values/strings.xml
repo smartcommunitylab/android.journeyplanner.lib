@@ -213,6 +213,8 @@
     <string name="smart_check_alerts_numbers">from n. %1$s to n. %2$s</string>
     <string name="smart_check_alerts_intersections">from intersection with %1$s to intersection with %2$s</string>
     
+    <string name="parking_alert">%1$s: %2$s places available</string>
+    
     <string name="smart_check_routes_empty">No routes</string>
     <string name="smart_check_parkings_empty">No parkings</string>
     <string name="smart_check_alerts_empty">No alerts</string>

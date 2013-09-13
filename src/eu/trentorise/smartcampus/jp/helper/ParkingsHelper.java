@@ -85,6 +85,16 @@ public class ParkingsHelper {
 		return marker;
 	}
 
+	public static String getName(String parking) {
+		String parkingName = parkingsNames.get(parking);
+		if (parkingName != null) {
+			return parkingName;
+		} else {
+			return parking;
+		}
+	}
+	
+	
 	public static String getName(ParkingSerial parking) {
 		String parkingName = parkingsNames.get(parking.getName());
 		if (parkingName != null) {

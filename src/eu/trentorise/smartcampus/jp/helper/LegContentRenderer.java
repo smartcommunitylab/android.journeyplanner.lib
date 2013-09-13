@@ -18,7 +18,11 @@ package eu.trentorise.smartcampus.jp.helper;
 import it.sayservice.platform.smartplanner.data.message.Leg;
 import it.sayservice.platform.smartplanner.data.message.Position;
 import it.sayservice.platform.smartplanner.data.message.TType;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertAccident;
 import it.sayservice.platform.smartplanner.data.message.alerts.AlertDelay;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertParking;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoad;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertStrike;
 
 import java.util.List;
 import java.util.Locale;
@@ -95,7 +99,7 @@ public class LegContentRenderer {
 					from += ", ";
 				}
 				from += this.ctx.getString(R.string.leg_car_pick_up) + " "
-						+ bold(leg.getFrom().getStopId().getAgencyId() + " " + leg.getFrom().getStopId().getId());
+						+ bold(ParkingsHelper.getName(leg.getFrom().getStopId().getId()));
 			}
 
 			if (leg.getTo().getStopId() != null) {
@@ -103,7 +107,7 @@ public class LegContentRenderer {
 					to += ", ";
 				}
 				to += this.ctx.getString(R.string.leg_car_leave) + " "
-						+ bold(leg.getTo().getStopId().getAgencyId() + " " + leg.getTo().getStopId().getId());
+						+ bold(ParkingsHelper.getName(leg.getTo().getStopId().getId()));
 			}
 		} else if (tType.equals(TType.BUS)) {
 			// TODO
@@ -159,11 +163,56 @@ public class LegContentRenderer {
 		if (!leg.getAlertDelayList().isEmpty()) {
 			for (AlertDelay ad : leg.getAlertDelayList()) {
 				if (ad.getDelay() > 0) {
-					delay = this.ctx.getString(R.string.leg_delay) + " " + millis2mins(ad.getDelay()) + " min";
+					delay += this.ctx.getString(R.string.leg_delay) + " " + millis2mins(ad.getDelay()) + " min";
+				}
+			}
+		} 
+		if (!leg.getAlertAccidentList().isEmpty()) {
+			if (delay.length()>0)
+			{
+				delay += "\n";
+			}
+			for (AlertAccident aa : leg.getAlertAccidentList()) {
+				if (aa.getDescription()!=null) {
+					delay += aa.getDescription();
 				}
 			}
 		}
-
+		
+		if (!leg.getAlertRoadList().isEmpty()) {
+			if (delay.length()>0)
+			{
+				delay += "\n";
+			}
+			for (AlertRoad aa : leg.getAlertRoadList()) {
+				if (aa.getDescription()!=null) {
+					delay += aa.getDescription();
+				}
+			}
+		}
+		
+		if (!leg.getAlertStrikeList().isEmpty()) {
+			if (delay.length()>0)
+			{
+				delay += "\n";
+			}
+			for (AlertStrike aa : leg.getAlertStrikeList()) {
+				if (aa.getDescription()!=null) {
+					delay += aa.getDescription();
+				}
+			}
+		}
+		if (!leg.getAlertParkingList().isEmpty()) {
+			if (delay.length()>0)
+			{
+				delay += "\n";
+			}
+			for (AlertParking aa : leg.getAlertParkingList()) {
+				if (aa.getDescription()!=null) {
+					delay += ctx.getString(R.string.parking_alert, ParkingsHelper.getName(aa.getPlace().getId()), aa.getPlacesAvailable());
+				}
+			}
+		}
 		return delay;
 	}
 

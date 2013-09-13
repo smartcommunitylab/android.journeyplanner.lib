@@ -97,7 +97,7 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 			}
 
 			if ((!l.getAlertDelayList().isEmpty() || !l.getAlertParkingList().isEmpty() || !l.getAlertStrikeList()
-					.isEmpty()) && !hasAlerts) {
+					.isEmpty() || !l.getAlertRoadList().isEmpty() || !l.getAlertAccidentList().isEmpty()) && !hasAlerts) {
 				hasAlerts = true;
 			}
 		}
