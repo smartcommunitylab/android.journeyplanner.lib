@@ -173,7 +173,7 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements OnCam
 		fragment.setArguments(args);
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		fragmentTransaction.addToBackStack(fragment.getTag());
-		fragmentTransaction.add(Config.mainlayout, fragment, "map");
+		fragmentTransaction.add(Config.mainlayout, fragment, "lines");
 		// fragmentTransaction.commitAllowingStateLoss();
 		fragmentTransaction.commit();
 	}
