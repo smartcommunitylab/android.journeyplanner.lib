@@ -27,12 +27,16 @@ import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
+import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
 
 public class BaseActivity extends FeedbackFragmentActivity {
 
 	private void initDataManagement(Bundle savedInstanceState) {
 		try {
 			JPHelper.init(getApplicationContext());
+			
+			RoutesDBHelper.init(getApplicationContext());
+			
 			String token = JPHelper.getAccessProvider().getAuthToken(this, null);
 			if (token != null) {
 				initData();
