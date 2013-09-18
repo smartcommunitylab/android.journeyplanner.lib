@@ -51,19 +51,25 @@ public class RoutesDBHelper {
 		
 	}
 
-	private static int removeHashesForAgency(Agency agency,SQLiteDatabase db){
+	private static void removeHashesForAgency(Agency agency,SQLiteDatabase db){
 			/*
 			 * This part produces a String like this:
 			 * hash=somehash1 OR hash=somehas2 OR hash=somehash3 ecc..
 			 * to put after the WHERE clause in SQL
 			 */
 			String whereClause=RoutesDatabase.AGENCY_ID_KEY+"="+agency.agencyId+" AND ( ";
-			for(String hash : agency.removed)
+			for(String hash : agency.removed){
 				whereClause+= RoutesDatabase.LINEHASH_KEY + " = " + hash + " OR ";
+				
+				
+				// delete old staff from the ROUTES table.
+				String whereClause2 = RoutesDatabase.LINEHASH_KEY + "="+ hash;
+				db.delete(RoutesDatabase.DB_TABLE_ROUTE, whereClause2, null);
+			}
 			whereClause=whereClause.substring(0,whereClause.length()-4)+")";
 			
-			//delete old stuff
-			return db.delete(RoutesDatabase.DB_TABLE_CALENDAR,
+			//delete old stuff from CALENDAR TABLE
+			db.delete(RoutesDatabase.DB_TABLE_CALENDAR,
 					whereClause, null);
 	}
 	
@@ -156,19 +162,19 @@ public class RoutesDBHelper {
 	    
 	    private static final String CREATE_CALENDAR_TABLE = "CREATE TABLE IF NOT EXISTS "
                 + DB_TABLE_CALENDAR + " (" 
-	    		+ AGENCY_ID_KEY + " integer primary key autoincrement, "
+	    		+ AGENCY_ID_KEY + " integer primary key, "
                 + DATE_KEY + "text not null, "
                 + LINEHASH_KEY + " text not null);";
 	    
 	    private static final String CREATE_ROUTE_TABLE = "CREATE TABLE IF NOT EXISTS "
                 + DB_TABLE_ROUTE + " (" 
-	    		+ LINEHASH_KEY + " integer primary key autoincrement, " 
+	    		+ LINEHASH_KEY + " text primary key, " 
                 + STOPS_ID_KEY + " text not null, "
                 + STOPS_NAMES_KEY + " text not null );";
 	    
 	    private static final String CREATE_VERSION_TABLE = "CREATE TABLE IF NOT EXISTS "
                 + DB_TABLE_VERSION + " (" 
-	    		+ AGENCY_ID_KEY + " integer primary key autoincrement, "
+	    		+ AGENCY_ID_KEY + " integer primary key, "
                 + VERSION_KEY + " text not null );";
 		
 
