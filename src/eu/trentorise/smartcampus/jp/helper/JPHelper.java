@@ -24,6 +24,7 @@ import it.sayservice.platform.smartplanner.data.message.otpbeans.Stop;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -665,7 +666,7 @@ public class JPHelper {
 		}
 
 		String queryStrObject = eu.trentorise.smartcampus.android.common.Utils.convertToJSON(filter);
-		String queryString = "filter=" + queryStrObject;
+		String queryString = "filter=" + URLEncoder.encode(queryStrObject,"utf8");
 		request.setQuery(queryString);
 
 		MessageResponse response = getInstance().protocolCarrier.invokeSync(request, JPParamsHelper.getAppToken(),
