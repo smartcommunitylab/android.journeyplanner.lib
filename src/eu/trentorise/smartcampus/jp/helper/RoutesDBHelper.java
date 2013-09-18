@@ -1,5 +1,7 @@
 package eu.trentorise.smartcampus.jp.helper;
 
+import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +28,7 @@ public class RoutesDBHelper {
 		instance = new RoutesDBHelper(applicationContext);
 	}
 	
-	public static void updateAgencys(Agency... agencies){
+	public static void updateAgencys(Agency[] agencies){
 		
 		SQLiteDatabase db = RoutesDBHelper.routesDB.getWritableDatabase();
 		
@@ -39,7 +41,7 @@ public class RoutesDBHelper {
 			addHashesAndDateForAgency(agency,db);
 			db.insert(RoutesDatabase.DB_TABLE_VERSION, RoutesDatabase.VERSION_KEY,agency.toContentValues() );
 		}	
-
+		db.close();
 	}
 	
 	private static void addHashesAndDateForAgency(Agency agency,
@@ -48,6 +50,7 @@ public class RoutesDBHelper {
 		for(String hash: agency.added){
 			db.insert(RoutesDatabase.DB_TABLE_CALENDAR, RoutesDatabase.DATE_KEY, agency.toContentValues(hash));
 		}
+		addRoutes(agency, db);
 		
 	}
 
@@ -72,11 +75,26 @@ public class RoutesDBHelper {
 			db.delete(RoutesDatabase.DB_TABLE_CALENDAR,
 					whereClause, null);
 	}
+
+	private static void addRoutes(Agency agency,SQLiteDatabase db){
+		int i= 0;
+		for(CompressedTransitTimeTable ctt : agency.ctts){
+			ContentValues routes = new ContentValues();
+			routes.put(RoutesDatabase.LINEHASH_KEY, agency.added.get(i));
+			String stopsIds = ctt.getStopsId().toString();
+			routes.put(RoutesDatabase.STOPS_ID_KEY, stopsIds.substring(1,stopsIds.length()-1));
+			String stopsNames = ctt.getStops().toString();
+			routes.put(RoutesDatabase.STOPS_ID_KEY, stopsNames.substring(1,stopsNames.length()-1));
+			db.insert(RoutesDatabase.DB_TABLE_ROUTE,RoutesDatabase.STOPS_NAMES_KEY, routes);
+			i++;
+		}
+	}
 	
 	public class Agency{
 		public String agencyId;
 		public List<String> removed;
 		public List<String> added;
+		public List<CompressedTransitTimeTable> ctts;
 		public String version;
 		
 		private String calendar;
@@ -84,15 +102,28 @@ public class RoutesDBHelper {
 		private HashMap<String,String> lines = new HashMap<String, String>();
 
 		public Agency(String agencyId, List<String> removed,
-				List<String> added, String version, String calendar) {
+				List<String> added, String version) {
 			super();
 			this.agencyId = agencyId;
 			this.removed = removed;
 			this.added = added;
 			this.version = version;
+		}
+
+		public Agency(String agencyId, List<String> removed,
+				List<String> added, List<CompressedTransitTimeTable> ctts,
+				String version, String calendar) {
+			super();
+			this.agencyId = agencyId;
+			this.removed = removed;
+			this.added = added;
+			this.ctts = ctts;
+			this.version = version;
 			this.calendar = calendar;
 			createMap();
 		}
+
+
 
 		public String getCalendar() {
 			return calendar;
