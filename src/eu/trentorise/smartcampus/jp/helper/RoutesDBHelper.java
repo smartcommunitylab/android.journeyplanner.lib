@@ -2,6 +2,8 @@ package eu.trentorise.smartcampus.jp.helper;
 
 import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +12,7 @@ import org.json.JSONObject;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -46,13 +49,51 @@ public class RoutesDBHelper {
 		db.close();
 	}
 	
+	public static CompressedTransitTimeTable getTimeTable(String date, String agencyId, String routeId){
+		CompressedTransitTimeTable out = new CompressedTransitTimeTable();
+		SQLiteDatabase db = RoutesDBHelper.routesDB.getReadableDatabase();
+		String hash = getHash(db, date, agencyId);
+		fillCTT(db, routeId, hash, out);
+		return out;
+	}
+	
+	private static void fillCTT(SQLiteDatabase db,String line, String hash,
+			CompressedTransitTimeTable tt) {
+		String whereClause = RoutesDatabase.LINEHASH_KEY + "=?";
+		Cursor c = db.query(RoutesDatabase.DB_TABLE_ROUTE, new String[] {
+				RoutesDatabase.STOPS_IDS_KEY, RoutesDatabase.STOPS_NAMES_KEY,
+				RoutesDatabase.TRIPS_IDS_KEY,
+				RoutesDatabase.COMPRESSED_TIMES_KEY }, whereClause,
+				new String[] { line+"_"+hash}, null, null, null, "1");
+		c.moveToFirst();
+		String stops = c.getString(c.getColumnIndex(RoutesDatabase.STOPS_NAMES_KEY));
+		tt.setStops(Arrays.asList(stops.split(",")));
+		String stopsIds = c.getString(c.getColumnIndex(RoutesDatabase.STOPS_IDS_KEY));
+		tt.setStopsId(Arrays.asList(stopsIds.split(",")));
+		String tripIds = c.getString(c.getColumnIndex(RoutesDatabase.TRIPS_IDS_KEY));
+		tt.setTripIds(Arrays.asList(tripIds.split(",")));
+		tt.setCompressedTimes(c.getString(c.getColumnIndex(RoutesDatabase.COMPRESSED_TIMES_KEY )));
+	}
+	
+	
+	private static String getHash(SQLiteDatabase db, String date,
+			String agencyId) {
+		String whereClause = RoutesDatabase.DATE_KEY + "=? AND "
+				+ RoutesDatabase.AGENCY_ID_KEY + "=?";
+		Cursor c = db.query(RoutesDatabase.DB_TABLE_CALENDAR,
+				new String[] { RoutesDatabase.LINEHASH_KEY }, whereClause,
+				new String[] { date, agencyId }, null, null, null, "1");
+		c.moveToFirst();
+		return c.getString(c.getColumnIndex(RoutesDatabase.LINEHASH_KEY));
+	}
+
 	private static void addHashesAndDateForAgency(Agency agency,
 			SQLiteDatabase db) {
 		
 		if(agency.isCalendarModified()){
 			for (String hash : agency.added) {
 				db.insert(RoutesDatabase.DB_TABLE_CALENDAR,
-						RoutesDatabase.DATE_KEY, agency.toContentValues(hash));
+						RoutesDatabase.DATE_KEY, agency.toContentValues(hash.substring(hash.lastIndexOf('_'))));
 			}
 		}
 		addRoutes(agency, db);
