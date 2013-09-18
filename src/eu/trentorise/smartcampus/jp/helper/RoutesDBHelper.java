@@ -1,7 +1,10 @@
 package eu.trentorise.smartcampus.jp.helper;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import org.json.JSONObject;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -35,13 +38,10 @@ public class RoutesDBHelper {
 		for(Agency agency : agencies){
 			addHashesAndDateForAgency(agency,db);
 			db.insert(RoutesDatabase.DB_TABLE_VERSION, RoutesDatabase.VERSION_KEY,agency.toContentValues() );
-		}
-		
-		
+		}	
 
 	}
 	
-	//TODO left the date in content values!!!!!!!
 	private static void addHashesAndDateForAgency(Agency agency,
 			SQLiteDatabase db) {
 		
@@ -72,8 +72,46 @@ public class RoutesDBHelper {
 		public List<String> removed;
 		public List<String> added;
 		public String version;
-		public String calendar;
 		
+		private String calendar;
+		
+		private HashMap<String,String> lines = new HashMap<String, String>();
+
+		public Agency(String agencyId, List<String> removed,
+				List<String> added, String version, String calendar) {
+			super();
+			this.agencyId = agencyId;
+			this.removed = removed;
+			this.added = added;
+			this.version = version;
+			this.calendar = calendar;
+			createMap();
+		}
+
+		public String getCalendar() {
+			return calendar;
+		}
+
+		public void setCalendar(String calendar) {
+			this.calendar = calendar;
+			createMap();
+		}
+
+		/**
+		 * This method take the json of calendar.js
+		 * and create a map where hashes are used as keys
+		 * and date are the value
+		 */
+		private void createMap() {
+			calendar = calendar.substring(1,calendar.length()-2);
+			calendar=calendar.replace("\"", "");
+			String[] rows = calendar.split(",");
+			for(String elements : rows){
+				String[] datas = elements.split(":");
+				lines.put(datas[1], datas[0]);
+			}
+		}
+
 		public ContentValues toContentValues(){
 			ContentValues cv = new ContentValues();
 			cv.put(RoutesDatabase.AGENCY_ID_KEY, agencyId);
@@ -85,6 +123,8 @@ public class RoutesDBHelper {
 			ContentValues cv = new ContentValues();
 			cv.put(RoutesDatabase.AGENCY_ID_KEY, agencyId);
 			cv.put(RoutesDatabase.LINEHASH_KEY, toAddHash);
+			int index = toAddHash.lastIndexOf('_');
+			cv.put(RoutesDatabase.DATE_KEY,lines.get(toAddHash.substring(index+1)));
 			return cv; 
 		}
 	}
