@@ -28,7 +28,7 @@ public class RoutesDBHelper {
 		instance = new RoutesDBHelper(applicationContext);
 	}
 	
-	public static void updateAgencys(Agency[] agencies){
+	public static void updateAgencys(Agency... agencies){
 		
 		SQLiteDatabase db = RoutesDBHelper.routesDB.getWritableDatabase();
 		
@@ -39,6 +39,8 @@ public class RoutesDBHelper {
 		//populate again and update version
 		for(Agency agency : agencies){
 			addHashesAndDateForAgency(agency,db);
+			
+			//update the version
 			db.insert(RoutesDatabase.DB_TABLE_VERSION, RoutesDatabase.VERSION_KEY,agency.toContentValues() );
 		}	
 		db.close();
@@ -47,8 +49,11 @@ public class RoutesDBHelper {
 	private static void addHashesAndDateForAgency(Agency agency,
 			SQLiteDatabase db) {
 		
-		for(String hash: agency.added){
-			db.insert(RoutesDatabase.DB_TABLE_CALENDAR, RoutesDatabase.DATE_KEY, agency.toContentValues(hash));
+		if(agency.isCalendarModified()){
+			for (String hash : agency.added) {
+				db.insert(RoutesDatabase.DB_TABLE_CALENDAR,
+						RoutesDatabase.DATE_KEY, agency.toContentValues(hash));
+			}
 		}
 		addRoutes(agency, db);
 		
@@ -82,9 +87,11 @@ public class RoutesDBHelper {
 			ContentValues routes = new ContentValues();
 			routes.put(RoutesDatabase.LINEHASH_KEY, agency.added.get(i));
 			String stopsIds = ctt.getStopsId().toString();
-			routes.put(RoutesDatabase.STOPS_ID_KEY, stopsIds.substring(1,stopsIds.length()-1));
+			routes.put(RoutesDatabase.STOPS_IDS_KEY, stopsIds.substring(1,stopsIds.length()-1));
 			String stopsNames = ctt.getStops().toString();
-			routes.put(RoutesDatabase.STOPS_ID_KEY, stopsNames.substring(1,stopsNames.length()-1));
+			routes.put(RoutesDatabase.STOPS_IDS_KEY, stopsNames.substring(1,stopsNames.length()-1));
+			String tripids = ctt.getTripIds().toString();
+			routes.put(RoutesDatabase.STOPS_IDS_KEY, tripids.substring(1,tripids.length()-1));
 			db.insert(RoutesDatabase.DB_TABLE_ROUTE,RoutesDatabase.STOPS_NAMES_KEY, routes);
 			i++;
 		}
@@ -97,12 +104,12 @@ public class RoutesDBHelper {
 		public List<CompressedTransitTimeTable> ctts;
 		public String version;
 		
-		private String calendar;
+		private String calendar=null;
 		
 		private HashMap<String,String> lines = new HashMap<String, String>();
 
 		public Agency(String agencyId, List<String> removed,
-				List<String> added, String version) {
+				List<String> added,List<CompressedTransitTimeTable> ctts, String version) {
 			super();
 			this.agencyId = agencyId;
 			this.removed = removed;
@@ -120,18 +127,21 @@ public class RoutesDBHelper {
 			this.ctts = ctts;
 			this.version = version;
 			this.calendar = calendar;
-			createMap();
+			if(calendar!=null)
+				createMap();
 		}
-
-
-
+		
+		public boolean isCalendarModified(){
+			return calendar!=null;
+		}
 		public String getCalendar() {
 			return calendar;
 		}
 
 		public void setCalendar(String calendar) {
 			this.calendar = calendar;
-			createMap();
+			if(calendar!=null)
+				createMap();
 		}
 
 		/**
@@ -183,9 +193,12 @@ public class RoutesDBHelper {
 	    public final static String LINEHASH_KEY = "linehash";  //this is used in routes table too.
 	    
 	    //routes fields
-	    public final static String STOPS_ID_KEY = "stopsID";
+	    public final static String STOPS_IDS_KEY = "stopsIDs";
 	    public final static String STOPS_NAMES_KEY = "stopsNames";
+	    public final static String TRIPS_IDS_KEY = "tripIds";
 	    public final static String COMPRESSED_TIMES_KEY = "times";
+	    
+	    		
 	    
 	    //version field
 	    public final static String VERSION_KEY = "version";
@@ -200,8 +213,10 @@ public class RoutesDBHelper {
 	    private static final String CREATE_ROUTE_TABLE = "CREATE TABLE IF NOT EXISTS "
                 + DB_TABLE_ROUTE + " (" 
 	    		+ LINEHASH_KEY + " text primary key, " 
-                + STOPS_ID_KEY + " text not null, "
-                + STOPS_NAMES_KEY + " text not null );";
+                + STOPS_IDS_KEY + " text not null, "
+                + STOPS_NAMES_KEY + " text,"
+                + TRIPS_IDS_KEY + " text,"
+                + COMPRESSED_TIMES_KEY + " text not null );";
 	    
 	    private static final String CREATE_VERSION_TABLE = "CREATE TABLE IF NOT EXISTS "
                 + DB_TABLE_VERSION + " (" 
