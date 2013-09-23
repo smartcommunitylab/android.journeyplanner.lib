@@ -55,6 +55,8 @@ public class Config {
 	public static final String CALL_ALERT_SUBMIT = "/submitalert";
 	public static final String CALL_GET_BUS_TIME_BY_ROUTE = "/getbustimes";
 	public static final String CALL_GET_TRANSIT_TIME_BY_ROUTE = "/gettransittimes";
+	public static final String CALL_GET_TT_CACHE_STATUS = "/getcachestatus";
+	public static final String CALL_GET_TT_CACHE_UPDATE = "/getcacheupdate";
 	public static final String CALL_GET_DELAY_TIME_BY_ROUTE = "/gettransitdelays";
 	public static final String CALL_GET_LIMITED_TIMETABLE = "/getlimitedtimetable";
 	public static final String CALL_GET_PARKINGS = "/getparkings";

@@ -1,5 +1,8 @@
 package eu.trentorise.smartcampus.jp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -19,6 +22,7 @@ import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
+import eu.trentorise.smartcampus.jp.timetable.CompressedTransitTimeTableCacheUpdaterAsyncTask;
 
 public class SmartCheckListFragment extends FeedbackFragment {
 
@@ -53,6 +57,17 @@ public class SmartCheckListFragment extends FeedbackFragment {
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getSherlockActivity(),
 				android.R.layout.simple_list_item_1, JPParamsHelper.getSmartCheckOptions());
 		optionsListView.setAdapter(adapter);
+
+		// TODO: test
+		Map<String, String> agencyIdsVersions = new HashMap<String, String>();
+		agencyIdsVersions.put(RoutesHelper.AGENCYID_BUS_TRENTO, "0");
+		agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_BZVR, "0");
+		agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TM, "0");
+		agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TNBDG, "0");
+
+		CompressedTransitTimeTableCacheUpdaterAsyncTask csat = new CompressedTransitTimeTableCacheUpdaterAsyncTask();
+		csat.execute(agencyIdsVersions);
+		// TODO: /test
 
 		optionsListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override

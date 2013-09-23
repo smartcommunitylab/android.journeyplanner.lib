@@ -17,8 +17,10 @@ package eu.trentorise.smartcampus.jp.helper;
 
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
 import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
+import it.sayservice.platform.smartplanner.data.message.cache.CacheUpdateResponse;
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Stop;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
@@ -634,6 +636,38 @@ public class JPHelper {
 		if (!TTHelper.isInitialized())
 			TTHelper.init(mContext);
 		return TTHelper.getTTwithRouteIdAndTime(routeId, from_day, to_day);
+	}
+
+	public static Map<String, CacheUpdateResponse> getCacheStatus(Map<String, String> agencyIdsVersions)
+			throws ProtocolException, ConnectionException, SecurityException {
+		String url = Config.TARGET_ADDRESS + Config.CALL_GET_TT_CACHE_STATUS;
+
+		String json = JSONUtils.convertToJSON(agencyIdsVersions);
+
+		MessageRequest req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), url);
+		req.setMethod(Method.POST);
+		req.setBody(json);
+
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+				getAuthToken());
+
+		Map<String, CacheUpdateResponse> map = eu.trentorise.smartcampus.android.common.Utils.convertJSON(res.getBody(),
+				new TypeReference<Map<String, CacheUpdateResponse>>() {
+				});
+		return map;
+	}
+
+	public static CompressedTransitTimeTable getCacheUpdate(String agencyId, String fileName) throws ConnectionException,
+			ProtocolException, SecurityException {
+		String url = Config.TARGET_ADDRESS + Config.CALL_GET_TT_CACHE_UPDATE + "/" + agencyId + "/" + fileName;
+
+		MessageRequest req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), url);
+
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+				getAuthToken());
+
+		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(),
+				CompressedTransitTimeTable.class);
 	}
 
 	public static List<SmartCheckStop> getStops(String agencyId, double[] location, double radius) throws Exception {
