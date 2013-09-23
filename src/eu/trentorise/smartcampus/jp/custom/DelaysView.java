@@ -109,6 +109,7 @@ public class DelaysView extends CustomGridView<Map<String,String>> {
 	@Override
 	protected void drawCell(Canvas canvas, Map<String,String> item, int row, int col, int x, int y) {
 		Map<CreatorType,String> map = new HashMap<CreatorType, String>(2);
+		try{
 		for (Iterator<Entry<String,String>> iterator = item.entrySet().iterator(); iterator.hasNext();) {
 			Entry<String,String> delay = iterator.next();
 			if (!delay.getValue().equalsIgnoreCase("0")) {
@@ -128,6 +129,9 @@ public class DelaysView extends CustomGridView<Map<String,String>> {
 			int xPos = (int)(x + getColWidth()/2 - mUTextPaint.measureText(text)/2);
 			canvas.drawText(text + "'", xPos, yPos, p);
 		} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 

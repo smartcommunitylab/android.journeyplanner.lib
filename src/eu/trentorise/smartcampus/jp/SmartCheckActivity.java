@@ -13,6 +13,7 @@ import eu.trentorise.smartcampus.jp.custom.BetterMapView;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
+import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 
 public class SmartCheckActivity extends BaseActivity {
 
@@ -34,15 +35,46 @@ public class SmartCheckActivity extends BaseActivity {
 			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 			getSupportActionBar().removeAllTabs();
 		}
-
-		android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-		SherlockFragment fragment = new SmartCheckListFragment();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		fragmentTransaction.replace(Config.mainlayout, fragment, TAG_SMARTCHECKLIST);
-//		fragmentTransaction.addToBackStack(null);
-		fragmentTransaction.commit();
+		Bundle extras = getIntent().getExtras();
+		if (extras == null) {
+			android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+			SherlockFragment fragment = new SmartCheckListFragment();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			fragmentTransaction.replace(Config.mainlayout, fragment, TAG_SMARTCHECKLIST);
+//			fragmentTransaction.addToBackStack(null);
+			fragmentTransaction.commit();
+		    }
+		else manageWidgetIntent(extras);
+		
 	}
-
+	private void manageWidgetIntent(Bundle extras) {
+	    
+	    String value1 = extras.getString("FRAGMENT");
+	    if (value1 != null) {
+//			Intent intent = new Intent(this, SmartCheckActivity.class);
+			Bundle bundle = new Bundle();
+			bundle.putString(SmartCheckBusFragment.PARAM_AID, RoutesHelper.AGENCYID_BUS_TRENTO);
+//			intent.putExtra(name, value)
+//			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//			startActivity(intent);
+//	    	SherlockFragment fragment = new SmartCheckBusFragment();
+//			fragment.setArguments(args);
+//			FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//			fragmentTransaction.replace(android.R.id.content, fragment, "events");
+//			fragmentTransaction.addToBackStack(fragment.getTag());
+//			fragmentTransaction.commit();
+			android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+			SherlockFragment fragment = new SmartCheckBusFragment();
+			fragment.setArguments(bundle);
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			fragmentTransaction.replace(Config.mainlayout, fragment, TAG_SMARTCHECKLIST);
+//			fragmentTransaction.addToBackStack(null);
+			fragmentTransaction.commit();
+	    	
+		
+	    }
+	}
 	@Override
 	protected void onResume() {
 		super.onResume();

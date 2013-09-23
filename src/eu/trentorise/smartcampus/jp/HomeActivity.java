@@ -24,6 +24,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -31,6 +32,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
@@ -39,6 +41,7 @@ import com.github.espiandev.showcaseview.BaseTutorialActivity;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.TutorialActivity;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.jp.helper.JPHelper.Tutorial;
 import eu.trentorise.smartcampus.jp.notifications.BroadcastNotificationsActivity;
 import eu.trentorise.smartcampus.jp.notifications.NotificationsFragmentActivityJP;
@@ -83,6 +86,35 @@ public class HomeActivity extends BaseActivity {
 			showTourDialog();
 			JPHelper.disableFirstLaunch(this);
 		}
+		
+		Bundle extras = getIntent().getExtras();
+		if (extras == null) {
+		    return;
+		    }
+		else manageWidgetIntent(extras);
+	}
+	
+	private void manageWidgetIntent(Bundle extras) {
+	    
+	    String value1 = extras.getString("FRAGMENT");
+	    if (value1 != null) {
+			Intent intent = new Intent(this, SmartCheckActivity.class);
+//			Bundle bundle = new Bundle();
+//			bundle.putString(SmartCheckBusFragment.PARAM_AID, RoutesHelper.AGENCYID_BUS_TRENTO);
+//			intent.putExtra(name, value)
+			intent.putExtra("FRAGMENT", "BUS");
+			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+			startActivity(intent);
+//	    	SherlockFragment fragment = new SmartCheckBusFragment();
+//			fragment.setArguments(args);
+//			FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//			fragmentTransaction.replace(android.R.id.content, fragment, "events");
+//			fragmentTransaction.addToBackStack(fragment.getTag());
+//			fragmentTransaction.commit();
+	    	
+		
+	    }
 	}
 	private Tutorial getFirstValidTutorial() {
 		Tutorial t = JPHelper.getLastTutorialNotShowed(this);

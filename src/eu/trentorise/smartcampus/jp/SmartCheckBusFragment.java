@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -42,6 +43,9 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 			this.agencyId = savedInstanceState.getString(PARAM_AID);
 		} else if (getArguments() != null && getArguments().containsKey(PARAM_AID)) {
 			this.agencyId = getArguments().getString(PARAM_AID);
+		}
+		if (getActivity().getIntent() != null) {
+			//usa i parametri
 		}
 	}
 
