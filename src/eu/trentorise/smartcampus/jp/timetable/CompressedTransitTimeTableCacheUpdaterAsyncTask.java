@@ -19,25 +19,30 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class CompressedTransitTimeTableCacheUpdaterAsyncTask extends
-		AsyncTask<Map<String, String>, Integer, Map<String, AgencyDescriptor>> {
+		AsyncTask<Map<String, Long>, Integer, Map<String, AgencyDescriptor>> {
 
 	private long time;
 
 	@Override
 	protected void onPreExecute() {
+		// TODO: test
 		time = System.currentTimeMillis();
-		Log.e(getClass().getName(), "Agencies update started");
+		Log.e(getClass().getCanonicalName(), "Agencies update started");
+
 		super.onPreExecute();
 	}
 
 	@Override
-	protected Map<String, AgencyDescriptor> doInBackground(Map<String, String>... params) {
-		Map<String, String> map = params[0];
+	protected Map<String, AgencyDescriptor> doInBackground(Map<String, Long>... params) {
+		Map<String, String> versionsMap = new HashMap<String, String>();
+		for (Entry<String, Long> entry : params[0].entrySet()) {
+			versionsMap.put(entry.getKey(), entry.getValue().toString());
+		}
 		Map<String, CacheUpdateResponse> cacheUpdateResponsesMap = null;
 		Map<String, AgencyDescriptor> agencyDescriptorsMap = new HashMap<String, AgencyDescriptor>();
 
 		try {
-			cacheUpdateResponsesMap = JPHelper.getCacheStatus(map);
+			cacheUpdateResponsesMap = JPHelper.getCacheStatus(versionsMap);
 
 			for (Entry<String, CacheUpdateResponse> curEntry : cacheUpdateResponsesMap.entrySet()) {
 				String agencyId = curEntry.getKey();
@@ -66,9 +71,11 @@ public class CompressedTransitTimeTableCacheUpdaterAsyncTask extends
 
 	@Override
 	protected void onPostExecute(Map<String, AgencyDescriptor> result) {
+		// TODO: test
 		time = (System.currentTimeMillis() - time) / 1000;
-		Log.e(getClass().getName(), "Agencies updated: " + Integer.toString(result.size()) + " in " + Long.toString(time)
-				+ " seconds.");
+		Log.e(getClass().getCanonicalName(),
+				"Agencies updated: " + Integer.toString(result.size()) + " in " + Long.toString(time) + " seconds.");
+
 		super.onPostExecute(result);
 	}
 

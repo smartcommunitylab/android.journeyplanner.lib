@@ -57,18 +57,6 @@ public class SmartCheckListFragment extends FeedbackFragment {
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getSherlockActivity(),
 				android.R.layout.simple_list_item_1, JPParamsHelper.getSmartCheckOptions());
 		optionsListView.setAdapter(adapter);
-
-		// TODO: test
-		Map<String, String> agencyIdsVersions = new HashMap<String, String>();
-		agencyIdsVersions.put(RoutesHelper.AGENCYID_BUS_TRENTO, "0");
-		agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_BZVR, "0");
-		agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TM, "0");
-		agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TNBDG, "0");
-
-		CompressedTransitTimeTableCacheUpdaterAsyncTask csat = new CompressedTransitTimeTableCacheUpdaterAsyncTask();
-		csat.execute(agencyIdsVersions);
-		// TODO: /test
-
 		optionsListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

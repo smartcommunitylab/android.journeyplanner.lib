@@ -3,6 +3,7 @@ package eu.trentorise.smartcampus.jp.helper;
 import it.sayservice.platform.smartplanner.data.message.cache.CacheUpdateResponse;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import eu.trentorise.smartcampus.jp.timetable.CompressedTTHelper;
+import eu.trentorise.smartcampus.jp.timetable.CompressedTransitTimeTableCacheUpdaterAsyncTask;
 
 public class RoutesDBHelper {
 
@@ -27,6 +31,44 @@ public class RoutesDBHelper {
 
 	public static void init(Context applicationContext) {
 		instance = new RoutesDBHelper(applicationContext);
+
+		Map<String, Long> dbVersions = getVersions();
+		Map<String, Long> assetsVersions = CompressedTTHelper.getInstance().getVersionsFromAssets();
+
+		List<AgencyDescriptor> adList = new ArrayList<AgencyDescriptor>();
+		for (String agencyId : RoutesHelper.AGENCYIDS) {
+			Long dbVersion = dbVersions.get(agencyId);
+			Long assetsVersion = assetsVersions.get(agencyId);
+
+			if (assetsVersion != null && (dbVersion == null || dbVersion < assetsVersion)) {
+				Log.e(RoutesDBHelper.class.getCanonicalName(), "Agency update from asset: " + agencyId);
+				AgencyDescriptor ad = CompressedTTHelper.buildAgencyDescriptorFromAssets(agencyId, assetsVersion);
+				adList.add(ad);
+			}
+		}
+
+		if (!adList.isEmpty()) {
+			updateAgencys(adList.toArray(new AgencyDescriptor[] {}));
+			Log.e(RoutesDBHelper.class.getCanonicalName(), "Agencies updated.");
+		}
+
+		// TODO: test
+		// Map<String, String> agencyIdsVersions = new HashMap<String,
+		// String>();
+		// agencyIdsVersions.put(RoutesHelper.AGENCYID_BUS_TRENTO, "0");
+		// agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_BZVR, "0");
+		// agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TM, "0");
+		// agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TNBDG, "0");
+		assetsVersions = CompressedTTHelper.getInstance().getVersionsFromAssets();
+
+		CompressedTransitTimeTableCacheUpdaterAsyncTask csat = new CompressedTransitTimeTableCacheUpdaterAsyncTask();
+		csat.execute(assetsVersions);
+		// TODO: /test
+	}
+
+	public static Map<String, Long> getVersions() {
+		SQLiteDatabase db = RoutesDBHelper.routesDB.getReadableDatabase();
+		return queryVersions(db);
 	}
 
 	public static void updateAgencys(AgencyDescriptor... agencies) {
@@ -69,6 +111,19 @@ public class RoutesDBHelper {
 		tt.setCompressedTimes(c.getString(c.getColumnIndex(RoutesDatabase.COMPRESSED_TIMES_KEY)));
 	}
 
+	private static Map<String, Long> queryVersions(SQLiteDatabase db) {
+		Map<String, Long> versionsMap = new HashMap<String, Long>();
+		Cursor c = db.query(RoutesDatabase.DB_TABLE_VERSION, new String[] { RoutesDatabase.AGENCY_ID_KEY,
+				RoutesDatabase.VERSION_KEY }, null, null, null, null, null);
+		c.moveToFirst();
+		while (c.isAfterLast() == false) {
+			String agencyId = c.getString(c.getColumnIndex(RoutesDatabase.AGENCY_ID_KEY));
+			Long version = c.getLong(c.getColumnIndex(RoutesDatabase.VERSION_KEY));
+			versionsMap.put(agencyId, version);
+		}
+		return versionsMap;
+	}
+
 	private static String getHash(SQLiteDatabase db, String date, String agencyId) {
 		String whereClause = RoutesDatabase.DATE_KEY + "=? AND " + RoutesDatabase.AGENCY_ID_KEY + "=?";
 		Cursor c = db.query(RoutesDatabase.DB_TABLE_CALENDAR, new String[] { RoutesDatabase.LINEHASH_KEY }, whereClause,
@@ -94,15 +149,19 @@ public class RoutesDBHelper {
 		 * hash=somehas2 OR hash=somehash3 ecc.. to put after the WHERE clause
 		 * in SQL
 		 */
-		String whereClause = RoutesDatabase.AGENCY_ID_KEY + "=" + agency.agencyId + " AND ( ";
-		for (String hash : agency.cur.getRemoved()) {
-			whereClause += RoutesDatabase.LINEHASH_KEY + " = " + hash + " OR ";
+		String whereClause = RoutesDatabase.AGENCY_ID_KEY + "=" + agency.agencyId;
 
-			// delete old staff from the ROUTES table.
-			String whereClause2 = RoutesDatabase.LINEHASH_KEY + "=" + hash;
-			db.delete(RoutesDatabase.DB_TABLE_ROUTE, whereClause2, null);
+		if (!agency.cur.getRemoved().isEmpty()) {
+			whereClause = whereClause + " AND ( ";
+			for (String hash : agency.cur.getRemoved()) {
+				whereClause += RoutesDatabase.LINEHASH_KEY + " = " + hash + " OR ";
+
+				// delete old staff from the ROUTES table.
+				String whereClause2 = RoutesDatabase.LINEHASH_KEY + "=" + hash;
+				db.delete(RoutesDatabase.DB_TABLE_ROUTE, whereClause2, null);
+			}
+			whereClause = whereClause.substring(0, whereClause.length() - 4) + ")";
 		}
-		whereClause = whereClause.substring(0, whereClause.length() - 4) + ")";
 
 		// delete old stuff from CALENDAR TABLE
 		db.delete(RoutesDatabase.DB_TABLE_CALENDAR, whereClause, null);
@@ -198,7 +257,7 @@ public class RoutesDBHelper {
 			ContentValues cv = new ContentValues();
 			cv.put(RoutesDatabase.AGENCY_ID_KEY, agencyId);
 			// cv.put(RoutesDatabase.VERSION_KEY, version);
-			cv.put(RoutesDatabase.VERSION_KEY, Long.toString(this.cur.getVersion()));
+			cv.put(RoutesDatabase.VERSION_KEY, this.cur.getVersion());
 			return cv;
 		}
 
@@ -242,14 +301,18 @@ public class RoutesDBHelper {
 		public final static String VERSION_KEY = "version";
 
 		private static final String CREATE_CALENDAR_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_CALENDAR + " ("
-				+ AGENCY_ID_KEY + " integer primary key, " + DATE_KEY + "text not null, " + LINEHASH_KEY + " text not null);";
+				+ AGENCY_ID_KEY + " integer not null, " + DATE_KEY + " text not null, " + LINEHASH_KEY + " text not null);";
 
 		private static final String CREATE_ROUTE_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_ROUTE + " (" + LINEHASH_KEY
 				+ " text primary key, " + STOPS_IDS_KEY + " text not null, " + STOPS_NAMES_KEY + " text," + TRIPS_IDS_KEY
 				+ " text," + COMPRESSED_TIMES_KEY + " text not null );";
 
 		private static final String CREATE_VERSION_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_VERSION + " ("
-				+ AGENCY_ID_KEY + " integer primary key, " + VERSION_KEY + " text not null );";
+				+ AGENCY_ID_KEY + " integer primary key, " + VERSION_KEY + " integer not null default 0);";
+
+		private static final String DROP_CALENDAR_TABLE = "DROP TABLE " + DB_TABLE_CALENDAR + ";";
+		private static final String DROP_ROUTE_TABLE = "DROP TABLE " + DB_TABLE_ROUTE + ";";
+		private static final String DROP_VERSION_TABLE = "DROP TABLE " + DB_TABLE_VERSION + ";";
 
 		public RoutesDatabase(Context context) {
 			super(context, DB_NAME, null, DB_VERSION);
@@ -264,8 +327,12 @@ public class RoutesDBHelper {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// implementation is necessary
-			// empty because we are at the first version
+			db.execSQL(DROP_CALENDAR_TABLE);
+			db.execSQL(DROP_ROUTE_TABLE);
+			db.execSQL(DROP_VERSION_TABLE);
+			db.execSQL(CREATE_CALENDAR_TABLE);
+			db.execSQL(CREATE_ROUTE_TABLE);
+			db.execSQL(CREATE_VERSION_TABLE);
 		}
 
 	}
