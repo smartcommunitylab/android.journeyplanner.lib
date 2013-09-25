@@ -15,10 +15,12 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 
 import eu.trentorise.smartcampus.jp.custom.BetterMapView;
+import eu.trentorise.smartcampus.jp.custom.TabListener;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
+import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.jp.model.RouteDescriptor;
 
@@ -41,40 +43,22 @@ public class SmartCheckActivity extends BaseActivity {
 		;
 		setContentView(R.layout.empty_layout_jp);
 
-		// BetterMapView mapView = new BetterMapView(this,
-		// getResources().getString(R.string.maps_api_key));
-		// mapView.setClickable(true);
-		// mapView.setBuiltInZoomControls(true);
-		// MapManager.setBetterMapView(mapView);
-
 		if (getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD) {
 			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 			getSupportActionBar().removeAllTabs();
 		}
-		// Bundle extras = getIntent().getExtras();
-		// if (extras == null) {
-		// android.support.v4.app.FragmentTransaction fragmentTransaction =
-		// getSupportFragmentManager().beginTransaction();
-		// SherlockFragment fragment = new SmartCheckListFragment();
-		// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		// fragmentTransaction.replace(Config.mainlayout, fragment,
-		// TAG_SMARTCHECKLIST);
-		// fragmentTransaction.commit();
-		// }
-		// else manageWidgetIntent(extras);
+
 		String action = getIntent().getAction();
 		Bundle extras = getIntent().getExtras();
 		if (action != null) {
 			manageWidgetIntent(action, extras);
-		} else 
-		{
-			 android.support.v4.app.FragmentTransaction fragmentTransaction =
-			 getSupportFragmentManager().beginTransaction();
-			 SherlockFragment fragment = new SmartCheckListFragment();
-			 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-			 fragmentTransaction.replace(Config.mainlayout, fragment,
-			 TAG_SMARTCHECKLIST);
-			 fragmentTransaction.commit();
+		} else {
+			android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager()
+					.beginTransaction();
+			SherlockFragment fragment = new SmartCheckListFragment();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			fragmentTransaction.replace(Config.mainlayout, fragment, TAG_SMARTCHECKLIST);
+			fragmentTransaction.commit();
 		}
 	}
 
@@ -82,7 +66,10 @@ public class SmartCheckActivity extends BaseActivity {
 		String agency = null;
 		String routeid = null;
 		SmartLine param = null;
-
+		ActionBar actionBar = getSupportActionBar();
+		if (!JPHelper.isInitialized())
+			JPHelper.init(this);
+		JPHelper.getLocationHelper().start();
 		Integer position = 0;
 		android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 		if (extras != null) {
@@ -94,78 +81,96 @@ public class SmartCheckActivity extends BaseActivity {
 		/* load smartline anch call smartttfragment with correct id */
 		if (agency != null) {
 
-			// if
-			// ("eu.trentorise.smartcampus.widget.REAL_TIME_BUS".equals(action)
-			// ||
-			// "eu.trentorise.smartcampus.widget.REAL_TIME_TRAIN".equals(action))
-			// {
-			Fragment fragment = new SmartCheckTTFragment();
-			Bundle b = new Bundle();
 			/* autobus */
 			if ("eu.trentorise.smartcampus.widget.REAL_TIME_BUS".equals(action)) {
-				busLines = RoutesHelper.getSmartLines(this, agency);
+				navigation_to_bus(agency, actionBar, position);
 
-				param = new SmartLine(null, busLines.get(position).getRoutesShorts().get(0), busLines.get(position)
-						.getColor(), new ArrayList<String>(Arrays.asList(busLines.get(position).getRoutesShorts()
-						.get(0))), new ArrayList<String>(Arrays.asList(busLines.get(position).getRoutesLong().get(0))),
-						new ArrayList<String>(Arrays.asList(busLines.get(position).getRouteID().get(0))));
 			} else if ("eu.trentorise.smartcampus.widget.REAL_TIME_TRAIN".equals(action)) {
 				/* train */
-				trainLines = RoutesHelper.getRouteDescriptorsList(agencyIds);
-
-				param = new SmartLine(null, getString(trainLines.get(position).getNameResource()), getResources()
-						.getColor(R.color.sc_gray), null, null, Arrays.asList(trainLines.get(position).getRouteId()));
+				navigate_to_train(actionBar, position);
 			}
-			b.putParcelable(SmartCheckTTFragment.PARAM_SMARTLINE, param);
-			fragment.setArguments(b);
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-			fragmentTransaction.replace(Config.mainlayout, fragment, "lines");
-			// fragmentTransaction.addToBackStack(fragment.getTag());
-			fragmentTransaction.commit();
+
 		} else if ("eu.trentorise.smartcampus.widget.REAL_TIME_PARKING".equals(action)) {
 			/* parking */
-			Fragment fragmentparking = new SmartCheckParkingsFragment();
-
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-			fragmentTransaction.replace(Config.mainlayout, fragmentparking, "lines");
-			// fragmentTransaction.addToBackStack(fragmentparking.getTag());
-			fragmentTransaction.commit();
-
-			//
-			// Bundle bundle = new Bundle();
-			// bundle.putString(SmartCheckBusFragment.PARAM_AID,
-			// RoutesHelper.AGENCYID_BUS_TRENTO);
-			// android.support.v4.app.FragmentTransaction fragmentTransaction =
-			// getSupportFragmentManager().beginTransaction();
-			// SherlockFragment fragment = new SmartCheckBusFragment();
-			// fragment.setArguments(bundle);
-			// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-			// fragmentTransaction.replace(Config.mainlayout, fragment,
-			// TAG_SMARTCHECKLIST);
-			// fragmentTransaction.commit();
+			navigate_to_parking(actionBar);
 
 		}
 	}
 
-	// private void manageWidgetIntent(Bundle extras) {
-	//
-	// String value1 = extras.getString("FRAGMENT");
-	// if (value1 != null) {
-	// Bundle bundle = new Bundle();
-	// bundle.putString(SmartCheckBusFragment.PARAM_AID,
-	// RoutesHelper.AGENCYID_BUS_TRENTO);
-	// android.support.v4.app.FragmentTransaction fragmentTransaction =
-	// getSupportFragmentManager().beginTransaction();
-	// SherlockFragment fragment = new SmartCheckBusFragment();
-	// fragment.setArguments(bundle);
-	// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-	// fragmentTransaction.replace(Config.mainlayout, fragment,
-	// TAG_SMARTCHECKLIST);
-	// fragmentTransaction.commit();
-	//
-	//
-	// }
-	// }
+	private void navigation_to_bus(String agency, ActionBar actionBar, Integer position) {
+		SmartLine param;
+		busLines = RoutesHelper.getSmartLines(this, agency);
+
+		param = new SmartLine(null, busLines.get(position).getRoutesShorts().get(0), busLines.get(position)
+				.getColor(), new ArrayList<String>(Arrays.asList(busLines.get(position).getRoutesShorts()
+				.get(0))), new ArrayList<String>(Arrays.asList(busLines.get(position).getRoutesLong().get(0))),
+				new ArrayList<String>(Arrays.asList(busLines.get(position).getRouteID().get(0))));
+
+		build_tabs(actionBar, param);
+
+	}
+
+	private void navigate_to_train(ActionBar actionBar, Integer position) {
+		SmartLine param;
+		trainLines = RoutesHelper.getRouteDescriptorsList(agencyIds);
+
+		param = new SmartLine(null, getString(trainLines.get(position).getNameResource()), getResources().getColor(
+				R.color.sc_gray), null, null, Arrays.asList(trainLines.get(position).getRouteId()));
+		build_tabs(actionBar, param);
+	}
+
+	private void build_tabs(ActionBar actionBar, SmartLine param) {
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		actionBar.removeAllTabs();
+
+		// Lines
+		ActionBar.Tab tab = actionBar.newTab();
+		tab.setText(R.string.tab_lines);
+		tab.setTabListener(new TabListener<SmartCheckTTFragment>(this, "lines", SmartCheckTTFragment.class, null));
+		Bundle bundle = new Bundle();
+		bundle.putParcelable(SmartCheckTTFragment.PARAM_SMARTLINE, param);
+		tab.setTag(bundle);
+		actionBar.addTab(tab);
+
+		// Map
+		tab = actionBar.newTab();
+		tab.setText(R.string.tab_map);
+		tab.setTabListener(new TabListener<SmartCheckMapV2Fragment>(this, "map", SmartCheckMapV2Fragment.class, null));
+		bundle = new Bundle();
+		bundle.putStringArray(SmartCheckMapV2Fragment.ARG_AGENCY_IDS, agencyIds);
+		tab.setTag(bundle);
+		actionBar.addTab(tab);
+
+		actionBar.selectTab(actionBar.getTabAt(0));
+	}
+
+	private void navigate_to_parking(ActionBar actionBar) {
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		actionBar.removeAllTabs();
+
+		// Lines
+		ActionBar.Tab tab = actionBar.newTab();
+		tab.setText(R.string.tab_lines);
+		tab.setTabListener(new TabListener<SmartCheckParkingsFragment>(this, "lines", SmartCheckParkingsFragment.class,
+				null));
+		Bundle bundle = new Bundle();
+		bundle.putString(SmartCheckParkingsFragment.PARAM_AID, ParkingsHelper.PARKING_AID_TRENTO);
+		tab.setTag(bundle);
+		actionBar.addTab(tab);
+
+		// Map
+		tab = actionBar.newTab();
+		tab.setText(R.string.tab_map);
+		tab.setTabListener(new TabListener<SmartCheckParkingMapV2Fragment>(this, "map",
+				SmartCheckParkingMapV2Fragment.class, null));
+		bundle = new Bundle();
+		bundle.putString(SmartCheckParkingMapV2Fragment.PARAM_AID, ParkingsHelper.PARKING_AID_TRENTO);
+		tab.setTag(bundle);
+		actionBar.addTab(tab);
+
+		actionBar.selectTab(actionBar.getTabAt(0));
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
