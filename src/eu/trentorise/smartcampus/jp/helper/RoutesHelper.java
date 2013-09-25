@@ -126,19 +126,19 @@ public class RoutesHelper {
 		TypedArray icons = null;
 		TypedArray colors = null;
 
-		if (agencyId == AGENCYID_BUS_TRENTO) {
+		if (AGENCYID_BUS_TRENTO.equals(agencyId)) {
 			lines = resources.getStringArray(R.array.smart_check_12_numbers);
 			// linesNames =
 			// resources.obtainTypedArray(R.array.smart_check_17_names);
 			icons = resources.obtainTypedArray(R.array.smart_check_12_icons);
 			colors = resources.obtainTypedArray(R.array.smart_check_12_colors);
-		} else if (agencyId == AGENCYID_BUS_ROVERETO) {
+		} else if (AGENCYID_BUS_ROVERETO.equals(agencyId)) {
 			lines = resources.getStringArray(R.array.smart_check_16_numbers);
 			// linesNames =
 			// resources.obtainTypedArray(R.array.smart_check_17_names);
 			icons = resources.obtainTypedArray(R.array.smart_check_16_icons);
 			colors = resources.obtainTypedArray(R.array.smart_check_16_colors);
-		} else if (agencyId == AGENCYID_BUS_SUBURBAN) {
+		} else if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
 			lines = resources.getStringArray(R.array.smart_check_17_zones);
 			linesNames = resources.obtainTypedArray(R.array.smart_check_17_names);
 			// icons = resources.obtainTypedArray(R.array.smart_check_12_icons);
