@@ -89,7 +89,6 @@
         <item>6</item>
         <item>7</item>
         <item>A</item>
-        <item>B</item>
     </string-array>
 
     <array name="smart_check_16_icons">
@@ -101,7 +100,6 @@
         <item>@drawable/ic_f6</item>
         <item>@drawable/ic_f7</item>
         <item>@drawable/ic_f_a</item>
-        <item>@drawable/ic_f_b</item>
     </array>
     <array name="smart_check_16_colors">
         <item>#174072</item>
@@ -112,7 +110,6 @@
         <item>#6EB046</item>
         <item>#1B9887</item>
         <item>#B9BAB5</item>
-        <item>#717880</item>
     </array>
 
     <!-- Extraurbano -->
@@ -576,34 +573,19 @@
     <string name="agency_17_route_418_ExUr">Linea 4: Riva - Grez - Viale Martiri - Riva</string>
 
     <!-- Rovereto urbano routes -->
-    <string name="agency_16_route_488_Rov">C.so Rosmini - Ospedale - Lizzana - Marco</string>
-    <string name="agency_16_route_390_Rov">Moietto - Toldi - Costa - Isera - Lenzima</string>
-    <string name="agency_16_route_389_Rov">Lenzima - Isera - Costa - Toldi - Moietto</string>
-    <string name="agency_16_route_391_Rov">Isera - C.so Rosmini - Viale dei Colli - Costa</string>
-    <string name="agency_16_route_392_Rov">Costa - Viale dei Colli - C.so Rosmini - Isera</string>
-    <string name="agency_16_route_445_Rov">C.so Rosmini -  Nogaredo - C.so Rosmini</string>
-    <string name="agency_16_route_446_Rov">C.so Rosmini - Nogaredo - C.so Rosmini</string>
-    <string name="agency_16_route_383_Rov">Marco - Brione - Pomarolo - Nomi</string>
-    <string name="agency_16_route_380_Rov">Marco - Villa Lagarina -  Pomarolo - Nomi</string>
-    <string name="agency_16_route_346_Rov">Nomi - Pomarolo - Marco</string>
-    <string name="agency_16_route_384_Rov">Nomi - Pomarolo - Brione - Marco</string>
-    <string name="agency_16_route_347_Rov">Volano - S. Ilario - Mori</string>
-    <string name="agency_16_route_376_Rov">Mori - Marco - P.le Orsi - S. Ilario - Volano</string>
-    <string name="agency_16_route_377_Rov">Castellano - Pedersano - P.le Orsi</string>
-    <string name="agency_16_route_379_Rov">P.le Orsi -  Pedersano - Castellano</string>
-    <string name="agency_16_route_386_Rov">Nogaredo - Villa Lagarina - Mori</string>
-    <string name="agency_16_route_385_Rov">Mori - Villa Lagarina - Nogaredo</string>
-    <string name="agency_16_route_482_Rov">Via Magazol - Ospedale - Via Magazol</string>
-    <string name="agency_16_route_481_Rov">Brione - S. Giorgio - Lizzana - Podestà - Brione</string>
-    <string name="agency_16_route_470_Rov">C.so Rosmini - Baldresca</string>
-    <string name="agency_16_route_471_Rov">Baldresca - C.so Rosmini - S. Giovanni Bosco</string>
-    <string name="agency_16_route_457_Rov">Costa - C.so Rosmini</string>
-    <string name="agency_16_route_456_Rov">P.le Orsi - C.so Rosmini - Costa</string>
-    <string name="agency_16_route_453_Rov">Nomi - Pomarolo -  P.le Orsi</string>
-    <string name="agency_16_route_452_Rov">C.so Bettini - Nogaredo - Nomi</string>
-    <string name="agency_16_route_448_Rov">Mori - P.le Orsi - C.so Rosmini</string>
-    <string name="agency_16_route_447_Rov">C.so Bettini - Marco - Mori</string>
-    <string name="agency_16_route_449_Rov">Castellano - Pedersano - Molini - Stazione</string>
-    <string name="agency_16_route_451_Rov">P.le Orsi - Volano - Pedersano - Castellano></string>
-
+    <string name="agency_16_route_486_Rov">Brione S.Giorgio Lizzana P.Guella</string>
+    <string name="agency_16_route_488_Rov">Corso Bettini Ospedale Lizzana Marco</string>
+    <string name="agency_16_route_490_Rov">Costa Corso Rosmini S.Giorgio</string>
+    <string name="agency_16_route_496_Rov">Nomi Pomarolo/Volano Rosmini Mori</string>
+    <string name="agency_16_route_497_Rov">Mori Villa Lagarina Pomarolo Nomi</string>
+    <string name="agency_16_route_504_Rov">Costa Corso Rosmini</string>
+    <string name="agency_16_route_506_Rov">Mori Marco Corso Rosmini</string>
+    <string name="agency_16_route_507_Rov">P.Le Orsi Volano Castellano</string>
+    <string name="agency_16_route_510_Rov">C.So Bettini Isera Nomi</string>
+    <string name="agency_16_route_511_Rov">Nomi Besenello V.Cesari</string>
+    <string name="agency_16_route_512_Rov">Noriglio Rosmini Campana Dei Caduti</string>
+    <string name="agency_16_route_517_Rov">Rosmini Isera Nogaredo Villa Lagarina</string>
+    <string name="agency_16_route_519_Rov">Pedersano Nogaredo Rosmini Lenzima</string>
+    
+    
 </resources>

@@ -90,6 +90,7 @@ public class DelaysView extends CustomGridView<Map<String,String>> {
 
 	@Override
 	protected void handleClick(Map<String,String> item) {
+		if (item == null) return;
 		final Map<CreatorType, String> delaysCreatorTypesMap = new HashMap<CreatorType, String>();
 		for (Entry<String, String> delay : item.entrySet()) {
 			if (!delay.getValue().equalsIgnoreCase("0")) {
@@ -109,11 +110,13 @@ public class DelaysView extends CustomGridView<Map<String,String>> {
 	@Override
 	protected void drawCell(Canvas canvas, Map<String,String> item, int row, int col, int x, int y) {
 		Map<CreatorType,String> map = new HashMap<CreatorType, String>(2);
-		for (Iterator<Entry<String,String>> iterator = item.entrySet().iterator(); iterator.hasNext();) {
-			Entry<String,String> delay = iterator.next();
-			if (!delay.getValue().equalsIgnoreCase("0")) {
-				CreatorType ct = CreatorType.getAlertType(delay.getKey());
-				map.put(ct, delay.getValue());
+		if (item != null) {
+			for (Iterator<Entry<String,String>> iterator = item.entrySet().iterator(); iterator.hasNext();) {
+				Entry<String,String> delay = iterator.next();
+				if (!delay.getValue().equalsIgnoreCase("0")) {
+					CreatorType ct = CreatorType.getAlertType(delay.getKey());
+					map.put(ct, delay.getValue());
+				}
 			}
 		}
 		int yPos = (int) ((y+getRowHeight() / 2) - ((mSTextPaint.descent() + mSTextPaint.ascent()) / 2)) ; 

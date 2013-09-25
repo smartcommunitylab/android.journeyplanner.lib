@@ -1,7 +1,6 @@
 package eu.trentorise.smartcampus.jp;
 
 import java.util.Arrays;
-import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,7 +16,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.map.AlertRoadsInfoDialog.OnDetailsClick;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
@@ -131,8 +129,7 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 
 		if (AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK) == null
 				|| AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK).isEmpty()) {
-			new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(mActivity, new SmartCheckAlertRoadsMapProcessor(mActivity,
-					getSupportMap(), agencyId, null, null, AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK, false)).execute();
+			new SmartCheckAlertRoadsMapProcessor(mActivity, getSupportMap(), agencyId, null, null, AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK, false).execute();
 		} else {
 			getSupportMap().clear();
 

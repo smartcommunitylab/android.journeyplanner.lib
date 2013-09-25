@@ -44,7 +44,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
@@ -159,10 +158,9 @@ public class LegMapActivity extends BaseActivity implements OnCameraChangeListen
 			// alerts
 			if (AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN) == null
 					|| AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN).isEmpty()) {
-				Log.e("DATE IN MILLIS!", Long.toString(date));
-				new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(this, new SmartCheckAlertRoadsMapProcessor(this,
+				new SmartCheckAlertRoadsMapProcessor(this,
 						getSupportMap(), JPParamsHelper.getAlertroadsAgencyId(), (date > 0 ? date : null), null,
-						JPParamsHelper.getAlertroadsAgencyId(), true)).execute();
+						AlertRoadsHelper.ALERTS_CACHE_PLAN, true).execute();
 			} else {
 				List<AlertRoadLoc> newFilteredList = filterByProjection(getSupportMap(),
 						AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN));

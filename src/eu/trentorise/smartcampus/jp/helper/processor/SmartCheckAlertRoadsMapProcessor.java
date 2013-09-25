@@ -15,20 +15,21 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.helper.processor;
 
+import java.util.Collections;
 import java.util.List;
+
+import android.os.AsyncTask;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.gms.maps.GoogleMap;
 
 import eu.trentorise.smartcampus.jp.LegMapActivity;
-import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class SmartCheckAlertRoadsMapProcessor extends AbstractAsyncTaskProcessor<Void, List<AlertRoadLoc>> {
+public class SmartCheckAlertRoadsMapProcessor extends AsyncTask<Void, Void, List<AlertRoadLoc>> {
 
 	private SherlockFragmentActivity mActivity;
 	private String agencyId;
@@ -40,7 +41,6 @@ public class SmartCheckAlertRoadsMapProcessor extends AbstractAsyncTaskProcessor
 
 	public SmartCheckAlertRoadsMapProcessor(SherlockFragmentActivity activity, GoogleMap map, String agencyId, Long fromTime,
 			Long period, String cacheToUpdate, boolean filterByProjection) {
-		super(activity);
 		this.mActivity = activity;
 		this.map = map;
 		this.agencyId = agencyId;
@@ -51,24 +51,42 @@ public class SmartCheckAlertRoadsMapProcessor extends AbstractAsyncTaskProcessor
 	}
 
 	@Override
-	public List<AlertRoadLoc> performAction(Void... params) throws SecurityException, Exception {
-		long start = fromTime != null ? fromTime : System.currentTimeMillis();
-		long end = period != null ? (start + period) : (start + (1000 * 60 * 60 * 24));
-		return JPHelper.getAlertRoads(agencyId, start, end);
+	protected void onCancelled() {
+		mActivity.setSupportProgressBarIndeterminateVisibility(false);
+		super.onCancelled();
 	}
 
 	@Override
-	public void handleResult(List<AlertRoadLoc> result) {
+	protected void onPreExecute() {
+		mActivity.setSupportProgressBarIndeterminateVisibility(true);
+		super.onPreExecute();
+	}
+
+	@Override
+	protected List<AlertRoadLoc> doInBackground(Void... params) {
+		long start = fromTime != null ? fromTime : System.currentTimeMillis();
+		long end = period != null ? (start + period) : (start + (1000 * 60 * 60 * 24));
+		try {
+			return JPHelper.getAlertRoads(agencyId, start, end);
+		} catch (Exception e) {
+			return Collections.emptyList();
+		}
+	}
+
+	@Override
+	public void onPostExecute(List<AlertRoadLoc> result) {
 		if (cacheToUpdate != null) {
 			// force cache update
 			AlertRoadsHelper.setCache(cacheToUpdate, result);
 		}
-
 		if (filterByProjection) {
 			result = LegMapActivity.filterByProjection(map, result);
 		}
-
-		MapManager.ClusteringHelper.render(map, MapManager.ClusteringHelper.cluster(mActivity, map, result));
+//		map.clear();
+		MapManager.ClusteringHelper
+				.render(map, MapManager.ClusteringHelper.cluster(mActivity,
+						map, result));
+		mActivity.setSupportProgressBarIndeterminateVisibility(false);
 	}
 
 }
