@@ -573,19 +573,28 @@
     <string name="agency_17_route_418_ExUr">Linea 4: Riva - Grez - Viale Martiri - Riva</string>
 
     <!-- Rovereto urbano routes -->
-    <string name="agency_16_route_486_Rov">Brione S.Giorgio Lizzana P.Guella</string>
-    <string name="agency_16_route_488_Rov">Corso Bettini Ospedale Lizzana Marco</string>
-    <string name="agency_16_route_490_Rov">Costa Corso Rosmini S.Giorgio</string>
-    <string name="agency_16_route_496_Rov">Nomi Pomarolo/Volano Rosmini Mori</string>
-    <string name="agency_16_route_497_Rov">Mori Villa Lagarina Pomarolo Nomi</string>
-    <string name="agency_16_route_504_Rov">Costa Corso Rosmini</string>
-    <string name="agency_16_route_506_Rov">Mori Marco Corso Rosmini</string>
-    <string name="agency_16_route_507_Rov">P.Le Orsi Volano Castellano</string>
-    <string name="agency_16_route_510_Rov">C.So Bettini Isera Nomi</string>
-    <string name="agency_16_route_511_Rov">Nomi Besenello V.Cesari</string>
-    <string name="agency_16_route_512_Rov">Noriglio Rosmini Campana Dei Caduti</string>
-    <string name="agency_16_route_517_Rov">Rosmini Isera Nogaredo Villa Lagarina</string>
-    <string name="agency_16_route_519_Rov">Pedersano Nogaredo Rosmini Lenzima</string>
-    
+    <string name="agency_16_route_01A_Rov">Corso Bettini Ospedale Lizzana Marco</string>
+    <string name="agency_16_route_01R_Rov">Marco Lizzana Corso Bettini Pomarolo</string>
+    <string name="agency_16_route_02A_Rov">Costa Corso Rosmini S.Giorgio</string>
+    <string name="agency_16_route_02R_Rov">S.Giorgio Corso Rosmini Costa</string>
+    <string name="agency_16_route_03A_Rov">Pedersano Nogaredo Rosmini Lenzima</string>
+    <string name="agency_16_route_03R_Rov">Lenzima Rosmini Nogaredo Pedersano</string>
+    <string name="agency_16_route_04A_Rov">Rosmini Isera Nogaredo Villa Lagarina</string>
+    <string name="agency_16_route_04R_Rov">Villa Lagarina Nogaredo Isera Rosmini</string>
+    <string name="agency_16_route_05_Rov">Mori Villa Lagarina Pomarolo Nomi</string>
+    <string name="agency_16_route_06A_Rov">Nomi Pomarolo/Volano Rosmini Mori</string>
+    <string name="agency_16_route_06R_Rov">Mori Rosmini Calliano Nomi</string>
+    <string name="agency_16_route_07A_Rov">Campana Dei Caduti Noriglio</string>
+    <string name="agency_16_route_07R_Rov">Noriglio Rosmini Campana Dei Caduti</string>
+    <string name="agency_16_route_AA_Rov">Brione S.Giorgio Lizzana P.Guella</string>
+    <string name="agency_16_route_AR_Rov">P.Guella Brione</string>
+    <string name="agency_16_route_N1A_Rov">Notturno: Corso Rosmini Marco Mori</string>
+    <string name="agency_16_route_N1R_Rov">Notturno: Mori Marco Corso Rosmini</string>
+    <string name="agency_16_route_N2A_Rov">Notturno: Costa Corso Rosmini</string>
+    <string name="agency_16_route_N2R_Rov">Notturno: Corso Rosmini Costa</string>
+    <string name="agency_16_route_N3A_Rov">Notturno: Castellano Stazione Fs</string>
+    <string name="agency_16_route_N3R_Rov">Notturno: Stazione Fs Castellano</string>
+    <string name="agency_16_route_N5R_Rov">Notturno: C.So Bettini Isera Nomi</string>
+    <string name="agency_16_route_N6_Rov">Notturno: Nomi Besenello V.Cesari</string>
     
 </resources>

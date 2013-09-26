@@ -119,7 +119,7 @@ public class Config {
 		}
 	};
 
-	public static final RType[] RTYPES_ALLOWED = new RType[] { RType.fastest, RType.leastChanges, RType.leastWalking };
+	public static final RType[] RTYPES_ALLOWED = new RType[] { RType.fastest, RType.leastChanges, RType.safest, RType.leastWalking };
 
 	public static final TType[] TTYPES_DEFAULT = new TType[] { TType.TRANSIT };
 	public static final RType RTYPE_DEFAULT = RType.fastest;
