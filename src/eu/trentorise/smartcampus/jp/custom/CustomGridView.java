@@ -21,9 +21,11 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 /**
  * @author raman
@@ -38,6 +40,8 @@ public abstract class CustomGridView<T> extends View {
 	
 	private List<T> data;
 
+	private Rect rect = null;
+	
 	/**
 	 * @param context
 	 */
@@ -104,14 +108,18 @@ public abstract class CustomGridView<T> extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			rect = new Rect(getLeft(), getTop(), getRight(), getBottom());
 			return true;
 		}
 		if (event.getAction() == MotionEvent.ACTION_UP) {
 			float x = event.getX();
 			float y = event.getY();
-			int i = (int)(x / getColWidth());
-			int j = (int)(y / getRowHeight());
-			handleClick(data.get(j*getNumCols()+i));
+
+			if(rect.contains(getLeft() + (int) x, getTop() + (int) y)){
+				int i = (int)(x / getColWidth());
+				int j = (int)(y / getRowHeight());
+				handleClick(data.get(j*getNumCols()+i));
+	        }
 		} 
 		return super.onTouchEvent(event);
 	}
