@@ -22,7 +22,7 @@ import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
-import eu.trentorise.smartcampus.jp.timetable.CompressedTransitTimeTableCacheUpdaterAsyncTask;
+import eu.trentorise.smartcampus.jp.timetable.CTTTCacheUpdaterAsyncTask;
 
 public class SmartCheckListFragment extends FeedbackFragment {
 

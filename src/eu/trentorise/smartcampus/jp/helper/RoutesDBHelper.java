@@ -5,7 +5,9 @@ import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTrans
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,9 +17,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
-import eu.trentorise.smartcampus.jp.timetable.CompressedTTHelper;
-import eu.trentorise.smartcampus.jp.timetable.CompressedTransitTimeTableCacheUpdaterAsyncTask;
+import eu.trentorise.smartcampus.jp.timetable.CTTTCacheUpdaterAsyncTask;
 
 public class RoutesDBHelper {
 
@@ -26,44 +28,20 @@ public class RoutesDBHelper {
 	private static RoutesDBHelper instance = null;
 
 	protected RoutesDBHelper(Context context) {
+		// TODO: temp
+		context.deleteDatabase(Environment.getExternalStorageDirectory() + "/" + RoutesDatabase.DB_NAME);
+		//
+
 		routesDB = new RoutesDatabase(context);
 	}
 
 	public static void init(Context applicationContext) {
 		instance = new RoutesDBHelper(applicationContext);
+		// Log.e(RoutesDBHelper.class.getCanonicalName(),
+		// routesDB.getReadableDatabase().getPath());
 
-		Map<String, Long> dbVersions = getVersions();
-		Map<String, Long> assetsVersions = CompressedTTHelper.getInstance().getVersionsFromAssets();
-
-		List<AgencyDescriptor> adList = new ArrayList<AgencyDescriptor>();
-		for (String agencyId : RoutesHelper.AGENCYIDS) {
-			Long dbVersion = dbVersions.get(agencyId);
-			Long assetsVersion = assetsVersions.get(agencyId);
-
-			if (assetsVersion != null && (dbVersion == null || dbVersion < assetsVersion)) {
-				Log.e(RoutesDBHelper.class.getCanonicalName(), "Agency update from asset: " + agencyId);
-				AgencyDescriptor ad = CompressedTTHelper.buildAgencyDescriptorFromAssets(agencyId, assetsVersion);
-				adList.add(ad);
-			}
-		}
-
-		if (!adList.isEmpty()) {
-			updateAgencys(adList.toArray(new AgencyDescriptor[] {}));
-			Log.e(RoutesDBHelper.class.getCanonicalName(), "Agencies updated.");
-		}
-
-		// TODO: test
-		// Map<String, String> agencyIdsVersions = new HashMap<String,
-		// String>();
-		// agencyIdsVersions.put(RoutesHelper.AGENCYID_BUS_TRENTO, "0");
-		// agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_BZVR, "0");
-		// agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TM, "0");
-		// agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TNBDG, "0");
-		assetsVersions = CompressedTTHelper.getInstance().getVersionsFromAssets();
-
-		CompressedTransitTimeTableCacheUpdaterAsyncTask csat = new CompressedTransitTimeTableCacheUpdaterAsyncTask();
-		csat.execute(assetsVersions);
-		// TODO: /test
+		CTTTCacheUpdaterAsyncTask ctttCacheUpdaterAsyncTask = new CTTTCacheUpdaterAsyncTask();
+		ctttCacheUpdaterAsyncTask.execute();
 	}
 
 	public static Map<String, Long> getVersions() {
@@ -71,7 +49,7 @@ public class RoutesDBHelper {
 		return queryVersions(db);
 	}
 
-	public static void updateAgencys(AgencyDescriptor... agencies) {
+	public static void updateAgencies(AgencyDescriptor... agencies) {
 		SQLiteDatabase db = RoutesDBHelper.routesDB.getWritableDatabase();
 
 		// delete all
@@ -83,7 +61,10 @@ public class RoutesDBHelper {
 			addHashesAndDateForAgency(agency, db);
 
 			// update the version
-			db.insert(RoutesDatabase.DB_TABLE_VERSION, RoutesDatabase.VERSION_KEY, agency.toContentValues());
+			ContentValues cv = agency.toContentValues();
+			db.insert(RoutesDatabase.DB_TABLE_VERSION, RoutesDatabase.VERSION_KEY, cv);
+
+			Log.e(RoutesDBHelper.class.getCanonicalName(), "Agency " + agency.agencyId + " updated.");
 		}
 		db.close();
 	}
@@ -103,12 +84,13 @@ public class RoutesDBHelper {
 				whereClause, new String[] { line + "_" + hash }, null, null, null, "1");
 		c.moveToFirst();
 		String stops = c.getString(c.getColumnIndex(RoutesDatabase.STOPS_NAMES_KEY));
-		tt.setStops(Arrays.asList(stops.split(",")));
+		tt.setStops(stops != null ? Arrays.asList(stops.split(",")) : Collections.<String> emptyList());
 		String stopsIds = c.getString(c.getColumnIndex(RoutesDatabase.STOPS_IDS_KEY));
-		tt.setStopsId(Arrays.asList(stopsIds.split(",")));
+		tt.setStopsId(stopsIds != null ? Arrays.asList(stopsIds.split(",")) : Collections.<String> emptyList());
 		String tripIds = c.getString(c.getColumnIndex(RoutesDatabase.TRIPS_IDS_KEY));
-		tt.setTripIds(Arrays.asList(tripIds.split(",")));
-		tt.setCompressedTimes(c.getString(c.getColumnIndex(RoutesDatabase.COMPRESSED_TIMES_KEY)));
+		tt.setTripIds(tripIds != null ? Arrays.asList(tripIds.split(",")) : Collections.<String> emptyList());
+		String compressedTimes = c.getString(c.getColumnIndex(RoutesDatabase.COMPRESSED_TIMES_KEY));
+		tt.setCompressedTimes(compressedTimes != null ? compressedTimes : "");
 	}
 
 	private static Map<String, Long> queryVersions(SQLiteDatabase db) {
@@ -125,18 +107,52 @@ public class RoutesDBHelper {
 	}
 
 	private static String getHash(SQLiteDatabase db, String date, String agencyId) {
-		String whereClause = RoutesDatabase.DATE_KEY + "=? AND " + RoutesDatabase.AGENCY_ID_KEY + "=?";
-		Cursor c = db.query(RoutesDatabase.DB_TABLE_CALENDAR, new String[] { RoutesDatabase.LINEHASH_KEY }, whereClause,
-				new String[] { date, agencyId }, null, null, null, "1");
-		c.moveToFirst();
-		return c.getString(c.getColumnIndex(RoutesDatabase.LINEHASH_KEY));
+		// String whereClause = RoutesDatabase.DATE_KEY + "='"+ date + " AND " +
+		// RoutesDatabase.AGENCY_ID_KEY + "=" + agencyId;
+		// Cursor c = db.query(RoutesDatabase.DB_TABLE_CALENDAR, new String[] {
+		// RoutesDatabase.LINEHASH_KEY }, whereClause,
+		// new String[] { date, agencyId }, null, null, null, "1");
+
+		String whereClause = RoutesDatabase.DATE_KEY + "='" + date + "' AND " + RoutesDatabase.AGENCY_ID_KEY + "=" + agencyId;
+		Cursor c = db.query(RoutesDatabase.DB_TABLE_CALENDAR, new String[] { RoutesDatabase.LINEHASH_KEY,
+				RoutesDatabase.DATE_KEY, RoutesDatabase.AGENCY_ID_KEY }, whereClause, null, null, null, null, "1");
+
+		// String whereClause = RoutesDatabase.DATE_KEY + "='" + date + "' AND "
+		// + RoutesDatabase.AGENCY_ID_KEY + "=" + agencyId;
+		// String sql = "SELECT " + RoutesDatabase.LINEHASH_KEY + " FROM " +
+		// RoutesDatabase.DB_TABLE_CALENDAR + " WHERE "
+		// + whereClause;
+		// Cursor c = db.rawQuery(sql, null);
+
+		if (c.moveToFirst()) {
+			return c.getString(c.getColumnIndex(RoutesDatabase.LINEHASH_KEY));
+		} else {
+			return null;
+		}
 	}
 
 	private static void addHashesAndDateForAgency(AgencyDescriptor agency, SQLiteDatabase db) {
 		if (agency.isCalendarModified()) {
+			List<String> support = new ArrayList<String>();
 			for (String hash : agency.cur.getAdded()) {
-				db.insert(RoutesDatabase.DB_TABLE_CALENDAR, RoutesDatabase.DATE_KEY,
-						agency.toContentValues(hash.substring(hash.lastIndexOf('_'))));
+				String toAddHash = hash.substring(hash.lastIndexOf('_') + 1);
+				if (!support.contains(toAddHash)) {
+					support.add(toAddHash);
+				} else {
+					continue;
+				}
+
+				List<String> dates = new ArrayList<String>();
+				for (Entry<String, String> entry : agency.getCalendar().entrySet()) {
+					if (entry.getValue().equals(toAddHash)) {
+						dates.add(entry.getKey());
+					}
+				}
+
+				for (String date : dates) {
+					db.insert(RoutesDatabase.DB_TABLE_CALENDAR, RoutesDatabase.DATE_KEY,
+							agency.toContentValues(toAddHash, date));
+				}
 			}
 		}
 
@@ -168,18 +184,29 @@ public class RoutesDBHelper {
 	}
 
 	private static void addRoutes(AgencyDescriptor agency, SQLiteDatabase db) {
-		int i = 0;
-		for (CompressedTransitTimeTable ctt : agency.ctts) {
-			ContentValues routes = new ContentValues();
-			routes.put(RoutesDatabase.LINEHASH_KEY, agency.cur.getAdded().get(i));
-			String stopsIds = ctt.getStopsId().toString();
-			routes.put(RoutesDatabase.STOPS_IDS_KEY, stopsIds.substring(1, stopsIds.length() - 1));
-			String stopsNames = ctt.getStops().toString();
-			routes.put(RoutesDatabase.STOPS_IDS_KEY, stopsNames.substring(1, stopsNames.length() - 1));
-			String tripids = ctt.getTripIds().toString();
-			routes.put(RoutesDatabase.STOPS_IDS_KEY, tripids.substring(1, tripids.length() - 1));
-			db.insert(RoutesDatabase.DB_TABLE_ROUTE, RoutesDatabase.STOPS_NAMES_KEY, routes);
-			i++;
+		try {
+			int i = 0;
+			for (CompressedTransitTimeTable ctt : agency.ctts) {
+				ContentValues routes = new ContentValues();
+				routes.put(RoutesDatabase.LINEHASH_KEY, agency.cur.getAdded().get(i));
+
+				if (ctt != null) {
+					String stopsIds = ctt.getStopsId().toString();
+					routes.put(RoutesDatabase.STOPS_IDS_KEY, stopsIds.substring(1, stopsIds.length() - 1));
+					String stopsNames = ctt.getStops().toString();
+					routes.put(RoutesDatabase.STOPS_IDS_KEY, stopsNames.substring(1, stopsNames.length() - 1));
+					if (ctt.getTripIds() != null) {
+						String tripids = ctt.getTripIds().toString();
+						routes.put(RoutesDatabase.TRIPS_IDS_KEY, tripids.substring(1, tripids.length() - 1));
+					}
+					routes.put(RoutesDatabase.COMPRESSED_TIMES_KEY, ctt.getCompressedTimes());
+				}
+
+				db.insert(RoutesDatabase.DB_TABLE_ROUTE, RoutesDatabase.COMPRESSED_TIMES_KEY, routes);
+				i++;
+			}
+		} catch (Exception e) {
+			Log.e(RoutesDBHelper.class.getCanonicalName(), e.getMessage());
 		}
 	}
 
@@ -200,8 +227,6 @@ public class RoutesDBHelper {
 
 		public List<CompressedTransitTimeTable> ctts;
 
-		private HashMap<String, String> lines = new HashMap<String, String>();
-
 		// public AgencyDescriptor(String agencyId, CacheUpdateResponse cur,
 		// List<CompressedTransitTimeTable> ctts) {
 		// super();
@@ -214,10 +239,6 @@ public class RoutesDBHelper {
 			this.agencyId = agencyId;
 			this.cur = cur;
 			this.ctts = ctts;
-
-			if (cur.getCalendar() != null) {
-				createMap();
-			}
 		}
 
 		public boolean isCalendarModified() {
@@ -230,28 +251,25 @@ public class RoutesDBHelper {
 
 		public void setCalendar(Map<String, String> calendar) {
 			this.cur.setCalendar(calendar);
-			if (calendar != null) {
-				createMap();
-			}
 		}
 
-		/**
-		 * This method take the json of calendar.js and create a map where
-		 * hashes are used as keys and date are the value
-		 */
-		private void createMap() {
-			// calendar = calendar.substring(1, calendar.length() - 2);
-			// calendar = calendar.replace("\"", "");
-			// String[] rows = calendar.split(",");
-			// for (String elements : rows) {
-			// String[] datas = elements.split(":");
-			// lines.put(datas[1], datas[0]);
-			// }
-			Map<String, String> calendar = this.cur.getCalendar();
-			for (Entry<String, String> entry : calendar.entrySet()) {
-				lines.put(entry.getValue(), entry.getKey());
-			}
-		}
+		// /**
+		// * This method take the json of calendar.js and create a map where
+		// * hashes are used as keys and date are the value
+		// */
+		// private void createMap() {
+		// // calendar = calendar.substring(1, calendar.length() - 2);
+		// // calendar = calendar.replace("\"", "");
+		// // String[] rows = calendar.split(",");
+		// // for (String elements : rows) {
+		// // String[] datas = elements.split(":");
+		// // lines.put(datas[1], datas[0]);
+		// // }
+		// Map<String, String> calendar = this.cur.getCalendar();
+		// for (Entry<String, String> entry : calendar.entrySet()) {
+		// lines.put(entry.getValue(), entry.getKey());
+		// }
+		// }
 
 		public ContentValues toContentValues() {
 			ContentValues cv = new ContentValues();
@@ -261,12 +279,11 @@ public class RoutesDBHelper {
 			return cv;
 		}
 
-		public ContentValues toContentValues(String toAddHash) {
+		public ContentValues toContentValues(String toAddHash, String date) {
 			ContentValues cv = new ContentValues();
 			cv.put(RoutesDatabase.AGENCY_ID_KEY, agencyId);
 			cv.put(RoutesDatabase.LINEHASH_KEY, toAddHash);
-			int index = toAddHash.lastIndexOf('_');
-			cv.put(RoutesDatabase.DATE_KEY, lines.get(toAddHash.substring(index + 1)));
+			cv.put(RoutesDatabase.DATE_KEY, date);
 			return cv;
 		}
 	}
@@ -304,18 +321,14 @@ public class RoutesDBHelper {
 				+ AGENCY_ID_KEY + " integer not null, " + DATE_KEY + " text not null, " + LINEHASH_KEY + " text not null);";
 
 		private static final String CREATE_ROUTE_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_ROUTE + " (" + LINEHASH_KEY
-				+ " text primary key, " + STOPS_IDS_KEY + " text not null, " + STOPS_NAMES_KEY + " text," + TRIPS_IDS_KEY
-				+ " text," + COMPRESSED_TIMES_KEY + " text not null );";
+				+ " text primary key, " + STOPS_IDS_KEY + " text, " + STOPS_NAMES_KEY + " text," + TRIPS_IDS_KEY + " text,"
+				+ COMPRESSED_TIMES_KEY + " text );";
 
 		private static final String CREATE_VERSION_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_VERSION + " ("
 				+ AGENCY_ID_KEY + " integer primary key, " + VERSION_KEY + " integer not null default 0);";
 
-		private static final String DROP_CALENDAR_TABLE = "DROP TABLE " + DB_TABLE_CALENDAR + ";";
-		private static final String DROP_ROUTE_TABLE = "DROP TABLE " + DB_TABLE_ROUTE + ";";
-		private static final String DROP_VERSION_TABLE = "DROP TABLE " + DB_TABLE_VERSION + ";";
-
 		public RoutesDatabase(Context context) {
-			super(context, DB_NAME, null, DB_VERSION);
+			super(context, Environment.getExternalStorageDirectory() + "/" + DB_NAME, null, DB_VERSION);
 		}
 
 		@Override
@@ -327,12 +340,6 @@ public class RoutesDBHelper {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			db.execSQL(DROP_CALENDAR_TABLE);
-			db.execSQL(DROP_ROUTE_TABLE);
-			db.execSQL(DROP_VERSION_TABLE);
-			db.execSQL(CREATE_CALENDAR_TABLE);
-			db.execSQL(CREATE_ROUTE_TABLE);
-			db.execSQL(CREATE_VERSION_TABLE);
 		}
 
 	}

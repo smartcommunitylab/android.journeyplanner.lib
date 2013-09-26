@@ -1,5 +1,7 @@
 package eu.trentorise.smartcampus.jp;
 
+import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,7 +46,9 @@ import eu.trentorise.smartcampus.jp.custom.TypesView;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 import eu.trentorise.smartcampus.jp.custom.data.TimeTable;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
+import eu.trentorise.smartcampus.jp.timetable.CompressedTTHelper;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class SmartCheckTTFragment extends FeedbackFragment {
@@ -391,9 +395,15 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 			long from_day = (Long) params[0];
 			long to_day = (Long) params[1];
 			String routeId = (String) params[2];
-			TimeTable returnTimeTable = JPHelper.getLocalTransitTimeTableById(from_day, to_day, routeId);
-			if (returnTimeTable == null)
-				returnTimeTable = JPHelper.getTransitTimeTableById(from_day, to_day, routeId);
+			CompressedTransitTimeTable cttt = RoutesDBHelper.getTimeTable(CompressedTTHelper.convertMsToDateFormat(from_day),
+					RoutesHelper.getAgencyIdByRouteId(routeId), routeId);
+			// TimeTable returnTimeTable =
+			// JPHelper.getLocalTransitTimeTableById(from_day, to_day, routeId);
+			TimeTable returnTimeTable = CompressedTTHelper.ctt2tt(cttt);
+			// if (returnTimeTable == null) {
+			// returnTimeTable = JPHelper.getTransitTimeTableById(from_day,
+			// to_day, routeId);
+			// }
 
 			actualTimeTable = returnTimeTable;
 			initData(actualTimeTable);

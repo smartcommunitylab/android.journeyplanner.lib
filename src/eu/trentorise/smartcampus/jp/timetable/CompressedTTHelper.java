@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -107,9 +108,8 @@ public class CompressedTTHelper {
 			cur.setAdded(lineHashFiles);
 
 			agencyDescriptor = RoutesDBHelper.buildAgencyDescriptor(agencyId, cur, ctttList);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e(CompressedTTHelper.class.getCanonicalName(), e.getMessage());
 		}
 
 		return agencyDescriptor;
@@ -229,7 +229,7 @@ public class CompressedTTHelper {
 
 	}
 
-	private static String convertMsToDateFormat(long time) {
+	public static String convertMsToDateFormat(long time) {
 		Date date = new Date(time);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		return sdf.format(date);
@@ -285,4 +285,56 @@ public class CompressedTTHelper {
 		return output;
 	}
 
+	public static TimeTable ctt2tt(CompressedTransitTimeTable ctt) {
+		TimeTable timeTable = new TimeTable();
+		timeTable.setStops(ctt.getStops());
+		timeTable.setStopsId(ctt.getStopsId());
+		List<List<String>> tripIdsLists = new ArrayList<List<String>>();
+		tripIdsLists.add(ctt.getTripIds());
+		timeTable.setTripIds(tripIdsLists);
+		
+		List<List<List<String>>> timesLists = new ArrayList<List<List<String>>>();
+		
+		List<List<String>> times = new ArrayList<List<String>>();
+
+		int counter = 0;
+		int index = 0;
+		List<String> column = new ArrayList<String>();
+
+		char[] ctArray = ctt.getCompressedTimes().toCharArray();
+
+		while (index < ctArray.length) {
+			if (ctArray[index] == (" ").charAt(0)) {
+				index += 1;
+				continue;
+			}
+
+			if (ctArray[index] == ("|").charAt(0)) {
+				column.add("     ");
+				index += 1;
+			} else {
+				StringBuilder sb = new StringBuilder();
+				for (int cc = 0; cc < 4; cc++) {
+					sb.append(ctArray[index + cc]);
+					if (cc == 1) {
+						sb.append(":");
+					}
+				}
+				column.add(sb.toString());
+				index += 4;
+			}
+			counter++;
+
+			if (counter == ctt.getStopsId().size()) {
+				times.add(column);
+				column = new ArrayList<String>();
+				counter = 0;
+			}
+		}
+		
+		timesLists.add(times);
+		timeTable.setTimes(timesLists);
+
+		return timeTable;
+	}
 }

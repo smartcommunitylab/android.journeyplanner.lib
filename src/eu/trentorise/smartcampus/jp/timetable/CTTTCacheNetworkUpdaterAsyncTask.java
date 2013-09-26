@@ -18,7 +18,7 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class CompressedTransitTimeTableCacheUpdaterAsyncTask extends
+public class CTTTCacheNetworkUpdaterAsyncTask extends
 		AsyncTask<Map<String, Long>, Integer, Map<String, AgencyDescriptor>> {
 
 	private long time;
@@ -27,7 +27,7 @@ public class CompressedTransitTimeTableCacheUpdaterAsyncTask extends
 	protected void onPreExecute() {
 		// TODO: test
 		time = System.currentTimeMillis();
-		Log.e(getClass().getCanonicalName(), "Agencies update started");
+		Log.e(getClass().getCanonicalName(), "Agencies update from server started");
 
 		super.onPreExecute();
 	}
