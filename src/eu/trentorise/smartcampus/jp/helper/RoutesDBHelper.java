@@ -26,13 +26,14 @@ public class RoutesDBHelper {
 	public static RoutesDatabase routesDB;
 
 	private static RoutesDBHelper instance = null;
+	private static Context mApplicationContext;
 
 	protected RoutesDBHelper(Context context) {
 		// TODO: temp
 		context.deleteDatabase(Environment.getExternalStorageDirectory() + "/" + RoutesDatabase.DB_NAME);
 		//
-
-		routesDB = new RoutesDatabase(context);
+		mApplicationContext= context.getApplicationContext();
+		routesDB = new RoutesDatabase(mApplicationContext);
 	}
 
 	public static void init(Context applicationContext) {
@@ -71,9 +72,11 @@ public class RoutesDBHelper {
 
 	public static CompressedTransitTimeTable getTimeTable(String date, String agencyId, String routeId) {
 		CompressedTransitTimeTable out = new CompressedTransitTimeTable();
-		SQLiteDatabase db = RoutesDBHelper.routesDB.getReadableDatabase();
+		SQLiteDatabase db = instance.new RoutesDatabase(mApplicationContext).getReadableDatabase();
+		//SQLiteDatabase db = RoutesDBHelper.routesDB.getReadableDatabase();
 		String hash = getHash(db, date, agencyId);
 		fillCTT(db, routeId, hash, out);
+		db.close();
 		return out;
 	}
 
@@ -107,55 +110,48 @@ public class RoutesDBHelper {
 	}
 
 	private static String getHash(SQLiteDatabase db, String date, String agencyId) {
-		// String whereClause = RoutesDatabase.DATE_KEY + "='"+ date + " AND " +
-		// RoutesDatabase.AGENCY_ID_KEY + "=" + agencyId;
-		// Cursor c = db.query(RoutesDatabase.DB_TABLE_CALENDAR, new String[] {
-		// RoutesDatabase.LINEHASH_KEY }, whereClause,
-		// new String[] { date, agencyId }, null, null, null, "1");
 
-		String whereClause = RoutesDatabase.DATE_KEY + "='" + date + "' AND " + RoutesDatabase.AGENCY_ID_KEY + "=" + agencyId;
-		Cursor c = db.query(RoutesDatabase.DB_TABLE_CALENDAR, new String[] { RoutesDatabase.LINEHASH_KEY,
-				RoutesDatabase.DATE_KEY, RoutesDatabase.AGENCY_ID_KEY }, whereClause, null, null, null, null, "1");
-
-		// String whereClause = RoutesDatabase.DATE_KEY + "='" + date + "' AND "
-		// + RoutesDatabase.AGENCY_ID_KEY + "=" + agencyId;
-		// String sql = "SELECT " + RoutesDatabase.LINEHASH_KEY + " FROM " +
-		// RoutesDatabase.DB_TABLE_CALENDAR + " WHERE "
-		// + whereClause;
-		// Cursor c = db.rawQuery(sql, null);
-
-		if (c.moveToFirst()) {
-			return c.getString(c.getColumnIndex(RoutesDatabase.LINEHASH_KEY));
-		} else {
-			return null;
-		}
+		//String whereClause = RoutesDatabase.AGENCY_ID_KEY + "=? AND "+RoutesDatabase.DATE_KEY +"=?";
+		String whereClause = RoutesDatabase.AGENCY_ID_KEY + "=? AND "+RoutesDatabase.DATE_KEY +" LIKE '%"+date+"%'";
+		//String whereClause = RoutesDatabase.AGENCY_ID_KEY + "=?";
+		String sql = "SELECT " + RoutesDatabase.LINEHASH_KEY + " FROM "
+				+ RoutesDatabase.DB_TABLE_CALENDAR + " WHERE " + whereClause;
+		Cursor c = db.rawQuery(sql,new String[]{agencyId});
+//		Cursor c= db.query(RoutesDatabase.DB_TABLE_CALENDAR, new String[]{RoutesDatabase.LINEHASH_KEY}, whereClause,
+//			new String[]{agencyId}, null, null, null);
+		c.moveToFirst();
+		return c.getString(c.getColumnIndex(RoutesDatabase.LINEHASH_KEY));
 	}
 
 	private static void addHashesAndDateForAgency(AgencyDescriptor agency, SQLiteDatabase db) {
 		if (agency.isCalendarModified()) {
+			db.beginTransaction();
 			List<String> support = new ArrayList<String>();
 			for (String hash : agency.cur.getAdded()) {
 				String toAddHash = hash.substring(hash.lastIndexOf('_') + 1);
+				
 				if (!support.contains(toAddHash)) {
 					support.add(toAddHash);
 				} else {
-					continue;
+					continue; 
 				}
-
+				
 				List<String> dates = new ArrayList<String>();
 				for (Entry<String, String> entry : agency.getCalendar().entrySet()) {
 					if (entry.getValue().equals(toAddHash)) {
 						dates.add(entry.getKey());
 					}
 				}
-
 				for (String date : dates) {
 					db.insert(RoutesDatabase.DB_TABLE_CALENDAR, RoutesDatabase.DATE_KEY,
 							agency.toContentValues(toAddHash, date));
 				}
+						
 			}
+			db.setTransactionSuccessful();
+			db.endTransaction();
+			
 		}
-
 		addRoutes(agency, db);
 	}
 
@@ -189,12 +185,11 @@ public class RoutesDBHelper {
 			for (CompressedTransitTimeTable ctt : agency.ctts) {
 				ContentValues routes = new ContentValues();
 				routes.put(RoutesDatabase.LINEHASH_KEY, agency.cur.getAdded().get(i));
-
 				if (ctt != null) {
 					String stopsIds = ctt.getStopsId().toString();
 					routes.put(RoutesDatabase.STOPS_IDS_KEY, stopsIds.substring(1, stopsIds.length() - 1));
 					String stopsNames = ctt.getStops().toString();
-					routes.put(RoutesDatabase.STOPS_IDS_KEY, stopsNames.substring(1, stopsNames.length() - 1));
+					routes.put(RoutesDatabase.STOPS_NAMES_KEY, stopsNames.substring(1, stopsNames.length() - 1));
 					if (ctt.getTripIds() != null) {
 						String tripids = ctt.getTripIds().toString();
 						routes.put(RoutesDatabase.TRIPS_IDS_KEY, tripids.substring(1, tripids.length() - 1));
@@ -203,6 +198,7 @@ public class RoutesDBHelper {
 				}
 
 				db.insert(RoutesDatabase.DB_TABLE_ROUTE, RoutesDatabase.COMPRESSED_TIMES_KEY, routes);
+				
 				i++;
 			}
 		} catch (Exception e) {
@@ -281,7 +277,7 @@ public class RoutesDBHelper {
 
 		public ContentValues toContentValues(String toAddHash, String date) {
 			ContentValues cv = new ContentValues();
-			cv.put(RoutesDatabase.AGENCY_ID_KEY, agencyId);
+			cv.put(RoutesDatabase.AGENCY_ID_KEY, this.agencyId);
 			cv.put(RoutesDatabase.LINEHASH_KEY, toAddHash);
 			cv.put(RoutesDatabase.DATE_KEY, date);
 			return cv;
@@ -318,7 +314,7 @@ public class RoutesDBHelper {
 		public final static String VERSION_KEY = "version";
 
 		private static final String CREATE_CALENDAR_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_CALENDAR + " ("
-				+ AGENCY_ID_KEY + " integer not null, " + DATE_KEY + " text not null, " + LINEHASH_KEY + " text not null);";
+				+ AGENCY_ID_KEY + "text not null, " + DATE_KEY + " text not null, " + LINEHASH_KEY + " text not null);";
 
 		private static final String CREATE_ROUTE_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_ROUTE + " (" + LINEHASH_KEY
 				+ " text primary key, " + STOPS_IDS_KEY + " text, " + STOPS_NAMES_KEY + " text," + TRIPS_IDS_KEY + " text,"
