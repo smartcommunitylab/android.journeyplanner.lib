@@ -338,8 +338,8 @@
     <string name="agency_12_route_16R">Povo - Cognola - Martignano - Centochiavi</string>
     <string name="agency_12_route_17A">Piazza Dante - Via Bolzano - Lavis</string>
     <string name="agency_12_route_17R">Lavis - S. Lazzaro -  Piazza Dante</string>
-    <string name="agency_12_route_FUTSA">Funivia Trento Sardagna</string>
-    <string name="agency_12_route_FUTSR">Funivia Sardagna Trento </string>
+    <string name="agency_12_route_FUTSR">Funivia Trento Sardagna</string>
+    <string name="agency_12_route_FUTSA">Funivia Sardagna Trento </string>
 
     <!-- Suburban zones -->
     <string name="agency_17_zone_1">Val di Fiemme, Val di Fassa, Val di Cembra</string>
