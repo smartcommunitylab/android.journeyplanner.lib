@@ -36,6 +36,7 @@ import eu.trentorise.smartcampus.android.common.navigation.NavigationHelper;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.SmartCheckParkingsAdapter;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 
 public class ParkingsInfoDialog extends SherlockDialogFragment {
@@ -61,8 +62,16 @@ public class ParkingsInfoDialog extends SherlockDialogFragment {
 
 		GeoPoint myGeoPoint = JPHelper.getLocationHelper().getLocation();
 		myLocation = new Location("");
-		myLocation.setLatitude(myGeoPoint.getLatitudeE6() / 1e6);
-		myLocation.setLongitude(myGeoPoint.getLongitudeE6() / 1e6);
+		if (myGeoPoint != null) {
+			myLocation.setLatitude(myGeoPoint.getLatitudeE6() / 1e6);
+			myLocation.setLongitude(myGeoPoint.getLongitudeE6() / 1e6);
+		} else {
+			List<Double> center = JPParamsHelper.getCenterMap();
+			if (center != null) {
+				myLocation.setLatitude(center.get(0));
+				myLocation.setLongitude(center.get(1));
+			}
+		}
 	}
 
 	@Override

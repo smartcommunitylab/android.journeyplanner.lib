@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
 //import com.google.android.gms.maps.GoogleMap;
@@ -36,8 +37,6 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 	private double diagonal;
 	private GoogleMap map;
 
-	private long time;
-
 	List<SmartCheckStop> stops = new ArrayList<SmartCheckStop>();
 
 	public StopsV2AsyncTask(SherlockFragmentActivity mActivity, String[] selectedAgencyIds, LatLng latLng, double diagonal,
@@ -45,7 +44,16 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 		super();
 		this.mActivity = mActivity;
 		this.selectedAgencyIds = selectedAgencyIds;
-		this.location = new double[] { latLng.latitude, latLng.longitude };
+		if (latLng != null) {
+			this.location = new double[] { latLng.latitude, latLng.longitude };
+		} else {
+			List<Double> center = JPParamsHelper.getCenterMap();
+			if (center != null) {
+				this.location = new double[] {center.get(0),center.get(1)};
+			}
+
+		}
+
 		this.diagonal = diagonal;
 		this.map = map;
 		this.zoomLevelChanged = zoomLevelChanged;
@@ -60,7 +68,6 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 
 	@Override
 	protected Boolean doInBackground(Object... params) {
-		time = System.currentTimeMillis();
 		try {
 			if (selectedAgencyIds != null) {
 				for (int i = 0; i < selectedAgencyIds.length; i++) {
@@ -73,8 +80,6 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 			Log.e(getClass().getSimpleName(), e.getMessage());
 			return false;
 		}
-		long newtime = System.currentTimeMillis();
-		time = newtime;
 		return !isCancelled();
 	}
 
@@ -99,17 +104,8 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 		Collection<SmartCheckStop> stops = MapManager.getCache().getStopsByAgencyIds(selectedAgencyIds);
 		if (!stops.isEmpty() || newStops > 0 || zoomLevelChanged) {
 			map.clear();
-			long newtime = System.currentTimeMillis();
-			time = newtime;
 			List<MarkerOptions> cluster = MapManager.ClusteringHelper.cluster(mActivity.getApplicationContext(), map, stops);
-			newtime = System.currentTimeMillis();
-			time = newtime;
-
-			newtime = System.currentTimeMillis();
-			time = newtime;
 			MapManager.ClusteringHelper.render(map, cluster);
-			newtime = System.currentTimeMillis();
-			time = newtime;
 		}
 
 		if (mOnStopLoadingFinished != null) {

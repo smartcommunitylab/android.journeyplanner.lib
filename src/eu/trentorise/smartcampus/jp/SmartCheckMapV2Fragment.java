@@ -92,7 +92,13 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements OnCam
 
 			getSupportMap().moveCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, zoomLevel));
 		} else {
-			getSupportMap().moveCamera(CameraUpdateFactory.zoomTo(zoomLevel));
+			List<Double> defaultLoc = JPParamsHelper.getCenterMap();
+			if (defaultLoc != null) {
+				centerLatLng = new LatLng(defaultLoc.get(0),defaultLoc.get(1));
+				getSupportMap().moveCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, zoomLevel));
+			} else {
+				getSupportMap().moveCamera(CameraUpdateFactory.zoomTo(zoomLevel));
+			}
 		}
 	}
 

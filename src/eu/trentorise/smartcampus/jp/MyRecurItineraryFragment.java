@@ -212,7 +212,7 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 							new DeleteMyRecurItineraryProcessor(getSherlockActivity(), MyRecurItineraryFragment.this.getTag()));
 					task.execute(params.getName(), params.getClientId());
 					dialog.dismiss();
-					getSherlockActivity().getSupportFragmentManager().popBackStackImmediate();
+//					getSherlockActivity().getSupportFragmentManager().popBackStackImmediate();
 				}
 			});
 			deleteAlertDialog.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {

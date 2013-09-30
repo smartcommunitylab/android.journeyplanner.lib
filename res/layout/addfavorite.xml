@@ -7,7 +7,8 @@
     android:paddingBottom="16dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
-    android:paddingTop="16dp" >
+    android:paddingTop="16dp" 
+    android:background="@android:color/white">
 
     <AutoCompleteTextView
         android:id="@+id/addfav_actext"
