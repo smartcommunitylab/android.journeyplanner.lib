@@ -28,6 +28,7 @@ import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActiv
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
+import eu.trentorise.smartcampus.jp.timetable.CTTTCacheUpdaterAsyncTask;
 
 public class BaseActivity extends FeedbackFragmentActivity {
 

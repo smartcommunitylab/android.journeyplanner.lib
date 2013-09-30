@@ -157,7 +157,7 @@ public class TTHelper {
 		}
 	}
 
-	private static List<List<Map<String, String>>> emptyDelay(TimeTable localTT) {
+	public static List<List<Map<String, String>>> emptyDelay(TimeTable localTT) {
 		List<List<Map<String, String>>> returnlist = new ArrayList<List<Map<String, String>>>();
 		for (int day = 0; day < localTT.getTimes().size(); day++) {
 			{

@@ -30,7 +30,7 @@ public class RoutesDBHelper {
 
 	protected RoutesDBHelper(Context context) {
 		// TODO: temp
-		context.deleteDatabase(Environment.getExternalStorageDirectory() + "/" + RoutesDatabase.DB_NAME);
+		//context.deleteDatabase(Environment.getExternalStorageDirectory() + "/" + RoutesDatabase.DB_NAME);
 		//
 		mApplicationContext= context.getApplicationContext();
 		routesDB = new RoutesDatabase(mApplicationContext);
@@ -42,7 +42,7 @@ public class RoutesDBHelper {
 		// routesDB.getReadableDatabase().getPath());
 
 		CTTTCacheUpdaterAsyncTask ctttCacheUpdaterAsyncTask = new CTTTCacheUpdaterAsyncTask();
-		ctttCacheUpdaterAsyncTask.execute();
+		ctttCacheUpdaterAsyncTask.execute(); 
 	}
 
 	public static Map<String, Long> getVersions() {
@@ -72,8 +72,8 @@ public class RoutesDBHelper {
 
 	public static CompressedTransitTimeTable getTimeTable(String date, String agencyId, String routeId) {
 		CompressedTransitTimeTable out = new CompressedTransitTimeTable();
-		SQLiteDatabase db = instance.new RoutesDatabase(mApplicationContext).getReadableDatabase();
-		//SQLiteDatabase db = RoutesDBHelper.routesDB.getReadableDatabase();
+		//SQLiteDatabase db = instance.new RoutesDatabase(mApplicationContext).getReadableDatabase();
+		SQLiteDatabase db = RoutesDBHelper.routesDB.getReadableDatabase();
 		String hash = getHash(db, date, agencyId);
 		fillCTT(db, routeId, hash, out);
 		db.close();
@@ -100,8 +100,7 @@ public class RoutesDBHelper {
 		Map<String, Long> versionsMap = new HashMap<String, Long>();
 		Cursor c = db.query(RoutesDatabase.DB_TABLE_VERSION, new String[] { RoutesDatabase.AGENCY_ID_KEY,
 				RoutesDatabase.VERSION_KEY }, null, null, null, null, null);
-		c.moveToFirst();
-		while (c.isAfterLast() == false) {
+		while (c.moveToNext()) {
 			String agencyId = c.getString(c.getColumnIndex(RoutesDatabase.AGENCY_ID_KEY));
 			Long version = c.getLong(c.getColumnIndex(RoutesDatabase.VERSION_KEY));
 			versionsMap.put(agencyId, version);
@@ -161,7 +160,7 @@ public class RoutesDBHelper {
 		 * hash=somehas2 OR hash=somehash3 ecc.. to put after the WHERE clause
 		 * in SQL
 		 */
-		String whereClause = RoutesDatabase.AGENCY_ID_KEY + "=" + agency.agencyId;
+		String whereClause = RoutesDatabase.AGENCY_ID_KEY + "='" + agency.agencyId+"'";
 
 		if (!agency.cur.getRemoved().isEmpty()) {
 			whereClause = whereClause + " AND ( ";
@@ -314,7 +313,7 @@ public class RoutesDBHelper {
 		public final static String VERSION_KEY = "version";
 
 		private static final String CREATE_CALENDAR_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_CALENDAR + " ("
-				+ AGENCY_ID_KEY + "text not null, " + DATE_KEY + " text not null, " + LINEHASH_KEY + " text not null);";
+				+ AGENCY_ID_KEY + " text not null, " + DATE_KEY + " text not null, " + LINEHASH_KEY + " text not null);";
 
 		private static final String CREATE_ROUTE_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_ROUTE + " (" + LINEHASH_KEY
 				+ " text primary key, " + STOPS_IDS_KEY + " text, " + STOPS_NAMES_KEY + " text," + TRIPS_IDS_KEY + " text,"

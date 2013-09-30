@@ -293,6 +293,8 @@ public class CompressedTTHelper {
 		tripIdsLists.add(ctt.getTripIds());
 		timeTable.setTripIds(tripIdsLists);
 		
+		
+		
 		List<List<List<String>>> timesLists = new ArrayList<List<List<String>>>();
 		
 		List<List<String>> times = new ArrayList<List<String>>();
@@ -334,7 +336,9 @@ public class CompressedTTHelper {
 		
 		timesLists.add(times);
 		timeTable.setTimes(timesLists);
-
+		
+		timeTable.setDelays(TTHelper.emptyDelay(timeTable));
+		
 		return timeTable;
 	}
 }

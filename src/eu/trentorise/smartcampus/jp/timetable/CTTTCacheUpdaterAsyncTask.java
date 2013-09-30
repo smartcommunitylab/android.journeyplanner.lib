@@ -24,7 +24,7 @@ public class CTTTCacheUpdaterAsyncTask extends AsyncTask<Void, Integer, Void> {
 		Log.e(getClass().getCanonicalName(), "Agencies update from assets started");
 
 		dbVersions = RoutesDBHelper.getVersions();
-		assetsVersions = CompressedTTHelper.getInstance().getVersionsFromAssets();
+		assetsVersions = CompressedTTHelper.getVersionsFromAssets();
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class CTTTCacheUpdaterAsyncTask extends AsyncTask<Void, Integer, Void> {
 		// agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TM, "0");
 		// agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TNBDG, "0");
 
-		assetsVersions = CompressedTTHelper.getInstance().getVersionsFromAssets();
+		assetsVersions = CompressedTTHelper.getVersionsFromAssets();
 		CTTTCacheNetworkUpdaterAsyncTask csat = new CTTTCacheNetworkUpdaterAsyncTask();
 		csat.execute(assetsVersions);
 	}

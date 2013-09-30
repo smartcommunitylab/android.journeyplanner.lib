@@ -398,7 +398,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 			CompressedTransitTimeTable cttt = RoutesDBHelper.getTimeTable(CompressedTTHelper.convertMsToDateFormat(from_day),
 					RoutesHelper.getAgencyIdByRouteId(routeId), routeId);
 			// TimeTable returnTimeTable =
-			// JPHelper.getLocalTransitTimeTableById(from_day, to_day, routeId);
+			//JPHelper.getLocalTransitTimeTableById(from_day, to_day, routeId);
 			TimeTable returnTimeTable = CompressedTTHelper.ctt2tt(cttt);
 			// if (returnTimeTable == null) {
 			// returnTimeTable = JPHelper.getTransitTimeTableById(from_day,
@@ -485,10 +485,11 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 		// sum of every column
 		int tempNumbCol = 0;
 		courseForDay.add(0);
-
-		for (List<Map<String, String>> tt : actualBusTimeTable.getDelays()) {
-			tempNumbCol += tt.size();
-			courseForDay.add(tempNumbCol);
+		if (actualBusTimeTable.getDelays() != null) {
+			for (List<Map<String, String>> tt : actualBusTimeTable.getDelays()) {
+				tempNumbCol += tt.size();
+				courseForDay.add(tempNumbCol);
+			}
 		}
 
 		NUM_COLS = tempNumbCol;
