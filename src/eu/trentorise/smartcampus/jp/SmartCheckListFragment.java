@@ -239,7 +239,7 @@ public class SmartCheckListFragment extends FeedbackFragment {
 
 					// Lines
 					ActionBar.Tab tab = actionBar.newTab();
-					tab.setText(R.string.tab_lines);
+					tab.setText(R.string.tab_parkings);
 					tab.setTabListener(new TabListener<SmartCheckParkingsFragment>(getSherlockActivity(), "lines",
 							SmartCheckParkingsFragment.class, null));
 					Bundle bundle = new Bundle();
