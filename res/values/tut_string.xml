@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="jp_first_launch">Welcome!Our app will help you plan your trips and keep track of your usual travel routes through Trento.</string>
+    <string name="jp_first_launch">Welcome! Our app will help you plan your trips and keep track of your usual travel routes.</string>
     <string name="jp_plan_tut">Plan your next trip here</string>
     <string name="jp_monitor_tut">Set up your usual routes to be notified about possible delays.</string>
     <string name="jp_watch_tut">Keep track of your usual travel routes here</string>
