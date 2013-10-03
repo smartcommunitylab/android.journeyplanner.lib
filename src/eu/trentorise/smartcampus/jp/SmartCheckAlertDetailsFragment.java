@@ -58,7 +58,7 @@ public class SmartCheckAlertDetailsFragment extends FeedbackFragment {
 				ImageView typeImageView = new ImageView(getActivity());
 				typeImageView.setImageResource(AlertRoadsHelper.getDrawableResourceByType(type));
 				final float scale = getActivity().getResources().getDisplayMetrics().density;
-				int pixels = (int) (24 * scale + 0.5f);
+				int pixels = (int) (36 * scale + 0.5f);
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(pixels, pixels);
 				typeImageView.setLayoutParams(params);
 				typesLayout.addView(typeImageView);
