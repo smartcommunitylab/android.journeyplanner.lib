@@ -54,6 +54,7 @@ public class SmartCheckAlertDetailsFragment extends FeedbackFragment {
 
 		// types
 		if (alert.getChangeTypes().length > 0) {
+			typesLayout.removeAllViews();
 			for (AlertRoadType type : alert.getChangeTypes()) {
 				ImageView typeImageView = new ImageView(getActivity());
 				typeImageView.setImageResource(AlertRoadsHelper.getDrawableResourceByType(type));
