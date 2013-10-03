@@ -75,7 +75,7 @@ public class SmartCheckActivity extends BaseActivity {
 		if (extras != null) {
 			agency = extras.getString("AGENCY_ID");
 			routeid = extras.getString("ROUTE_ID");
-			position = extras.getInt("POSITION");
+			// position = extras.getInt("POSITION");
 		}
 		/* if parking load parking frame, */
 		/* load smartline anch call smartttfragment with correct id */
@@ -83,11 +83,11 @@ public class SmartCheckActivity extends BaseActivity {
 
 			/* autobus */
 			if ("eu.trentorise.smartcampus.widget.REAL_TIME_BUS".equals(action)) {
-				navigation_to_bus(agency, actionBar, position);
+				navigation_to_bus(agency, routeid, actionBar);
 
 			} else if ("eu.trentorise.smartcampus.widget.REAL_TIME_TRAIN".equals(action)) {
 				/* train */
-				navigate_to_train(actionBar, position);
+				navigate_to_train(actionBar, routeid);
 			}
 
 		} else if ("eu.trentorise.smartcampus.widget.REAL_TIME_PARKING".equals(action)) {
@@ -97,26 +97,36 @@ public class SmartCheckActivity extends BaseActivity {
 		}
 	}
 
-	private void navigation_to_bus(String agency, ActionBar actionBar, Integer position) {
+	private void navigation_to_bus(String agency, String routeid, ActionBar actionBar) {
 		SmartLine param;
 		busLines = RoutesHelper.getSmartLines(this, agency);
+		/* find position using routeid */
+		int pos = 0;
+		for (SmartLine smartline : busLines) {
+			if (smartline.getRouteID().get(0).equals(routeid)) {
+				param = new SmartLine(null, smartline.getRoutesShorts().get(0), smartline.getColor(),
+						new ArrayList<String>(Arrays.asList(smartline.getRoutesShorts().get(0))),
+						new ArrayList<String>(Arrays.asList(smartline.getRoutesLong().get(0))), new ArrayList<String>(
+								Arrays.asList(smartline.getRouteID().get(0))));
 
-		param = new SmartLine(null, busLines.get(position).getRoutesShorts().get(0), busLines.get(position)
-				.getColor(), new ArrayList<String>(Arrays.asList(busLines.get(position).getRoutesShorts()
-				.get(0))), new ArrayList<String>(Arrays.asList(busLines.get(position).getRoutesLong().get(0))),
-				new ArrayList<String>(Arrays.asList(busLines.get(position).getRouteID().get(0))));
-
-		build_tabs(actionBar, param);
+				build_tabs(actionBar, param);
+				break;
+			}
+		}
 
 	}
 
-	private void navigate_to_train(ActionBar actionBar, Integer position) {
+	private void navigate_to_train(ActionBar actionBar, String routeid) {
 		SmartLine param;
 		trainLines = RoutesHelper.getRouteDescriptorsList(agencyIds);
-
-		param = new SmartLine(null, getString(trainLines.get(position).getNameResource()), getResources().getColor(
-				R.color.sc_gray), null, null, Arrays.asList(trainLines.get(position).getRouteId()));
-		build_tabs(actionBar, param);
+		int pos = 0;
+		for (RouteDescriptor routeDesc : trainLines) {
+			if (routeDesc.getRouteId().equals(routeid)) {
+				param = new SmartLine(null, getString(routeDesc.getNameResource()), getResources().getColor(
+						R.color.sc_gray), null, null, Arrays.asList(routeDesc.getRouteId()));
+				build_tabs(actionBar, param);
+			}
+		}
 	}
 
 	private void build_tabs(ActionBar actionBar, SmartLine param) {
