@@ -41,14 +41,14 @@ import android.location.Location;
 
 
 		public void add(Square another) {
-			if(another.mDiagonal>mDiagonal)
+			//if(another.mDiagonal>mDiagonal)
 				mDiagonal=another.mDiagonal;
-			else{
-				float[] results = new float[1];
-				Location.distanceBetween(mLat, mLong, another.mLat, another.mLong, results);
-				if(results[0]>mDiagonal)
-					mDiagonal=mDiagonal+another.mDiagonal-results[0];
-			}
+//			else{
+//				float[] results = new float[1];
+//				Location.distanceBetween(mLat, mLong, another.mLat, another.mLong, results);
+//				if(results[0]>mDiagonal)
+//					mDiagonal=mDiagonal+another.mDiagonal-results[0];
+//			}
 			double[] location=midPoint(mLat, mLong, another.mLat, another.mLong);
 			this.mLat = location[0];
 			this.mLong = location[1];

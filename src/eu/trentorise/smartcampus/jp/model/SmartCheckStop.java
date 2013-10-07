@@ -72,7 +72,7 @@ public class SmartCheckStop extends BasicObject implements LocatedObject {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof SmartCheckStop))
 			return false;
 		SmartCheckStop other = (SmartCheckStop) obj;
 		if (getId() == null) {
@@ -81,6 +81,10 @@ public class SmartCheckStop extends BasicObject implements LocatedObject {
 		} else if (!getId().equals(other.getId()))
 			return false;
 		return true;
+//		if(other.getLocation()[0]== this.getLocation()[0] &&
+//				other.getLocation()[1]== this.getLocation()[1])
+//			return true;
+//		return false;
 	}
 
 	@Override

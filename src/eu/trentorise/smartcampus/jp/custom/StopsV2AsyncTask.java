@@ -62,12 +62,9 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 	protected Boolean doInBackground(Object... params) {
 		time = System.currentTimeMillis();
 		try {
-			if (selectedAgencyIds != null) {
-				for (int i = 0; i < selectedAgencyIds.length; i++) {
-					stops.addAll(JPHelper.getStops(selectedAgencyIds[i], location, diagonal));
-				}
-			} else {
-				stops.addAll(JPHelper.getStops(null, location, diagonal));
+			for (int i = 0; i < selectedAgencyIds.length; i++) {
+				stops.addAll(JPHelper.getStops(selectedAgencyIds[i], location,
+						diagonal));
 			}
 		} catch (Exception e) {
 			Log.e(getClass().getSimpleName(), e.getMessage());
@@ -116,7 +113,7 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 			mOnStopLoadingFinished.onStopLoadingFinished(result, location, diagonal);
 		}
 
-		mActivity.setSupportProgressBarIndeterminateVisibility(false);
+		//mActivity.setSupportProgressBarIndeterminateVisibility(false);
 	}
 
 	@Override
