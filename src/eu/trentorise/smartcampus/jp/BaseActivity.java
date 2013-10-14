@@ -35,20 +35,14 @@ public class BaseActivity extends FeedbackFragmentActivity {
 	private void initDataManagement(Bundle savedInstanceState) {
 		try {
 			JPHelper.init(getApplicationContext());
-			
-			RoutesDBHelper.init(getApplicationContext());
-			
-			String token = JPHelper.getAccessProvider().getAuthToken(this, null);
+
+			String token = JPHelper.getAuthToken();
 			if (token != null) {
-				initData();
+				//TODO login
 			}
 		} catch (Exception e) {
 			JPHelper.endAppFailure(this, R.string.app_failure_setup);
 		}
-	}
-	
-
-	protected void initData() {
 	}
 
 	public void initializeSharedPreferences() {
@@ -82,10 +76,6 @@ public class BaseActivity extends FeedbackFragmentActivity {
 		}
 	}
 	
-
-	
-
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -95,7 +85,9 @@ public class BaseActivity extends FeedbackFragmentActivity {
 				if (token == null) {
 					JPHelper.endAppFailure(this, R.string.app_failure_security);
 				} else {
-					initData();
+					
+					//TODO login
+					//initData();
 				}
 			} else if (resultCode == RESULT_CANCELED) {
 				JPHelper.endAppFailure(this, R.string.token_required);

@@ -45,7 +45,6 @@ public class ViewActivity extends BaseActivity {
 		initData();
 	}
 
-	@Override
 	protected void initData() {
 		try {
 			new LoadTask().execute();

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2012-2013 Trento RISE
  * 
@@ -45,16 +46,21 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
-import eu.trentorise.smartcampus.ac.SCAccessProvider;
-import eu.trentorise.smartcampus.ac.authenticator.AMSCAccessProvider;
+import eu.trentorise.smartcampus.ac.AACException;
+import eu.trentorise.smartcampus.ac.embedded.EmbeddedSCAccessProvider;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.LocationHelper;
+import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.data.BasicAlert;
@@ -71,7 +77,6 @@ import eu.trentorise.smartcampus.jp.model.SmartCheckRoute;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 import eu.trentorise.smartcampus.jp.model.SmartCheckTime;
 import eu.trentorise.smartcampus.jp.model.TripData;
-import eu.trentorise.smartcampus.jp.timetable.CompressedTTHelper;
 import eu.trentorise.smartcampus.jp.timetable.TTHelper;
 import eu.trentorise.smartcampus.protocolcarrier.ProtocolCarrier;
 import eu.trentorise.smartcampus.protocolcarrier.common.Constants.Method;
@@ -88,7 +93,7 @@ public class JPHelper {
 
 	private static JPHelper instance = null;
 
-	private static SCAccessProvider accessProvider = new AMSCAccessProvider();
+	private static EmbeddedSCAccessProvider accessProvider = new EmbeddedSCAccessProvider();
 
 	private static Context mContext;
 
@@ -133,7 +138,6 @@ public class JPHelper {
 
 		JPParamsHelper.init(mContext);
 		TTHelper.init(mContext);
-		CompressedTTHelper.init(mContext);
 		MapManager.initWithParams();
 
 		setProtocolCarrier(new ProtocolCarrier(mContext, JPParamsHelper.getAppToken()));
@@ -248,6 +252,38 @@ public class JPHelper {
 		}
 		// se cambiato restituisce il valore del monitor
 		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), Boolean.class);
+	}
+	
+	public static Map<String, CacheUpdateResponse> getCacheStatus(Map<String, String> agencyIdsVersions)
+			throws ProtocolException, ConnectionException, SecurityException {
+		String url = Config.TARGET_ADDRESS + Config.CALL_GET_TT_CACHE_STATUS;
+
+		String json = JSONUtils.convertToJSON(agencyIdsVersions);
+
+		MessageRequest req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), url);
+		req.setMethod(Method.POST);
+		req.setBody(json);
+
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+				getAuthToken());
+
+		Map<String, CacheUpdateResponse> map = eu.trentorise.smartcampus.android.common.Utils.convertJSON(res.getBody(),
+				new TypeReference<Map<String, CacheUpdateResponse>>() {
+				});
+		return map;
+	}
+
+	public static CompressedTransitTimeTable getCacheUpdate(String agencyId, String fileName) throws ConnectionException,
+			ProtocolException, SecurityException {
+		String url = Config.TARGET_ADDRESS + Config.CALL_GET_TT_CACHE_UPDATE + "/" + agencyId + "/" + fileName;
+
+		MessageRequest req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), url);
+
+		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
+				getAuthToken());
+
+		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(),
+				CompressedTransitTimeTable.class);
 	}
 
 	public static boolean monitorMyRecItinerary(boolean monitor, String id) throws ConnectionException, ProtocolException,
@@ -418,7 +454,13 @@ public class JPHelper {
 	}
 
 	public static String getAuthToken() {
-		return getAccessProvider().readToken(JPHelper.mContext, null);
+		try {
+			return getAccessProvider().readToken(mContext);
+		} catch (AACException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static JPHelper getInstance() throws DataException {
@@ -427,7 +469,7 @@ public class JPHelper {
 		return instance;
 	}
 
-	public static SCAccessProvider getAccessProvider() {
+	public static EmbeddedSCAccessProvider getAccessProvider() {
 		return accessProvider;
 	}
 
@@ -641,38 +683,6 @@ public class JPHelper {
 		return TTHelper.getTTwithRouteIdAndTime(routeId, from_day, to_day);
 	}
 
-	public static Map<String, CacheUpdateResponse> getCacheStatus(Map<String, String> agencyIdsVersions)
-			throws ProtocolException, ConnectionException, SecurityException {
-		String url = Config.TARGET_ADDRESS + Config.CALL_GET_TT_CACHE_STATUS;
-
-		String json = JSONUtils.convertToJSON(agencyIdsVersions);
-
-		MessageRequest req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), url);
-		req.setMethod(Method.POST);
-		req.setBody(json);
-
-		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
-				getAuthToken());
-
-		Map<String, CacheUpdateResponse> map = eu.trentorise.smartcampus.android.common.Utils.convertJSON(res.getBody(),
-				new TypeReference<Map<String, CacheUpdateResponse>>() {
-				});
-		return map;
-	}
-
-	public static CompressedTransitTimeTable getCacheUpdate(String agencyId, String fileName) throws ConnectionException,
-			ProtocolException, SecurityException {
-		String url = Config.TARGET_ADDRESS + Config.CALL_GET_TT_CACHE_UPDATE + "/" + agencyId + "/" + fileName;
-
-		MessageRequest req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), url);
-
-		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
-				getAuthToken());
-
-		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(),
-				CompressedTransitTimeTable.class);
-	}
-
 	public static List<SmartCheckStop> getStops(String agencyId, double[] location, double radius) throws Exception {
 		getInstance();
 		MessageRequest request = new MessageRequest(GlobalConfig.getAppUrl(getInstance().mContext),
@@ -702,7 +712,7 @@ public class JPHelper {
 		}
 
 		String queryStrObject = eu.trentorise.smartcampus.android.common.Utils.convertToJSON(filter);
-		String queryString = "filter=" + URLEncoder.encode(queryStrObject,"UTF-8");
+		String queryString = "filter=" + URLEncoder.encode(queryStrObject,"utf8");
 		request.setQuery(queryString);
 
 		MessageResponse response = getInstance().protocolCarrier.invokeSync(request, JPParamsHelper.getAppToken(),
