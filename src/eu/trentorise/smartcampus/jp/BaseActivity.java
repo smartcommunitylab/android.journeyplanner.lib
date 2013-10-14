@@ -97,7 +97,7 @@ public class BaseActivity extends FeedbackFragmentActivity {
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
+		super.onConfigurationChanged(newConfig); 
 	}
 
 	@Override

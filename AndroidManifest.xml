@@ -40,8 +40,8 @@
         android:theme="@style/Theme.Journeyplanner" >
         <uses-library android:name="com.google.android.maps" />
         
-        <meta-data android:name="clientID" android:value="bbde6aea-bc7a-4ea0-afc9-91c15e4d6da1"/>
-        <meta-data android:name="clientSecret" android:value="8c44736a-56c1-46a5-b572-f577e72c44f2"/>
+        <meta-data android:name="CLIENT_ID" android:value="bbde6aea-bc7a-4ea0-afc9-91c15e4d6da1"/>
+        <meta-data android:name="CLIENT_SECRET" android:value="8c44736a-56c1-46a5-b572-f577e72c44f2"/>
         
         <activity
             android:name=".HomeActivity"
