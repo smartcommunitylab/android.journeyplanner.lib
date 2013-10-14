@@ -57,6 +57,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import eu.trentorise.smartcampus.ac.AACException;
+import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.ac.embedded.EmbeddedSCAccessProvider;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.LocationHelper;
@@ -93,13 +94,15 @@ public class JPHelper {
 
 	private static JPHelper instance = null;
 
-	private static EmbeddedSCAccessProvider accessProvider = new EmbeddedSCAccessProvider();
+	private static SCAccessProvider accessProvider = null;
 
 	private static Context mContext;
 
 	private ProtocolCarrier protocolCarrier = null;
 
 	private static LocationHelper mLocationHelper;
+
+	public static String mAuthToken;
 
 	private SyncStorageWithPaging storage = null;
 
@@ -453,14 +456,9 @@ public class JPHelper {
 		}
 	}
 
+	
 	public static String getAuthToken() {
-		try {
-			return getAccessProvider().readToken(mContext);
-		} catch (AACException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return mAuthToken;
 	}
 
 	public static JPHelper getInstance() throws DataException {
@@ -469,7 +467,9 @@ public class JPHelper {
 		return instance;
 	}
 
-	public static EmbeddedSCAccessProvider getAccessProvider() {
+	public static SCAccessProvider getAccessProvider() {
+		if(accessProvider==null)
+			accessProvider = SCAccessProvider.getInstance(mContext);
 		return accessProvider;
 	}
 
