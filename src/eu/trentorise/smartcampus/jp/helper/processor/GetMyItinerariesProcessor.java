@@ -21,8 +21,8 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.custom.MyItinerariesListAdapter;
-import eu.trentorise.smartcampus.jp.custom.data.BasicItinerary;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class GetMyItinerariesProcessor extends AbstractAsyncTaskProcessor<Void, List<BasicItinerary>> {

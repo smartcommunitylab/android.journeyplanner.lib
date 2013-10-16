@@ -40,8 +40,8 @@ import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.DialogHandler;
 import eu.trentorise.smartcampus.jp.custom.LegsListAdapter;
-import eu.trentorise.smartcampus.jp.custom.data.BasicItinerary;
 import eu.trentorise.smartcampus.jp.helper.processor.SaveItineraryProcessor;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 
 public class ItineraryFragment extends FeedbackFragment {
 

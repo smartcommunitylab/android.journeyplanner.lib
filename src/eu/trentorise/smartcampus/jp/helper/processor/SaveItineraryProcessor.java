@@ -22,12 +22,11 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import eu.trentorise.smartcampus.jp.MyItinerariesFragment;
-import eu.trentorise.smartcampus.jp.MyRecurItineraryFragment;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.SavedJourneyActivity;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
-import eu.trentorise.smartcampus.jp.custom.data.BasicItinerary;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class SaveItineraryProcessor extends AbstractAsyncTaskProcessor<BasicItinerary, Void> {
