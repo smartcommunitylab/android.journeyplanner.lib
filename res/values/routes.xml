@@ -310,12 +310,12 @@
     <string name="agency_12_route_02">Vela - P. Dante - Osp. S. Chiara - P. Dante -Vela</string>
     <string name="agency_12_route_03A">Cortesano - Gardolo - P. Dante - Villazzano 3</string>
     <string name="agency_12_route_03R">Villazzano 3 - P. Dante - Gardolo - Cortesano</string>
-    <string name="agency_12_route_04R">Madonna Bianca - Via Degasperi - Piazza Dante</string>
     <string name="agency_12_route_04A">Piazza Dante - Via Degasperi - Madonna Bianca</string>
+    <string name="agency_12_route_04R">Madonna Bianca - Via Degasperi - Piazza Dante</string>
     <string name="agency_12_route_05A">Piazza Dante - P.Fiera - Povo - Oltrecastello</string>
     <string name="agency_12_route_05R">Oltrecastello - Povo - P.Aquila - P. Dante</string>
-    <string name="agency_12_route_06R">Sopramonte - P. Dante - Villazzano - Grotta</string>
-    <string name="agency_12_route_06A">Grotta - Villazzano - P. Dante - Sopramonte</string>
+    <string name="agency_12_route_06A">Sopramonte - P. Dante - Villazzano - Grotta</string>
+    <string name="agency_12_route_06R">Grotta - Villazzano - P. Dante - Sopramonte</string>
     <string name="agency_12_route_07A">Canova - Melta - Piazza Dante - Gocciadoro</string>
     <string name="agency_12_route_07R">Gocciadoro - Piazza Dante - Melta - Canova</string>
     <string name="agency_12_route_08R">Mattarello -  Piazza Dante -  Centochiavi</string>
