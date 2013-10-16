@@ -14,6 +14,7 @@ import android.util.Log;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper.AgencyDescriptor;
+import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
@@ -60,9 +61,10 @@ public class CTTTCacheNetworkUpdaterAsyncTask extends
 			}
 		} catch (ProtocolException e) {
 			e.printStackTrace();
-		} catch (ConnectionException e) {
-			e.printStackTrace();
 		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

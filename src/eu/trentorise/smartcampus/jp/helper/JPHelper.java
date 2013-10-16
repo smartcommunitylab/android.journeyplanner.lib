@@ -69,10 +69,12 @@ import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 import eu.trentorise.smartcampus.jp.model.SmartCheckTime;
 import eu.trentorise.smartcampus.jp.model.TripData;
 import eu.trentorise.smartcampus.jp.timetable.TTHelper;
+import eu.trentorise.smartcampus.mobilityservice.MobilityDataService;
 import eu.trentorise.smartcampus.mobilityservice.MobilityPlannerService;
 import eu.trentorise.smartcampus.mobilityservice.MobilityServiceException;
 import eu.trentorise.smartcampus.mobilityservice.MobilityUserService;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
+import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.protocolcarrier.ProtocolCarrier;
 import eu.trentorise.smartcampus.protocolcarrier.common.Constants.Method;
 import eu.trentorise.smartcampus.protocolcarrier.custom.MessageRequest;
@@ -176,27 +178,31 @@ public class JPHelper {
 	public static void saveItinerary(BasicItinerary bi)
 			throws ProtocolException, MobilityServiceException {
 		if (bi != null) {
-			MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(mContext)+"core.mobility");
+			MobilityUserService userService = new MobilityUserService(
+					GlobalConfig.getAppUrl(mContext) + "core.mobility");
 			userService.saveSingleJourney(bi, JPHelper.getAuthToken());
 		}
 	}
 
+	/**
+	 * 
+	 * @return a list with all saved journeys
+	 */
 	public static List<BasicItinerary> getMyItineraries()
-			throws ConnectionException, ProtocolException, SecurityException,
-			JSONException, JsonParseException, JsonMappingException,
-			IOException {
-		MessageRequest req = new MessageRequest(
-				GlobalConfig.getAppUrl(JPHelper.mContext),
-				Config.TARGET_ADDRESS + Config.CALL_ITINERARY);
-		req.setMethod(Method.GET);
-
-		MessageResponse res = JPHelper.instance.getProtocolCarrier()
-				.invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
-		return eu.trentorise.smartcampus.android.common.Utils
-				.convertJSONToObjects(res.getBody(), BasicItinerary.class);
-
+			throws ProtocolException, MobilityServiceException {
+		MobilityUserService userService = new MobilityUserService(
+				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+		return userService.getSingleJourneys(getAuthToken());
 	}
 
+	// TODO change it
+	// public static List<Delay> getDelay(String routeId,
+	// long from_time, long to_time) throws ProtocolException,
+	// MobilityServiceException {
+	// MobilityDataService dataService = new
+	// MobilityDataService(GlobalConfig.getAppUrl(mContext)+"core.mobility");
+	// return dataService.getDelays(routeId, getAuthToken());
+	// }
 	public static List<List<Map<String, String>>> getDelay(String routeId,
 			long from_time, long to_time) throws ConnectionException,
 			ProtocolException, SecurityException, JSONException,
@@ -218,96 +224,48 @@ public class JPHelper {
 				.getDelays();
 	}
 
-	public static void deleteMyItinerary(String id) throws ConnectionException,
-			ProtocolException, SecurityException {
+	/**
+	 * Delete single journeys
+	 * 
+	 * @param id
+	 *            of the route
+	 */
+	public static void deleteMyItinerary(String id) throws ProtocolException,
+			MobilityServiceException {
 		if (id != null && id.length() > 0) {
-			MessageRequest req = new MessageRequest(
-					GlobalConfig.getAppUrl(JPHelper.mContext),
-					Config.TARGET_ADDRESS + Config.CALL_ITINERARY + "/" + id);
-			req.setMethod(Method.DELETE);
-
-			JPHelper.instance.getProtocolCarrier().invokeSync(req,
-					JPParamsHelper.getAppToken(), getAuthToken());
+			MobilityUserService userService = new MobilityUserService(
+					GlobalConfig.getAppUrl(mContext) + "core.mobility");
+			userService.deleteSingleJourney(id, getAuthToken());
 		}
 	}
 
 	public static boolean monitorMyItinerary(boolean monitor, String id)
-			throws ConnectionException, ProtocolException, SecurityException {
-		MessageResponse res = null;
-
-		if (id != null && id.length() > 0) {
-			MessageRequest req = new MessageRequest(
-					GlobalConfig.getAppUrl(JPHelper.mContext),
-					Config.TARGET_ADDRESS + Config.CALL_MONITOR + "/" + id
-							+ "/" + Boolean.toString(monitor));
-			req.setMethod(Method.GET);
-			req.setBody("");
-
-			res = JPHelper.instance.getProtocolCarrier().invokeSync(req,
-					JPParamsHelper.getAppToken(), getAuthToken());
-
-		}
-		// se cambiato restituisce il valore del monitor
-		return eu.trentorise.smartcampus.android.common.Utils
-				.convertJSONToObject(res.getBody(), Boolean.class);
+			throws ProtocolException, MobilityServiceException {
+		MobilityUserService userService = new MobilityUserService(
+				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+		return userService.monitorSingleJourney(id, monitor, getAuthToken());
 	}
 
 	public static Map<String, CacheUpdateResponse> getCacheStatus(
 			Map<String, String> agencyIdsVersions) throws ProtocolException,
-			ConnectionException, SecurityException {
-		String url = Config.TARGET_ADDRESS + Config.CALL_GET_TT_CACHE_STATUS;
-
-		String json = JSONUtils.convertToJSON(agencyIdsVersions);
-
-		MessageRequest req = new MessageRequest(
-				GlobalConfig.getAppUrl(JPHelper.mContext), url);
-		req.setMethod(Method.POST);
-		req.setBody(json);
-
-		MessageResponse res = JPHelper.instance.getProtocolCarrier()
-				.invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
-
-		Map<String, CacheUpdateResponse> map = eu.trentorise.smartcampus.android.common.Utils
-				.convertJSON(res.getBody(),
-						new TypeReference<Map<String, CacheUpdateResponse>>() {
-						});
-		return map;
+			SecurityException, RemoteException {
+		MobilityDataService dataService = new MobilityDataService(
+				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+		return dataService.getCacheStatus(agencyIdsVersions, getAuthToken());
 	}
 
 	public static CompressedTransitTimeTable getCacheUpdate(String agencyId,
-			String fileName) throws ConnectionException, ProtocolException,
-			SecurityException {
-		String url = Config.TARGET_ADDRESS + Config.CALL_GET_TT_CACHE_UPDATE
-				+ "/" + agencyId + "/" + fileName;
-
-		MessageRequest req = new MessageRequest(
-				GlobalConfig.getAppUrl(JPHelper.mContext), url);
-
-		MessageResponse res = JPHelper.instance.getProtocolCarrier()
-				.invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
-
-		return eu.trentorise.smartcampus.android.common.Utils
-				.convertJSONToObject(res.getBody(),
-						CompressedTransitTimeTable.class);
+			String fileName) throws ProtocolException, SecurityException, RemoteException{
+			MobilityDataService dataService = new MobilityDataService(
+					GlobalConfig.getAppUrl(mContext) + "core.mobility");
+			return dataService.getCachedTimetable(agencyId, fileName, getAuthToken());
 	}
 
 	public static boolean monitorMyRecItinerary(boolean monitor, String id)
-			throws ConnectionException, ProtocolException, SecurityException {
-		MessageResponse res = null;
-		if (id != null && id.length() > 0) {
-			MessageRequest req = new MessageRequest(
-					GlobalConfig.getAppUrl(JPHelper.mContext),
-					Config.TARGET_ADDRESS + Config.CALL_REC_MONITOR + "/" + id
-							+ "/" + Boolean.toString(monitor));
-			req.setMethod(Method.GET);
-			req.setBody("");
-
-			res = JPHelper.instance.getProtocolCarrier().invokeSync(req,
-					JPParamsHelper.getAppToken(), getAuthToken());
-
-		}
-		return eu.trentorise.smartcampus.android.common.Utils
-				.convertJSONToObject(res.getBody(), Boolean.class);
+			throws ProtocolException, MobilityServiceException {
+		MobilityUserService userService = new MobilityUserService(
+				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+		return userService.monitorRecurrentJourney(id, monitor, getAuthToken());
 
 	}
 
