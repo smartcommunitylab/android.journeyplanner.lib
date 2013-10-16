@@ -39,7 +39,7 @@ import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.jp.model.RouteDescriptor;
-import eu.trentorise.smartcampus.jp.model.TripData;
+import eu.trentorise.smartcampus.mobilityservice.model.TripData;
 
 public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 
@@ -128,7 +128,7 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 		 * 
 		 */
 
-		Map<CreatorType, String> delays = tripData.getDelays();
+		Map<CreatorType, String> delays = tripData.getDelay().getValues();
 		if (delays != null) {
 			if (delays.get(CreatorType.USER) != null) {
 				holder.delayUser
@@ -165,7 +165,7 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 			delaysLinearLayout.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Map<CreatorType, String> delays = tripData.getDelays();
+					Map<CreatorType, String> delays = tripData.getDelay().getValues();
 					if (delays != null && !delays.isEmpty()) {
 						DelaysDialogFragment delaysDialog = new DelaysDialogFragment();
 						Bundle args = new Bundle();

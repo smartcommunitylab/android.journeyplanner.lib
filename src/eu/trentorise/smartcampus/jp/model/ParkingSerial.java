@@ -14,15 +14,6 @@ public class ParkingSerial implements Serializable, LocatedObject {
 	private double[] position;
 	private Boolean monitored;
 
-	// public Parking getParking() {
-	// Parking parking = new Parking();
-	// parking.setName(getName());
-	// parking.setDescription(getDescription());
-	// parking.setSlotsTotal(getSlotsTotal());
-	// parking.setSlotsAvailable(getSlotsAvailable());
-	// parking.setPosition(getPosition());
-	// return parking;
-	// }
 
 	public String getName() {
 		return name;

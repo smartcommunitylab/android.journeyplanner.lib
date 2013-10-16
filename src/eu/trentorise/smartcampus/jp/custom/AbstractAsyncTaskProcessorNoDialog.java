@@ -38,7 +38,7 @@ public abstract class AbstractAsyncTaskProcessorNoDialog<Params, Result> impleme
 
 	@Override
 	public void handleFailure(Exception e) {
-		Log.e(activity.getClass().getName(), ""+e.getMessage());
+		Log.e(activity.getClass().getName(), ""+e.toString());
 		JPHelper.showFailure(activity, R.string.app_failure_operation);
 	}
 
@@ -56,7 +56,7 @@ public abstract class AbstractAsyncTaskProcessorNoDialog<Params, Result> impleme
 		try {
 			accessProvider.login(activity, null);
 		} catch (Exception e) {
-			Log.e(HomeActivity.class.getName(),""+ e.getMessage());
+			Log.e(activity.getClass().getName(),""+ e.toString());
 			JPHelper.showFailure(activity, R.string.app_failure_security);
 		}
 	}

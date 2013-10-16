@@ -16,11 +16,13 @@
 package eu.trentorise.smartcampus.jp.helper;
 
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoad;
 import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 import it.sayservice.platform.smartplanner.data.message.cache.CacheUpdateResponse;
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Stop;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
@@ -64,7 +66,6 @@ import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 import eu.trentorise.smartcampus.jp.model.SmartCheckRoute;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 import eu.trentorise.smartcampus.jp.model.SmartCheckTime;
-import eu.trentorise.smartcampus.jp.model.TripData;
 import eu.trentorise.smartcampus.jp.timetable.TTHelper;
 import eu.trentorise.smartcampus.mobilityservice.MobilityAlertService;
 import eu.trentorise.smartcampus.mobilityservice.MobilityDataService;
@@ -73,6 +74,7 @@ import eu.trentorise.smartcampus.mobilityservice.MobilityServiceException;
 import eu.trentorise.smartcampus.mobilityservice.MobilityUserService;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
+import eu.trentorise.smartcampus.mobilityservice.model.TripData;
 import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.protocolcarrier.ProtocolCarrier;
 import eu.trentorise.smartcampus.protocolcarrier.common.Constants.Method;
@@ -103,6 +105,10 @@ public class JPHelper {
 	public static String mAuthToken;
 
 	private SyncStorageWithPaging storage = null;
+	
+	private static final String MOBILITY_URL = "/core.mobility";
+	private static final String TERRITORY_URL = "/core.territory";
+
 
 	// tutorial's stuff
 
@@ -158,6 +164,7 @@ public class JPHelper {
 
 	public static void init(Context mContext) {
 		JPParamsHelper.init(mContext);
+		RoutesDBHelper.init(mContext.getApplicationContext());
 		instance = new JPHelper(mContext);
 	}
 
@@ -170,7 +177,7 @@ public class JPHelper {
 
 		if (sj != null) {
 			MobilityPlannerService plannerService = new MobilityPlannerService(
-					GlobalConfig.getAppUrl(mContext) + "core.mobility");
+					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			return plannerService.planSingleJourney(sj, getAuthToken());
 		}
 
@@ -181,7 +188,7 @@ public class JPHelper {
 			throws ProtocolException, MobilityServiceException {
 		if (bi != null) {
 			MobilityUserService userService = new MobilityUserService(
-					GlobalConfig.getAppUrl(mContext) + "core.mobility");
+					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			userService.saveSingleJourney(bi, JPHelper.getAuthToken());
 		}
 	}
@@ -193,7 +200,7 @@ public class JPHelper {
 	public static List<BasicItinerary> getMyItineraries()
 			throws ProtocolException, MobilityServiceException {
 		MobilityUserService userService = new MobilityUserService(
-				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return userService.getSingleJourneys(getAuthToken());
 	}
 
@@ -235,7 +242,7 @@ public class JPHelper {
 			MobilityServiceException {
 		if (id != null && id.length() > 0) {
 			MobilityUserService userService = new MobilityUserService(
-					GlobalConfig.getAppUrl(mContext) + "core.mobility");
+					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			userService.deleteSingleJourney(id, getAuthToken());
 		}
 	}
@@ -243,7 +250,7 @@ public class JPHelper {
 	public static boolean monitorMyItinerary(boolean monitor, String id)
 			throws ProtocolException, MobilityServiceException {
 		MobilityUserService userService = new MobilityUserService(
-				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return userService.monitorSingleJourney(id, monitor, getAuthToken());
 	}
 
@@ -251,7 +258,7 @@ public class JPHelper {
 			Map<String, String> agencyIdsVersions) throws ProtocolException,
 			SecurityException, RemoteException {
 		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getCacheStatus(agencyIdsVersions, getAuthToken());
 	}
 
@@ -259,7 +266,7 @@ public class JPHelper {
 			String fileName) throws ProtocolException, SecurityException,
 			RemoteException {
 		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getCachedTimetable(agencyId, fileName,
 				getAuthToken());
 	}
@@ -267,7 +274,7 @@ public class JPHelper {
 	public static boolean monitorMyRecItinerary(boolean monitor, String id)
 			throws ProtocolException, MobilityServiceException {
 		MobilityUserService userService = new MobilityUserService(
-				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return userService.monitorRecurrentJourney(id, monitor, getAuthToken());
 
 	}
@@ -278,7 +285,7 @@ public class JPHelper {
 	public static List<Route> getRoutesByAgencyId(String agencyId)
 			throws ProtocolException, MobilityServiceException {
 		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getRoutes(agencyId, getAuthToken());
 	}
 
@@ -361,7 +368,7 @@ public class JPHelper {
 	public static List<Stop> getStopsByAgencyIdRouteId(String agencyId,
 			String routeId) throws ProtocolException, MobilityServiceException {
 		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getStops(agencyId, routeId, getAuthToken());
 	}
 
@@ -369,7 +376,7 @@ public class JPHelper {
 			String agencyId, String routeId, String stopId)
 			throws ProtocolException, MobilityServiceException {
 		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getStopTimes(agencyId, routeId, stopId,
 				getAuthToken());
 	}
@@ -381,7 +388,7 @@ public class JPHelper {
 			MobilityServiceException {
 		if (ba != null) {
 			MobilityAlertService alertService = new MobilityAlertService(
-					GlobalConfig.getAppUrl(mContext) + "core.mobility");
+					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			alertService.sendUserAlert(ba.getContent(), getAuthToken());
 		}
 	}
@@ -437,7 +444,7 @@ public class JPHelper {
 			MobilityServiceException {
 		if (brj != null) {
 			MobilityUserService userService = new MobilityUserService(
-					GlobalConfig.getAppUrl(mContext) + "core.mobility");
+					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			userService.saveRecurrentJourney(brj, getAuthToken());
 			return true;
 		}
@@ -448,7 +455,7 @@ public class JPHelper {
 			throws MobilityServiceException, ProtocolException {
 		if (id != null && id.length() > 0) {
 			MobilityUserService userService = new MobilityUserService(
-					GlobalConfig.getAppUrl(mContext) + "core.mobility");
+					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			userService.deleteRecurrentJourney(id, getAuthToken());
 		}
 	}
@@ -457,7 +464,7 @@ public class JPHelper {
 			throws ProtocolException, MobilityServiceException {
 		if (objectId != null) {
 			MobilityUserService userService = new MobilityUserService(
-					GlobalConfig.getAppUrl(mContext) + "core.mobility");
+					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			return userService.getRecurrentJourney(objectId, getAuthToken());
 
 		}
@@ -487,7 +494,7 @@ public class JPHelper {
 			MobilityServiceException {
 		if (brj != null) {
 			MobilityPlannerService plannerService = new MobilityPlannerService(
-					GlobalConfig.getAppUrl(mContext) + "core.mobility");
+					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			return plannerService.planRecurrentJourney(brj.getData(),
 					getAuthToken());
 		}
@@ -498,7 +505,7 @@ public class JPHelper {
 			throws ProtocolException, MobilityServiceException {
 		if (brj != null) {
 			MobilityUserService userService = new MobilityUserService(
-					GlobalConfig.getAppUrl(mContext) + "core.mobility");
+					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			userService.saveRecurrentJourney(brj, JPHelper.getAuthToken());
 			return true;
 		}
@@ -508,7 +515,7 @@ public class JPHelper {
 	public static List<BasicRecurrentJourney> getMyRecurItineraries()
 			throws ProtocolException, MobilityServiceException {
 		MobilityUserService userService = new MobilityUserService(
-				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return userService.getRecurrentJourneys(getAuthToken());
 	}
 
@@ -576,16 +583,15 @@ public class JPHelper {
 			filter.setRadius(radius);
 		}
 
-
 		TerritoryService territoryService = new TerritoryService(
-				GlobalConfig.getAppUrl(mContext) + "core.territory");
-		
+				GlobalConfig.getAppUrl(mContext) + TERRITORY_URL);
+
 		return convertPOIs(territoryService.getPOIs(filter, getAuthToken()));
 	}
-	
-	public static List<SmartCheckStop> convertPOIs(List<POIObject> l){
+
+	public static List<SmartCheckStop> convertPOIs(List<POIObject> l) {
 		List<SmartCheckStop> out = new ArrayList<SmartCheckStop>();
-		for(POIObject obj : l){
+		for (POIObject obj : l) {
 			SmartCheckStop toAdd = new SmartCheckStop();
 			toAdd.setCustomData(obj.getCustomData());
 			toAdd.setId(obj.getId());
@@ -600,125 +606,48 @@ public class JPHelper {
 
 	public static List<TripData> getTrips(SmartCheckStop stop) throws Exception {
 
-		getInstance();
-		String url = Config.TARGET_ADDRESS + Config.CALL_GET_LIMITED_TIMETABLE;
-		url += "/";
-		url += stop.getCustomData().get("agencyId"); // agencyId
-		url += "/";
-		url += stop.getCustomData().get("id"); // stopId
-		url += "/";
-		url += "3"; // max results for route
-
-		MessageRequest request = new MessageRequest(
-				GlobalConfig.getAppUrl(getInstance().mContext), url);
-		request.setMethod(Method.GET);
-		request.setQuery("complex=true");
-
-		MessageResponse response = getInstance().protocolCarrier.invokeSync(
-				request, JPParamsHelper.getAppToken(), getAuthToken());
-		String body = response.getBody();
-		if (body == null || body.trim().length() == 0) {
-			return Collections.emptyList();
-		}
-
-		Map<String, SmartCheckRoute> map = eu.trentorise.smartcampus.android.common.Utils
-				.convertJSON(body,
-						new TypeReference<Map<String, SmartCheckRoute>>() {
-						});
-
-		ArrayList<TripData> objects = new ArrayList<TripData>();
-
-		if (map != null) {
-			for (Entry<String, SmartCheckRoute> entry : map.entrySet()) {
-				// if (types != null && !types.contains(key)) continue;
-				String routeId = entry.getKey();
-				SmartCheckRoute routeData = entry.getValue();
-
-				for (SmartCheckTime timeData : routeData.getTimes()) {
-					TripData tripData = new TripData();
-					tripData.setRouteId(routeId);
-					tripData.setRouteName(routeData.getName());
-					tripData.setRouteShortName(routeData.getRoute());
-					tripData.setTime(timeData.getTime());
-					tripData.setTripId(timeData.getTrip().getId());
-					tripData.setAgencyId(timeData.getTrip().getAgency());
-
-					// delays
-					Map<CreatorType, String> delays = null;
-					if (routeData.getDelays().containsKey(
-							timeData.getTrip().getId())) {
-						delays = new HashMap<CreatorType, String>();
-						Map<String, String> rdDelays = routeData.getDelays()
-								.get(timeData.getTrip().getId());
-						for (Entry<String, String> delay : rdDelays.entrySet()) {
-							delays.put(
-									CreatorType.getAlertType(delay.getKey()),
-									delay.getValue());
-						}
-					}
-					tripData.setDelays(delays);
-
-					objects.add(tripData);
-				}
-			}
-		}
-
-		return objects;
+		MobilityDataService dataService = new MobilityDataService(
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		return dataService.getNextTrips(stop.getCustomData().get("agencyId")
+				.toString(), stop.getCustomData().get("id").toString(), 3,
+				getAuthToken());
 	}
 
 	public static List<ParkingSerial> getParkings(String parkingAgencyId)
 			throws Exception {
-		getInstance();
-		String url = Config.TARGET_ADDRESS;
-
-		if (parkingAgencyId != null) {
-			url += Config.CALL_GET_PARKINGS_BY_AGENCY + "/" + parkingAgencyId;
-		} else {
-			url += Config.CALL_GET_PARKINGS;
+		MobilityDataService dataService = new MobilityDataService(
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		return convertParkings(dataService.getParkings(parkingAgencyId, getAuthToken()));
+	}
+	
+	public static List<ParkingSerial> convertParkings(List<Parking> l){
+		List<ParkingSerial> out = new ArrayList<ParkingSerial>();
+		for (Parking obj : l) {
+			ParkingSerial toAdd = new ParkingSerial();
+			toAdd.setName(obj.getName());
+			toAdd.setDescription(obj.getDescription());
+			toAdd.setMonitored(obj.isMonitored());
+			toAdd.setPosition(obj.getPosition());
+			toAdd.setSlotsAvailable(obj.getSlotsAvailable());
+			toAdd.setSlotsTotal(obj.getSlotsTotal());
+			out.add(toAdd);
 		}
-
-		MessageRequest request = new MessageRequest(
-				GlobalConfig.getAppUrl(JPHelper.mContext), url);
-		request.setMethod(Method.GET);
-
-		MessageResponse response = getInstance().protocolCarrier.invokeSync(
-				request, JPParamsHelper.getAppToken(), getAuthToken());
-		String body = response.getBody();
-		if (body == null || body.trim().length() == 0) {
-			return Collections.emptyList();
-		}
-
-		List<ParkingSerial> objects = eu.trentorise.smartcampus.android.common.Utils
-				.convertJSON(body, new TypeReference<List<ParkingSerial>>() {
-				});
-
-		return objects;
+		return out;
 	}
 
 	public static List<AlertRoadLoc> getAlertRoads(String agencyId,
 			long fromTime, long toTime) throws Exception {
-		String url = Config.TARGET_ADDRESS;
-		if (agencyId != null && agencyId.length() > 0) {
-			url += Config.CALL_GET_ROADINFO_BY_AGENCY + "/" + agencyId + "/"
-					+ fromTime + "/" + toTime;
+		MobilityDataService dataService = new MobilityDataService(
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		return convertAlertRoad(dataService.getRoadInfo(agencyId, fromTime, toTime, getAuthToken()));
+	}
+
+	public static List<AlertRoadLoc> convertAlertRoad(List<AlertRoad> roadInfo) {
+		List<AlertRoadLoc> out = new ArrayList<AlertRoadLoc>();
+		for(AlertRoad ar : roadInfo){
+			out.add(new AlertRoadLoc(ar));
 		}
-
-		MessageRequest request = new MessageRequest(
-				GlobalConfig.getAppUrl(JPHelper.mContext), url);
-		request.setMethod(Method.GET);
-
-		MessageResponse response = getInstance().protocolCarrier.invokeSync(
-				request, JPParamsHelper.getAppToken(), getAuthToken());
-		String body = response.getBody();
-		if (body == null || body.trim().length() == 0) {
-			return Collections.emptyList();
-		}
-
-		List<AlertRoadLoc> objects = eu.trentorise.smartcampus.android.common.Utils
-				.convertJSON(body, new TypeReference<List<AlertRoadLoc>>() {
-				});
-
-		return objects;
+		return out;
 	}
 
 	public static SyncStorage getSyncStorage() throws DataException {

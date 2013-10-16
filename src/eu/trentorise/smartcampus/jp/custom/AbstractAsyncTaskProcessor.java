@@ -37,13 +37,12 @@ public abstract class AbstractAsyncTaskProcessor<Params, Result> implements SCAs
 
 	@Override
 	public void handleFailure(Exception e) {
-		Log.e(activity.getClass().getName(), "" + e.getMessage());
+		Log.e(activity.getClass().getName(), "" + e.toString());
 		JPHelper.showFailure(activity, R.string.app_failure_operation);
 	}
 
 	@Override
 	public void handleConnectionError() {
-		// TODO Auto-generated method stub
 		HandleExceptionHelper.showDialogConnectivity(activity);
 
 	}
@@ -55,7 +54,7 @@ public abstract class AbstractAsyncTaskProcessor<Params, Result> implements SCAs
 			accessProvider.login(activity, null);
 			
 		} catch (Exception e) {
-			Log.e(HomeActivity.class.getName(), "" + e.getMessage());
+			Log.e(activity.getClass().getName(), "" + e.toString());
 			JPHelper.showFailure(activity, R.string.app_failure_security);
 		}
 	}

@@ -80,7 +80,7 @@ public class HomeActivity extends BaseActivity {
 		setHiddenNotification();
 
 		if (JPHelper.isFirstLaunch(this)) {
-			showTourDialog();
+			//showTourDialog();
 			JPHelper.disableFirstLaunch(this);
 		}
 	}

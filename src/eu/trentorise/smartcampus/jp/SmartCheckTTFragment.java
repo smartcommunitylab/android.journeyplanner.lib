@@ -395,6 +395,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 			long from_day = (Long) params[0];
 			long to_day = (Long) params[1];
 			String routeId = (String) params[2];
+			
 			CompressedTransitTimeTable cttt = RoutesDBHelper.getTimeTable(CompressedTTHelper.convertMsToDateFormat(from_day),
 					RoutesHelper.getAgencyIdByRouteId(routeId), routeId);
 			// TimeTable returnTimeTable =
