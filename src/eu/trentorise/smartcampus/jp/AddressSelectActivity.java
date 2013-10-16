@@ -29,7 +29,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.maps.GeoPoint;
@@ -111,7 +110,7 @@ public class AddressSelectActivity extends BaseActivity implements OnMapLongClic
 			String addressLine = "LON " + Double.toString(address.getLongitude()) + ", LAT "
 					+ Double.toString(address.getLatitude());
 			address.setAddressLine(0, addressLine);
-			new InfoDialog(AddressSelectActivity.this, addresses.get(0)).show(getSupportFragmentManager(), "me");
+			new InfoDialog(AddressSelectActivity.this, address).show(getSupportFragmentManager(), "me");
 		}
 	}
 
