@@ -1,5 +1,7 @@
 package eu.trentorise.smartcampus.jp.timetable;
 
+import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,8 +22,8 @@ import android.content.res.AssetManager;
 import android.util.Log;
 import eu.trentorise.smartcampus.android.common.Utils;
 import eu.trentorise.smartcampus.jp.custom.data.TimeTable;
-import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
+import eu.trentorise.smartcampus.mobilityservice.model.Delay;
 
 public class TTHelper {
 	/*******************************************************************************
@@ -142,21 +144,27 @@ public class TTHelper {
 			if (jsonParams.length() ==0) {
 				localTT = new TimeTable();
 				localTT.setStops(Collections.<String>emptyList());
+				//localTT.setTimes(Collections.<List<String>>emptyList());
 				localTT.setTimes(Collections.<List<List<String>>>singletonList(Collections.<List<String>>emptyList()));
 			} else {
 				localTT = Utils.convertJSONToObject(jsonParams, TimeTable.class);
 			}
 			
+			//localTT.setDelays(createEmptyDelay(localTT));
 			localTT.setDelays(emptyDelay(localTT));
-			// TimeTable returnTT = changeDelay(localTT, routeId, from_time,
-			// to_time);
+			// TimeTable returnTT = changeDelay(localTT, routeId, from_time,to_time);
 			return localTT;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-
+	
+	/**
+	 * @deprecated
+	 * @param localTT
+	 * @return
+	 */
 	public static List<List<Map<String, String>>> emptyDelay(TimeTable localTT) {
 		List<List<Map<String, String>>> returnlist = new ArrayList<List<Map<String, String>>>();
 		for (int day = 0; day < localTT.getTimes().size(); day++) {
@@ -172,32 +180,48 @@ public class TTHelper {
 		}
 		return returnlist;
 	}
+	
+	public static List<Delay> createEmptyDelay(TimeTable localTT) {
+		List<Delay> returnlist = new ArrayList<Delay>();
+		for (int day = 0; day < localTT.getTimes().size(); day++) {
+			{
+				Delay d = new Delay();
+				for (int course = 0; course < localTT.getTimes().get(day).size(); course++) {
 
-	private static TimeTable changeDelay(TimeTable localTT, String routeId, long from_time, long to_time) {
-		try {
-			List<List<Map<String, String>>> realTimeDelay = JPHelper.getDelay(routeId, from_time, to_time);
-			localTT.setDelays(realTimeDelay);
-		} catch (Exception e) {
-			// create empty delay
-			List<List<Map<String, String>>> returnlist = new ArrayList<List<Map<String, String>>>();
-			for (int day = 0; day < localTT.getTimes().size(); day++) {
-				{
-					List<Map<String, String>> daylist = new ArrayList<Map<String, String>>();
-					for (int course = 0; course < localTT.getTimes().get(day).size(); course++) {
-						{
-							Map<String, String> courselist = new HashMap<String, String>();
-							daylist.add(courselist);
-						}
-						returnlist.add(daylist);
-					}
-					returnlist.add(daylist);
+					Map<CreatorType, String> courselist = new HashMap<CreatorType, String>();
+					d.setValues(courselist);
 				}
+				returnlist.add(d);
 			}
-			localTT.setDelays(returnlist);
 		}
-		return localTT;
-
+		return returnlist;
 	}
+
+//	private static TimeTable changeDelay(TimeTable localTT, String routeId, long from_time, long to_time) {
+//		try {
+//			List<List<Map<String, String>>> realTimeDelay = JPHelper.getDelay(routeId, from_time, to_time);
+//			localTT.setDelays(realTimeDelay);
+//		} catch (Exception e) {
+//			// create empty delay
+//			List<List<Map<String, String>>> returnlist = new ArrayList<List<Map<String, String>>>();
+//			for (int day = 0; day < localTT.getTimes().size(); day++) {
+//				{
+//					List<Map<String, String>> daylist = new ArrayList<Map<String, String>>();
+//					for (int course = 0; course < localTT.getTimes().get(day).size(); course++) {
+//						{
+//							Map<String, String> courselist = new HashMap<String, String>();
+//							daylist.add(courselist);
+//						}
+//						returnlist.add(daylist);
+//					}
+//					returnlist.add(daylist);
+//				}
+//			}
+//			localTT.setDelays(returnlist);
+//		}
+//		return localTT;
+//
+//	}
 
 	private static String convertMsToDateFormat(long time) {
 		Date date = new Date(time);

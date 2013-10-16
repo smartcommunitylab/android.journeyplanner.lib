@@ -58,10 +58,10 @@ import com.actionbarsherlock.view.SubMenu;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
-import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.PrefsHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.DeleteMyRecurItineraryProcessor;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class MonitorJourneyFragment extends PlanNewJourneyFragment {

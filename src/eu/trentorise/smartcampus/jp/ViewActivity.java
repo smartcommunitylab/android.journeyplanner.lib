@@ -22,9 +22,9 @@ import com.actionbarsherlock.app.SherlockFragment;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
-import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class ViewActivity extends BaseActivity {
@@ -77,7 +77,7 @@ public class ViewActivity extends BaseActivity {
 				
 							fragment = new MyRecurItineraryFragment();
 							Bundle b = new Bundle();
-							b.putSerializable(MyRecurItineraryFragment.PARAMS, (BasicRecurrentJourney)result);
+							b.putSerializable(MyRecurItineraryFragment.PARAMS, ((BasicRecurrentJourney)result));
 							b.putBoolean(MyRecurItineraryFragment.PARAM_EDITING,false );
 
 							fragment.setArguments(b);
