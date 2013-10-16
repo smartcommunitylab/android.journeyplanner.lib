@@ -69,11 +69,13 @@ import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 import eu.trentorise.smartcampus.jp.model.SmartCheckTime;
 import eu.trentorise.smartcampus.jp.model.TripData;
 import eu.trentorise.smartcampus.jp.timetable.TTHelper;
+import eu.trentorise.smartcampus.mobilityservice.MobilityAlertService;
 import eu.trentorise.smartcampus.mobilityservice.MobilityDataService;
 import eu.trentorise.smartcampus.mobilityservice.MobilityPlannerService;
 import eu.trentorise.smartcampus.mobilityservice.MobilityServiceException;
 import eu.trentorise.smartcampus.mobilityservice.MobilityUserService;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
+import eu.trentorise.smartcampus.mobilityservice.model.Delay;
 import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.protocolcarrier.ProtocolCarrier;
 import eu.trentorise.smartcampus.protocolcarrier.common.Constants.Method;
@@ -196,13 +198,12 @@ public class JPHelper {
 	}
 
 	// TODO change it
-	// public static List<Delay> getDelay(String routeId,
-	// long from_time, long to_time) throws ProtocolException,
-	// MobilityServiceException {
-	// MobilityDataService dataService = new
-	// MobilityDataService(GlobalConfig.getAppUrl(mContext)+"core.mobility");
-	// return dataService.getDelays(routeId, getAuthToken());
-	// }
+//	public static List<Delay> getDelay(String routeId, long from_time,
+//			long to_time) throws ProtocolException, MobilityServiceException {
+//		MobilityDataService dataService = new MobilityDataService(
+//				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+//		return dataService.getDelays(routeId, getAuthToken());
+//	}
 	public static List<List<Map<String, String>>> getDelay(String routeId,
 			long from_time, long to_time) throws ConnectionException,
 			ProtocolException, SecurityException, JSONException,
@@ -273,27 +274,10 @@ public class JPHelper {
 	 * BUS
 	 */
 	public static List<Route> getRoutesByAgencyId(String agencyId)
-			throws ConnectionException, ProtocolException, SecurityException,
-			JsonParseException, JsonMappingException, IOException {
-		List<Route> list = new ArrayList<Route>();
-
-		MessageRequest req = new MessageRequest(
-				GlobalConfig.getAppUrl(JPHelper.mContext),
-				Config.TARGET_ADDRESS + Config.CALL_BUS_ROUTES + "/" + agencyId);
-		req.setMethod(Method.GET);
-
-		MessageResponse res = JPHelper.instance.getProtocolCarrier()
-				.invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
-
-		List<?> routes = JSONUtils.getFullMapper().readValue(res.getBody(),
-				List.class);
-		for (Object r : routes) {
-			Route route = JSONUtils.getFullMapper()
-					.convertValue(r, Route.class);
-			list.add(route);
-		}
-
-		return list;
+			throws ProtocolException, MobilityServiceException {
+		MobilityDataService dataService = new MobilityDataService(
+				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+		return dataService.getRoutes(agencyId, getAuthToken());
 	}
 
 	public static List<SmartLine> getSmartLinesByAgencyId(String agencyId)
@@ -373,82 +357,28 @@ public class JPHelper {
 	}
 
 	public static List<Stop> getStopsByAgencyIdRouteId(String agencyId,
-			String routeId) throws ConnectionException, ProtocolException,
-			SecurityException, JsonParseException, JsonMappingException,
-			IOException {
-		List<Stop> list = new ArrayList<Stop>();
-
-		MessageRequest req = new MessageRequest(
-				GlobalConfig.getAppUrl(JPHelper.mContext),
-				Config.TARGET_ADDRESS + Config.CALL_BUS_STOPS + "/" + agencyId
-						+ "/" + routeId);
-		req.setMethod(Method.GET);
-
-		MessageResponse res = JPHelper.instance.getProtocolCarrier()
-				.invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
-
-		List<?> stops = JSONUtils.getFullMapper().readValue(res.getBody(),
-				List.class);
-		for (Object r : stops) {
-			Stop stop = JSONUtils.getFullMapper().convertValue(r, Stop.class);
-			list.add(stop);
-		}
-
-		return list;
+			String routeId) throws ProtocolException, MobilityServiceException{
+		MobilityDataService dataService = new MobilityDataService(
+				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+		return dataService.getStops(agencyId, routeId, getAuthToken());
 	}
 
-	public static List<StopTime> getStoptimesByAgencyIdRouteIdStopId(
+	public static List<StopTime> getStopTimesByAgencyIdRouteIdStopId(
 			String agencyId, String routeId, String stopId)
-			throws ConnectionException, ProtocolException, SecurityException,
-			JsonParseException, JsonMappingException, IOException {
-		List<StopTime> list = new ArrayList<StopTime>();
-
-		MessageRequest req = new MessageRequest(
-				GlobalConfig.getAppUrl(JPHelper.mContext),
-				Config.TARGET_ADDRESS + Config.CALL_BUS_STOPTIMES + "/"
-						+ agencyId + "/" + routeId + "/" + stopId);
-		req.setMethod(Method.GET);
-
-		MessageResponse res = JPHelper.instance.getProtocolCarrier()
-				.invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
-
-		List<?> stoptimes = JSONUtils.getFullMapper().readValue(res.getBody(),
-				List.class);
-		for (Object r : stoptimes) {
-			StopTime stoptime = JSONUtils.getFullMapper().convertValue(r,
-					StopTime.class);
-			list.add(stoptime);
-		}
-
-		long now = Calendar.getInstance().getTimeInMillis();
-		List<StopTime> newlist = new ArrayList<StopTime>();
-		for (StopTime st : list) {
-			long newTime = st.getTime() * 1000;
-			if (newTime < now) {
-				st.setTime(newTime);
-				newlist.add(st);
-			}
-		}
-		list = newlist;
-
-		return list;
+			throws ProtocolException, MobilityServiceException {
+		MobilityDataService dataService = new MobilityDataService(
+				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+		return dataService.getStopTimes(agencyId, routeId, stopId, getAuthToken());
 	}
 
 	/*
 	 * Alerts
 	 */
-	public static void submitAlert(BasicAlert ba) throws ConnectionException,
-			ProtocolException, SecurityException {
+	public static void submitAlert(BasicAlert ba) throws ProtocolException, MobilityServiceException {
 		if (ba != null) {
-			String json = JSONUtils.convertToJSON(ba);
-			MessageRequest req = new MessageRequest(
-					GlobalConfig.getAppUrl(JPHelper.mContext),
-					Config.TARGET_ADDRESS + Config.CALL_ALERT_SUBMIT);
-			req.setMethod(Method.POST);
-			req.setBody(json);
-
-			JPHelper.instance.getProtocolCarrier().invokeSync(req,
-					JPParamsHelper.getAppToken(), getAuthToken());
+			MobilityAlertService alertService = new MobilityAlertService(
+					GlobalConfig.getAppUrl(mContext) + "core.mobility");
+			alertService.sendServiceAlert(ba.getContent(), getAuthToken());
 		}
 	}
 

@@ -87,7 +87,7 @@ public class GetBroadcastDataProcessor extends AbstractAsyncTaskProcessor<String
 			stopId = stopsList.get(0).getId();
 		}
 
-		List<StopTime> stopTimesList = (List<StopTime>) JPHelper.getStoptimesByAgencyIdRouteIdStopId(agencyId, routeId, stopId);
+		List<StopTime> stopTimesList = (List<StopTime>) JPHelper.getStopTimesByAgencyIdRouteIdStopId(agencyId, routeId, stopId);
 		map.put(STOPTIMES, stopTimesList);
 
 		return map;
