@@ -41,7 +41,7 @@
     <string name="tab_lines">Lines</string>
     <string name="tab_zones">Zones</string>
     <string name="tab_parkings">Parkings</string>
-    <string name="tab_alerts">Alerts</string>
+    <string name="tab_alerts">Decrees</string>
     <string name="dialog_itineraryname_hint">Journey name</string>
     <string name="plan_location">Location</string>
     <string name="plan_datetime">Departure</string>
