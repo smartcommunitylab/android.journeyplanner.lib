@@ -66,6 +66,7 @@ import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 import eu.trentorise.smartcampus.jp.model.SmartCheckRoute;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 import eu.trentorise.smartcampus.jp.model.SmartCheckTime;
+import eu.trentorise.smartcampus.jp.timetable.CompressedTTHelper;
 import eu.trentorise.smartcampus.jp.timetable.TTHelper;
 import eu.trentorise.smartcampus.mobilityservice.MobilityAlertService;
 import eu.trentorise.smartcampus.mobilityservice.MobilityDataService;
@@ -146,6 +147,7 @@ public class JPHelper {
 
 		JPParamsHelper.init(mContext);
 		TTHelper.init(mContext);
+		CompressedTTHelper.init(mContext);
 		MapManager.initWithParams();
 
 		setProtocolCarrier(new ProtocolCarrier(mContext,
@@ -551,6 +553,7 @@ public class JPHelper {
 				.convertJSONToObject(res.getBody(), TimeTable.class);
 	}
 
+
 	// public static TimeTable getLocalTransitTimeTableById(long from_day,
 	// long to_day, String routeId) throws ConnectionException,
 	// ProtocolException, SecurityException, JSONException,
@@ -559,6 +562,15 @@ public class JPHelper {
 	// TTHelper.init(mContext);
 	// return TTHelper.getTTwithRouteIdAndTime(routeId, from_day, to_day);
 	// }
+
+	public static TimeTable getLocalTransitTimeTableById(long from_day, long to_day, String routeId)
+			throws ConnectionException, ProtocolException, SecurityException, JSONException, JsonParseException,
+			JsonMappingException, IOException {
+		if (!TTHelper.isInitialized())
+			TTHelper.init(mContext);
+		return TTHelper.getTTwithRouteIdAndTime(routeId, from_day, to_day);
+	}
+
 
 	public static List<SmartCheckStop> getStops(String agencyId,
 			double[] location, double radius) throws Exception {

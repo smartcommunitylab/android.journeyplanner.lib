@@ -1,6 +1,7 @@
 package eu.trentorise.smartcampus.jp.timetable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,16 +55,18 @@ public class CTTTCacheUpdaterAsyncTask extends AsyncTask<Void, Integer, Void> {
 	@Override
 	protected void onPostExecute(Void result) {
 		// // TODO: test
-		// Map<String, String> agencyIdsVersions = new HashMap<String,
-		// String>();
-		// agencyIdsVersions.put(RoutesHelper.AGENCYID_BUS_TRENTO, "0");
-		// agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_BZVR, "0");
-		// agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TM, "0");
-		// agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TNBDG, "0");
+//		Map<String, String> agencyIdsVersions = new HashMap<String,
+//		String>();
+//		agencyIdsVersions.put(RoutesHelper.AGENCYID_BUS_TRENTO, "0");
+//		agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_BZVR, "0");
+//		agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TM, "0");
+//		agencyIdsVersions.put(RoutesHelper.AGENCYID_TRAIN_TNBDG, "0");
 
-		assetsVersions = CompressedTTHelper.getVersionsFromAssets();
+		//assetsVersions = CompressedTTHelper.getVersionsFromAssets();
+		dbVersions = RoutesDBHelper.getVersions();
 		CTTTCacheNetworkUpdaterAsyncTask csat = new CTTTCacheNetworkUpdaterAsyncTask();
-		csat.execute(assetsVersions);
+		//csat.execute(assetsVersions);
+		csat.execute(dbVersions);
 	}
 
 }

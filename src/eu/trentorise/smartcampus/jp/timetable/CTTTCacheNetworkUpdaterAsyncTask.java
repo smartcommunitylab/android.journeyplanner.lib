@@ -23,10 +23,12 @@ public class CTTTCacheNetworkUpdaterAsyncTask extends
 		AsyncTask<Map<String, Long>, Integer, Map<String, AgencyDescriptor>> {
 
 	private long time;
+	private int updatedAgency;
 
 	@Override
 	protected void onPreExecute() {
 		// TODO: test
+		updatedAgency = 0;
 		time = System.currentTimeMillis();
 		Log.e(getClass().getCanonicalName(), "Agencies update from server started");
 
@@ -38,6 +40,8 @@ public class CTTTCacheNetworkUpdaterAsyncTask extends
 		Map<String, String> versionsMap = new HashMap<String, String>();
 		for (Entry<String, Long> entry : params[0].entrySet()) {
 			versionsMap.put(entry.getKey(), entry.getValue().toString());
+			//Test
+			//versionsMap.put(entry.getKey(), "0");
 		}
 		Map<String, CacheUpdateResponse> cacheUpdateResponsesMap = null;
 		Map<String, AgencyDescriptor> agencyDescriptorsMap = new HashMap<String, AgencyDescriptor>();
@@ -48,16 +52,35 @@ public class CTTTCacheNetworkUpdaterAsyncTask extends
 			for (Entry<String, CacheUpdateResponse> curEntry : cacheUpdateResponsesMap.entrySet()) {
 				String agencyId = curEntry.getKey();
 				List<String> addedList = curEntry.getValue().getAdded();
+				List<String> removedList = curEntry.getValue().getRemoved();
+				Long onlineVersion = curEntry.getValue().getVersion();
+				Long dbVersion = Long.parseLong(versionsMap.get(agencyId));
 				List<CompressedTransitTimeTable> ctttList = new ArrayList<CompressedTransitTimeTable>();
 
-				for (String addedFileName : addedList) {
-					CompressedTransitTimeTable cttt = JPHelper.getCacheUpdate(agencyId, addedFileName);
-					ctttList.add(cttt);
-				}
+				if(onlineVersion > dbVersion){
+					Log.e(getClass().getCanonicalName(), "Updating Agency " + agencyId);
+					updatedAgency++;
+				
+					for (String removedFileName : removedList) {
+						Log.e(getClass().getCanonicalName(), "Update of removedFileName: " + removedFileName);
+					}
+				
+					for (String addedFileName : addedList) {
+						Log.e(getClass().getCanonicalName(), "Update of addedFileName: " + addedFileName);
+						CompressedTransitTimeTable cttt = JPHelper.getCacheUpdate(agencyId, addedFileName);
+						ctttList.add(cttt);
+					}
 
-				AgencyDescriptor agencyDescriptor = RoutesDBHelper.buildAgencyDescriptor(agencyId, curEntry.getValue(),
-						ctttList);
-				agencyDescriptorsMap.put(agencyId, agencyDescriptor);
+					AgencyDescriptor agencyDescriptor = RoutesDBHelper.buildAgencyDescriptor(agencyId, curEntry.getValue(),
+							ctttList);
+					agencyDescriptorsMap.put(agencyId, agencyDescriptor);
+				
+					RoutesDBHelper.updateAgencies(agencyDescriptor);	//Here start the updating of DB
+					Log.e(RoutesDBHelper.class.getCanonicalName(), "Agencies updated.");
+				} else {
+					Log.e(getClass().getCanonicalName(), "No update found for Agency " + agencyId);		
+				}
+				
 			}
 		} catch (ProtocolException e) {
 			e.printStackTrace();
@@ -76,7 +99,7 @@ public class CTTTCacheNetworkUpdaterAsyncTask extends
 		// TODO: test
 		time = (System.currentTimeMillis() - time) / 1000;
 		Log.e(getClass().getCanonicalName(),
-				"Agencies updated: " + Integer.toString(result.size()) + " in " + Long.toString(time) + " seconds.");
+				"Agencies updated: " + Integer.toString(updatedAgency) + " in " + Long.toString(time) + " seconds.");
 
 		super.onPostExecute(result);
 	}
