@@ -29,8 +29,9 @@ public class RoutesDBHelper {
 	private static Context mApplicationContext;
 
 	protected RoutesDBHelper(Context context) {
-		// TODO: temp
-		//context.deleteDatabase(Environment.getExternalStorageDirectory() + "/" + RoutesDatabase.DB_NAME);
+		// TODO: test
+		//	context.deleteDatabase(Environment.getExternalStorageDirectory() + "/" + RoutesDatabase.DB_NAME);
+		//	Log.e(RoutesDBHelper.class.getCanonicalName(), "Deleting DB.... SUCCESS");
 		//
 		mApplicationContext= context.getApplicationContext();
 		routesDB = new RoutesDatabase(mApplicationContext);
@@ -63,8 +64,12 @@ public class RoutesDBHelper {
 
 			// update the version
 			ContentValues cv = agency.toContentValues();
-			db.insert(RoutesDatabase.DB_TABLE_VERSION, RoutesDatabase.VERSION_KEY, cv);
-
+			
+			if(db.update(RoutesDatabase.DB_TABLE_VERSION, cv, RoutesDatabase.AGENCY_ID_KEY+"='"+agency.agencyId+"'", null) == 0){
+				db.insert(RoutesDatabase.DB_TABLE_VERSION, RoutesDatabase.VERSION_KEY, cv);
+			}
+			//db.insert(RoutesDatabase.DB_TABLE_VERSION, RoutesDatabase.VERSION_KEY, cv);
+			
 			Log.e(RoutesDBHelper.class.getCanonicalName(), "Agency " + agency.agencyId + " updated.");
 		}
 		db.close();
@@ -142,11 +147,29 @@ public class RoutesDBHelper {
 					}
 				}
 				for (String date : dates) {
-					db.insert(RoutesDatabase.DB_TABLE_CALENDAR, RoutesDatabase.DATE_KEY,
+					String whereC = RoutesDatabase.AGENCY_ID_KEY + "='"+ agency.agencyId +"' AND "+RoutesDatabase.DATE_KEY +" LIKE '%"+date+"%'";
+					if(db.update(RoutesDatabase.DB_TABLE_CALENDAR, agency.toContentValues(toAddHash, date), whereC, null) == 0){
+						db.insert(RoutesDatabase.DB_TABLE_CALENDAR, RoutesDatabase.DATE_KEY,
 							agency.toContentValues(toAddHash, date));
-				}
-						
+					}
+					//db.insert(RoutesDatabase.DB_TABLE_CALENDAR, RoutesDatabase.DATE_KEY,agency.toContentValues(toAddHash, date));
+				}			
 			}
+			//If I receive an update relating to the calendar only, I have to consider this case
+			if(agency.cur.getAdded().isEmpty()){	
+				String date = "";
+				String hash = "";
+				for (Entry<String, String> entry : agency.getCalendar().entrySet()) {
+					date = entry.getKey();
+					hash = entry.getValue();
+					String whereC = RoutesDatabase.AGENCY_ID_KEY + "='"+ agency.agencyId +"' AND "+RoutesDatabase.DATE_KEY +" LIKE '%"+date+"%'";
+					if(db.update(RoutesDatabase.DB_TABLE_CALENDAR, agency.toContentValues(hash, date), whereC, null) == 0){
+						db.insert(RoutesDatabase.DB_TABLE_CALENDAR, RoutesDatabase.DATE_KEY,
+							agency.toContentValues(hash, date));
+					}				
+				}
+			}
+						
 			db.setTransactionSuccessful();
 			db.endTransaction();
 			
@@ -165,20 +188,23 @@ public class RoutesDBHelper {
 		if (!agency.cur.getRemoved().isEmpty()) {
 			whereClause = whereClause + " AND ( ";
 			for (String hash : agency.cur.getRemoved()) {
-				whereClause += RoutesDatabase.LINEHASH_KEY + " = " + hash + " OR ";
+				whereClause += RoutesDatabase.LINEHASH_KEY + " = '" + hash + "' OR ";
 
 				// delete old staff from the ROUTES table.
-				String whereClause2 = RoutesDatabase.LINEHASH_KEY + "=" + hash;
+				String whereClause2 = RoutesDatabase.LINEHASH_KEY + "='" + hash + "'";
 				db.delete(RoutesDatabase.DB_TABLE_ROUTE, whereClause2, null);
 			}
 			whereClause = whereClause.substring(0, whereClause.length() - 4) + ")";
 		}
 
 		// delete old stuff from CALENDAR TABLE
-		db.delete(RoutesDatabase.DB_TABLE_CALENDAR, whereClause, null);
+		if(agency.cur.getCalendar() != null){
+			db.delete(RoutesDatabase.DB_TABLE_CALENDAR, whereClause, null);
+		}
 	}
 
 	private static void addRoutes(AgencyDescriptor agency, SQLiteDatabase db) {
+		String curLinehash="";
 		try {
 			int i = 0;
 			for (CompressedTransitTimeTable ctt : agency.ctts) {
@@ -196,12 +222,23 @@ public class RoutesDBHelper {
 					routes.put(RoutesDatabase.COMPRESSED_TIMES_KEY, ctt.getCompressedTimes());
 				}
 
-				db.insert(RoutesDatabase.DB_TABLE_ROUTE, RoutesDatabase.COMPRESSED_TIMES_KEY, routes);
+				if(routes.get(RoutesDatabase.LINEHASH_KEY) != null){
+					curLinehash = routes.getAsString(RoutesDatabase.LINEHASH_KEY);
+				
+					if(curLinehash.compareTo("")!=0){
+						if (db.update(RoutesDatabase.DB_TABLE_ROUTE, routes,RoutesDatabase.LINEHASH_KEY + "='" + curLinehash+ "'", null) == 0) {
+							db.insert(RoutesDatabase.DB_TABLE_ROUTE,RoutesDatabase.COMPRESSED_TIMES_KEY, routes);
+						}
+					}
+				}
+				
+				//db.insert(RoutesDatabase.DB_TABLE_ROUTE, RoutesDatabase.COMPRESSED_TIMES_KEY, routes);
 				
 				i++;
 			}
 		} catch (Exception e) {
-			Log.e(RoutesDBHelper.class.getCanonicalName(), e.getMessage());
+			//Log.e(RoutesDBHelper.class.getCanonicalName(), e.getMessage());
+			Log.e(RoutesDBHelper.class.getCanonicalName(), "Error updating or inserting data: " + curLinehash);
 		}
 	}
 
@@ -335,6 +372,8 @@ public class RoutesDBHelper {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			//TEST MB
+			int i = 0;
 		}
 
 	}

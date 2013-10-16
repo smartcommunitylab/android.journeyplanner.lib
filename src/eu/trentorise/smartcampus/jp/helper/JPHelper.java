@@ -644,7 +644,7 @@ public class JPHelper {
 	public static Map<String, CacheUpdateResponse> getCacheStatus(Map<String, String> agencyIdsVersions)
 			throws ProtocolException, ConnectionException, SecurityException {
 		String url = Config.TARGET_ADDRESS + Config.CALL_GET_TT_CACHE_STATUS;
-
+		
 		String json = JSONUtils.convertToJSON(agencyIdsVersions);
 
 		MessageRequest req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), url);
@@ -653,7 +653,7 @@ public class JPHelper {
 
 		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
 				getAuthToken());
-
+				
 		Map<String, CacheUpdateResponse> map = eu.trentorise.smartcampus.android.common.Utils.convertJSON(res.getBody(),
 				new TypeReference<Map<String, CacheUpdateResponse>>() {
 				});
