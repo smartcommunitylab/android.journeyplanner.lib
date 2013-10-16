@@ -166,7 +166,6 @@ public class JPHelper {
 
 	public static void init(Context mContext) {
 		JPParamsHelper.init(mContext);
-		RoutesDBHelper.init(mContext.getApplicationContext());
 		instance = new JPHelper(mContext);
 	}
 

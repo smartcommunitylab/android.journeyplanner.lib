@@ -41,6 +41,7 @@ public class BaseActivity extends FeedbackFragmentActivity {
 
 	private void initDataManagement(Bundle savedInstanceState) {
 		JPHelper.init(getApplicationContext());
+		RoutesDBHelper.init(getApplicationContext());
 		try {
 			if (!JPHelper.getAccessProvider().login(this, null)) {
 				new SCAsyncTask<Void, Void, String>(this, new LoadToken(
