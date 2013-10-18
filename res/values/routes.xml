@@ -336,8 +336,8 @@
     <string name="agency_12_route_15R">Spini di Gardolo - Interporto - Piazza Dante</string>
     <string name="agency_12_route_16A">Centochiavi - Martignano - Cognola - Povo</string>
     <string name="agency_12_route_16R">Povo - Cognola - Martignano - Centochiavi</string>
-    <string name="agency_12_route_17A">Piazza Dante - Via Bolzano - Lavis</string>
-    <string name="agency_12_route_17R">Lavis - S. Lazzaro -  Piazza Dante</string>
+    <string name="agency_12_route_17A">Lavis - S. Lazzaro -  Piazza Dante</string>
+    <string name="agency_12_route_17R">Piazza Dante - Via Bolzano - Lavis</string>
     <string name="agency_12_route_FUTSR">Funivia Trento Sardagna</string>
     <string name="agency_12_route_FUTSA">Funivia Sardagna Trento </string>
 
