@@ -32,8 +32,8 @@ public class CTTTCacheUpdaterAsyncTask extends AsyncTask<Void, Integer, Void> {
 	protected Void doInBackground(Void... params) {
 		List<AgencyDescriptor> adList = new ArrayList<AgencyDescriptor>();
 		for (String agencyId : RoutesHelper.AGENCYIDS) {
-			Long dbVersion = dbVersions.get(agencyId);
-			Long assetsVersion = assetsVersions.get(agencyId);
+			Long dbVersion = this.dbVersions.get(agencyId);
+			Long assetsVersion = this.assetsVersions.get(agencyId);
 
 			if (assetsVersion != null && (dbVersion == null || dbVersion < assetsVersion)) {
 				Log.e(RoutesDBHelper.class.getCanonicalName(), "Agency update from asset: " + agencyId);

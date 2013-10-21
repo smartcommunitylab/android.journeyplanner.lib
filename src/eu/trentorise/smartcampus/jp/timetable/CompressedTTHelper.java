@@ -1,5 +1,6 @@
 package eu.trentorise.smartcampus.jp.timetable;
 
+import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 import it.sayservice.platform.smartplanner.data.message.cache.CacheUpdateResponse;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
 
@@ -22,11 +23,12 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 import eu.trentorise.smartcampus.android.common.Utils;
-import eu.trentorise.smartcampus.jp.custom.data.TimeTable;
+import eu.trentorise.smartcampus.mobilityservice.model.TimeTable;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper.AgencyDescriptor;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
+import eu.trentorise.smartcampus.mobilityservice.model.Delay;
 
 public class CompressedTTHelper {
 	/*******************************************************************************
@@ -70,22 +72,27 @@ public class CompressedTTHelper {
 			try {
 				in = assetManager.open(agencyId + indexFilename);
 				String jsonParams = getStringFromInputStream(in);
-				Map<String, Object> indexMap = (Map<String, Object>) Utils.convertJSONToObject(jsonParams, Map.class);
-				versions.put(agencyId, Long.parseLong(indexMap.get("version").toString()));
+				Map<String, Object> indexMap = (Map<String, Object>) Utils
+						.convertJSONToObject(jsonParams, Map.class);
+				versions.put(agencyId,
+						Long.parseLong(indexMap.get("version").toString()));
 			} catch (IOException e) {
-				Log.w(CompressedTTHelper.class.getCanonicalName(), e.getMessage());
+				Log.w(CompressedTTHelper.class.getCanonicalName(),
+						e.getMessage());
 			}
 		}
 
 		return versions;
 	}
 
-	public static AgencyDescriptor buildAgencyDescriptorFromAssets(String agencyId, long version) {
+	public static AgencyDescriptor buildAgencyDescriptorFromAssets(
+			String agencyId, long version) {
 		AgencyDescriptor agencyDescriptor = null;
 		try {
 			CacheUpdateResponse cur = new CacheUpdateResponse();
 			cur.setVersion(version);
-			cur.setCalendar(CompressedTTHelper.getInstance().loadCalendarByAgencyId(agencyId));
+			cur.setCalendar(CompressedTTHelper.getInstance()
+					.loadCalendarByAgencyId(agencyId));
 
 			AssetManager assetManager = mContext.getResources().getAssets();
 			InputStream in;
@@ -100,13 +107,16 @@ public class CompressedTTHelper {
 					lineHashFiles.add(fileName.replace(".js", ""));
 					in = assetManager.open(agencyId + "/" + fileName);
 					String jsonParams = getStringFromInputStream(in);
-					CompressedTransitTimeTable cttt = Utils.convertJSONToObject(jsonParams, CompressedTransitTimeTable.class);
+					CompressedTransitTimeTable cttt = Utils
+							.convertJSONToObject(jsonParams,
+									CompressedTransitTimeTable.class);
 					ctttList.add(cttt);
 				}
 			}
 			cur.setAdded(lineHashFiles);
 
-			agencyDescriptor = RoutesDBHelper.buildAgencyDescriptor(agencyId, cur, ctttList);
+			agencyDescriptor = RoutesDBHelper.buildAgencyDescriptor(agencyId,
+					cur, ctttList);
 		} catch (Exception e) {
 			Log.e(CompressedTTHelper.class.getCanonicalName(), e.getMessage());
 		}
@@ -141,14 +151,19 @@ public class CompressedTTHelper {
 		return calendarGlobal;
 	}
 
-	public static TimeTable getTTwithRouteIdAndTime(String routeId, long from_time, long to_time) {
+	public static TimeTable getTTwithRouteIdAndTime(String routeId,
+			long from_time, long to_time) {
 		TimeTable tt = null;
 		try {
 			// convert time to date
 			String date = convertMsToDateFormat(from_time);
 			// get correct name of file
-			String nameFile = RoutesHelper.getAgencyIdByRouteId(routeId) + "/" + routeId + "_"
-					+ calendar.get(RoutesHelper.getAgencyIdByRouteId(routeId)).get(date) + ".js";
+			String nameFile = RoutesHelper.getAgencyIdByRouteId(routeId)
+					+ "/"
+					+ routeId
+					+ "_"
+					+ calendar.get(RoutesHelper.getAgencyIdByRouteId(routeId))
+							.get(date) + ".js";
 			// get the new tt
 			tt = getTimeTable(nameFile, routeId, from_time, to_time);
 		} catch (Exception e) {
@@ -157,7 +172,8 @@ public class CompressedTTHelper {
 
 	}
 
-	private static TimeTable getTimeTable(String nameFile, String routeId, long from_time, long to_time) {
+	private static TimeTable getTimeTable(String nameFile, String routeId,
+			long from_time, long to_time) {
 		AssetManager assetManager = mContext.getResources().getAssets();
 		try {
 			TimeTable localTT = null;
@@ -171,9 +187,13 @@ public class CompressedTTHelper {
 			if (jsonParams.length() == 0) {
 				localTT = new TimeTable();
 				localTT.setStops(Collections.<String> emptyList());
-				localTT.setTimes(Collections.<List<List<String>>> singletonList(Collections.<List<String>> emptyList()));
+				localTT.setTimes(Collections.<List<String>>emptyList());
+//				localTT.setTimes(Collections
+//						.<List<List<String>>> singletonList(Collections
+//								.<List<String>> emptyList()));
 			} else {
-				localTT = Utils.convertJSONToObject(jsonParams, TimeTable.class);
+				localTT = Utils
+						.convertJSONToObject(jsonParams, TimeTable.class);
 			}
 
 			localTT.setDelays(emptyDelay(localTT));
@@ -186,43 +206,44 @@ public class CompressedTTHelper {
 		}
 	}
 
-	private static List<List<Map<String, String>>> emptyDelay(TimeTable localTT) {
-		List<List<Map<String, String>>> returnlist = new ArrayList<List<Map<String, String>>>();
+	private static List<Delay> emptyDelay(TimeTable localTT) {
+		List<Delay> delays = new ArrayList<Delay>();
 		for (int day = 0; day < localTT.getTimes().size(); day++) {
-			{
-				List<Map<String, String>> daylist = new ArrayList<Map<String, String>>();
-				for (int course = 0; course < localTT.getTimes().get(day).size(); course++) {
-
-					Map<String, String> courselist = new HashMap<String, String>();
-					daylist.add(courselist);
-				}
-				returnlist.add(daylist);
-			}
+			Delay d = new Delay();
+			Map<CreatorType, String> courselist = new HashMap<CreatorType, String>();
+			d.setValues(courselist);
+			delays.add(d);
 		}
-		return returnlist;
+		return delays;
 	}
 
-	private static TimeTable changeDelay(TimeTable localTT, String routeId, long from_time, long to_time) {
+	private static TimeTable changeDelay(TimeTable localTT, String routeId,
+			long from_time, long to_time) {
 		try {
-			List<List<Map<String, String>>> realTimeDelay = JPHelper.getDelay(routeId, from_time, to_time);
+			List<Delay> realTimeDelay = JPHelper.getDelay(routeId, from_time,
+					to_time);
 			localTT.setDelays(realTimeDelay);
 		} catch (Exception e) {
+			//TODO old code
+			// List<List<Map<String, String>>> returnlist = new
+			// ArrayList<List<Map<String, String>>>();
+			// for (int day = 0; day < localTT.getTimes().size(); day++) {
+			// {
+			// List<Map<String, String>> daylist = new ArrayList<Map<String,
+			// String>>();
+			// for (int course = 0; course < localTT.getTimes().get(day).size();
+			// course++) {
+			// {
+			// Map<String, String> courselist = new HashMap<String, String>();
+			// daylist.add(courselist);
+			// }
+			// returnlist.add(daylist);
+			// }
+			// returnlist.add(daylist);
+			// }
+			// }
 			// create empty delay
-			List<List<Map<String, String>>> returnlist = new ArrayList<List<Map<String, String>>>();
-			for (int day = 0; day < localTT.getTimes().size(); day++) {
-				{
-					List<Map<String, String>> daylist = new ArrayList<Map<String, String>>();
-					for (int course = 0; course < localTT.getTimes().get(day).size(); course++) {
-						{
-							Map<String, String> courselist = new HashMap<String, String>();
-							daylist.add(courselist);
-						}
-						returnlist.add(daylist);
-					}
-					returnlist.add(daylist);
-				}
-			}
-			localTT.setDelays(returnlist);
+			localTT.setDelays(emptyDelay(localTT));
 		}
 		return localTT;
 
@@ -288,19 +309,24 @@ public class CompressedTTHelper {
 		TimeTable timeTable = new TimeTable();
 		timeTable.setStops(ctt.getStops());
 		timeTable.setStopsId(ctt.getStopsId());
-		List<List<String>> tripIdsLists = new ArrayList<List<String>>();
-		tripIdsLists.add(ctt.getTripIds());
+		
+		
+		//TODO Ask raman maybe inconsistent datas
+//		List<List<String>> tripIdsLists = new ArrayList<List<String>>();
+//		tripIdsLists.add(ctt.getTripIds());
+//		timeTable.setTripIds(tripIdsLists);
+		List<String> tripIdsLists = new ArrayList<String>();
+		tripIdsLists.addAll(ctt.getTripIds());
 		timeTable.setTripIds(tripIdsLists);
 		
-		
-		
-		List<List<List<String>>> timesLists = new ArrayList<List<List<String>>>();
-		
-		List<List<String>> times = new ArrayList<List<String>>();
+
+		List<List<String>> timesLists = new ArrayList<List<String>>();
+
+		ArrayList<String> times = new ArrayList<String>();
 
 		int counter = 0;
 		int index = 0;
-		List<String> column = new ArrayList<String>();
+		ArrayList<String> column = new ArrayList<String>();
 
 		char[] ctArray = ctt.getCompressedTimes().toCharArray();
 
@@ -327,17 +353,19 @@ public class CompressedTTHelper {
 			counter++;
 
 			if (counter == ctt.getStopsId().size()) {
-				times.add(column);
+				//TODO ASK RAMAN
+				//times.add(column);
+				times.addAll(column);
 				column = new ArrayList<String>();
 				counter = 0;
 			}
 		}
-		
+
 		timesLists.add(times);
 		timeTable.setTimes(timesLists);
-		
+
 		timeTable.setDelays(TTHelper.emptyDelay(timeTable));
-		
+
 		return timeTable;
 	}
 }

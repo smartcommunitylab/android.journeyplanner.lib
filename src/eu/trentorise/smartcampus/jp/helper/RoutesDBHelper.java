@@ -29,7 +29,7 @@ public class RoutesDBHelper {
 
 	protected RoutesDBHelper(Context context) {
 		// TODO: test
-		//	context.deleteDatabase(Environment.getExternalStorageDirectory() + "/" + RoutesDatabase.DB_NAME);
+			context.deleteDatabase(Environment.getExternalStorageDirectory() + "/" + RoutesDatabase.DB_NAME);
 		//	Log.e(RoutesDBHelper.class.getCanonicalName(), "Deleting DB.... SUCCESS");
 		//
 		mApplicationContext= context.getApplicationContext();
@@ -236,7 +236,7 @@ public class RoutesDBHelper {
 					}
 				}
 				
-				//db.insert(RoutesDatabase.DB_TABLE_ROUTE, RoutesDatabase.COMPRESSED_TIMES_KEY, routes);
+				db.insert(RoutesDatabase.DB_TABLE_ROUTE, RoutesDatabase.COMPRESSED_TIMES_KEY, routes);
 				
 				i++;
 			}
@@ -375,8 +375,6 @@ public class RoutesDBHelper {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			//TEST MB
-			int i = 0;
 		}
 
 	}

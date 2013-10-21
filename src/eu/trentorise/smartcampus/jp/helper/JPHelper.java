@@ -17,7 +17,6 @@ package eu.trentorise.smartcampus.jp.helper;
 
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
 import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoad;
-import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 import it.sayservice.platform.smartplanner.data.message.cache.CacheUpdateResponse;
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
@@ -28,17 +27,14 @@ import it.sayservice.platform.smartplanner.data.message.otpbeans.Stop;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONException;
 
 import android.app.Activity;
@@ -54,18 +50,14 @@ import android.widget.Toast;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.LocationHelper;
-import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.data.BasicAlert;
 import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourneyParameters;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
-import eu.trentorise.smartcampus.jp.custom.data.TimeTable;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 import eu.trentorise.smartcampus.jp.model.ParkingSerial;
-import eu.trentorise.smartcampus.jp.model.SmartCheckRoute;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
-import eu.trentorise.smartcampus.jp.model.SmartCheckTime;
 import eu.trentorise.smartcampus.jp.timetable.CompressedTTHelper;
 import eu.trentorise.smartcampus.jp.timetable.TTHelper;
 import eu.trentorise.smartcampus.mobilityservice.MobilityAlertService;
@@ -75,12 +67,11 @@ import eu.trentorise.smartcampus.mobilityservice.MobilityServiceException;
 import eu.trentorise.smartcampus.mobilityservice.MobilityUserService;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
+import eu.trentorise.smartcampus.mobilityservice.model.Delay;
+import eu.trentorise.smartcampus.mobilityservice.model.TimeTable;
 import eu.trentorise.smartcampus.mobilityservice.model.TripData;
 import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.protocolcarrier.ProtocolCarrier;
-import eu.trentorise.smartcampus.protocolcarrier.common.Constants.Method;
-import eu.trentorise.smartcampus.protocolcarrier.custom.MessageRequest;
-import eu.trentorise.smartcampus.protocolcarrier.custom.MessageResponse;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
@@ -106,10 +97,9 @@ public class JPHelper {
 	public static String mAuthToken;
 
 	private SyncStorageWithPaging storage = null;
-	
+
 	private static final String MOBILITY_URL = "/core.mobility";
 	private static final String TERRITORY_URL = "/core.territory";
-
 
 	// tutorial's stuff
 
@@ -153,14 +143,6 @@ public class JPHelper {
 		setProtocolCarrier(new ProtocolCarrier(mContext,
 				JPParamsHelper.getAppToken()));
 
-		// LocationManager locationManager = (LocationManager)
-		// mContext.getSystemService(Context.LOCATION_SERVICE);
-		// locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
-		// 0, 0, new JPLocationListener());
-		// locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-		// 0, 0, new JPLocationListener());
-		// locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-		// 0, 0, new JPLocationListener());
 		setLocationHelper(new LocationHelper(mContext));
 	}
 
@@ -205,33 +187,34 @@ public class JPHelper {
 		return userService.getSingleJourneys(getAuthToken());
 	}
 
-	// TODO change it
-	// public static List<Delay> getDelay(String routeId, long from_time,
-	// long to_time) throws ProtocolException, MobilityServiceException {
-	// MobilityDataService dataService = new MobilityDataService(
-	// GlobalConfig.getAppUrl(mContext) + "core.mobility");
-	// return dataService.getDelays(routeId, getAuthToken());
-	// }
-	public static List<List<Map<String, String>>> getDelay(String routeId,
-			long from_time, long to_time) throws ConnectionException,
-			ProtocolException, SecurityException, JSONException,
-			JsonParseException, JsonMappingException, IOException {
-		String url = Config.TARGET_ADDRESS
-				+ Config.CALL_GET_DELAY_TIME_BY_ROUTE + "/" + routeId + "/"
-				+ from_time + "/" + to_time;
-
-		MessageRequest req = new MessageRequest(
-				GlobalConfig.getAppUrl(JPHelper.mContext), url);
-		req.setMethod(Method.GET);
-		req.setQuery("complex=true");
-
-		MessageResponse res = JPHelper.instance.getProtocolCarrier()
-				.invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
-
-		return eu.trentorise.smartcampus.android.common.Utils
-				.convertJSONToObject(res.getBody(), TimeTable.class)
-				.getDelays();
+	public static List<Delay> getDelay(String routeId, long from_time,
+			long to_time) throws ProtocolException, MobilityServiceException {
+		MobilityDataService dataService = new MobilityDataService(
+				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+		return dataService.getDelays(routeId, getAuthToken());
 	}
+
+	// TODO old code
+	// public static List<List<Map<String, String>>> getDelay(String routeId,
+	// long from_time, long to_time) throws ConnectionException,
+	// ProtocolException, SecurityException, JSONException,
+	// JsonParseException, JsonMappingException, IOException {
+	// String url = Config.TARGET_ADDRESS
+	// + Config.CALL_GET_DELAY_TIME_BY_ROUTE + "/" + routeId + "/"
+	// + from_time + "/" + to_time;
+	//
+	// MessageRequest req = new MessageRequest(
+	// GlobalConfig.getAppUrl(JPHelper.mContext), url);
+	// req.setMethod(Method.GET);
+	// req.setQuery("complex=true");
+	//
+	// MessageResponse res = JPHelper.instance.getProtocolCarrier()
+	// .invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
+	//
+	// return eu.trentorise.smartcampus.android.common.Utils
+	// .convertJSONToObject(res.getBody(), TimeTable.class)
+	// .getDelays();
+	// }
 
 	/**
 	 * Delete single journeys
@@ -520,56 +503,47 @@ public class JPHelper {
 		return userService.getRecurrentJourneys(getAuthToken());
 	}
 
-	// TODO after delays
-	// public static TimeTable getTransitTimeTableById(long from_day, long
-	// to_day,
-	// String routeId) throws ProtocolException, MobilityServiceException {
-	// MobilityDataService dataService = new MobilityDataService(
-	// GlobalConfig.getAppUrl(mContext) + "core.mobility");
-	// if(routeId!=null){
-	// return dataService.getTimeTable(routeId, from_day, getAuthToken());
-	// }
-	// return null;
-	// }
-
 	public static TimeTable getTransitTimeTableById(long from_day, long to_day,
-			String routeId) throws ConnectionException, ProtocolException,
-			SecurityException, JSONException, JsonParseException,
-			JsonMappingException, IOException {
-		String url = Config.TARGET_ADDRESS
-				+ Config.CALL_GET_TRANSIT_TIME_BY_ROUTE + "/" + routeId + "/"
-				+ from_day + "/" + to_day;
-
-		MessageRequest req = new MessageRequest(
-				GlobalConfig.getAppUrl(JPHelper.mContext), url);
-		req.setMethod(Method.GET);
-		req.setQuery("complex=true");
-
-		MessageResponse res = JPHelper.instance.getProtocolCarrier()
-				.invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
-
-		return eu.trentorise.smartcampus.android.common.Utils
-				.convertJSONToObject(res.getBody(), TimeTable.class);
+			String routeId) throws ProtocolException, MobilityServiceException {
+		MobilityDataService dataService = new MobilityDataService(
+				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+		if (routeId != null) {
+			return dataService.getTimeTable(routeId, from_day, getAuthToken());
+		}
+		return null;
 	}
 
+	// TODO old code
 
-	// public static TimeTable getLocalTransitTimeTableById(long from_day,
-	// long to_day, String routeId) throws ConnectionException,
-	// ProtocolException, SecurityException, JSONException,
-	// JsonParseException, JsonMappingException, IOException {
-	// if (!TTHelper.isInitialized())
-	// TTHelper.init(mContext);
-	// return TTHelper.getTTwithRouteIdAndTime(routeId, from_day, to_day);
+	// public static TimeTable getTransitTimeTableById(long from_day, long
+	// to_day,
+	// String routeId) throws ConnectionException, ProtocolException,
+	// SecurityException, JSONException, JsonParseException,
+	// JsonMappingException, IOException {
+	// String url = Config.TARGET_ADDRESS
+	// + Config.CALL_GET_TRANSIT_TIME_BY_ROUTE + "/" + routeId + "/"
+	// + from_day + "/" + to_day;
+	//
+	// MessageRequest req = new MessageRequest(
+	// GlobalConfig.getAppUrl(JPHelper.mContext), url);
+	// req.setMethod(Method.GET);
+	// req.setQuery("complex=true");
+	//
+	// MessageResponse res = JPHelper.instance.getProtocolCarrier()
+	// .invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
+	//
+	// return eu.trentorise.smartcampus.android.common.Utils
+	// .convertJSONToObject(res.getBody(), TimeTable.class);
 	// }
 
-	public static TimeTable getLocalTransitTimeTableById(long from_day, long to_day, String routeId)
-			throws ConnectionException, ProtocolException, SecurityException, JSONException, JsonParseException,
-			JsonMappingException, IOException {
+	public static TimeTable getLocalTransitTimeTableById(long from_day,
+			long to_day, String routeId) throws ConnectionException,
+			ProtocolException, SecurityException, JSONException,
+			JsonParseException, JsonMappingException, IOException {
 		if (!TTHelper.isInitialized())
 			TTHelper.init(mContext);
 		return TTHelper.getTTwithRouteIdAndTime(routeId, from_day, to_day);
 	}
-
 
 	public static List<SmartCheckStop> getStops(String agencyId,
 			double[] location, double radius) throws Exception {
@@ -628,10 +602,11 @@ public class JPHelper {
 			throws Exception {
 		MobilityDataService dataService = new MobilityDataService(
 				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return convertParkings(dataService.getParkings(parkingAgencyId, getAuthToken()));
+		return convertParkings(dataService.getParkings(parkingAgencyId,
+				getAuthToken()));
 	}
-	
-	public static List<ParkingSerial> convertParkings(List<Parking> l){
+
+	public static List<ParkingSerial> convertParkings(List<Parking> l) {
 		List<ParkingSerial> out = new ArrayList<ParkingSerial>();
 		for (Parking obj : l) {
 			ParkingSerial toAdd = new ParkingSerial();
@@ -650,12 +625,13 @@ public class JPHelper {
 			long fromTime, long toTime) throws Exception {
 		MobilityDataService dataService = new MobilityDataService(
 				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return convertAlertRoad(dataService.getRoadInfo(agencyId, fromTime, toTime, getAuthToken()));
+		return convertAlertRoad(dataService.getRoadInfo(agencyId, fromTime,
+				toTime, getAuthToken()));
 	}
 
 	public static List<AlertRoadLoc> convertAlertRoad(List<AlertRoad> roadInfo) {
 		List<AlertRoadLoc> out = new ArrayList<AlertRoadLoc>();
-		for(AlertRoad ar : roadInfo){
+		for (AlertRoad ar : roadInfo) {
 			out.add(new AlertRoadLoc(ar));
 		}
 		return out;

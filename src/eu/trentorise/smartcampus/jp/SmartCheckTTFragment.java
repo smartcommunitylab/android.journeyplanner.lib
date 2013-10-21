@@ -1,5 +1,6 @@
 package eu.trentorise.smartcampus.jp;
 
+import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
 
 import java.text.DateFormat;
@@ -44,11 +45,12 @@ import eu.trentorise.smartcampus.jp.custom.TTHelper;
 import eu.trentorise.smartcampus.jp.custom.TTView;
 import eu.trentorise.smartcampus.jp.custom.TypesView;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
-import eu.trentorise.smartcampus.jp.custom.data.TimeTable;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.jp.timetable.CompressedTTHelper;
+import eu.trentorise.smartcampus.mobilityservice.model.Delay;
+import eu.trentorise.smartcampus.mobilityservice.model.TimeTable;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class SmartCheckTTFragment extends FeedbackFragment {
@@ -65,7 +67,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 	private String[] stops = null;
 	private String[] tripids = null;
 
-	private Map<String, String>[] delays = null;
+	private Map<CreatorType, String>[] delays = null;
 	private List<String> timesArr = null;
 	private ProgressBar mProgressBar;
 	private int displayedDay;
@@ -316,14 +318,14 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 		super.onPause();
 	}
 
-	private class GetDelayProcessor extends AbstractAsyncTaskProcessorNoDialog<Object, List<List<Map<String, String>>>> {
+	private class GetDelayProcessor extends AbstractAsyncTaskProcessorNoDialog<Object, List<Delay>> {
 
 		public GetDelayProcessor(SherlockFragmentActivity activity) {
 			super(activity);
 		}
 
 		@Override
-		public List<List<Map<String, String>>> performAction(Object... params) throws SecurityException, Exception {
+		public List<Delay> performAction(Object... params) throws SecurityException, Exception {
 			return JPHelper.getDelay((String) params[2], (Long) params[0], (Long) params[1]);
 		}
 
@@ -342,13 +344,16 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 		}
 
 		@Override
-		public void handleResult(List<List<Map<String, String>>> result) {
+		public void handleResult(List<Delay> result) {
 			if (mProgressBar.isShown())
 				toggleProgressDialog();
 			// refresh delay with new data
 			int tempNumbCol = 0;
-			for (List<Map<String, String>> tt : result) {
-				tempNumbCol += tt.size();
+//			for (List<Map<String, String>> tt : result) {
+//				tempNumbCol += tt.size();
+//			}
+			for(int i =0 ; i<result.size();i++){
+				tempNumbCol+= result.get(i).getValues().size();
 			}
 
 			final int NUM_COLS = tempNumbCol;
@@ -358,7 +363,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 			delays = new HashMap[NUM_COLS];
 
 			for (int j = 0; j < NUM_COLS; j++) {
-				while (result.get(indexOfDay).isEmpty()) {
+				while (result.get(indexOfDay).getValues().isEmpty()) {
 					if (indexOfDay == 0) {
 						displayedDay = 1;
 					}
@@ -366,10 +371,10 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 				}
 				// hook
 
-				Map<String, String> actualDelays = result.get(indexOfDay).get(indexOfCourseInThatDay);
+				Map<CreatorType, String> actualDelays = result.get(indexOfDay).getValues();
 				delays[j] = actualDelays;
 
-				if (indexOfCourseInThatDay == result.get(indexOfDay).size() - 1) {
+				if (indexOfCourseInThatDay == result.get(indexOfDay).getValues().size() - 1) {
 					if (indexOfDay < DAYS_WINDOWS)
 						indexOfDay++;
 					indexOfCourseInThatDay = 0;
@@ -447,7 +452,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 			if (todayView) {
 				if (!mProgressBar.isShown())
 					toggleProgressDialog();
-				AsyncTaskNoDialog<Object, Void, List<List<Map<String, String>>>> task = new AsyncTaskNoDialog<Object, Void, List<List<Map<String, String>>>>(
+				AsyncTaskNoDialog<Object, Void, List<Delay> >task = new AsyncTaskNoDialog<Object, Void, List<Delay>>(
 						getSherlockActivity(), new GetDelayProcessor(getSherlockActivity()));
 				task.execute(from_date_millisecond, to_date_millisecond, params.getRouteID().get(0));
 			}
@@ -487,8 +492,12 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 		int tempNumbCol = 0;
 		courseForDay.add(0);
 		if (actualBusTimeTable.getDelays() != null) {
-			for (List<Map<String, String>> tt : actualBusTimeTable.getDelays()) {
-				tempNumbCol += tt.size();
+//			for (List<Map<String, String>> tt : actualBusTimeTable.getDelays()) {
+//				tempNumbCol += tt.size();
+//				courseForDay.add(tempNumbCol);
+//			}
+			for(int i =0;i<actualBusTimeTable.getDelays().size();i++){
+				tempNumbCol += actualBusTimeTable.getDelays().get(i).getValues().size();
 				courseForDay.add(tempNumbCol);
 			}
 		}
@@ -511,7 +520,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 			stops[i] = actualBusTimeTable.getStops().get(i);
 
 			for (int j = 0; j < NUM_COLS; j++) {
-				while (actualBusTimeTable.getDelays().get(indexOfDay).isEmpty()) {
+				while (actualBusTimeTable.getDelays().get(indexOfDay).getValues().isEmpty()) {
 					if (indexOfDay == 0) {
 						displayedDay = 1;
 					}
@@ -519,12 +528,11 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 				}
 
 				if (i == 0) {
-					Map<String, String> actualDelays = actualBusTimeTable.getDelays().get(indexOfDay)
-							.get(indexOfCourseInThatDay);
+					Map<CreatorType, String> actualDelays = actualBusTimeTable.getDelays().get(indexOfDay).getValues();
 					delays[j] = actualDelays;
 					if (typeOfTransport) {
 						if (actualBusTimeTable.getTripIds() != null) {
-							String actualTripId = actualBusTimeTable.getTripIds().get(indexOfDay).get(indexOfCourseInThatDay);
+							String actualTripId = actualBusTimeTable.getTripIds().get(indexOfDay);
 							tripids[j] = actualTripId;
 						} else {
 							typeOfTransport = false;
@@ -532,7 +540,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 					}
 				}
 
-				String time = actualBusTimeTable.getTimes().get(indexOfDay).get(indexOfCourseInThatDay).get(i);
+				String time = actualBusTimeTable.getTimes().get(indexOfDay).get(indexOfCourseInThatDay);
 				time = time == null || time.length() == 0 ? "" : time.substring(0, 5);
 				timesArr.add(time);
 				if (time.length() > 0) {
@@ -541,7 +549,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 					}
 				}
 
-				if (indexOfCourseInThatDay == actualBusTimeTable.getDelays().get(indexOfDay).size() - 1) {
+				if (indexOfCourseInThatDay == actualBusTimeTable.getDelays().get(indexOfDay).getValues().size() - 1) {
 					if (indexOfDay < DAYS_WINDOWS)
 						indexOfDay++;
 					indexOfCourseInThatDay = 0;

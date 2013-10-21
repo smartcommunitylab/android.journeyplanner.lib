@@ -21,7 +21,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 import eu.trentorise.smartcampus.android.common.Utils;
-import eu.trentorise.smartcampus.jp.custom.data.TimeTable;
+import eu.trentorise.smartcampus.mobilityservice.model.TimeTable;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.mobilityservice.model.Delay;
 
@@ -144,8 +144,8 @@ public class TTHelper {
 			if (jsonParams.length() ==0) {
 				localTT = new TimeTable();
 				localTT.setStops(Collections.<String>emptyList());
-				//localTT.setTimes(Collections.<List<String>>emptyList());
-				localTT.setTimes(Collections.<List<List<String>>>singletonList(Collections.<List<String>>emptyList()));
+				localTT.setTimes(Collections.<List<String>>emptyList());
+				//localTT.setTimes(Collections.<List<List<String>>>singletonList(Collections.<List<String>>emptyList()));
 			} else {
 				localTT = Utils.convertJSONToObject(jsonParams, TimeTable.class);
 			}
@@ -161,24 +161,18 @@ public class TTHelper {
 	}
 	
 	/**
-	 * @deprecated
 	 * @param localTT
 	 * @return
 	 */
-	public static List<List<Map<String, String>>> emptyDelay(TimeTable localTT) {
-		List<List<Map<String, String>>> returnlist = new ArrayList<List<Map<String, String>>>();
+	public static List<Delay> emptyDelay(TimeTable localTT) {
+		List<Delay> delays = new ArrayList<Delay>();
 		for (int day = 0; day < localTT.getTimes().size(); day++) {
-			{
-				List<Map<String, String>> daylist = new ArrayList<Map<String, String>>();
-				for (int course = 0; course < localTT.getTimes().get(day).size(); course++) {
-
-					Map<String, String> courselist = new HashMap<String, String>();
-					daylist.add(courselist);
-				}
-				returnlist.add(daylist);
-			}
+			Delay d = new Delay();
+			Map<CreatorType, String> courselist = new HashMap<CreatorType, String>();
+			d.setValues(courselist);
+			delays.add(d);
 		}
-		return returnlist;
+		return delays;
 	}
 	
 	public static List<Delay> createEmptyDelay(TimeTable localTT) {
