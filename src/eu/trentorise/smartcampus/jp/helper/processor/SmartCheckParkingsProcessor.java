@@ -57,7 +57,7 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 
 	@Override
 	public List<ParkingSerial> performAction(Void... params) throws SecurityException, Exception {
-		return JPHelper.getParkings(parkingAid);
+		return JPHelper.getParkings(parkingAid,JPHelper.getAuthToken(mActivity));
 	}
 
 	@Override

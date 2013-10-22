@@ -9,6 +9,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 
+import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.jp.custom.BetterMapView;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
@@ -112,7 +113,13 @@ public class SmartCheckActivity extends BaseActivity {
 
 	@Override
 	public String getAuthToken() {
-		return JPHelper.getAuthToken();
+		try {
+			return JPHelper.getAuthToken(this);
+		} catch (AACException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

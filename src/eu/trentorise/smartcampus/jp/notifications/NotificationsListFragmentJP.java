@@ -3,6 +3,7 @@ package eu.trentorise.smartcampus.jp.notifications;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -103,15 +104,18 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 	 */
 	private class NotificationsAsyncTaskProcessorJP extends AbstractAsyncTaskProcessor<String, Object> {
 
+		private Context ctx;
+
 		public NotificationsAsyncTaskProcessorJP(Activity activity) {
 			super(activity);
+			ctx = activity.getApplicationContext();
 		}
 
 		@Override
 		public Object performAction(String... params) throws SecurityException, ConnectionException, Exception {
 			String id = params[0];
 
-			return JPHelper.getItineraryObject(id);
+			return JPHelper.getItineraryObject(id,JPHelper.getAuthToken(ctx));
 		}
 
 		@Override

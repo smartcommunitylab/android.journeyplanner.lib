@@ -43,7 +43,7 @@ public class SmartCheckAlertRoadsProcessor extends AbstractAsyncTaskProcessor<Vo
 	@Override
 	public List<AlertRoadLoc> performAction(Void... params) throws SecurityException, Exception {
 		long now = System.currentTimeMillis();
-		return JPHelper.getAlertRoads(agencyId, now, now + (1000 * 60 * 60 * 24));
+		return JPHelper.getAlertRoads(agencyId, now, now + (1000 * 60 * 60 * 24),JPHelper.getAuthToken(mActivity));
 	}
 
 	@Override

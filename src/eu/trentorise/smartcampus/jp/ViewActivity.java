@@ -62,7 +62,7 @@ public class ViewActivity extends BaseActivity {
 				public Object performAction(Void... params) throws SecurityException, Exception {
 					String objectId = getIntent().getStringExtra(getString(R.string.view_intent_arg_object_id));
 					if (objectId != null) {
-						return JPHelper.getItineraryObject(objectId);
+						return JPHelper.getItineraryObject(objectId,JPHelper.getAuthToken(ViewActivity.this));
 					}
 					return null;
 				}

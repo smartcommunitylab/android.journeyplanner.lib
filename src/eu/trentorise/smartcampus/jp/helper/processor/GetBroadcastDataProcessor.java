@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.content.Context;
 import android.widget.ArrayAdapter;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -31,7 +32,8 @@ import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class GetBroadcastDataProcessor extends AbstractAsyncTaskProcessor<String, Map<String, List<?>>> {
+public class GetBroadcastDataProcessor extends
+		AbstractAsyncTaskProcessor<String, Map<String, List<?>>> {
 
 	private static final String ROUTES = "routes";
 	private static final String STOPS = "stops";
@@ -41,16 +43,21 @@ public class GetBroadcastDataProcessor extends AbstractAsyncTaskProcessor<String
 	private ArrayAdapter<Stop> stopsAdapter;
 	private ArrayAdapter<StopTime> stopTimesAdapter;
 
-	public GetBroadcastDataProcessor(SherlockFragmentActivity activity, ArrayAdapter<Route> routesAdapter,
-			ArrayAdapter<Stop> stopsAdapter, ArrayAdapter<StopTime> stopTimesAdapter) {
+	private Context ctx;
+
+	public GetBroadcastDataProcessor(SherlockFragmentActivity activity,
+			ArrayAdapter<Route> routesAdapter, ArrayAdapter<Stop> stopsAdapter,
+			ArrayAdapter<StopTime> stopTimesAdapter) {
 		super(activity);
+		ctx = activity.getApplicationContext();
 		this.routesAdapter = routesAdapter;
 		this.stopsAdapter = stopsAdapter;
 		this.stopTimesAdapter = stopTimesAdapter;
 	}
 
 	@Override
-	public Map<String, List<?>> performAction(String... params) throws SecurityException, Exception {
+	public Map<String, List<?>> performAction(String... params)
+			throws SecurityException, Exception {
 		// 0: agencyId
 		// 1: routeId
 		// 2: stopId
@@ -76,18 +83,23 @@ public class GetBroadcastDataProcessor extends AbstractAsyncTaskProcessor<String
 		}
 
 		if (routeId == null) {
-			List<Route> routesList = (List<Route>) JPHelper.getRoutesByAgencyId(agencyId);
+			List<Route> routesList = (List<Route>) JPHelper
+					.getRoutesByAgencyId(agencyId, JPHelper.getAuthToken(ctx));
 			map.put(ROUTES, routesList);
 			routeId = routesList.get(0).getId().getId();
 		}
 
 		if (stopId == null) {
-			List<Stop> stopsList = (List<Stop>) JPHelper.getStopsByAgencyIdRouteId(agencyId, routeId);
+			List<Stop> stopsList = (List<Stop>) JPHelper
+					.getStopsByAgencyIdRouteId(agencyId, routeId,
+							JPHelper.getAuthToken(ctx));
 			map.put(STOPS, stopsList);
 			stopId = stopsList.get(0).getId();
 		}
 
-		List<StopTime> stopTimesList = (List<StopTime>) JPHelper.getStopTimesByAgencyIdRouteIdStopId(agencyId, routeId, stopId);
+		List<StopTime> stopTimesList = (List<StopTime>) JPHelper
+				.getStopTimesByAgencyIdRouteIdStopId(agencyId, routeId, stopId,
+						JPHelper.getAuthToken(ctx));
 		map.put(STOPTIMES, stopTimesList);
 
 		return map;

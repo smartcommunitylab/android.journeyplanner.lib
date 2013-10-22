@@ -654,7 +654,7 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 			// 1: id
 			boolean monitor = Boolean.parseBoolean(strings[0]);
 			String id = strings[1];
-			return JPHelper.monitorMyRecItinerary(monitor, id);
+			return JPHelper.monitorMyRecItinerary(monitor, id, JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override

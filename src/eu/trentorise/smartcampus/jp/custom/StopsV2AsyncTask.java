@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -35,13 +36,14 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 	private boolean zoomLevelChanged;
 	private double diagonal;
 	private GoogleMap map;
+	private Context ctx;
 
 	private long time;
 
 	List<SmartCheckStop> stops = new ArrayList<SmartCheckStop>();
 
 	public StopsV2AsyncTask(SherlockFragmentActivity mActivity, String[] selectedAgencyIds, LatLng latLng, double diagonal,
-			GoogleMap map, boolean zoomLevelChanged, OnStopLoadingFinished listener) {
+			GoogleMap map, boolean zoomLevelChanged, OnStopLoadingFinished listener,Context ctx) {
 		super();
 		this.mActivity = mActivity;
 		this.selectedAgencyIds = selectedAgencyIds;
@@ -50,6 +52,7 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 		this.map = map;
 		this.zoomLevelChanged = zoomLevelChanged;
 		this.mOnStopLoadingFinished = listener;
+		this.ctx=ctx;
 	}
 
 	@Override
@@ -64,10 +67,10 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 		try {
 			for (int i = 0; i < selectedAgencyIds.length; i++) {
 				stops.addAll(JPHelper.getStops(selectedAgencyIds[i], location,
-						diagonal));
+						diagonal,JPHelper.getAuthToken(ctx)));
 			}
 		} catch (Exception e) {
-			Log.e(getClass().getSimpleName(), e.getMessage());
+			Log.e(getClass().getSimpleName(), e.toString());
 			return false;
 		}
 		long newtime = System.currentTimeMillis();

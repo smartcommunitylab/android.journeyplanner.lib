@@ -54,7 +54,7 @@ public class SmartCheckAlertRoadsMapProcessor extends AbstractAsyncTaskProcessor
 	public List<AlertRoadLoc> performAction(Void... params) throws SecurityException, Exception {
 		long start = fromTime != null ? fromTime : System.currentTimeMillis();
 		long end = period != null ? (start + period) : (start + (1000 * 60 * 60 * 24));
-		return JPHelper.getAlertRoads(agencyId, start, end);
+		return JPHelper.getAlertRoads(agencyId, start, end,JPHelper.getAuthToken(mActivity));
 	}
 
 	@Override

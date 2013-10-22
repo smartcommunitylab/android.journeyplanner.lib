@@ -221,7 +221,7 @@ public class CompressedTTHelper {
 			long from_time, long to_time) {
 		try {
 			List<Delay> realTimeDelay = JPHelper.getDelay(routeId, from_time,
-					to_time);
+					to_time,JPHelper.getAuthToken(mContext));
 			localTT.setDelays(realTimeDelay);
 		} catch (Exception e) {
 			//TODO old code

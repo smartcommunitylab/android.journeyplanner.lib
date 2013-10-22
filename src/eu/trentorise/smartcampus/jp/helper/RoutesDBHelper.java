@@ -42,7 +42,7 @@ public class RoutesDBHelper {
 		// Log.e(RoutesDBHelper.class.getCanonicalName(),
 		// routesDB.getReadableDatabase().getPath());
 
-		CTTTCacheUpdaterAsyncTask ctttCacheUpdaterAsyncTask = new CTTTCacheUpdaterAsyncTask();
+		CTTTCacheUpdaterAsyncTask ctttCacheUpdaterAsyncTask = new CTTTCacheUpdaterAsyncTask(applicationContext);
 		ctttCacheUpdaterAsyncTask.execute(); 
 	}
 

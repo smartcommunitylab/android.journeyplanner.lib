@@ -112,7 +112,7 @@ public class MyItinerariesFragment extends FeedbackFragment {
 
 		@Override
 		public List<BasicItinerary> performAction(Void... params) throws SecurityException, Exception {
-			return JPHelper.getMyItineraries();
+			return JPHelper.getMyItineraries(JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override

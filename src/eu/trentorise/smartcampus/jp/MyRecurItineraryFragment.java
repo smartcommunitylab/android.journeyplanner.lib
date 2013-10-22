@@ -354,7 +354,7 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 
 		@Override
 		public RecurrentJourney performAction(BasicRecurrentJourneyParameters... array) throws SecurityException, Exception {
-			return JPHelper.planRecurItinerary(array[0]);
+			return JPHelper.planRecurItinerary(array[0],JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override
@@ -390,7 +390,7 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 
 		@Override
 		public Boolean performAction(BasicRecurrentJourney... array) throws SecurityException, Exception {
-			return JPHelper.saveMyRecurrentJourney(array[0]);
+			return JPHelper.saveMyRecurrentJourney(array[0],JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override
@@ -422,7 +422,7 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 			// 1: id
 			boolean monitor = Boolean.parseBoolean(strings[0]);
 			String id = strings[1];
-			return JPHelper.monitorMyRecItinerary(monitor, id);
+			return JPHelper.monitorMyRecItinerary(monitor, id,JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 
+import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.jp.BaseActivity;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
@@ -44,7 +45,13 @@ public class NotificationsFragmentActivityJP extends BaseActivity {
 
 	@Override
 	public String getAuthToken() {
-		return JPHelper.getAuthToken();
+		try {
+			return JPHelper.getAuthToken(this);
+		} catch (AACException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

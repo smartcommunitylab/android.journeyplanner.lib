@@ -17,6 +17,8 @@ package eu.trentorise.smartcampus.jp.helper.processor;
 
 import java.util.List;
 
+import android.content.Context;
+
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.gms.maps.GoogleMap;
 
@@ -31,16 +33,18 @@ public class SmartCheckParkingMapProcessor extends AbstractAsyncTaskProcessor<Vo
 	private SherlockFragmentActivity mActivity;
 	private String parkingAid;
 	private GoogleMap map;
+	private Context ctx;
 
 	public SmartCheckParkingMapProcessor(SherlockFragmentActivity activity, GoogleMap map, String parkingAid) {
 		super(activity);
 		this.map = map;
 		this.parkingAid = parkingAid;
+		this.ctx=activity.getApplicationContext();
 	}
 
 	@Override
 	public List<ParkingSerial> performAction(Void... params) throws SecurityException, Exception {
-		return JPHelper.getParkings(parkingAid);
+		return JPHelper.getParkings(parkingAid,JPHelper.getAuthToken(ctx));
 	}
 
 	@Override

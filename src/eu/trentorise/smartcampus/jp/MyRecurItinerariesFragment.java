@@ -120,7 +120,7 @@ public class MyRecurItinerariesFragment extends FeedbackFragment {
 		@Override
 		public List<BasicRecurrentJourney> performAction(Void... params)
 				throws SecurityException, Exception {
-			return JPHelper.getMyRecurItineraries();
+			return JPHelper.getMyRecurItineraries(JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override

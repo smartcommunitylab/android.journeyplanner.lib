@@ -326,7 +326,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 
 		@Override
 		public List<Delay> performAction(Object... params) throws SecurityException, Exception {
-			return JPHelper.getDelay((String) params[2], (Long) params[0], (Long) params[1]);
+			return JPHelper.getDelay((String) params[2], (Long) params[0], (Long) params[1],JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override

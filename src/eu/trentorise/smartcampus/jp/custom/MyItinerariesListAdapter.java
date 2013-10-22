@@ -227,7 +227,7 @@ public class MyItinerariesListAdapter extends ArrayAdapter<BasicItinerary> {
 			 position = (Integer) params[2];
 			 myItineraries=(List<BasicItinerary>) params[1];
 			 id =  myItineraries.get(position).getClientId();
-			return JPHelper.monitorMyItinerary(monitor, id);
+			return JPHelper.monitorMyItinerary(monitor, id,JPHelper.getAuthToken(context));
 		}
 
 		@Override

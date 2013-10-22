@@ -97,7 +97,6 @@ public class BaseActivity extends FeedbackFragmentActivity {
 			if (resultCode == RESULT_OK) {
 				String token = data.getExtras().getString(
 						AccountManager.KEY_AUTHTOKEN);
-				JPHelper.mAuthToken = token;
 				if (token == null) {
 					JPHelper.endAppFailure(this, R.string.app_failure_security);
 				}
@@ -122,7 +121,13 @@ public class BaseActivity extends FeedbackFragmentActivity {
 
 	@Override
 	public String getAuthToken() {
-		return JPHelper.getAuthToken();
+		try {
+			return JPHelper.getAuthToken(this);
+		} catch (AACException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private class LoadToken extends AbstractAsyncTaskProcessor<Void, String> {
@@ -134,14 +139,12 @@ public class BaseActivity extends FeedbackFragmentActivity {
 		@Override
 		public String performAction(Void... params) throws SecurityException,
 				ConnectionException, Exception {
-			// JPHelper.getAccessProvider().login(activity, null);
-			return JPHelper.getAccessProvider().readToken(activity);
-			// return null;
+			return JPHelper.getAuthToken(BaseActivity.this);
 		}
 
 		@Override
 		public void handleResult(String result) {
-			JPHelper.mAuthToken = result;
+			//ok
 		}
 
 	}

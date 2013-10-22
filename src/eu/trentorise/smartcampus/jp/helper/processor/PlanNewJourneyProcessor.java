@@ -20,6 +20,7 @@ import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
 
 import java.util.List;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
@@ -35,16 +36,18 @@ public class PlanNewJourneyProcessor extends AbstractAsyncTaskProcessor<SingleJo
 
 	private SingleJourney singleJourney;
 	private String mTag;
+	private Context ctx;
 
 	public PlanNewJourneyProcessor(SherlockFragmentActivity activity, SingleJourney singleJourney, String mTag) {
 		super(activity);
+		ctx=activity.getApplicationContext();
 		this.singleJourney = singleJourney;
 		this.mTag = mTag;
 	}
 
 	@Override
 	public List<Itinerary> performAction(SingleJourney... array) throws SecurityException, Exception {
-		return JPHelper.planSingleJourney(array[0]);
+		return JPHelper.planSingleJourney(array[0],JPHelper.getAuthToken(ctx));
 	}
 
 	@Override

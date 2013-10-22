@@ -191,7 +191,7 @@ public class MyRecurItinerariesListAdapter extends ArrayAdapter<BasicRecurrentJo
 			 position = (Integer) params[2];
 			// myItineraries=(List<BasicRecurrentJourneyParameters>) params[1];
 			 id =  (String) params[1];
-			return JPHelper.monitorMyRecItinerary(monitor, id);
+			return JPHelper.monitorMyRecItinerary(monitor, id,JPHelper.getAuthToken(context));
 		}
 
 		@Override

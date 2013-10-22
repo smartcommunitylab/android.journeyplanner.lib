@@ -17,6 +17,8 @@ package eu.trentorise.smartcampus.jp.helper.processor;
 
 import java.util.List;
 
+import android.content.Context;
+
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
@@ -28,15 +30,17 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 public class GetMyRecurItinerariesProcessor extends AbstractAsyncTaskProcessor<Void, List<BasicRecurrentJourney>> {
 
 	private MyRecurItinerariesListAdapter adapter;
+	private Context ctx;
 
 	public GetMyRecurItinerariesProcessor(SherlockFragmentActivity activity, MyRecurItinerariesListAdapter adapter) {
 		super(activity);
+		this.ctx=activity;
 		this.adapter = adapter;
 	}
 
 	@Override
 	public List<BasicRecurrentJourney> performAction(Void... params) throws SecurityException, Exception {
-		return JPHelper.getMyRecurItineraries();
+		return JPHelper.getMyRecurItineraries(JPHelper.getAuthToken(ctx));
 	}
 
 	@Override

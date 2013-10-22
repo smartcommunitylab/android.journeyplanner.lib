@@ -261,7 +261,7 @@ public class MyItineraryFragment extends FeedbackFragment {
 			// 1: id
 			boolean monitor = Boolean.parseBoolean(strings[0]);
 			String id = strings[1];
-			return JPHelper.monitorMyItinerary(monitor, id);
+			return JPHelper.monitorMyItinerary(monitor, id, JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override

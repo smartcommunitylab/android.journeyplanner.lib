@@ -19,10 +19,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.maps.GeoPoint;
 
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
-import eu.trentorise.smartcampus.jp.custom.StopsAsyncTask;
 import eu.trentorise.smartcampus.jp.custom.StopsV2AsyncTask;
 import eu.trentorise.smartcampus.jp.custom.StopsV2AsyncTask.OnStopLoadingFinished;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
@@ -137,7 +135,7 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements
 
 		loader = new StopsV2AsyncTask(mActivity, selectedAgencyIds,
 				centerLatLng, getDiagonalLenght(), getSupportMap(),
-				zoomLevelChanged, null);
+				zoomLevelChanged, null,getActivity());
 		loader.execute();
 	}
 
