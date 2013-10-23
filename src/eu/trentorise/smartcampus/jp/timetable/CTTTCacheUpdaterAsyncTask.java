@@ -81,7 +81,6 @@ public class CTTTCacheUpdaterAsyncTask extends AsyncTask<Void, Integer, Void> {
 		dbVersions = RoutesDBHelper.getVersions();
 		CTTTCacheNetworkUpdaterAsyncTask csat = new CTTTCacheNetworkUpdaterAsyncTask(
 				mContext);
-		// csat.execute(assetsVersions);
 		csat.execute(dbVersions);
 	}
 

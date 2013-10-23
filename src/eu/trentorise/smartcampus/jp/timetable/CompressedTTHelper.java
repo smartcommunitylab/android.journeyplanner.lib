@@ -309,20 +309,10 @@ public class CompressedTTHelper {
 		TimeTable timeTable = new TimeTable();
 		timeTable.setStops(ctt.getStops());
 		timeTable.setStopsId(ctt.getStopsId());
-		
-		
-		//TODO Ask raman maybe inconsistent datas
-//		List<List<String>> tripIdsLists = new ArrayList<List<String>>();
-//		tripIdsLists.add(ctt.getTripIds());
-//		timeTable.setTripIds(tripIdsLists);
-		List<String> tripIdsLists = new ArrayList<String>();
-		tripIdsLists.addAll(ctt.getTripIds());
-		timeTable.setTripIds(tripIdsLists);
+		timeTable.setTripIds(ctt.getTripIds());
 		
 
 		List<List<String>> timesLists = new ArrayList<List<String>>();
-
-		ArrayList<String> times = new ArrayList<String>();
 
 		int counter = 0;
 		int index = 0;
@@ -353,15 +343,12 @@ public class CompressedTTHelper {
 			counter++;
 
 			if (counter == ctt.getStopsId().size()) {
-				//TODO ASK RAMAN
-				//times.add(column);
-				times.addAll(column);
+				timesLists.add(column);
 				column = new ArrayList<String>();
 				counter = 0;
 			}
 		}
 
-		timesLists.add(times);
 		timeTable.setTimes(timesLists);
 
 		timeTable.setDelays(TTHelper.emptyDelay(timeTable));

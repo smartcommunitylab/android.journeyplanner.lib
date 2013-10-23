@@ -504,35 +504,12 @@ public class JPHelper {
 	public static TimeTable getTransitTimeTableById(long from_day, long to_day,
 			String routeId,String authToken) throws ProtocolException, MobilityServiceException {
 		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		if (routeId != null) {
 			return dataService.getTimeTable(routeId, from_day, authToken);
 		}
 		return null;
 	}
-
-	// TODO old code
-
-	// public static TimeTable getTransitTimeTableById(long from_day, long
-	// to_day,
-	// String routeId) throws ConnectionException, ProtocolException,
-	// SecurityException, JSONException, JsonParseException,
-	// JsonMappingException, IOException {
-	// String url = Config.TARGET_ADDRESS
-	// + Config.CALL_GET_TRANSIT_TIME_BY_ROUTE + "/" + routeId + "/"
-	// + from_day + "/" + to_day;
-	//
-	// MessageRequest req = new MessageRequest(
-	// GlobalConfig.getAppUrl(JPHelper.mContext), url);
-	// req.setMethod(Method.GET);
-	// req.setQuery("complex=true");
-	//
-	// MessageResponse res = JPHelper.instance.getProtocolCarrier()
-	// .invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
-	//
-	// return eu.trentorise.smartcampus.android.common.Utils
-	// .convertJSONToObject(res.getBody(), TimeTable.class);
-	// }
 
 	public static TimeTable getLocalTransitTimeTableById(long from_day,
 			long to_day, String routeId) throws ConnectionException,
