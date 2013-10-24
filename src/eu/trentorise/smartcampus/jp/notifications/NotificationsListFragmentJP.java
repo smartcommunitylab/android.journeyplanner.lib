@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 
@@ -36,46 +37,71 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 public class NotificationsListFragmentJP extends SherlockListFragment {
 
 	private NotificationsListAdapterJP adapter;
+	private final static String CORE_MOBILITY = "core.mobility";
+	private static final int MAX_MSG = 50;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle bundle) {
 		return inflater.inflate(R.layout.notifications_list_jp, container);
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		FeedbackFragmentInflater.inflateHandleButton(getSherlockActivity(), getView());
+		FeedbackFragmentInflater.inflateHandleButton(getSherlockActivity(),
+				getView());
 
-		adapter = new NotificationsListAdapterJP(getActivity(), R.layout.notifications_row_jp);
+		adapter = new NotificationsListAdapterJP(getActivity(),
+				R.layout.notifications_row_jp);
 		setListAdapter(adapter);
 		adapter.clear();
 
 		// instantiate again NotificationsHelper if needed
-		String appToken = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_APP_TOKEN);
-		String syncDbName = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_SYNC_DB_NAME);
-		String syncService = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_SYNC_SERVICE);
-		String authority = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_AUTHORITY);
+		String appToken = getSherlockActivity().getIntent().getStringExtra(
+				NotificationsHelper.PARAM_APP_TOKEN);
+		String syncDbName = getSherlockActivity().getIntent().getStringExtra(
+				NotificationsHelper.PARAM_SYNC_DB_NAME);
+		String syncService = getSherlockActivity().getIntent().getStringExtra(
+				NotificationsHelper.PARAM_SYNC_SERVICE);
+		String authority = getSherlockActivity().getIntent().getStringExtra(
+				NotificationsHelper.PARAM_AUTHORITY);
 
 		// instantiate again JPHelper if needed
 		if (!JPHelper.isInitialized()) {
 			JPHelper.init(getSherlockActivity());
 		}
 
-		if (!NotificationsHelper.isInstantiated() && appToken != null && syncDbName != null && syncService != null
+		if (!NotificationsHelper.isInstantiated() && appToken != null
+				&& syncDbName != null && syncService != null
 				&& authority != null) {
-			NotificationsHelper.init(getSherlockActivity(), appToken, syncDbName, syncService, authority);
+			try {
+				NotificationsHelper.init(getSherlockActivity(), appToken,
+						syncDbName, syncService, authority, CORE_MOBILITY,
+						MAX_MSG);
+				new SCAsyncTask<Void, Void, List<Notification>>(
+						getSherlockActivity(), new NotificationsLoader(
+								getSherlockActivity())).execute();
+			} catch (Exception e) {
+				Log.e(getClass().getName(), e.toString());
+				Toast.makeText(getActivity().getApplicationContext(),
+						getString(R.string.app_failure_operation),
+						Toast.LENGTH_SHORT).show();
+				getActivity().finish();
+			}
 		}
 
-		new SCAsyncTask<Void, Void, List<Notification>>(getSherlockActivity(), new NotificationsLoader(getSherlockActivity())).execute();
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		if (adapter.getItem(position).getEntities() != null && !adapter.getItem(position).getEntities().isEmpty()) {
-			String objectId = adapter.getItem(position).getEntities().get(0).getId();
-			SCAsyncTask<String, Void, Object> viewDetailsTask = new SCAsyncTask<String, Void, Object>(getSherlockActivity(),
+		if (adapter.getItem(position).getEntities() != null
+				&& !adapter.getItem(position).getEntities().isEmpty()) {
+			String objectId = adapter.getItem(position).getEntities().get(0)
+					.getId();
+			SCAsyncTask<String, Void, Object> viewDetailsTask = new SCAsyncTask<String, Void, Object>(
+					getSherlockActivity(),
 					new NotificationsAsyncTaskProcessorJP(getSherlockActivity()));
 			viewDetailsTask.execute(objectId);
 		}
@@ -102,7 +128,8 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 	/*
 	 * AsyncTask
 	 */
-	private class NotificationsAsyncTaskProcessorJP extends AbstractAsyncTaskProcessor<String, Object> {
+	private class NotificationsAsyncTaskProcessorJP extends
+			AbstractAsyncTaskProcessor<String, Object> {
 
 		private Context ctx;
 
@@ -112,10 +139,11 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 		}
 
 		@Override
-		public Object performAction(String... params) throws SecurityException, ConnectionException, Exception {
+		public Object performAction(String... params) throws SecurityException,
+				ConnectionException, Exception {
 			String id = params[0];
 
-			return JPHelper.getItineraryObject(id,JPHelper.getAuthToken(ctx));
+			return JPHelper.getItineraryObject(id, JPHelper.getAuthToken(ctx));
 		}
 
 		@Override
@@ -124,19 +152,25 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 				return;
 
 			Fragment fragment = null;
-			FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			FragmentTransaction fragmentTransaction = getSherlockActivity()
+					.getSupportFragmentManager().beginTransaction();
+			fragmentTransaction
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
 			if (result instanceof BasicItinerary) {
-				fragment = MyItineraryFragment.newInstance((BasicItinerary) result);
-				fragmentTransaction.replace(Config.mainlayout, fragment, Config.MY_JOURNEYS_FRAGMENT_TAG);
+				fragment = MyItineraryFragment
+						.newInstance((BasicItinerary) result);
+				fragmentTransaction.replace(Config.mainlayout, fragment,
+						Config.MY_JOURNEYS_FRAGMENT_TAG);
 			} else if (result instanceof BasicRecurrentJourney) {
 				fragment = new MyRecurItineraryFragment();
 				Bundle b = new Bundle();
-				b.putSerializable(MyRecurItineraryFragment.PARAMS, (BasicRecurrentJourney) result);
+				b.putSerializable(MyRecurItineraryFragment.PARAMS,
+						(BasicRecurrentJourney) result);
 				b.putBoolean(MyRecurItineraryFragment.PARAM_EDITING, false);
 				fragment.setArguments(b);
-				fragmentTransaction.replace(Config.mainlayout, fragment, Config.MY_RECUR_JOURNEYS_FRAGMENT_TAG);
+				fragmentTransaction.replace(Config.mainlayout, fragment,
+						Config.MY_RECUR_JOURNEYS_FRAGMENT_TAG);
 			}
 
 			if (fragment != null) {
@@ -147,20 +181,24 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 
 	}
 
-	private class NotificationsLoader extends AbstractAsyncTaskProcessor<Void, List<Notification>> {
+	private class NotificationsLoader extends
+			AbstractAsyncTaskProcessor<Void, List<Notification>> {
 
 		public NotificationsLoader(Activity activity) {
 			super(activity);
 		}
 
 		@Override
-		public List<Notification> performAction(Void... params) throws SecurityException, ConnectionException, Exception {
-			return NotificationsHelper.getNotifications(getNotificationFilter(), 0, -1, 0);
+		public List<Notification> performAction(Void... params)
+				throws SecurityException, ConnectionException, Exception {
+			return NotificationsHelper.getNotifications(
+					getNotificationFilter(), 0, -1, 0);
 		}
 
 		@Override
 		public void handleResult(List<Notification> notificationsList) {
-			TextView listEmptyTextView = (TextView) getView().findViewById(R.id.jp_list_text_empty);
+			TextView listEmptyTextView = (TextView) getView().findViewById(
+					R.id.jp_list_text_empty);
 
 			if (!notificationsList.isEmpty()) {
 				adapter.clear();

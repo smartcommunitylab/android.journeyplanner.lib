@@ -97,7 +97,7 @@ public class JPHelper {
 
 	private SyncStorageWithPaging storage = null;
 
-	private static final String MOBILITY_URL = "/core.mobility";
+	public static final String MOBILITY_URL = "/core.mobility";
 	private static final String TERRITORY_URL = "/core.territory";
 
 	// tutorial's stuff
