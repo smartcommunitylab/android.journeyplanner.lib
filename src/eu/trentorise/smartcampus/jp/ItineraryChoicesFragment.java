@@ -31,25 +31,24 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.actionbarsherlock.app.SherlockFragment;
-
+import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.ItinerariesListAdapter;
 import eu.trentorise.smartcampus.jp.helper.Utils;
+import eu.trentorise.smartcampus.jp.helper.processor.PlanNewJourneyProcessor;
 
 public class ItineraryChoicesFragment extends FeedbackFragment {
 
 	private static final String ITINERARIES = "itineraries";
 	private static final String JOURNEY = "journey";
 	private SingleJourney singleJourney;
-	private List<Itinerary> itineraries;
+	private List<Itinerary> itineraries = new ArrayList<Itinerary>();
 	private ItinerariesListAdapter adapter;
+	private LinearLayout mNoItems;
 
-	public static ItineraryChoicesFragment newInstance(SingleJourney singleJourney, List<Itinerary> itineraries) {
+	public static ItineraryChoicesFragment newInstance(SingleJourney singleJourney) {
 		ItineraryChoicesFragment f = new ItineraryChoicesFragment();
 		f.singleJourney = singleJourney;
-		f.itineraries = itineraries;
 		return f;
 	}
 	
@@ -100,17 +99,14 @@ public class ItineraryChoicesFragment extends FeedbackFragment {
 		toTextView.setText(singleJourney.getTo().getName());
 
 		ListView choicesList = (ListView) getView().findViewById(R.id.choices_listView);
-		LinearLayout noitems = (LinearLayout) getView().findViewById(R.id.no_items_label);
-		if ((itineraries==null)||(itineraries.size()==0))
-			{
-			//put "empty string"
-			noitems.setVisibility(View.VISIBLE);
-			}
-		else {
-			noitems.setVisibility(View.GONE);
-		}
+		mNoItems = (LinearLayout) getView().findViewById(R.id.no_items_label);
+		mNoItems.setVisibility(View.GONE);
 		adapter = new ItinerariesListAdapter(getSherlockActivity(), R.layout.itinerarychoices_row, itineraries);
 		choicesList.setAdapter(adapter);
+
+		SCAsyncTask<SingleJourney, Void, List<Itinerary>> task = new SCAsyncTask<SingleJourney, Void, List<Itinerary>>(
+				getSherlockActivity(), new PlanNewJourneyProcessor(getSherlockActivity(), adapter, mNoItems));
+		task.execute(singleJourney);
 
 		choicesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override

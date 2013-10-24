@@ -15,7 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp;
 
-import it.sayservice.platform.smartplanner.data.message.Itinerary;
 import it.sayservice.platform.smartplanner.data.message.Position;
 import it.sayservice.platform.smartplanner.data.message.TType;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
@@ -33,6 +32,8 @@ import android.content.SharedPreferences;
 import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -53,7 +54,6 @@ import com.google.android.maps.GeoPoint;
 
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper;
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper.OnAddressSelectedListener;
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.common.SCGeocoder;
 import eu.trentorise.smartcampus.android.common.Utils;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
@@ -62,7 +62,6 @@ import eu.trentorise.smartcampus.jp.custom.UserPrefsHolder;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.PrefsHelper;
-import eu.trentorise.smartcampus.jp.helper.processor.PlanNewJourneyProcessor;
 
 public class PlanNewJourneyFragment extends FeedbackFragment {
 
@@ -219,10 +218,12 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 				sj.setTransportTypes((TType[]) userPrefsHolder.getTransportTypes());
 				sj.setRouteType(userPrefsHolder.getRouteType());
 
-				SCAsyncTask<SingleJourney, Void, List<Itinerary>> task = new SCAsyncTask<SingleJourney, Void, List<Itinerary>>(
-						getSherlockActivity(), new PlanNewJourneyProcessor(getSherlockActivity(), sj,
-								PlanNewJourneyFragment.this.getTag()));
-				task.execute(sj);
+				FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
+				Fragment fragment = ItineraryChoicesFragment.newInstance(sj);
+				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+				fragmentTransaction.replace(Config.mainlayout, fragment, fragment.getTag());
+				fragmentTransaction.addToBackStack(fragment.getTag());
+				fragmentTransaction.commit();
 			}
 		});
 		// hide keyboard if it is still open
