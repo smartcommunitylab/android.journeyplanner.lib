@@ -25,7 +25,6 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 /**
  * @author raman
@@ -33,6 +32,10 @@ import android.widget.Toast;
  */
 public abstract class CustomGridView<T> extends View {
 
+	/**
+	 * 
+	 */
+	private static final String TEXT = "00000";
 	private int numRows;
 	private int numCols;
 	private int rowHeight;
@@ -220,4 +223,19 @@ public abstract class CustomGridView<T> extends View {
 	public void setData(List<T> data) {
 		this.data = data;
 	}
+	
+	protected int calculateFontSize(Paint p) {
+		int size = 10;
+		p.setTextSize(size);
+		float width = 0;
+		Rect bounds = new Rect();
+		int colWidth = TTHelper.colWidth(getContext());
+		while (width < colWidth*0.5) {
+			p.setTextSize(size++);
+			p.getTextBounds(TEXT, 0, TEXT.length(), bounds);
+			width = bounds.width();
+		}
+		return size - 1;
+	}
+	
 }

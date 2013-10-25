@@ -99,11 +99,15 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			savedInstanceState.putSerializable(TO, toPosition);
 		}
 
-		fromFav = (Boolean) fromFavBtn.getTag();
-		savedInstanceState.putBoolean(FROM_STAR, (Boolean) fromFav);
+		if (fromFavBtn != null) {
+			fromFav = (Boolean) fromFavBtn.getTag();
+			savedInstanceState.putBoolean(FROM_STAR, (Boolean) fromFav);
+		}
 
-		toFav = (Boolean) toFavBtn.getTag();
-		savedInstanceState.putBoolean(TO_STAR, (Boolean) toFav);
+		if (toFavBtn != null) {
+			toFav = (Boolean) toFavBtn.getTag();
+			savedInstanceState.putBoolean(TO_STAR, (Boolean) toFav);
+		}
 	}
 
 	@Override

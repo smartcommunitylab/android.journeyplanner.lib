@@ -80,11 +80,11 @@ public class DelaysView extends CustomGridView<Map<String,String>> {
 		mHLinePaint.setStrokeWidth(2);
 
 		mUTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mUTextPaint.setTextSize(18);
+		mUTextPaint.setTextSize(calculateFontSize(mUTextPaint));
 		mUTextPaint.setColor(getContext().getResources().getColor(R.color.blue));
 
 		mSTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mSTextPaint.setTextSize(18);
+		mSTextPaint.setTextSize(calculateFontSize(mSTextPaint));
 		mSTextPaint.setColor(getContext().getResources().getColor(R.color.red));
 	}
 
