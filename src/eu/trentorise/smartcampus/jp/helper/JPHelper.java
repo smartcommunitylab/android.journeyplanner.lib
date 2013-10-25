@@ -77,6 +77,7 @@ import eu.trentorise.smartcampus.protocolcarrier.custom.MessageResponse;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
+import eu.trentorise.smartcampus.storage.BasicObject;
 import eu.trentorise.smartcampus.storage.DataException;
 import eu.trentorise.smartcampus.storage.sync.SyncStorage;
 import eu.trentorise.smartcampus.storage.sync.SyncStorageWithPaging;
@@ -199,8 +200,9 @@ public class JPHelper {
 
 		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
 				getAuthToken());
-		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObjects(res.getBody(), BasicItinerary.class);
-
+		List<BasicItinerary> objects = eu.trentorise.smartcampus.android.common.Utils.convertJSONToObjects(res.getBody(), BasicItinerary.class);
+		if (objects == null) throw new ProtocolException("Incorrect answer received");
+		return objects;
 	}
 
 	public static List<List<Map<String, String>>> getDelay(String routeId, long from_time, long to_time)
@@ -216,7 +218,10 @@ public class JPHelper {
 		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
 				getAuthToken());
 
-		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), TimeTable.class).getDelays();
+		TimeTable tt = eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), TimeTable.class);
+		if (tt == null) throw new ProtocolException("Incorrect answer received");
+
+		return tt.getDelays();
 	}
 
 	public static void deleteMyItinerary(String id) throws ConnectionException, ProtocolException, SecurityException {
@@ -243,7 +248,9 @@ public class JPHelper {
 
 		}
 		// se cambiato restituisce il valore del monitor
-		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), Boolean.class);
+		Boolean b = eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), Boolean.class);
+		if (b == null) throw new ProtocolException("Incorrect answer received");
+		return b;
 	}
 
 	public static boolean monitorMyRecItinerary(boolean monitor, String id) throws ConnectionException, ProtocolException,
@@ -258,8 +265,9 @@ public class JPHelper {
 			res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
 
 		}
-		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), Boolean.class);
-
+		Boolean b = eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), Boolean.class);
+		if (b == null) throw new ProtocolException("Incorrect answer received");
+		return b;
 	}
 
 	/*
@@ -495,6 +503,7 @@ public class JPHelper {
 				getAuthToken());
 		if (res.getBody() != null && res.getBody().length() != 0) {
 			return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), BasicItinerary.class);
+			
 		} else {
 			req = new MessageRequest(GlobalConfig.getAppUrl(JPHelper.mContext), Config.TARGET_ADDRESS + Config.CALL_GET_RECUR
 					+ "/" + objectId);
@@ -543,7 +552,9 @@ public class JPHelper {
 
 		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
 				getAuthToken());
-		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), RecurrentJourney.class);
+		RecurrentJourney rj = eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), RecurrentJourney.class);
+		if (rj == null) throw new ProtocolException("Incorrect answer received");
+		return rj;
 		// return
 		// eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(exammpleRouteString,
 		// RecurrentJourney.class);
@@ -588,8 +599,10 @@ public class JPHelper {
 		// return
 		// eu.trentorise.smartcampus.android.common.Utils.convertJSONToObjects(myJourneysString,
 		// BasicRecurrentJourney.class);
-		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObjects(res.getBody(), BasicRecurrentJourney.class);
-
+		List<BasicRecurrentJourney> objects = eu.trentorise.smartcampus.android.common.Utils.convertJSONToObjects(res.getBody(), BasicRecurrentJourney.class);
+		
+		if (objects == null) throw new ProtocolException("Incorrect answer received");
+		return objects;
 	}
 
 	// private static String busTTreturn = "{"+
@@ -626,7 +639,10 @@ public class JPHelper {
 		MessageResponse res = JPHelper.instance.getProtocolCarrier().invokeSync(req, JPParamsHelper.getAppToken(),
 				getAuthToken());
 
-		return eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), TimeTable.class);
+		TimeTable tt = eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(res.getBody(), TimeTable.class);
+		if (tt == null) throw new ProtocolException("Incorrect answer received");
+
+		return tt;
 	}
 
 	public static TimeTable getLocalTransitTimeTableById(long from_day, long to_day, String routeId)
@@ -782,6 +798,8 @@ public class JPHelper {
 				new TypeReference<List<ParkingSerial>>() {
 				});
 
+		if (objects == null) throw new ProtocolException("Incorrect answer received");
+
 		return objects;
 	}
 
@@ -805,6 +823,7 @@ public class JPHelper {
 				new TypeReference<List<AlertRoadLoc>>() {
 				});
 
+		if (objects == null) throw new ProtocolException("Incorrect answer received");
 		return objects;
 	}
 
