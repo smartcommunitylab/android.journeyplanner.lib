@@ -60,9 +60,14 @@ public class AddressSelectActivity extends BaseActivity implements OnMapLongClic
 			mMap.setOnMapLongClickListener(this);
 			mMap.setMyLocationEnabled(true);
 
-			if (JPHelper.getLocationHelper().getLocation() != null) {
-				LatLng centerLatLng = new LatLng(JPHelper.getLocationHelper().getLocation().getLatitudeE6() / 1e6,
+			LatLng centerLatLng = null;
+			if (JPParamsHelper.getCenterMap() != null) {
+				centerLatLng = new LatLng(JPParamsHelper.getCenterMap().get(0),JPParamsHelper.getCenterMap().get(1));
+			} else if (JPHelper.getLocationHelper().getLocation() != null) {
+				centerLatLng = new LatLng(JPHelper.getLocationHelper().getLocation().getLatitudeE6() / 1e6,
 						JPHelper.getLocationHelper().getLocation().getLongitudeE6() / 1e6);
+			}
+			if (centerLatLng != null) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, JPParamsHelper.getZoomLevelMap()));
 			} else {
 				mMap.moveCamera(CameraUpdateFactory.zoomTo(JPParamsHelper.getZoomLevelMap()));
@@ -107,7 +112,7 @@ public class AddressSelectActivity extends BaseActivity implements OnMapLongClic
 			String addressLine = "LON " + Double.toString(address.getLongitude()) + ", LAT "
 					+ Double.toString(address.getLatitude());
 			address.setAddressLine(0, addressLine);
-			new InfoDialog(AddressSelectActivity.this, addresses.get(0)).show(getSupportFragmentManager(), "me");
+			new InfoDialog(AddressSelectActivity.this, address).show(getSupportFragmentManager(), "me");
 		}
 	}
 

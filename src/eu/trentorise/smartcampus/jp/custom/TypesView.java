@@ -52,6 +52,7 @@ public class TypesView extends TTView {
 	}
 	
 	private String getText(String text) {
+		text = text.trim();
 		if (text.toLowerCase().startsWith("r"))
 			return "R";
 		if (text.toLowerCase().startsWith("e"))

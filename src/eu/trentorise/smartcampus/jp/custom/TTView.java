@@ -20,7 +20,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.widget.Toast;
 import eu.trentorise.smartcampus.jp.R;
 
 /**
@@ -80,7 +79,7 @@ public class TTView extends CustomGridView<String> {
 		mHLinePaint.setStrokeWidth(2);
 
 		mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mTextPaint.setTextSize(18);
+		mTextPaint.setTextSize(calculateFontSize(mTextPaint));
 	}
 
 	@Override

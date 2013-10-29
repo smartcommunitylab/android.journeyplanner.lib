@@ -58,7 +58,7 @@
                 android:id="@+id/smartcheck_alertdetails_gotomap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center|bottom"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/empty"
                 android:src="@drawable/ic_menu_map_pink" />

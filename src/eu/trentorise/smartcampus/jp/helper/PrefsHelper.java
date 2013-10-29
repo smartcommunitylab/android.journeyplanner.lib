@@ -32,6 +32,8 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TableLayout;
@@ -43,16 +45,26 @@ import eu.trentorise.smartcampus.jp.custom.UserPrefsHolder;
 
 public class PrefsHelper {
 
+	private static final Set<TType> BIKE_TYPES = new HashSet<TType>();
+	static {
+		BIKE_TYPES.add(TType.BICYCLE);
+		BIKE_TYPES.add(TType.SHAREDBIKE);
+		BIKE_TYPES.add(TType.SHAREDBIKE_WITHOUT_STATION);
+	}
+			
 	public static void buildUserPrefsView(Context ctx, UserPrefsHolder userPrefsHolder, View view) {
 
-		TableLayout tTypesTableLayout = (TableLayout) view.findViewById(R.id.transporttypes_table);
+		final TableLayout tTypesTableLayout = (TableLayout) view.findViewById(R.id.transporttypes_table);
+		final RadioGroup rTypesRadioGroup = (RadioGroup) view.findViewById(R.id.routetypes_radioGroup);
+		rTypesRadioGroup.removeAllViews(); // prevent duplications
 		tTypesTableLayout.removeAllViews(); // prevents duplications
-		RadioGroup rTypesRadioGroup;
 
 		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
 		tTypesTableLayout.setShrinkAllColumns(true);
 
+		boolean bikeChecked = false;
+		
 		TableRow tableRow = new TableRow(ctx);
 		for (int tCounter = 0; tCounter < Config.TTYPES_ALLOWED.length; tCounter++) {
 			TType tType = Config.TTYPES_ALLOWED[tCounter];
@@ -70,6 +82,23 @@ public class PrefsHelper {
 			cb.setTextColor(ctx.getResources().getColor(android.R.color.black));
 			cb.setTag(tType);
 			cb.setChecked(tTypesList.contains(tType));
+			if (BIKE_TYPES.contains(tType)) {
+				cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+						RadioButton rb = (RadioButton) rTypesRadioGroup.findViewWithTag(RType.safest);
+						if (rb != null) {
+							boolean isBikeChecked = isChecked;
+							for (TType bt : BIKE_TYPES) {
+								CheckBox cb = (CheckBox)tTypesTableLayout.findViewWithTag(bt);
+								isBikeChecked |= cb != null && cb.isChecked();
+							}
+							rb.setVisibility(isBikeChecked ? View.VISIBLE : View.GONE);
+						}
+					}
+				} );
+				bikeChecked |= cb.isChecked();
+			}
 
 			tableRow.addView(cb);
 		}
@@ -79,11 +108,7 @@ public class PrefsHelper {
 		tableRow.setGravity(Gravity.CENTER_VERTICAL);
 		tableRow.setLayoutParams(params);
 
-		rTypesRadioGroup = (RadioGroup) view.findViewById(R.id.routetypes_radioGroup);
-		rTypesRadioGroup.removeAllViews(); // prevent duplications
-
 		for (RType rType : Config.RTYPES_ALLOWED) {
-
 			RadioButton rb = new RadioButton(ctx);
 			rb.setText(Utils.getRTypeUIString(ctx, rType));
 			rb.setTextColor(ctx.getResources().getColor(android.R.color.black));
@@ -92,7 +117,9 @@ public class PrefsHelper {
 			if (rType.equals(userPrefsHolder.getRouteType())) {
 				rTypesRadioGroup.check(rb.getId());
 			}
-
+			if (rType.equals(RType.safest)) {
+				rb.setVisibility(bikeChecked ? View.VISIBLE : View.GONE);
+			}
 		}
 
 	}

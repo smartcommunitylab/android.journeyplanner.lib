@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
 //import com.google.android.gms.maps.GoogleMap;
@@ -47,7 +48,16 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 		super();
 		this.mActivity = mActivity;
 		this.selectedAgencyIds = selectedAgencyIds;
-		this.location = new double[] { latLng.latitude, latLng.longitude };
+		if (latLng != null) {
+			this.location = new double[] { latLng.latitude, latLng.longitude };
+		} else {
+			List<Double> center = JPParamsHelper.getCenterMap();
+			if (center != null) {
+				this.location = new double[] {center.get(0),center.get(1)};
+			}
+
+		}
+
 		this.diagonal = diagonal;
 		this.map = map;
 		this.zoomLevelChanged = zoomLevelChanged;

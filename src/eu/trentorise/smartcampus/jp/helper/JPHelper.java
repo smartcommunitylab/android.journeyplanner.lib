@@ -189,7 +189,7 @@ public class JPHelper {
 	public static List<Delay> getDelay(String routeId, long from_time,
 			long to_time,String authToken) throws ProtocolException, MobilityServiceException {
 		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + "core.mobility");
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getDelays(routeId, authToken);
 	}
 

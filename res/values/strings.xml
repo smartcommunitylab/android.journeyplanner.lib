@@ -41,7 +41,7 @@
     <string name="tab_lines">Lines</string>
     <string name="tab_zones">Zones</string>
     <string name="tab_parkings">Parkings</string>
-    <string name="tab_alerts">Alerts</string>
+    <string name="tab_alerts">Decrees</string>
     <string name="dialog_itineraryname_hint">Journey name</string>
     <string name="plan_location">Location</string>
     <string name="plan_datetime">Departure</string>
@@ -196,7 +196,7 @@
     <string name="smart_check_list_train_timetable">Train Timetable</string>
     <string name="smart_check_list_parking_trento">Trento Parking Availability</string>
     <string name="smart_check_list_parking_rovereto">Rovereto Parking Availability</string>
-    <string name="smart_check_list_alerts_rovereto">Rovereto Alerts</string>
+    <string name="smart_check_list_alerts_rovereto">Rovereto Traffic Decrees</string>
     
     <string name="smart_check_stops_type_mobility">Mobility</string>
     <string name="smart_check_stops_delay">%s\' delay</string>

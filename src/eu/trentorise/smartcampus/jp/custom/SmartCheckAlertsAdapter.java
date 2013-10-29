@@ -89,7 +89,7 @@ public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoadLoc> {
 		holder.alertRoadStreet.setText(alertRoad.getRoad().getStreet());
 
 		// description
-		holder.alertRoadDescription.setText(alertRoad.getDescription());
+		holder.alertRoadDescription.setText(extractShortDescription(alertRoad));
 
 		// type
 		holder.alertRoadTypes.removeAllViews();
@@ -97,10 +97,11 @@ public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoadLoc> {
 			for (AlertRoadType type : alertRoad.getChangeTypes()) {
 				ImageView typeImageView = new ImageView(mContext);
 				typeImageView.setImageResource(AlertRoadsHelper.getDrawableResourceByType(type));
-				final float scale = mContext.getResources().getDisplayMetrics().density;
-				int pixels = (int) (24 * scale + 0.5f);
+				float scale = mContext.getResources().getDisplayMetrics().density;
+				int pixels = (int) (36 * scale + 0.5f);
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(pixels, pixels);
 				typeImageView.setLayoutParams(params);
+				typeImageView.setPadding(0, 2, 0, 2);
 				holder.alertRoadTypes.addView(typeImageView);
 			}
 			holder.alertRoadTypes.setVisibility(View.VISIBLE);
@@ -109,6 +110,17 @@ public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoadLoc> {
 		}
 
 		return row;
+	}
+
+	/**
+	 * @param alertRoad
+	 * @return
+	 */
+	private static String extractShortDescription(AlertRoadLoc alertRoad) {
+		if (alertRoad.getDescription().indexOf(':') > 0) {
+			return alertRoad.getDescription().substring(alertRoad.getDescription().indexOf(':')+1).trim();
+		}
+		return alertRoad.getDescription();
 	}
 
 	public static class AlertRoadHolder {

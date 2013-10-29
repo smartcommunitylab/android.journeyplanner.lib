@@ -184,7 +184,7 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 							new DeleteMyRecurItineraryProcessor(getSherlockActivity(), MonitorJourneyFragment.this.getTag()));
 					task.execute(params.getName(), params.getClientId());
 					dialog.dismiss();
-					getSherlockActivity().getSupportFragmentManager().popBackStackImmediate();
+//					getSherlockActivity().getSupportFragmentManager().popBackStackImmediate();
 				}
 			});
 			deleteAlertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

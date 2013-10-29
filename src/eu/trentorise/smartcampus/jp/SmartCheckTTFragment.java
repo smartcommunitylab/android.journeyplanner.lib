@@ -391,43 +391,11 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 			if (mProgressBar.isShown())
 				toggleProgressDialog();
 			// refresh delay with new data
-			int tempNumbCol = 0;
-			// for (List<Map<String, String>> tt : result) {
-			// tempNumbCol += tt.size();
-			// }
-			for (int i = 0; i < result.size(); i++) {
-				tempNumbCol += result.get(i).getValues().size();
-			}
-
-			final int NUM_COLS = tempNumbCol;
-			int indexOfDay = 0;
-			int indexOfCourseInThatDay = 0;
-
 			delays = new HashMap[NUM_COLS];
 
 			for (int j = 0; j < NUM_COLS; j++) {
-				while (result.get(indexOfDay).getValues().isEmpty()) {
-					if (indexOfDay == 0) {
-						displayedDay = 1;
-					}
-					indexOfDay++;
-				}
-				// hook
-
-				Map<CreatorType, String> actualDelays = result.get(indexOfDay)
-						.getValues();
-				delays[j] = actualDelays;
-
-				if (indexOfCourseInThatDay == result.get(indexOfDay)
-						.getValues().size() - 1) {
-					if (indexOfDay < DAYS_WINDOWS)
-						indexOfDay++;
-					indexOfCourseInThatDay = 0;
-				} else {
-					indexOfCourseInThatDay++;
-				}
+				delays[j] = result.get(j).getValues();
 			}
-
 			// reload Delay part
 			reloadDelays();
 		}

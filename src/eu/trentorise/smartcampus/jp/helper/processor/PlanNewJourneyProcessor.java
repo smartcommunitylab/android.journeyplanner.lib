@@ -20,44 +20,47 @@ import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
 
 import java.util.List;
 
-import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-
-import eu.trentorise.smartcampus.jp.Config;
-import eu.trentorise.smartcampus.jp.ItineraryChoicesFragment;
+import android.app.Activity;
+import android.view.View;
+import android.widget.LinearLayout;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
+import eu.trentorise.smartcampus.jp.custom.ItinerariesListAdapter;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class PlanNewJourneyProcessor extends AbstractAsyncTaskProcessor<SingleJourney, List<Itinerary>> {
 
-	private SingleJourney singleJourney;
-	private String mTag;
-	private Context ctx;
+	private ItinerariesListAdapter adapter = null;
+	private LinearLayout mNoItems = null;
+	
 
-	public PlanNewJourneyProcessor(SherlockFragmentActivity activity, SingleJourney singleJourney, String mTag) {
+	public PlanNewJourneyProcessor(Activity activity, ItinerariesListAdapter adapter, LinearLayout mNoItems) {
 		super(activity);
-		ctx=activity.getApplicationContext();
-		this.singleJourney = singleJourney;
-		this.mTag = mTag;
+		this.adapter = adapter;
+		this.mNoItems  = mNoItems;
 	}
 
 	@Override
 	public List<Itinerary> performAction(SingleJourney... array) throws SecurityException, Exception {
-		return JPHelper.planSingleJourney(array[0],JPHelper.getAuthToken(ctx));
+		return JPHelper.planSingleJourney(array[0],JPHelper.getAuthToken(activity));
 	}
 
 	@Override
 	public void handleResult(List<Itinerary> itineraries) {
-		FragmentTransaction fragmentTransaction = ((SherlockFragmentActivity)activity).getSupportFragmentManager().beginTransaction();
-		Fragment fragment = ItineraryChoicesFragment.newInstance(singleJourney, itineraries);
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		fragmentTransaction.replace(Config.mainlayout, fragment, mTag);
-		fragmentTransaction.addToBackStack(fragment.getTag());
-		fragmentTransaction.commit();
+		adapter.clear();
+		for (Itinerary myt : itineraries) {
+			adapter.add(myt);
+		}
+		adapter.notifyDataSetChanged();
+		if ((itineraries==null)||(itineraries.size()==0))
+		{
+		//put "empty string"
+		mNoItems.setVisibility(View.VISIBLE);
+		}
+	else {
+		mNoItems.setVisibility(View.GONE);
+	}
+		
 	}
 
 }

@@ -19,7 +19,6 @@ package eu.trentorise.smartcampus.jp.custom;
 import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -38,9 +37,9 @@ import eu.trentorise.smartcampus.jp.R;
 
 /**
  * @author raman
- * 
+ *
  */
-public class DelaysView extends CustomGridView<Map<CreatorType, String>> {
+public class DelaysView extends CustomGridView<Map<CreatorType,String>> {
 
 	protected Paint mVLinePaint;
 	protected Paint mHLinePaint;
@@ -81,74 +80,67 @@ public class DelaysView extends CustomGridView<Map<CreatorType, String>> {
 		mHLinePaint.setStrokeWidth(2);
 
 		mUTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mUTextPaint.setTextSize(18);
-		mUTextPaint
-				.setColor(getContext().getResources().getColor(R.color.blue));
+		mUTextPaint.setTextSize(calculateFontSize(mUTextPaint));
+		mUTextPaint.setColor(getContext().getResources().getColor(R.color.blue));
 
 		mSTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mSTextPaint.setTextSize(18);
+		mSTextPaint.setTextSize(calculateFontSize(mSTextPaint));
 		mSTextPaint.setColor(getContext().getResources().getColor(R.color.red));
 	}
 
 	@Override
-	protected void handleClick(Map<CreatorType, String> item) {
+	protected void handleClick(Map<CreatorType,String> item) {
+		if (item == null) return;
 		final Map<CreatorType, String> delaysCreatorTypesMap = new HashMap<CreatorType, String>();
 		for (Entry<CreatorType, String> delay : item.entrySet()) {
 			if (!delay.getValue().equalsIgnoreCase("0")) {
-				CreatorType ct = CreatorType.getAlertType(delay.getKey().toString());
+				CreatorType ct = delay.getKey();
 				delaysCreatorTypesMap.put(ct, delay.getValue());
 			}
-		}
+		}	
 		if (delaysCreatorTypesMap.size() > 0) {
 			DelaysDialogFragment delaysDialog = new DelaysDialogFragment();
 			Bundle args = new Bundle();
-			args.putSerializable(DelaysDialogFragment.ARG_DELAYS,
-					(Serializable) delaysCreatorTypesMap);
+			args.putSerializable(DelaysDialogFragment.ARG_DELAYS, (Serializable) delaysCreatorTypesMap);
 			delaysDialog.setArguments(args);
-			delaysDialog.show(((SherlockFragmentActivity) getContext())
-					.getSupportFragmentManager(), "delaysdialog");
+			delaysDialog.show(((SherlockFragmentActivity)getContext()).getSupportFragmentManager(), "delaysdialog");
 		}
 	}
 
 	@Override
-	protected void drawCell(Canvas canvas, Map<CreatorType, String> item, int row,
-			int col, int x, int y) {
-		Map<CreatorType, String> map = new HashMap<CreatorType, String>(2);
-		for (Iterator<Entry<CreatorType, String>> iterator = item.entrySet()
-				.iterator(); iterator.hasNext();) {
-			Entry<CreatorType, String> delay = iterator.next();
-			if (!delay.getValue().equalsIgnoreCase("0")) {
-				CreatorType ct = CreatorType.getAlertType(delay.getKey().toString());
-				map.put(ct, delay.getValue());
+	protected void drawCell(Canvas canvas, Map<CreatorType,String> item, int row, int col, int x, int y) {
+		Map<CreatorType,String> map = new HashMap<CreatorType, String>(2);
+		if (item != null) {
+			for (Iterator<Entry<CreatorType,String>> iterator = item.entrySet().iterator(); iterator.hasNext();) {
+				Entry<CreatorType,String> delay = iterator.next();
+				if (!delay.getValue().equalsIgnoreCase("0")) {
+					CreatorType ct = delay.getKey();
+					map.put(ct, delay.getValue());
+				}
 			}
 		}
-		int yPos = (int) ((y + getRowHeight() / 2) - ((mSTextPaint.descent() + mSTextPaint
-				.ascent()) / 2));
+		int yPos = (int) ((y+getRowHeight() / 2) - ((mSTextPaint.descent() + mSTextPaint.ascent()) / 2)) ; 
 		if (map.size() == 2) {
-			int xPos = (int) (x + getColWidth() / 4 - mSTextPaint
-					.measureText(map.get(CreatorType.SERVICE)) / 2);
-			canvas.drawText(map.get(CreatorType.SERVICE) + "'", xPos, yPos,
-					mSTextPaint);
-			xPos = (int) (x + 3 * getColWidth() / 4 - mUTextPaint
-					.measureText(map.get(CreatorType.USER)) / 2);
-			canvas.drawText(map.get(CreatorType.USER) + "'", xPos, yPos,
-					mUTextPaint);
+			int xPos = (int)(x + getColWidth()/4 - mSTextPaint.measureText(map.get(CreatorType.SERVICE))/2);
+			canvas.drawText(map.get(CreatorType.SERVICE) + "'", xPos, yPos, mSTextPaint);
+			xPos = (int)(x + 3*getColWidth()/4 - mUTextPaint.measureText(map.get(CreatorType.USER))/2);
+			canvas.drawText(map.get(CreatorType.USER) + "'", xPos, yPos, mUTextPaint);
 		} else if (map.size() == 1) {
-			Paint p = map.containsKey(CreatorType.SERVICE) ? mSTextPaint
-					: mUTextPaint;
+			Paint p = map.containsKey(CreatorType.SERVICE) ? mSTextPaint : mUTextPaint;
 			String text = map.values().iterator().next();
-			int xPos = (int) (x + getColWidth() / 2 - mUTextPaint
-					.measureText(text) / 2);
+			int xPos = (int)(x + getColWidth()/2 - mUTextPaint.measureText(text)/2);
 			canvas.drawText(text + "'", xPos, yPos, p);
-		}
+		} 
 	}
-	
+
+
+	@Override
 	public void setData(List<Map<CreatorType, String>> data) {
 		super.setData(data);
 		setNumRows(1);
 		setNumCols(data == null ? 0 : data.size());
 	}
-
+	
 	@Override
 	public int getRowHeight() {
 		return TTHelper.rowHeight(getContext());
@@ -157,5 +149,5 @@ public class DelaysView extends CustomGridView<Map<CreatorType, String>> {
 	@Override
 	public int getColWidth() {
 		return TTHelper.colWidth(getContext());
-	}
+	}	
 }
