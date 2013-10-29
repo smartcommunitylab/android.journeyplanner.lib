@@ -59,30 +59,20 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 		adapter.clear();
 
 		// instantiate again NotificationsHelper if needed
-		String appToken = getSherlockActivity().getIntent().getStringExtra(
-				NotificationsHelper.PARAM_APP_TOKEN);
-		String syncDbName = getSherlockActivity().getIntent().getStringExtra(
-				NotificationsHelper.PARAM_SYNC_DB_NAME);
-		String syncService = getSherlockActivity().getIntent().getStringExtra(
-				NotificationsHelper.PARAM_SYNC_SERVICE);
-		String authority = getSherlockActivity().getIntent().getStringExtra(
-				NotificationsHelper.PARAM_AUTHORITY);
+		String appToken = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_APP_TOKEN);
+		String syncDbName = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_SYNC_DB_NAME);
+		String syncService = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_SYNC_SERVICE);
+		String authority = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_AUTHORITY);
 
 		// instantiate again JPHelper if needed
 		if (!JPHelper.isInitialized()) {
 			JPHelper.init(getSherlockActivity());
 		}
 
-		if (!NotificationsHelper.isInstantiated() && appToken != null
-				&& syncDbName != null && syncService != null
+		if (!NotificationsHelper.isInstantiated() && appToken != null && syncDbName != null && syncService != null
 				&& authority != null) {
 			try {
-				NotificationsHelper.init(getSherlockActivity(), appToken,
-						syncDbName, syncService, authority, CORE_MOBILITY,
-						MAX_MSG);
-				new SCAsyncTask<Void, Void, List<Notification>>(
-						getSherlockActivity(), new NotificationsLoader(
-								getSherlockActivity())).execute();
+				NotificationsHelper.init(getSherlockActivity(), appToken, syncDbName, syncService, authority, CORE_MOBILITY, MAX_MSG);
 			} catch (Exception e) {
 				Log.e(getClass().getName(), e.toString());
 				Toast.makeText(getActivity().getApplicationContext(),
@@ -91,6 +81,8 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 				getActivity().finish();
 			}
 		}
+
+		new SCAsyncTask<Void, Void, List<Notification>>(getSherlockActivity(), new NotificationsLoader(getSherlockActivity())).execute();
 
 	}
 
