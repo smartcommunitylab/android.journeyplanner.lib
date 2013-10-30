@@ -128,8 +128,8 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 		 * 
 		 */
 
-		Map<CreatorType, String> delays = tripData.getDelay().getValues();
-		if (delays != null) {
+		if (tripData.getDelay() != null && tripData.getDelay().getValues() != null) {
+			Map<CreatorType, String> delays = tripData.getDelay().getValues();
 			if (delays.get(CreatorType.USER) != null) {
 				holder.delayUser
 						.setText(mContext.getString(R.string.smart_check_stops_delay_user, delays.get(CreatorType.USER)));
@@ -165,8 +165,8 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 			delaysLinearLayout.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Map<CreatorType, String> delays = tripData.getDelay().getValues();
-					if (delays != null && !delays.isEmpty()) {
+					if (tripData.getDelay() != null && tripData.getDelay().getValues() != null && !tripData.getDelay().getValues().isEmpty()) {
+						Map<CreatorType, String> delays = tripData.getDelay().getValues();
 						DelaysDialogFragment delaysDialog = new DelaysDialogFragment();
 						Bundle args = new Bundle();
 						args.putSerializable(DelaysDialogFragment.ARG_DELAYS, (Serializable) delays);

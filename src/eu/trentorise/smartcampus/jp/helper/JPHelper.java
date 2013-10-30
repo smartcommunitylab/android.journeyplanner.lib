@@ -520,7 +520,7 @@ public class JPHelper {
 		return TTHelper.getTTwithRouteIdAndTime(routeId, from_day, to_day);
 	}
 
-	public static List<SmartCheckStop> getStops(String agencyId,
+	public static List<SmartCheckStop> getStops(String[] agencyIds,
 			double[] location, double radius,String authToken) throws Exception {
 
 		ObjectFilter filter = new ObjectFilter();
@@ -531,8 +531,8 @@ public class JPHelper {
 		Map<String, Object> criteria = new HashMap<String, Object>();
 		criteria.put("source", "smartplanner-transitstops");
 
-		if (agencyId != null) {
-			criteria.put("customData.agencyId", agencyId);
+		if (agencyIds != null && agencyIds.length > 0) {
+			criteria.put("customData.agencyId", agencyIds);
 		}
 
 		filter.setCriteria(criteria);
@@ -540,7 +540,8 @@ public class JPHelper {
 		// filter by near me
 		if (location != null) {
 			filter.setCenter(location);
-			filter.setRadius(radius);
+			// radius is in meter. As for interface, the radius unit corresponds to ~ 100 km
+			filter.setRadius(radius/100000);
 		}
 
 		TerritoryService territoryService = new TerritoryService(

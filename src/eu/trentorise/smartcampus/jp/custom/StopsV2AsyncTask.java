@@ -75,10 +75,11 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 	protected Boolean doInBackground(Object... params) {
 		time = System.currentTimeMillis();
 		try {
-			for (int i = 0; i < selectedAgencyIds.length; i++) {
-				stops.addAll(JPHelper.getStops(selectedAgencyIds[i], location,
-						diagonal,JPHelper.getAuthToken(ctx)));
-			}
+//			for (int i = 0; i < selectedAgencyIds.length; i++) {
+//				stops.addAll(JPHelper.getStops(selectedAgencyIds[i], location,
+//						diagonal,JPHelper.getAuthToken(ctx)));
+//			}
+			stops.addAll(JPHelper.getStops(selectedAgencyIds, location, diagonal,JPHelper.getAuthToken(ctx)));
 		} catch (Exception e) {
 			Log.e(getClass().getSimpleName(), e.toString());
 			return false;
