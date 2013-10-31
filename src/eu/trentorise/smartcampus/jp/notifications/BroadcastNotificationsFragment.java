@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.jp.notifications;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
+import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
@@ -91,27 +93,24 @@ public class BroadcastNotificationsFragment extends FeedbackFragment {
 							getSherlockActivity().getApplicationContext(),
 							R.string.tmp, Toast.LENGTH_SHORT).show();
 				}
-				// TODO degio missing methond in new access provider
+				// TODO handle the anonymous user
 				// if (new
 				// AMSCAccessProvider().isUserAnonymous(getSherlockActivity()))
 				// {
 				// // show dialog box
 				// UserRegistration.upgradeuser(getSherlockActivity());
 				// }
-				// else if (fragment != null) {
-				//
-				// fragment.setArguments(bundle);
-				// FragmentTransaction fragmentTransaction =
-				// getSherlockActivity().getSupportFragmentManager()
-				// .beginTransaction();
-				// //
-				// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-				// // fragmentTransaction.detach(self);
-				// fragmentTransaction.replace(Config.mainlayout, fragment,
-				// Config.NOTIFICATIONS);
-				// fragmentTransaction.addToBackStack(fragment.getTag());
-				// fragmentTransaction.commit();
-				// }
+				// else 
+				if (fragment != null) {
+					 fragment.setArguments(bundle);
+					 FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
+					 //
+					 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+					 // fragmentTransaction.detach(self);
+					 fragmentTransaction.replace(Config.mainlayout, fragment, Config.NOTIFICATIONS);
+					 fragmentTransaction.addToBackStack(fragment.getTag());
+					 fragmentTransaction.commit();
+				 }
 			}
 		});
 
