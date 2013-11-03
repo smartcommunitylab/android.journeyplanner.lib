@@ -28,6 +28,7 @@ import eu.trentorise.smartcampus.jp.MyRecurItineraryFragment;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.notifications.NotificationsHelper;
@@ -58,21 +59,14 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 		setListAdapter(adapter);
 		adapter.clear();
 
-		// instantiate again NotificationsHelper if needed
-		String appToken = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_APP_TOKEN);
-		String syncDbName = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_SYNC_DB_NAME);
-		String syncService = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_SYNC_SERVICE);
-		String authority = getSherlockActivity().getIntent().getStringExtra(NotificationsHelper.PARAM_AUTHORITY);
-
 		// instantiate again JPHelper if needed
 		if (!JPHelper.isInitialized()) {
 			JPHelper.init(getSherlockActivity());
 		}
 
-		if (!NotificationsHelper.isInstantiated() && appToken != null && syncDbName != null && syncService != null
-				&& authority != null) {
+		if (!NotificationsHelper.isInstantiated()) {
 			try {
-				NotificationsHelper.init(getSherlockActivity(), appToken, syncDbName, syncService, authority, CORE_MOBILITY, MAX_MSG);
+				NotificationsHelper.init(getSherlockActivity(), JPParamsHelper.getAppToken(), null, CORE_MOBILITY, MAX_MSG);
 			} catch (Exception e) {
 				Log.e(getClass().getName(), e.toString());
 				Toast.makeText(getActivity().getApplicationContext(),
