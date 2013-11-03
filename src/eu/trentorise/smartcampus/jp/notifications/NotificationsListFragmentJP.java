@@ -113,7 +113,6 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 	public static NotificationFilter getNotificationFilter() {
 		NotificationFilter filter = new NotificationFilter();
 		filter.setOrdering(ORDERING.ORDER_BY_ARRIVAL);
-		filter.setSource("JourneyPlanner");
 		return filter;
 	}
 
