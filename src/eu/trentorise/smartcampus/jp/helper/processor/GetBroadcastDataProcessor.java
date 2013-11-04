@@ -30,6 +30,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.Utils;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class GetBroadcastDataProcessor extends

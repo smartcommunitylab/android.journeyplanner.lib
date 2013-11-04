@@ -360,8 +360,11 @@ public class JPHelper {
 			throws ProtocolException, MobilityServiceException {
 		MobilityDataService dataService = new MobilityDataService(
 				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return dataService.getStopTimes(agencyId, routeId, stopId,
+		List<StopTime> res = dataService.getStopTimes(agencyId, routeId, stopId,
 				authToken);
+		for (StopTime st : res) st.setTime(st.getTime()*1000);
+		
+		return res;
 	}
 
 	/*
