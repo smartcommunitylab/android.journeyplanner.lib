@@ -71,7 +71,9 @@ import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.mobilityservice.model.Delay;
 import eu.trentorise.smartcampus.mobilityservice.model.TimeTable;
 import eu.trentorise.smartcampus.mobilityservice.model.TripData;
+import eu.trentorise.smartcampus.network.RemoteConnector;
 import eu.trentorise.smartcampus.network.RemoteException;
+import eu.trentorise.smartcampus.network.RemoteConnector.CLIENT_TYPE;
 import eu.trentorise.smartcampus.protocolcarrier.ProtocolCarrier;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
@@ -133,6 +135,9 @@ public class JPHelper {
 	protected JPHelper(Context mContext) {
 		super();
 		JPHelper.mContext = mContext;
+		if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.FROYO) {
+			RemoteConnector.setClientType(CLIENT_TYPE.CLIENT_WILDCARD);
+		}
 
 		JPParamsHelper.init(mContext);
 		TTHelper.init(mContext);
