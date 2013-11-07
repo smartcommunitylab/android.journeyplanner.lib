@@ -429,18 +429,6 @@ public class JPHelper {
 		JPHelper.mLocationHelper = mLocationHelper;
 	}
 
-	public static Boolean saveRecurrentJourney(BasicRecurrentJourney brj,String authToken)
-			throws ConnectionException, ProtocolException, SecurityException,
-			MobilityServiceException {
-		if (brj != null) {
-			MobilityUserService userService = new MobilityUserService(
-					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-			userService.saveRecurrentJourney(brj, authToken);
-			return true;
-		}
-		return false;
-	}
-
 	public static void deleteMyRecurItinerary(String id,String authToken)
 			throws MobilityServiceException, ProtocolException {
 		if (id != null && id.length() > 0) {
@@ -496,7 +484,11 @@ public class JPHelper {
 		if (brj != null) {
 			MobilityUserService userService = new MobilityUserService(
 					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-			userService.saveRecurrentJourney(brj, authToken);
+			if (brj.getClientId() == null) {
+				userService.saveRecurrentJourney(brj, authToken);
+			} else {
+				userService.updateRecurrentJourney(brj, brj.getClientId(), authToken);
+			}
 			return true;
 		}
 		return false;
