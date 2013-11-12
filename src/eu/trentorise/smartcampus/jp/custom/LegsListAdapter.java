@@ -94,8 +94,7 @@ public class LegsListAdapter extends ArrayAdapter<Leg> {
 		}
 
 		// alert
-		if (!leg.getAlertDelayList().isEmpty() || !leg.getAlertParkingList().isEmpty()
-				|| !leg.getAlertStrikeList().isEmpty() || !leg.getAlertRoadList().isEmpty() || !leg.getAlertAccidentList().isEmpty()) {
+		if (Utils.containsAlerts(leg)) {
 			holder.alerts.setText(renderer.buildAlerts(leg, position));
 			holder.alerts.setVisibility(View.VISIBLE);
 		} else {

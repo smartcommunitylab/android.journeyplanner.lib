@@ -25,7 +25,6 @@ import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoad;
 import it.sayservice.platform.smartplanner.data.message.alerts.AlertStrike;
 
 import java.util.List;
-import java.util.Locale;
 
 import android.content.Context;
 import android.text.Html;
@@ -160,14 +159,14 @@ public class LegContentRenderer {
 	public String buildAlerts(Leg leg, int index) {
 		// delay
 		String delay = "";
-		if (!leg.getAlertDelayList().isEmpty()) {
+		if (leg.getAlertDelayList() != null && !leg.getAlertDelayList().isEmpty()) {
 			for (AlertDelay ad : leg.getAlertDelayList()) {
 				if (ad.getDelay() > 0) {
 					delay += this.ctx.getString(R.string.leg_delay) + " " + millis2mins(ad.getDelay()) + " min";
 				}
 			}
 		} 
-		if (!leg.getAlertAccidentList().isEmpty()) {
+		if (leg.getAlertAccidentList() != null && !leg.getAlertAccidentList().isEmpty()) {
 			if (delay.length()>0)
 			{
 				delay += "\n";
@@ -179,7 +178,7 @@ public class LegContentRenderer {
 			}
 		}
 		
-		if (!leg.getAlertRoadList().isEmpty()) {
+		if (leg.getAlertAccidentList() != null && !leg.getAlertRoadList().isEmpty()) {
 			if (delay.length()>0)
 			{
 				delay += "\n";
@@ -191,7 +190,7 @@ public class LegContentRenderer {
 			}
 		}
 		
-		if (!leg.getAlertStrikeList().isEmpty()) {
+		if (leg.getAlertStrikeList() != null && !leg.getAlertStrikeList().isEmpty()) {
 			if (delay.length()>0)
 			{
 				delay += "\n";
@@ -202,7 +201,7 @@ public class LegContentRenderer {
 				}
 			}
 		}
-		if (!leg.getAlertParkingList().isEmpty()) {
+		if (leg.getAlertParkingList() != null && !leg.getAlertParkingList().isEmpty()) {
 			if (delay.length()>0)
 			{
 				delay += "\n";

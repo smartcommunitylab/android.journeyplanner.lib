@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.helper;
 
+import it.sayservice.platform.smartplanner.data.message.Leg;
 import it.sayservice.platform.smartplanner.data.message.RType;
 import it.sayservice.platform.smartplanner.data.message.TType;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
@@ -323,5 +324,14 @@ public class Utils {
 			}
 		}
 		return chunk.toString();
+	}
+	
+	public static boolean containsAlerts(Leg leg) {
+		return 
+				(leg.getAlertAccidentList() != null && !leg.getAlertAccidentList().isEmpty()) ||
+				(leg.getAlertDelayList() != null && !leg.getAlertDelayList().isEmpty()) ||
+				(leg.getAlertParkingList() != null && !leg.getAlertParkingList().isEmpty()) ||
+				(leg.getAlertRoadList() != null && !leg.getAlertRoadList().isEmpty()) ||
+				(leg.getAlertStrikeList() != null && !leg.getAlertStrikeList().isEmpty());
 	}
 }
