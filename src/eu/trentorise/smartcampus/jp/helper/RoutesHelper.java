@@ -233,9 +233,10 @@ public class RoutesHelper {
 	private static final List<RouteDescriptor> RoutesDescriptorsList_12 = Arrays.asList(new RouteDescriptor[] {
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "_A", R.string.agency_12_route__A, "A"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "_B", R.string.agency_12_route__B, "B"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "C", R.string.agency_12_route_C, "C"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "Da", R.string.agency_12_route_Da, "D"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "Dr", R.string.agency_12_route_Dr, "D"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "Ca", R.string.agency_12_route_Ca, "C"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "Cr", R.string.agency_12_route_Cr, "C"),
+//			new RouteDescriptor(AGENCYID_BUS_TRENTO, "Da", R.string.agency_12_route_Da, "D"),
+//			new RouteDescriptor(AGENCYID_BUS_TRENTO, "Dr", R.string.agency_12_route_Dr, "D"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "NPA", R.string.agency_12_route_NPA, "NP"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "01", R.string.agency_12_route_01, "1"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "02", R.string.agency_12_route_02, "2"),

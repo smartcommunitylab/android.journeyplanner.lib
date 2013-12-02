@@ -325,7 +325,7 @@ public class RoutesDBHelper {
 
 		// DB configurations
 		private static final String DB_NAME = "routesdb";
-		private static final int DB_VERSION = 1;
+		private static final int DB_VERSION = 3;
 
 		// Tables
 		public final static String DB_TABLE_CALENDAR = "calendar";
@@ -360,6 +360,8 @@ public class RoutesDBHelper {
 		private static final String CREATE_VERSION_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_VERSION + " ("
 				+ AGENCY_ID_KEY + " integer primary key, " + VERSION_KEY + " integer not null default 0);";
 
+		private static final String DELETE_TABLE  = "DROP TABLE IF EXISTS %s";
+		
 		public RoutesDatabase(Context context) {
 			super(context, Environment.getExternalStorageDirectory() + "/" + DB_NAME, null, DB_VERSION);
 		}
@@ -373,6 +375,12 @@ public class RoutesDBHelper {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			db.execSQL(String.format(DELETE_TABLE, DB_TABLE_CALENDAR));
+			db.execSQL(String.format(DELETE_TABLE, DB_TABLE_ROUTE));
+			db.execSQL(String.format(DELETE_TABLE, DB_TABLE_VERSION));
+			db.execSQL(CREATE_CALENDAR_TABLE);
+			db.execSQL(CREATE_ROUTE_TABLE);
+			db.execSQL(CREATE_VERSION_TABLE);
 		}
 
 	}
