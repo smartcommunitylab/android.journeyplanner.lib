@@ -74,7 +74,7 @@ public class TTHelper {
 	}
 
 	private static String getStringFromInputStream(InputStream is) {
-		String output = new String();
+//		String output = new String();
 
 		BufferedReader br = null;
 		StringBuilder sb = new StringBuilder();
@@ -104,14 +104,14 @@ public class TTHelper {
 				
 		String json = sb.toString();
 
-		try {
-			JSONObject jsonObject = new JSONObject(json);
-			output = jsonObject.toString();
-		} catch (JSONException e) {
-			Log.e("TTHelper", e.getMessage());
-		}
-
-		return output;
+//		try {
+//			JSONObject jsonObject = new JSONObject(json);
+//			output = jsonObject.toString();
+//		} catch (JSONException e) {
+//			Log.e("TTHelper", e.getMessage());
+//		}
+//
+		return json;
 	}
 
 	public static TimeTable getTTwithRouteIdAndTime(String routeId, long from_time, long to_time) {
@@ -120,21 +120,22 @@ public class TTHelper {
 			// convert time to date
 			String date = convertMsToDateFormat(from_time);
 			// get correct name of file
-			String nameFile = RoutesHelper.getAgencyIdByRouteId(routeId) + "/" + routeId + "_"
-					+ calendar.get(RoutesHelper.getAgencyIdByRouteId(routeId)).get(date) + ".js";
+			String dir = RoutesHelper.getAgencyIdByRouteId(routeId);
+			String nameFile = routeId + "_"
+					+ calendar.get(dir).get(date) + ".js";
 			// get the new tt
-			tt = getTimeTable(nameFile, routeId, from_time, to_time);
+			tt = getTimeTable(dir, nameFile, routeId, from_time, to_time);
 		} catch (Exception e) {
 		}
 		return tt;
 
 	}
 
-	private static TimeTable getTimeTable(String nameFile, String routeId, long from_time, long to_time) {
+	private static TimeTable getTimeTable(String dir, String nameFile, String routeId, long from_time, long to_time) {
 		AssetManager assetManager = mContext.getResources().getAssets();
 		try {
 			TimeTable localTT = null;
-			InputStream in = assetManager.open(nameFile);
+			InputStream in = assetManager.open(dir+"/"+nameFile);
 			String jsonParams = getStringFromInputStream(in);
 			// file not exists or the content is not parsed; some error occurred, go for remote version
 			if (jsonParams == null) return null;
@@ -143,13 +144,17 @@ public class TTHelper {
 				localTT = new TimeTable();
 				localTT.setStops(Collections.<String>emptyList());
 				localTT.setTimes(Collections.<List<List<String>>>singletonList(Collections.<List<String>>emptyList()));
-			} else {
+			// workaround; used to minimize cache size pointing in file to complete file.
+			} else if (jsonParams.startsWith("!")) {
+				String file = dir+"/"+jsonParams.substring(1);
+				in = assetManager.open(file);
+				jsonParams = getStringFromInputStream(in);
+				localTT = Utils.convertJSONToObject(jsonParams, TimeTable.class);
+			} else {	
 				localTT = Utils.convertJSONToObject(jsonParams, TimeTable.class);
 			}
 			
 			localTT.setDelays(emptyDelay(localTT));
-			// TimeTable returnTT = changeDelay(localTT, routeId, from_time,
-			// to_time);
 			return localTT;
 		} catch (IOException e) {
 			e.printStackTrace();
