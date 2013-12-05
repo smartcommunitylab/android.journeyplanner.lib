@@ -33,13 +33,13 @@ public class CTTTCacheUpdaterAsyncTask extends AsyncTask<Void, Integer, Void> {
 		Log.e(getClass().getCanonicalName(),
 				"Agencies update from assets started");
 
-		dbVersions = RoutesDBHelper.getVersions();
-		assetsVersions = CompressedTTHelper.getVersionsFromAssets();
 	}
 
 	@Override
 	protected Void doInBackground(Void... params) {
 		List<AgencyDescriptor> adList = new ArrayList<AgencyDescriptor>();
+		dbVersions = RoutesDBHelper.getVersions();
+		assetsVersions = CompressedTTHelper.getVersionsFromAssets();
 		for (String agencyId : RoutesHelper.AGENCYIDS) {
 			Long dbVersion = this.dbVersions.get(agencyId);
 			Long assetsVersion = this.assetsVersions.get(agencyId);

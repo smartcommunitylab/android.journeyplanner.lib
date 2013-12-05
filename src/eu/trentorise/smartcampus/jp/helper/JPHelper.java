@@ -52,6 +52,7 @@ import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.LocationHelper;
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.custom.TTHelper;
 import eu.trentorise.smartcampus.jp.custom.data.BasicAlert;
 import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourneyParameters;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
@@ -60,7 +61,6 @@ import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 import eu.trentorise.smartcampus.jp.model.ParkingSerial;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 import eu.trentorise.smartcampus.jp.timetable.CompressedTTHelper;
-import eu.trentorise.smartcampus.jp.timetable.TTHelper;
 import eu.trentorise.smartcampus.mobilityservice.MobilityAlertService;
 import eu.trentorise.smartcampus.mobilityservice.MobilityDataService;
 import eu.trentorise.smartcampus.mobilityservice.MobilityPlannerService;
@@ -72,8 +72,8 @@ import eu.trentorise.smartcampus.mobilityservice.model.Delay;
 import eu.trentorise.smartcampus.mobilityservice.model.TimeTable;
 import eu.trentorise.smartcampus.mobilityservice.model.TripData;
 import eu.trentorise.smartcampus.network.RemoteConnector;
-import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.network.RemoteConnector.CLIENT_TYPE;
+import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.protocolcarrier.ProtocolCarrier;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
@@ -140,7 +140,6 @@ public class JPHelper {
 		}
 
 		JPParamsHelper.init(mContext);
-		TTHelper.init(mContext);
 		CompressedTTHelper.init(mContext);
 		MapManager.initWithParams();
 
@@ -509,15 +508,6 @@ public class JPHelper {
 			return dataService.getTimeTable(routeId, from_day, authToken);
 		}
 		return null;
-	}
-
-	public static TimeTable getLocalTransitTimeTableById(long from_day,
-			long to_day, String routeId) throws ConnectionException,
-			ProtocolException, SecurityException, JSONException,
-			JsonParseException, JsonMappingException, IOException {
-		if (!TTHelper.isInitialized())
-			TTHelper.init(mContext);
-		return TTHelper.getTTwithRouteIdAndTime(routeId, from_day, to_day);
 	}
 
 	public static List<SmartCheckStop> getStops(String[] agencyIds,
