@@ -1,5 +1,7 @@
 package eu.trentorise.smartcampus.jp;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import com.actionbarsherlock.app.ActionBar;
 
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.TabListener;
+import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
@@ -141,13 +144,25 @@ public class SmartCheckListFragment extends FeedbackFragment {
 					actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 					actionBar.removeAllTabs();
 
-					// Zones
+					ArrayList<SmartLine> smartZones = (ArrayList<SmartLine>) RoutesHelper.getSmartLines(getSherlockActivity(),
+							RoutesHelper.AGENCYID_BUS_SUBURBAN);
+
 					ActionBar.Tab tab = actionBar.newTab();
 					tab.setText(R.string.tab_zones);
-					tab.setTabListener(new TabListener<SmartCheckSuburbanFragment>(getSherlockActivity(), "lines",
-							SmartCheckSuburbanFragment.class, null));
 					Bundle bundle = new Bundle();
-					bundle.putString(SmartCheckSuburbanFragment.PARAM_AID, RoutesHelper.AGENCYID_BUS_SUBURBAN);
+					if (smartZones.size() == 1) {
+						// Directions
+						tab.setTabListener(new TabListener<SmartCheckBusDirectionFragment>(getSherlockActivity(), "lines",
+								SmartCheckBusDirectionFragment.class, null));
+						bundle.putParcelable(SmartCheckBusDirectionFragment.PARAM_LINE, smartZones.get(0));
+						bundle.putString(SmartCheckBusDirectionFragment.PARAM_AGENCY, RoutesHelper.AGENCYID_BUS_SUBURBAN);
+					} else {
+						// Zones
+						tab.setTabListener(new TabListener<SmartCheckSuburbanFragment>(getSherlockActivity(), "lines",
+								SmartCheckSuburbanFragment.class, null));
+						bundle.putParcelableArrayList(SmartCheckSuburbanFragment.PARAM_LINES, smartZones);
+						bundle.putString(SmartCheckSuburbanFragment.PARAM_AID, RoutesHelper.AGENCYID_BUS_SUBURBAN);
+					}
 					tab.setTag(bundle);
 					actionBar.addTab(tab);
 

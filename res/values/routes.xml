@@ -6,7 +6,7 @@
         <item>_A</item>
         <item>_B</item>
         <item>C</item>
-<!--         <item>D</item> -->
+        <!-- <item>D</item> -->
         <item>01</item>
         <item>02</item>
         <item>03</item>
@@ -32,7 +32,7 @@
         <item>@drawable/ic_f_a</item>
         <item>@drawable/ic_f_b</item>
         <item>@drawable/ic_f_c</item>
-<!--         <item>@drawable/ic_f_d</item> -->
+        <!-- <item>@drawable/ic_f_d</item> -->
         <item>@drawable/ic_f1</item>
         <item>@drawable/ic_f2</item>
         <item>@drawable/ic_f3</item>
@@ -57,7 +57,7 @@
         <item>#B9BAB5</item>
         <item>#717880</item>
         <item>#000</item>
-<!--         <item>#000</item> -->
+        <!-- <item>#000</item> -->
         <item>#174072</item>
         <item>#D65A2E</item>
         <item>#C02927</item>
@@ -148,19 +148,20 @@
         <item>105</item>
         <item>106</item>
         <item>107</item>
-        <item>108</item>
         <item>109</item>
-        <item>110</item>
         <item>111</item>
         <item>112</item>
+        <item>113</item>
         <item>114</item>
         <item>115</item>
         <item>116</item>
+        <!-- <item>119</item> -->
         <item>120</item>
         <item>121</item>
         <item>122</item>
         <item>123</item>
         <item>140</item>
+        <!-- <item>701</item> NO ZONE -->
     </string-array>
     <string-array name="agency_17_zone_2">
         <item>201</item>
@@ -174,6 +175,7 @@
         <item>210</item>
         <item>211</item>
         <item>212</item>
+        <item>213</item>
         <item>214</item>
         <item>215</item>
         <item>216</item>
@@ -181,11 +183,10 @@
         <item>218</item>
         <item>230</item>
         <item>231</item>
-        <item>236</item>
+        <!-- <item>236</item> -->
         <item>861</item>
         <item>862</item>
         <item>863</item>
-        <item>864</item>
     </string-array>
     <string-array name="agency_17_zone_3">
         <item>301</item>
@@ -216,27 +217,26 @@
         <item>405</item>
         <item>406</item>
         <item>407</item>
-        <item>408</item>
+        <!-- <item>408</item> -->
         <item>409</item>
         <item>410</item>
         <item>413</item>
         <item>415</item>
-        <item>416</item>
         <item>417</item>
         <item>418</item>
+        <!-- <item>419</item> -->
         <item>423</item>
         <item>425</item>
         <item>428</item>
         <item>429</item>
         <item>431</item>
-        <item>433</item>
         <item>461</item>
         <item>462</item>
         <item>463</item>
         <item>464</item>
         <item>465</item>
         <item>466</item>
-        <item>467</item>
+        <!-- <item>467</item> ONLY TT -->
         <item>468</item>
     </string-array>
     <string-array name="agency_17_zone_5">
@@ -249,23 +249,21 @@
         <item>511</item>
         <item>512</item>
         <item>514</item>
-        <item>543</item>
     </string-array>
     <string-array name="agency_17_zone_6">
         <item>611</item>
         <item>615</item>
-        <item>616</item>
         <item>620</item>
         <item>623</item>
         <item>624</item>
         <item>625</item>
         <item>627</item>
         <item>630</item>
+        <!-- <item>631</item> -->
         <item>632</item>
         <item>633</item>
         <item>634</item>
         <item>635</item>
-        <item>636</item>
         <item>640</item>
         <item>641</item>
         <item>642</item>
@@ -273,8 +271,6 @@
         <item>644</item>
         <item>645</item>
         <item>646</item>
-        <!-- <item>701</item> -->
-        <!-- <item>864</item> -->
     </string-array>
 
     <array name="agency_17_zones">
@@ -304,8 +300,8 @@
     <string name="agency_12_route__B">Piazza Dante - Laste - Piazza Dante</string>
     <string name="agency_12_route_Ca">RSA S. Bartolomeo - RSA Ex Ospedalino</string>
     <string name="agency_12_route_Cr">RSA Ex Ospedalino - RSA S. Bartolomeo</string>
-<!--     <string name="agency_12_route_Da">Servizio R.S.A.: Porta Nuova - S. Bartolomeo</string> -->
-<!--     <string name="agency_12_route_Dr">SERVIZIO R.S.A.: S. Bartolomeo - Via Grazioli</string> -->
+    <!-- <string name="agency_12_route_Da">Servizio R.S.A.: Porta Nuova - S. Bartolomeo</string> -->
+    <!-- <string name="agency_12_route_Dr">SERVIZIO R.S.A.: S. Bartolomeo - Via Grazioli</string> -->
     <string name="agency_12_route_NPA">Navetta parcheggi: Ex Zuffo - Monte Baldo - Ex Zuffo</string>
     <string name="agency_12_route_01">Roncafort - P. Dante - Osp. S. Chiara- Roncafort</string>
     <string name="agency_12_route_02">Vela - P. Dante - Osp. S. Chiara - P. Dante -Vela</string>
@@ -573,6 +569,246 @@
     <string name="agency_17_route_583_ExUr">Linea 3 integrata: Bolognano - Arco - Riva - Torbole - Nago</string>
     <string name="agency_17_route_418_ExUr">Linea 4: Riva - Grez - Viale Martiri - Riva</string>
 
+    <!-- Suburban routes NEW!!! -->
+    <string name="agency_17_route_1_17_0">Cavalese-Predazzo-Moena-Canazei-Penia (ANDATA)</string>
+    <string name="agency_17_route_1_17_1">Cavalese-Predazzo-Moena-Canazei-Penia (RITORNO)</string>
+    <string name="agency_17_route_3_17_0">Trento -  Cembra - Capriana - Cavalese (ANDATA)</string>
+    <string name="agency_17_route_3_17_1">Trento -  Cembra - Capriana - Cavalese (RITORNO)</string>
+    <string name="agency_17_route_7_17_0">Casatta di Valfloriana - Palu\' - Sicina (ANDATA)</string>
+    <string name="agency_17_route_7_17_1">Casatta di Valfloriana - Palu\' - Sicina (RITORNO)</string>
+    <string name="agency_17_route_55_17_0">Trento-S.Michele a/A-Salorno-Egna-Ora-Cavalese (ANDATA)</string>
+    <string name="agency_17_route_55_17_1">Trento-S.Michele a/A-Salorno-Egna-Ora-Cavalese (RITORNO)</string>
+    <string name="agency_17_route_60_17_0">Verla - Valternigo - Palu\' di Giovo (ANDATA)</string>
+    <string name="agency_17_route_60_17_1">Verla - Valternigo - Palu\' di Giovo (RITORNO)</string>
+    <string name="agency_17_route_63_17_0">Montesover - Sover (ANDATA) (ANDATA)</string>
+    <string name="agency_17_route_63_17_1">Montesover - Sover (RITORNO) (RITORNO)</string>
+    <string name="agency_17_route_65_17_0">Cavalese - Masi di Cavalese (ANDATA)</string>
+    <string name="agency_17_route_65_17_1">Cavalese - Masi di Cavalese (RITORNO) (RITORNO)</string>
+    <string name="agency_17_route_67_17_0">Cavalese - Carano - Villaggio Veronza (ANDATA)</string>
+    <string name="agency_17_route_67_17_1">Cavalese - Carano - Villaggio Veronza (RITORNO)</string>
+    <string name="agency_17_route_69_17_0">Trento - Nogarè - Baselga di Pinè -Montesover (ANDATA)</string>
+    <string name="agency_17_route_69_17_1">Trento - Nogarè - Baselga di Pinè -Montesover (RITORNO)</string>
+    <string name="agency_17_route_71_17_0">Trento-Vezzano-Sarche-Tione (ANDATA)</string>
+    <string name="agency_17_route_71_17_1">Trento-Vezzano-Sarche-Tione (RITORNO)</string>
+    <string name="agency_17_route_73_17_0">Tione-Bolbeno-Ragoli-Montagne (ANDATA)</string>
+    <string name="agency_17_route_73_17_1">Tione-Bolbeno-Ragoli-Montagne (RITORNO)</string>
+    <string name="agency_17_route_76_17_0">Trento-Sardagna-Candriai-Vaneze-Vason-Viote (ANDATA)</string>
+    <string name="agency_17_route_76_17_1">Trento-Sardagna-Candriai-Vaneze-Vason-Viote (RITORNO)</string>
+    <string name="agency_17_route_78_17_0">Vezzano-Ranzo-Margone (ANDATA)</string>
+    <string name="agency_17_route_78_17_1">Vezzano-Ranzo-Margone (RITORNO)</string>
+    <string name="agency_17_route_80_17_0">Trento-Cadine-Sopramonte-Terlago-M.Terlago (ANDATA)</string>
+    <string name="agency_17_route_80_17_1">Trento-Cadine-Sopramonte-Terlago-M.Terlago (RITORNO)</string>
+    <string name="agency_17_route_84_17_0">Centrale - Regnana (ANDATA)</string>
+    <string name="agency_17_route_84_17_1">Centrale - Regnana (RITORNO)</string>
+    <string name="agency_17_route_86_17_0">Borgo Valsugana - Olle (ANDATA)</string>
+    <string name="agency_17_route_86_17_1">Borgo Valsugana - Olle (RITORNO)</string>
+    <string name="agency_17_route_90_17_0">Levico Terme - Barco - S.Giuliana - Lochere (ANDATA)</string>
+    <string name="agency_17_route_90_17_1">Levico Terme - Barco - S.Giuliana - Lochere (RITORNO)</string>
+    <string name="agency_17_route_92_17_0">Baselga di Pinè - S.Mauro (ANDATA)</string>
+    <string name="agency_17_route_92_17_1">Baselga di Pinè - S.Mauro (RITORNO)</string>
+    <string name="agency_17_route_95_17_0">Valcava-Brusago (ANDATA)</string>
+    <string name="agency_17_route_95_17_1">Valcava-Brusago (RITORNO)</string>
+    <string name="agency_17_route_96_17_0">Bedollo-Svaldi (ANDATA)</string>
+    <string name="agency_17_route_96_17_1">Bedollo-Svaldi (RITORNO)</string>
+    <string name="agency_17_route_98_17_0">Borgo Valsugana - Tezze - Primolano (ANDATA)</string>
+    <string name="agency_17_route_98_17_1">Borgo Valsugana - Tezze - Primolano (RITORNO)</string>
+    <string name="agency_17_route_102_17_0">S.Martino di Castrozza-Fiera di Primiero-Feltre (ANDATA)</string>
+    <string name="agency_17_route_102_17_1">S.Martino di Castrozza-Fiera di Primiero-Feltre (RITORNO)</string>
+    <string name="agency_17_route_106_17_0">Canal S.Bovo - Ronco Fosse - Ronco Chiesa (ANDATA)</string>
+    <string name="agency_17_route_106_17_1">Canal S.Bovo - Ronco Fosse - Ronco Chiesa (RITORNO)</string>
+    <string name="agency_17_route_108_17_0">Borgo Valsugana-Arten-Feltre (ANDATA)</string>
+    <string name="agency_17_route_108_17_1">Borgo Valsugana-Arten-Feltre (RITORNO)</string>
+    <string name="agency_17_route_110_17_0">Trento-Besenello-Calliano-Rovereto (ANDATA)</string>
+    <string name="agency_17_route_110_17_1">Trento-Besenello-Calliano-Rovereto (RITORNO)</string>
+    <string name="agency_17_route_112_17_0">Fiera di Primiero-Passo Cereda-Mis-Sagron (ANDATA)</string>
+    <string name="agency_17_route_112_17_1">Fiera di Primiero-Passo Cereda-Mis-Sagron (RITORNO)</string>
+    <string name="agency_17_route_116_17_0">Fiera di Primiero-Imer-Canal S.Bovo-Caoria (ANDATA)</string>
+    <string name="agency_17_route_116_17_1">Fiera di Primiero-Imer-Canal S.Bovo-Caoria (RITORNO)</string>
+    <string name="agency_17_route_117_17_0">Cavalese - Daiano - Varena (ANDATA)</string>
+    <string name="agency_17_route_117_17_1">Cavalese - Daiano - Varena (RITORNO)</string>
+    <string name="agency_17_route_120_17_0">Trento - Civezzano - Sover - Cavalese (ANDATA)</string>
+    <string name="agency_17_route_120_17_1">Trento - Civezzano - Sover - Cavalese (RITORNO)</string>
+    <string name="agency_17_route_123_17_0">Borgo-Fiera di P.-S.Martino di Castrozza (ANDATA)</string>
+    <string name="agency_17_route_123_17_1">Borgo-Fiera di P.-S.Martino di Castrozza (RITORNO)</string>
+    <string name="agency_17_route_130_17_0">Predazzo-P.sso Rolle-Fiera di P. (ANDATA)</string>
+    <string name="agency_17_route_130_17_1">Predazzo-P.sso Rolle-Fiera di P. (RITORNO)</string>
+    <string name="agency_17_route_132_17_0">Borgo Valsugana -Roncegno Terme -Ronchi (ANDATA)</string>
+    <string name="agency_17_route_132_17_1">Borgo Valsugana -Roncegno Terme -Ronchi (RITORNO)</string>
+    <string name="agency_17_route_134_17_0">Trento-Vezzano-Sarche-Dro-Arco-Riva (ANDATA)</string>
+    <string name="agency_17_route_134_17_1">Trento-Vezzano-Sarche-Dro-Arco-Riva (RITORNO)</string>
+    <string name="agency_17_route_136_17_0">Cavalese - Daiano - Carano - Tesero - Cavalese (ANDATA)</string>
+    <string name="agency_17_route_136_17_1">Cavalese - Daiano - Carano - Tesero - Cavalese (RITORNO)</string>
+    <string name="agency_17_route_138_17_0">Baselga di Pinè - Faida  - Montagnaga (ANDATA)</string>
+    <string name="agency_17_route_138_17_1">Baselga di Pinè - Faida  - Montagnaga (RITORNO)</string>
+    <string name="agency_17_route_151_17_0">Civezzano - S.Agnese - Bosco (ANDATA)</string>
+    <string name="agency_17_route_151_17_1">Civezzano - S.Agnese - Bosco (RITORNO)</string>
+    <string name="agency_17_route_153_17_0">Riva del G.-Tenno-Fiave\'-Ponte Arche (ANDATA)</string>
+    <string name="agency_17_route_153_17_1">Riva del G.-Tenno-Fiave\'-Ponte Arche (RITORNO)</string>
+    <string name="agency_17_route_155_17_0">Ponte Arche-S.Croce-Cavrasto-Bivedo (ANDATA)</string>
+    <string name="agency_17_route_155_17_1">Ponte Arche-S.Croce-Cavrasto-Bivedo (RITORNO)</string>
+    <string name="agency_17_route_157_17_0">Tione-Pieve di Bono-Storo-Baitoni-Vestone (ANDATA)</string>
+    <string name="agency_17_route_157_17_1">Tione-Pieve di Bono-Storo-Baitoni-Vestone (RITORNO)</string>
+    <string name="agency_17_route_159_17_0">Ponte Arche-Lundo (ANDATA)</string>
+    <string name="agency_17_route_159_17_1">Ponte Arche-Lundo (RITORNO)</string>
+    <string name="agency_17_route_161_17_0">Ponte Arche-S.Lorenzo in B.-Molveno (ANDATA)</string>
+    <string name="agency_17_route_161_17_1">Ponte Arche-S.Lorenzo in B.-Molveno (RITORNO)</string>
+    <string name="agency_17_route_165_17_0">Por-Castel Condino-Pieve di Bono (ANDATA)</string>
+    <string name="agency_17_route_165_17_1">Por-Castel Condino-Pieve di Bono (RITORNO)</string>
+    <string name="agency_17_route_167_17_0">Pieve di Bono-Praso-Daone (ANDATA)</string>
+    <string name="agency_17_route_167_17_1">Pieve di Bono-Praso-Daone (RITORNO)</string>
+    <string name="agency_17_route_169_17_0">Borgo Valsugana -Carzano -Strigno -Samone (ANDATA)</string>
+    <string name="agency_17_route_169_17_1">Borgo Valsugana -Carzano -Strigno -Samone (RITORNO)</string>
+    <string name="agency_17_route_171_17_0">Riva-Pregasina-Bezzecca-Storo-Pieve di Bono (ANDATA)</string>
+    <string name="agency_17_route_171_17_1">Riva-Pregasina-Bezzecca-Storo-Pieve di Bono (RITORNO)</string>
+    <string name="agency_17_route_175_17_0">Trento-Vigo Cavedine-Riva del Garda (ANDATA)</string>
+    <string name="agency_17_route_175_17_1">Trento-Vigo Cavedine-Riva del Garda (RITORNO)</string>
+    <string name="agency_17_route_177_17_0">Pergine-Kamauz-Frassilongo-S.Felice F.-Hacleri (ANDATA)</string>
+    <string name="agency_17_route_177_17_1">Pergine-Kamauz-Frassilongo-S.Felice F.-Hacleri (RITORNO)</string>
+    <string name="agency_17_route_179_17_0">Pergine -Canezza -Viarago -S.Orsola -Palù (ANDATA)</string>
+    <string name="agency_17_route_179_17_1">Pergine -Canezza -Viarago -S.Orsola -Palù (RITORNO)</string>
+    <string name="agency_17_route_181_17_0">Trento -Ravina -Mattarello -Aldeno -Garniga Terme (ANDATA)</string>
+    <string name="agency_17_route_181_17_1">Trento -Ravina -Mattarello -Aldeno -Garniga Terme (RITORNO)</string>
+    <string name="agency_17_route_184_17_0">Borgo Valsugana - Telve - Torcegno (ANDATA)</string>
+    <string name="agency_17_route_184_17_1">Borgo Valsugana - Telve - Torcegno (RITORNO)</string>
+    <string name="agency_17_route_186_17_0">Trento-V.Vattaro-Carbonare-Lavarone-Luserna (ANDATA)</string>
+    <string name="agency_17_route_186_17_1">Trento-V.Vattaro-Carbonare-Lavarone-Luserna (RITORNO)</string>
+    <string name="agency_17_route_188_17_0">Pergine Vals.-Ischia-Tenna-Levico Terme (ANDATA)</string>
+    <string name="agency_17_route_188_17_1">Pergine Vals.-Ischia-Tenna-Levico Terme (RITORNO)</string>
+    <string name="agency_17_route_190_17_0">Rovereto-Trambileno-Vanza-Pozzacchio (ANDATA)</string>
+    <string name="agency_17_route_190_17_1">Rovereto-Trambileno-Vanza-Pozzacchio (RITORNO)</string>
+    <string name="agency_17_route_194_17_0">Rovereto-Villa-Nomi-Aldeno (ANDATA)</string>
+    <string name="agency_17_route_194_17_1">Rovereto-Villa-Nomi-Aldeno (RITORNO)</string>
+    <string name="agency_17_route_196_17_0">Rovereto-Calliano-Folgaria-Lavarone (ANDATA)</string>
+    <string name="agency_17_route_196_17_1">Rovereto-Calliano-Folgaria-Lavarone (RITORNO)</string>
+    <string name="agency_17_route_198_17_0">Rovereto-Terragnolo-Serrada-Folgaria (ANDATA)</string>
+    <string name="agency_17_route_198_17_1">Rovereto-Terragnolo-Serrada-Folgaria (RITORNO)</string>
+    <string name="agency_17_route_200_17_0">Rovereto-Mori-Chizzola-Cornè-Ala-Avio (ANDATA)</string>
+    <string name="agency_17_route_200_17_1">Rovereto-Mori-Chizzola-Cornè-Ala-Avio (RITORNO)</string>
+    <string name="agency_17_route_203_17_0">Rovereto-Riva-Obra di Vallarsa-Ometto (ANDATA)</string>
+    <string name="agency_17_route_203_17_1">Rovereto-Riva-Obra di Vallarsa-Ometto (RITORNO)</string>
+    <string name="agency_17_route_205_17_0">Trento-Calliano-Folgaria-Lavarone (ANDATA)</string>
+    <string name="agency_17_route_205_17_1">Trento-Calliano-Folgaria-Lavarone (RITORNO)</string>
+    <string name="agency_17_route_215_17_0">Rovereto-Parrocchia di V.-Pian delle Fugazze (ANDATA)</string>
+    <string name="agency_17_route_215_17_1">Rovereto-Parrocchia di V.-Pian delle Fugazze (RITORNO)</string>
+    <string name="agency_17_route_220_17_0">Rovereto-Mori-S.Felice-Ronzo Chienis (ANDATA)</string>
+    <string name="agency_17_route_220_17_1">Rovereto-Mori-S.Felice-Ronzo Chienis (RITORNO)</string>
+    <string name="agency_17_route_227_17_0">Caoria-Canal S.Bovo-Feltre (ANDATA)</string>
+    <string name="agency_17_route_227_17_1">Caoria-Canal S.Bovo-Feltre (RITORNO)</string>
+    <string name="agency_17_route_229_17_0">Trento-Monte Terlago-Ranzo-Margone (ANDATA)</string>
+    <string name="agency_17_route_229_17_1">Trento-Monte Terlago-Ranzo-Margone (RITORNO)</string>
+    <string name="agency_17_route_231_17_0">Rovereto-Mori-Brentonico-Saccone (ANDATA)</string>
+    <string name="agency_17_route_231_17_1">Rovereto-Mori-Brentonico-Saccone (RITORNO)</string>
+    <string name="agency_17_route_233_17_0">Besagno-Crosano-Cornè (ANDATA)</string>
+    <string name="agency_17_route_233_17_1">Besagno-Crosano-Cornè (RITORNO)</string>
+    <string name="agency_17_route_235_17_0">Valle S.Felice-Manzano-Nomesino (ANDATA)</string>
+    <string name="agency_17_route_235_17_1">Valle S.Felice-Manzano-Nomesino (RITORNO)</string>
+    <string name="agency_17_route_300_17_0">Pergine - Civezzano (ANDATA)</string>
+    <string name="agency_17_route_300_17_1">Pergine - Civezzano (RITORNO)</string>
+    <string name="agency_17_route_309_17_0">Pergine Vals.-Masetti-Assizzi-Vignola-Falesina (ANDATA)</string>
+    <string name="agency_17_route_309_17_1">Pergine Vals.-Masetti-Assizzi-Vignola-Falesina (RITORNO)</string>
+    <string name="agency_17_route_311_17_0">Siror - Fiera di Primiero - Imer - Masi Imer (ANDATA)</string>
+    <string name="agency_17_route_311_17_1">Siror - Fiera di Primiero - Imer - Masi Imer (RITORNO)</string>
+    <string name="agency_17_route_316_17_0">Moena-Passo  S.Pellegrino-Falcade (ANDATA)</string>
+    <string name="agency_17_route_316_17_1">Moena-Passo  S.Pellegrino-Falcade (RITORNO)</string>
+    <string name="agency_17_route_320_17_0">Tione - Tione Ospedale Civile (ANDATA)</string>
+    <string name="agency_17_route_320_17_1">Tione - Tione Ospedale Civile (RITORNO)</string>
+    <string name="agency_17_route_322_17_0">Vigo Cavedine - Masi (ANDATA)</string>
+    <string name="agency_17_route_322_17_1">Vigo Cavedine - Masi (RITORNO)</string>
+    <string name="agency_17_route_324_17_0">Malè - Rabbi Bagni - Somrabbi (ANDATA)</string>
+    <string name="agency_17_route_324_17_1">Malè - Rabbi Bagni - Somrabbi (RITORNO)</string>
+    <string name="agency_17_route_326_17_0">Malè - Folgarida - Madonna di Campiglio (ANDATA)</string>
+    <string name="agency_17_route_326_17_1">Malè - Folgarida - Madonna di Campiglio (RITORNO)</string>
+    <string name="agency_17_route_328_17_0">Pellizzano - Menas (ANDATA)</string>
+    <string name="agency_17_route_328_17_1">Pellizzano - Menas (RITORNO)</string>
+    <string name="agency_17_route_330_17_0">Malè - Bolentina (ANDATA)</string>
+    <string name="agency_17_route_330_17_1">Malè - Bolentina (RITORNO)</string>
+    <string name="agency_17_route_332_17_0">Malè -Mezzana -Fucine -Vermiglio -Passo Tonale (ANDATA)</string>
+    <string name="agency_17_route_332_17_1">Malè -Mezzana -Fucine -Vermiglio -Passo Tonale (RITORNO)</string>
+    <string name="agency_17_route_334_17_0">Malè - Marilleva 1400 (ANDATA)</string>
+    <string name="agency_17_route_334_17_1">Malè - Marilleva 1400 (RITORNO)</string>
+    <string name="agency_17_route_336_17_0">Malè -Mezzana -Fucine -Cogolo -Peio (ANDATA)</string>
+    <string name="agency_17_route_336_17_1">Malè -Mezzana -Fucine -Cogolo -Peio (RITORNO)</string>
+    <string name="agency_17_route_340_17_0">Mezzolombardo - Roverè della Luna (ANDATA)</string>
+    <string name="agency_17_route_340_17_1">Mezzolombardo - Roverè della Luna (RITORNO)</string>
+    <string name="agency_17_route_343_17_0">Mezzocorona Ferrovia - S.Michele - Faedo Pineta (ANDATA)</string>
+    <string name="agency_17_route_343_17_1">Mezzocorona Ferrovia - S.Michele - Faedo Pineta (RITORNO)</string>
+    <string name="agency_17_route_345_17_0">Trento-Mezzocorona-Fai d/Paganella-Andalo-Molveno (ANDATA)</string>
+    <string name="agency_17_route_345_17_1">Trento-Mezzocorona-Fai d/Paganella-Andalo-Molveno (RITORNO)</string>
+    <string name="agency_17_route_354_17_0">Cles - Mechel (ANDATA)</string>
+    <string name="agency_17_route_354_17_1">Cles - Mechel (RITORNO)</string>
+    <string name="agency_17_route_357_17_0">Cles - Livo - Lanza di Rumo (ANDATA)</string>
+    <string name="agency_17_route_357_17_1">Cles - Livo - Lanza di Rumo (RITORNO)</string>
+    <string name="agency_17_route_362_17_0">Livo - Baselga - Bresimo (ANDATA)</string>
+    <string name="agency_17_route_362_17_1">Livo - Baselga - Bresimo (RITORNO)</string>
+    <string name="agency_17_route_364_17_0">Cles - Revò - Castelfondo - Fondo (ANDATA)</string>
+    <string name="agency_17_route_364_17_1">Cles - Revò - Castelfondo - Fondo (RITORNO)</string>
+    <string name="agency_17_route_366_17_0">Trento-Mezzolombardo-Campodenno-Denno-Cles (ANDATA)</string>
+    <string name="agency_17_route_366_17_1">Trento-Mezzolombardo-Campodenno-Denno-Cles (RITORNO)</string>
+    <string name="agency_17_route_368_17_0">Cles - Dermulo - Coredo - Smarano - Sfruz (ANDATA)</string>
+    <string name="agency_17_route_368_17_1">Cles - Dermulo - Coredo - Smarano - Sfruz (RITORNO)</string>
+    <string name="agency_17_route_371_17_0">Fondo - Tret (ANDATA)</string>
+    <string name="agency_17_route_371_17_1">Fondo - Tret (RITORNO)</string>
+    <string name="agency_17_route_375_17_0">Cles -Dermulo -Dambel -Don -Fondo -P.Mendola (ANDATA)</string>
+    <string name="agency_17_route_375_17_1">Cles -Dermulo -Dambel -Don -Fondo -P.Mendola (RITORNO)</string>
+    <string name="agency_17_route_378_17_0">Cles - Mostizzolo - Cis (ANDATA)</string>
+    <string name="agency_17_route_378_17_1">Cles - Mostizzolo - Cis (RITORNO)</string>
+    <string name="agency_17_route_391_17_0">Servizi bus per Ferrovia - andata (ANDATA)</string>
+    <string name="agency_17_route_391_17_1">Servizi bus per Ferrovia - andata (RITORNO)</string>
+    <string name="agency_17_route_395_17_0">Mezzolombardo - Vigo di Ton -  Toss (ANDATA)</string>
+    <string name="agency_17_route_395_17_1">Mezzolombardo - Vigo di Ton -  Toss (RITORNO)</string>
+    <string name="agency_17_route_397_17_0">Cles - Pavillo - Tuenno - Nanno - Portolo (ANDATA)</string>
+    <string name="agency_17_route_397_17_1">Cles - Pavillo - Tuenno - Nanno - Portolo (RITORNO)</string>
+    <string name="agency_17_route_401_17_0">Mollaro - Priò - Vervò - Tres (ANDATA)</string>
+    <string name="agency_17_route_401_17_1">Mollaro - Priò - Vervò - Tres (RITORNO)</string>
+    <string name="agency_17_route_417_17_0">Linea 3 integrata:Nago-Torbole-Riva-Arco-Bolognano (ANDATA)</string>
+    <string name="agency_17_route_417_17_1">Linea 3 integrata:Nago-Torbole-Riva-Arco-Bolognano (RITORNO)</string>
+    <string name="agency_17_route_420_17_0">Linea 1: Riva -Varone -Arco -S.Giorgio-Brione-Riva (ANDATA)</string>
+    <string name="agency_17_route_420_17_1">Linea 1: Riva -Varone -Arco -S.Giorgio-Brione-Riva (RITORNO)</string>
+    <string name="agency_17_route_423_17_0">Linea 2: Riva-Brione-S.Giorgio-Arco-Varone-Riva (ANDATA)</string>
+    <string name="agency_17_route_423_17_1">Linea 2: Riva-Brione-S.Giorgio-Arco-Varone-Riva (RITORNO)</string>
+    <string name="agency_17_route_446_17_0">Molina-Masi-Cavalese (ANDATA)</string>
+    <string name="agency_17_route_446_17_1">Molina-Masi-Cavalese (RITORNO)</string>
+    <string name="agency_17_route_494_17_0">Trento - Pergine - Baselga di Pinè - Montesover (ANDATA)</string>
+    <string name="agency_17_route_494_17_1">Trento - Pergine - Baselga di Pinè - Montesover (RITORNO)</string>
+    <string name="agency_17_route_503_17_0">Rovereto-Ala-Masi d\'Avio-Avio-Rovereto (ANDATA)</string>
+    <string name="agency_17_route_503_17_1">Rovereto-Ala-Masi d\'Avio-Avio-Rovereto (RITORNO)</string>
+    <string name="agency_17_route_507_17_0">Rovereto-Ala-Sabbionara-Avio-Masi-Rovereto (ANDATA)</string>
+    <string name="agency_17_route_507_17_1">Rovereto-Ala-Sabbionara-Avio-Masi-Rovereto (RITORNO)</string>
+    <string name="agency_17_route_520_17_0">Trento-Pergine V.-Levico T.-Borgo V. (ANDATA)</string>
+    <string name="agency_17_route_520_17_1">Trento-Pergine V.-Levico T.-Borgo V. (RITORNO)</string>
+    <string name="agency_17_route_522_17_0">Borgo V.- Strigno - Castello Tesino (ANDATA)</string>
+    <string name="agency_17_route_522_17_1">Borgo V.- Strigno - Castello Tesino (RITORNO)</string>
+    <string name="agency_17_route_549_17_0">Linea 1 Pergine Valsugana - Madrano - Nogarè (ANDATA)</string>
+    <string name="agency_17_route_549_17_1">Linea 1 Pergine Valsugana - Madrano - Nogarè (RITORNO)</string>
+    <string name="agency_17_route_551_17_0">Linea 2 Pergine-Zivignago-Canezza-Viarago-Serso (ANDATA)</string>
+    <string name="agency_17_route_551_17_1">Linea 2 Pergine-Zivignago-Canezza-Viarago-Serso (RITORNO)</string>
+    <string name="agency_17_route_552_17_0">Linea 6 Pergine Valsugana-Costasavina-Roncogno (ANDATA)</string>
+    <string name="agency_17_route_552_17_1">Linea 6 Pergine Valsugana-Costasavina-Roncogno (RITORNO)</string>
+    <string name="agency_17_route_554_17_0">Linea 4 Pergine Valsugana - Ischia (ANDATA)</string>
+    <string name="agency_17_route_554_17_1">Linea 4 Pergine Valsugana - Ischia (RITORNO)</string>
+    <string name="agency_17_route_556_17_0">Linea 3 Pergine Valsugana-Masetti-Assizzi-Zava (ANDATA)</string>
+    <string name="agency_17_route_556_17_1">Linea 3 Pergine Valsugana-Masetti-Assizzi-Zava (RITORNO)</string>
+    <string name="agency_17_route_562_17_0">Linea 5 Pergine V-Susà-S.Vito-Canale-S.Caterina (ANDATA)</string>
+    <string name="agency_17_route_562_17_1">Linea 5 Pergine V-Susà-S.Vito-Canale-S.Caterina (RITORNO)</string>
+    <string name="agency_17_route_565_17_0">Sopramonte-Baselga-Vigolo B.-Terlago-M.Terlago (ANDATA)</string>
+    <string name="agency_17_route_565_17_1">Sopramonte-Baselga-Vigolo B.-Terlago-M.Terlago (RITORNO)</string>
+    <string name="agency_17_route_577_17_0">Maso Tingherla - Kamauz - Pergine (ANDATA)</string>
+    <string name="agency_17_route_577_17_1">Maso Tingherla - Kamauz - Pergine (RITORNO)</string>
+    <string name="agency_17_route_580_17_0">Ala-Ronchi di Ala-Ponzolotti (ANDATA)</string>
+    <string name="agency_17_route_580_17_1">Ala-Ronchi di Ala-Ponzolotti (RITORNO)</string>
+    <string name="agency_17_route_604_17_0">Cavalese Autostazione - Ospedale (ANDATA)</string>
+    <string name="agency_17_route_604_17_1">Cavalese Autostazione - Ospedale (RITORNO)</string>
+    <string name="agency_17_route_618_17_0">Canal S.Bovo-Imer-Fiera di P.-Sagron-Mis-Agordo (ANDATA)</string>
+    <string name="agency_17_route_618_17_1">Canal S.Bovo-Imer-Fiera di P.-Sagron-Mis-Agordo (RITORNO)</string>
+    <string name="agency_17_route_634_17_0">Rovereto-Mori-Riva-Arco-Bolognano (ANDATA)</string>
+    <string name="agency_17_route_634_17_1">Rovereto-Mori-Riva-Arco-Bolognano (RITORNO)</string>
+    <string name="agency_17_route_636_17_0">Tione-Pinzolo-Madonna di C.-C.C.Magno (ANDATA)</string>
+    <string name="agency_17_route_636_17_1">Tione-Pinzolo-Madonna di C.-C.C.Magno (RITORNO)</string>
+    <string name="agency_17_route_638_17_0">SAD: Ora-S.Lugano-Castello-Cavalese (ANDATA)</string>
+    <string name="agency_17_route_638_17_1">SAD: Ora-S.Lugano-Castello-Cavalese (RITORNO)</string>
+    <string name="agency_17_route_640_17_0">Linea 8: Pergine Intermodale-Ospedale Villa Rosa (ANDATA)</string>
+    <string name="agency_17_route_640_17_1">Linea 8: Pergine Intermodale-Ospedale Villa Rosa (RITORNO)</string>
+
     <!-- Rovereto urbano routes -->
     <string name="agency_16_route_01A_Rov">Corso Bettini Ospedale Lizzana Marco</string>
     <string name="agency_16_route_01R_Rov">Marco Lizzana Corso Bettini Pomarolo</string>
@@ -597,5 +833,5 @@
     <string name="agency_16_route_N3R_Rov">Notturno: Stazione Fs Castellano</string>
     <string name="agency_16_route_N5R_Rov">Notturno: C.So Bettini Isera Nomi</string>
     <string name="agency_16_route_N6_Rov">Notturno: Nomi Besenello V.Cesari</string>
-    
+
 </resources>

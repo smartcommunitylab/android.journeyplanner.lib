@@ -51,7 +51,7 @@ public class SmartCheckTrainFragment extends FeedbackFragment {
 
 		// get routes from Constants
 		adapter = new SmartCheckTrainAdapter(getSherlockActivity(), android.R.layout.simple_list_item_1,
-				RoutesHelper.getRouteDescriptorsList(agencyIds));
+				RoutesHelper.getRouteDescriptorsList(getSherlockActivity(), agencyIds));
 		routesListView.setAdapter(adapter);
 
 		routesListView.setOnItemClickListener(new OnItemClickListener() {

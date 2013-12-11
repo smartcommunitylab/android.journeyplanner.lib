@@ -91,7 +91,7 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 				}
 			}
 
-			RouteDescriptor rd = RoutesHelper.getRouteDescriptorByRouteId(tripData.getRouteId());
+			RouteDescriptor rd = RoutesHelper.getRouteDescriptorByRouteId(mContext, tripData.getRouteId());
 			holder.route.setText(rd.getShortNameResource() + " - " + mContext.getResources().getString(rd.getNameResource()));
 
 			rd.getNameResource();

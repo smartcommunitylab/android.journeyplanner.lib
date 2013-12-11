@@ -77,7 +77,7 @@ public class MyRouteItinerariesListAdapter extends ArrayAdapter<RecurrentItinera
 			holder.monitor.setChecked(myItineraries.get(position).isMonitor());
 			RecurrentItinerary myItinerary = myItineraries.get(position);
 			
-			RouteDescriptor rd = RoutesHelper.getRouteDescriptorByRouteId(myItinerary.getName()); 
+			RouteDescriptor rd = RoutesHelper.getRouteDescriptorByRouteId(context, myItinerary.getName()); 
 			if (rd != null) {
 				String name = rd.getShortNameResource() + ": " + context.getString(rd.getNameResource());
 				holder.name.setText(name);
