@@ -409,7 +409,9 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 			delays = new HashMap[NUM_COLS];
 
 			for (int j = 0; j < NUM_COLS; j++) {
-				delays[j] = result.get(j).getValues();
+				if (result.size() > j) {
+					delays[j] = result.get(j).getValues();
+				}
 			}
 			// reload Delay part
 			reloadDelays();
