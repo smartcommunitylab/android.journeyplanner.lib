@@ -63,34 +63,29 @@ public class RoutesHelper {
 
 		List<RouteDescriptor> list = new ArrayList<RouteDescriptor>();
 		for (int i = 0; i < agencyIds.length; i++) {
-			if (ROUTES.get(agencyIds[i]) != null) {
-				for (RouteDescriptor r : ROUTES.get(agencyIds[i])) {
-					list.add(r);
-				}
+			String agencyId = agencyIds[i];
+
+			if (ROUTES.get(agencyId) == null) {
+				continue;
 			}
 
-			if (agencyIds[i] == AGENCYID_BUS_SUBURBAN) {
+			String[] lines = new String[] {};
+			if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
 				// filter for suburban zones in app parameters!
-				String[] lines = ctx.getResources().getStringArray(R.array.smart_check_17_zones);
+				lines = ctx.getResources().getStringArray(R.array.smart_check_17_zones);
 				lines = filterSuburbanLines(lines);
+			}
 
-				List<RouteDescriptor> newList = new ArrayList<RouteDescriptor>();
-				for (int index = 0; index < lines.length; index++) {
-					String line = lines[index];
-					if (line == null) {
-						// line not allowed
-						continue;
-					}
-
-					// put them in the array
-					for (RouteDescriptor routeDescriptor : list) {
-						//
-						if (validateRouteDescriptor(ctx, agencyIds[i], routeDescriptor, line, index)) {
-							newList.add(routeDescriptor);
+			for (RouteDescriptor r : ROUTES.get(agencyId)) {
+				if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
+					for (int index = 0; index < lines.length; index++) {
+						if (lines[index] != null && validateRouteDescriptor(ctx, agencyId, r, lines[index], index)) {
+							list.add(r);
 						}
 					}
+				} else {
+					list.add(r);
 				}
-				list = newList;
 			}
 		}
 		return list;
