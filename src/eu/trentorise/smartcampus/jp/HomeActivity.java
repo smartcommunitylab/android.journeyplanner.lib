@@ -180,6 +180,17 @@ public class HomeActivity extends TutorialManagerActivity {
 			startActivity(intent);
 			return;
 		} else {
+			String[] smartNames = getResources().getStringArray(R.array.smart_checks_list);
+			TypedArray smartIds = getResources().obtainTypedArray(R.array.smart_check_list_ids);
+			for (int i = 0; i < smartNames.length; i++) {
+				String scName = smartNames[i];
+				if (smartIds.getResourceId(i, 0) == viewId) {
+					SmartCheckDirectActivity.startSmartCheck(this, scName);
+					return;
+				}
+			}
+			smartIds.recycle();
+			
 			Toast toast = Toast.makeText(getApplicationContext(), R.string.tmp, Toast.LENGTH_SHORT);
 			toast.show();
 			return;
