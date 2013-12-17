@@ -9,12 +9,12 @@
     <string name="jp_notif_tut">Check if the bus or train is on time </string>
     <string name="jp_prefs_tut">Set up your defaults here</string>
 
-    <string name="jp_tut_bus_trento_timetable">bla-bla</string>
-    <string name="jp_tut_bus_rovereto_timetable">bla-bla</string>
-    <string name="jp_tut_suburban_timetable">bla-bla</string>
-    <string name="jp_tut_train_timetable">bla-bla</string>
-    <string name="jp_tut_parking_trento">bla-bla</string>
-    <string name="jp_tut_parking_rovereto">bla-bla</string>
-    <string name="jp_tut_alerts_rovereto">bla-bla</string>
+    <string name="jp_tut_bus_trento_timetable">Check the timetable of Trento urban buses</string>
+    <string name="jp_tut_bus_rovereto_timetable">Check the timetable of Rovereto urban buses</string>
+    <string name="jp_tut_suburban_timetable">Check the timetable of suburban buses</string>
+    <string name="jp_tut_train_timetable">Check the timetable of local trains</string>
+    <string name="jp_tut_parking_trento">Check the availability of parking slots in the Trento city parkings</string>
+    <string name="jp_tut_parking_rovereto">Check the availability of parking slots in the Rovereto city parkings</string>
+    <string name="jp_tut_alerts_rovereto">Learn about the municipality decrees about mobility</string>
             
 </resources>

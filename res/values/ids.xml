@@ -23,6 +23,7 @@
     <item name="menu_item_edit" type="id"/>
     <item name="menu_item_map" type="id"/>
     <item name="menu_item_list" type="id"/>
+    <item name="menu_item_pref" type="id"/>
     <item name="ttTimeTable" type="id"/>
     
     <item name="menu_item_notifications" type="id"/>

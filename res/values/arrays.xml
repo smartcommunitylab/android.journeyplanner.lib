@@ -49,12 +49,12 @@
     </array>
     
     <array name="smart_check_list_icons">
-        <item>@drawable/ic_menu_planjourneys</item>
-        <item>@drawable/ic_menu_planjourneys</item>
-        <item>@drawable/ic_menu_planjourneys</item>
-        <item>@drawable/ic_menu_planjourneys</item>
-        <item>@drawable/ic_menu_planjourneys</item>
-        <item>@drawable/ic_menu_planjourneys</item>
+        <item>@drawable/ic_bus</item>
+        <item>@drawable/ic_bus</item>
+        <item>@drawable/ic_bus</item>
+        <item>@drawable/ic_train</item>
+        <item>@drawable/ic_parking</item>
+        <item>@drawable/ic_parking</item>
         <item>@drawable/ic_menu_planjourneys</item>
     </array>
     
@@ -74,7 +74,7 @@
         <item>@string/btn_monitorsaved</item>
         <item>@string/btn_notifications</item>
         <item>@string/btn_broadcast</item>
-        <item>@string/btn_myprofile</item>
+<!--         <item>@string/btn_myprofile</item> -->
     </string-array>
     <string-array name="main_list_tut">
         <item>@string/jp_plan_tut</item>
@@ -82,7 +82,7 @@
         <item>@string/jp_watch_tut</item>
         <item>@string/jp_notif_tut</item>
         <item>@string/jp_send_tut</item>
-        <item>@string/jp_prefs_tut</item>
+<!--         <item>@string/jp_prefs_tut</item> -->
     </string-array>
     <array name="main_list_icons">
         <item>@drawable/ic_menu_planjourneys</item>
@@ -90,7 +90,7 @@
         <item>@drawable/ic_menu_savedjourneys</item>
         <item>@drawable/ic_menu_notifications</item>
         <item>@drawable/ic_menu_broadcast</item>
-        <item>@drawable/ic_menu_preferences</item>
+<!--         <item>@drawable/ic_menu_preferences</item> -->
     </array>
     <array name="main_list_ids">
         <item>@id/btn_planjourney</item>

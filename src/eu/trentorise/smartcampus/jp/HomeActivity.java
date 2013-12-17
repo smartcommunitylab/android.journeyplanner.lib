@@ -109,6 +109,7 @@ public class HomeActivity extends TutorialManagerActivity {
 		submenu.clear();
 		submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_tutorial, Menu.NONE, R.string.menu_tutorial);
 		submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_help, Menu.NONE, R.string.menu_help);
+		submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_pref, Menu.NONE, R.string.btn_myprofile);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -121,6 +122,10 @@ public class HomeActivity extends TutorialManagerActivity {
 			Intent i = new Intent(Intent.ACTION_VIEW);
 			i.setData(Uri.parse(getString(R.string.url_help)));
 			startActivity(i);
+		} else if (item.getItemId() == R.id.menu_item_pref) {
+			Intent intent = new Intent(this, ProfileActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+			startActivity(intent);
 		}
 
 		return super.onOptionsItemSelected(item);
