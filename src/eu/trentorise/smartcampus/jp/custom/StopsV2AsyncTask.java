@@ -125,9 +125,9 @@ public class StopsV2AsyncTask extends AsyncTask<Object, SmartCheckStop, Boolean>
 
 		if (mOnStopLoadingFinished != null) {
 			mOnStopLoadingFinished.onStopLoadingFinished(result, location, diagonal);
+		} else {
+			mActivity.setProgressBarIndeterminateVisibility(false);
 		}
-
-		//mActivity.setSupportProgressBarIndeterminateVisibility(false);
 	}
 
 	@Override

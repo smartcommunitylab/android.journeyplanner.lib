@@ -57,7 +57,7 @@ import eu.trentorise.smartcampus.jp.helper.processor.SubmitAlertProcessor;
 
 public class BT_DelayFormFragment extends FeedbackFragment {
 
-	public static final String ARG_AGENCYID = "agencyId";
+	public static final String ARG_AGENCYIDS = "agencyId";
 
 	private List<Route> routes = new ArrayList<Route>();
 	private List<Stop> stops = new ArrayList<Stop>();
@@ -103,7 +103,7 @@ public class BT_DelayFormFragment extends FeedbackFragment {
 
 		Bundle bundle = this.getArguments();
 
-		agencyIds = bundle.getStringArray(ARG_AGENCYID);
+		agencyIds = bundle.getStringArray(ARG_AGENCYIDS);
 
 		String itemtext = bundle.getString("itemtext");
 		if (itemtext != null) {

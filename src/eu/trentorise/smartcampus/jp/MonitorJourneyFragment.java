@@ -48,7 +48,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -57,6 +56,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
+import eu.trentorise.smartcampus.android.common.validation.ValidatorHelper;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.PrefsHelper;
@@ -293,11 +293,17 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 
 				RecurrentJourneyParameters rj = params.getData().getParameters();
 				if (fromPosition == null) {
-					Toast.makeText(getActivity(), R.string.from_field_empty, Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getActivity(), R.string.from_field_empty,
+					// Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), fromEditText,
+							getResources().getString(R.string.from_field_empty));
 					return;
 				}
 				if (toPosition == null) {
-					Toast.makeText(getActivity(), R.string.to_field_empty, Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getActivity(), R.string.to_field_empty,
+					// Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), toEditText,
+							getResources().getString(R.string.to_field_empty));
 					return;
 				}
 
@@ -311,28 +317,44 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 
 				CharSequence timeString = fromDate.getText();
 				if (timeString == null) {
-					Toast.makeText(getActivity(), R.string.from_date_field_empty, Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getActivity(),
+					// R.string.from_date_field_empty,
+					// Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), fromDate,
+							getResources().getString(R.string.from_date_field_empty));
 					return;
 				} else {
 					try {
 						fromDateD = Config.FORMAT_DATE_UI.parse(timeString.toString());
 						rj.setFromDate(fromDateD.getTime());
 					} catch (ParseException e) {
-						Toast.makeText(getActivity(), R.string.from_date_field_empty, Toast.LENGTH_SHORT).show();
+						// Toast.makeText(getActivity(),
+						// R.string.from_date_field_empty,
+						// Toast.LENGTH_SHORT).show();
+						ValidatorHelper.highlight(getSherlockActivity(), fromDate,
+								getResources().getString(R.string.from_date_field_empty));
 						return;
 					}
 				}
 
 				timeString = fromTime.getText();
 				if (timeString == null) {
-					Toast.makeText(getActivity(), R.string.from_time_field_empty, Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getActivity(),
+					// R.string.from_time_field_empty,
+					// Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), fromTime,
+							getResources().getString(R.string.from_time_field_empty));
 					return;
 				} else {
 					try {
 						fromTimeD = Config.FORMAT_TIME_UI.parse(timeString.toString());
 						rj.setTime(Config.FORMAT_TIME_SMARTPLANNER.format(fromTimeD));
 					} catch (ParseException e) {
-						Toast.makeText(getActivity(), R.string.from_time_field_empty, Toast.LENGTH_SHORT).show();
+						// Toast.makeText(getActivity(),
+						// R.string.from_time_field_empty,
+						// Toast.LENGTH_SHORT).show();
+						ValidatorHelper.highlight(getSherlockActivity(), fromTime,
+								getResources().getString(R.string.from_time_field_empty));
 						return;
 					}
 				}
@@ -352,7 +374,11 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 				if (!alwaysCheckbox.isChecked())
 
 					if (timeString == null) {
-						Toast.makeText(getActivity(), R.string.to_date_field_empty, Toast.LENGTH_SHORT).show();
+						// Toast.makeText(getActivity(),
+						// R.string.to_date_field_empty,
+						// Toast.LENGTH_SHORT).show();
+						ValidatorHelper.highlight(getSherlockActivity(), toDate,
+								getResources().getString(R.string.to_date_field_empty));
 						return;
 					} else {
 						try {
@@ -361,12 +387,20 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 							if (rj.getFromDate() == rj.getToDate())
 								rj.setToDate(rj.getToDate() + (24 * 60 * 60 * 1000));
 							if ((rj.getToDate() < rj.getFromDate()) && !alwaysCheckbox.isChecked()) {
-								Toast.makeText(getActivity(), R.string.to_date_before_from_date, Toast.LENGTH_SHORT).show();
+								// Toast.makeText(getActivity(),
+								// R.string.to_date_before_from_date,
+								// Toast.LENGTH_SHORT).show();
+								ValidatorHelper.highlight(getSherlockActivity(), toDate,
+										getResources().getString(R.string.to_date_before_from_date));
 								return;
 							}
 
 						} catch (ParseException e) {
-							Toast.makeText(getActivity(), R.string.to_date_field_empty, Toast.LENGTH_SHORT).show();
+							// Toast.makeText(getActivity(),
+							// R.string.to_date_field_empty,
+							// Toast.LENGTH_SHORT).show();
+							ValidatorHelper.highlight(getSherlockActivity(), toDate,
+									getResources().getString(R.string.to_date_field_empty));
 							return;
 						}
 					}
@@ -375,7 +409,10 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 
 				timeString = toTime.getText();
 				if (timeString == null) {
-					Toast.makeText(getActivity(), R.string.to_time_field_empty, Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getActivity(),
+					// R.string.to_time_field_empty, Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), toTime,
+							getResources().getString(R.string.to_time_field_empty));
 					return;
 				} else {
 					try {
@@ -385,19 +422,31 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 						if (rj.getInterval() < 0)
 							rj.setInterval(rj.getInterval() + 24 * 60 * 60 * 1000);
 						if (rj.getInterval() > Config.MAX_RECUR_INTERVAL) {
-							Toast.makeText(getActivity(), R.string.interval_too_large, Toast.LENGTH_SHORT).show();
+							// Toast.makeText(getActivity(),
+							// R.string.interval_too_large,
+							// Toast.LENGTH_SHORT).show();
+							ValidatorHelper.highlight(getSherlockActivity(), toTime,
+									getResources().getString(R.string.interval_too_large));
 							return;
 						}
 
 					} catch (ParseException e) {
-						Toast.makeText(getActivity(), R.string.to_time_field_empty, Toast.LENGTH_SHORT).show();
+						// Toast.makeText(getActivity(),
+						// R.string.to_time_field_empty,
+						// Toast.LENGTH_SHORT).show();
+						ValidatorHelper.highlight(getSherlockActivity(), toTime,
+								getResources().getString(R.string.to_time_field_empty));
 						return;
 					}
 				}
 
 				if (!eu.trentorise.smartcampus.jp.helper.Utils.validFromDateTimeToDateTime(fromDateD, fromTimeD, toDateD,
 						toTimeD) && !alwaysCheckbox.isChecked()) {
-					Toast.makeText(getActivity(), R.string.datetime_to_before_from, Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getActivity(),
+					// R.string.datetime_to_before_from,
+					// Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), toTime,
+							getResources().getString(R.string.datetime_to_before_from));
 					return;
 				}
 
@@ -429,7 +478,8 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 					rj.getRecurrence().add(1);
 
 				if (rj.getRecurrence().isEmpty()) {
-					Toast.makeText(getActivity(), R.string.no_days_selected, Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), getView().findViewById(R.id.monday_toggle), getResources().getString(R.string.no_days_selected));
+//					Toast.makeText(getActivity(), R.string.no_days_selected, Toast.LENGTH_SHORT).show();
 					return;
 				}
 

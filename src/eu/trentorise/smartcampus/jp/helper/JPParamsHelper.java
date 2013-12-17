@@ -1,8 +1,11 @@
 package eu.trentorise.smartcampus.jp.helper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import com.google.android.gms.internal.o;
 
 import android.content.Context;
 import android.util.Log;
@@ -23,6 +26,7 @@ public class JPParamsHelper {
 	public static final String KEY_ALERTROADS_PLANNING = "alertroads_in_planning";
 	public static final String KEY_ALERTROADS_PLANNING_AGENCYID = "alertroads_in_planning_agencyid";
 	public static final String KEY_SMARTCHECK_OPTIONS = "smartcheck_options";
+	public static final String KEY_SUBURBAN_ZONES = "suburban_zones";
 	public static final String KEY_BROADCAST_NOTIFICATIONS_OPTIONS = "broadcast_notifications_options";
 	public static final String KEY_CENTER_MAP = "center_map";
 	public static final String KEY_ZOOM_MAP = "zoom_map";
@@ -87,6 +91,17 @@ public class JPParamsHelper {
 
 	public static String[] getSmartCheckOptions() {
 		return getFilteredResource(R.array.smart_checks_list, KEY_SMARTCHECK_OPTIONS);
+	}
+
+	public static List<String> getSuburbanZones() {
+		List<String> suburbanZones = new ArrayList<String>();
+		List<Integer> result = (List<Integer>) getInstance().getParamsAsset().get(KEY_SUBURBAN_ZONES);
+		if (result != null) {
+			for (Integer n : result) {
+				suburbanZones.add(Integer.toString(n));
+			}
+		}
+		return suburbanZones;
 	}
 
 	/*

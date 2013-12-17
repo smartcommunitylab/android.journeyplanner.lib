@@ -22,11 +22,10 @@ public class SmartCheckActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		super.onCreate(savedInstanceState);
-
-		;		
 		setContentView(R.layout.empty_layout_jp);
 		
-//		BetterMapView mapView = new BetterMapView(this, getResources().getString(R.string.maps_api_key));
+		// BetterMapView mapView = new BetterMapView(this,
+		// getResources().getString(R.string.maps_api_key));
 //		mapView.setClickable(true);
 //		mapView.setBuiltInZoomControls(true);
 //		MapManager.setBetterMapView(mapView);
@@ -68,7 +67,8 @@ public class SmartCheckActivity extends BaseActivity {
 		SherlockFragment smartCheckFragment = (SherlockFragment) getSupportFragmentManager().findFragmentByTag(
 				TAG_SMARTCHECKLIST);
 
-		if (getSupportFragmentManager().getBackStackEntryCount() == 0 && getSupportActionBar().getNavigationMode()!=ActionBar.NAVIGATION_MODE_STANDARD ) {
+		if (getSupportFragmentManager().getBackStackEntryCount() == 0
+				&& getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD) {
 //			super.onBackPressed();
 			
 				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -90,15 +90,6 @@ public class SmartCheckActivity extends BaseActivity {
 		} else {
 			super.onBackPressed();
 		}
-		
-		// } else {
-		// android.support.v4.app.FragmentTransaction fragmentTransaction =
-		// getSupportFragmentManager().beginTransaction();
-		// fragmentTransaction.attach(smartCheckFragment);
-		// fragmentTransaction.commit();
-		//
-		// }
-		
 	}
 
 	@Override

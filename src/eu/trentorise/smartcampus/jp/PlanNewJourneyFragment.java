@@ -54,6 +54,7 @@ import com.google.android.maps.GeoPoint;
 
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper;
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper.OnAddressSelectedListener;
+import eu.trentorise.smartcampus.android.common.validation.ValidatorHelper;
 import eu.trentorise.smartcampus.android.common.SCGeocoder;
 import eu.trentorise.smartcampus.android.common.Utils;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
@@ -84,6 +85,11 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 	protected boolean fromFav = false;
 	protected boolean toFav = false;
 
+	protected AutoCompleteTextView fromEditText;
+	protected AutoCompleteTextView toEditText;
+	protected EditText dateEditText;
+	protected EditText timeEditText;
+	
 	private ImageButton fromFavBtn;
 	private ImageButton toFavBtn;
 
@@ -192,20 +198,23 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 					userPrefsHolder = PrefsHelper.sharedPreferences2Holder(userPrefs);
 				}
 
-				Date fromDate = (Date) getView().findViewById(R.id.plannew_date).getTag();
-				Date fromTime = (Date) getView().findViewById(R.id.plannew_time).getTag();
+				Date fromDate = (Date) dateEditText.getTag();
+				Date fromTime = (Date) timeEditText.getTag();
 
 				if (fromPosition == null) {
-					Toast.makeText(getActivity(), R.string.from_field_empty, Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getActivity(), R.string.from_field_empty, Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), fromEditText, getResources().getString(R.string.from_field_empty));
 					return;
 				}
 				if (toPosition == null) {
-					Toast.makeText(getActivity(), R.string.to_field_empty, Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getActivity(), R.string.to_field_empty, Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), toEditText, getResources().getString(R.string.to_field_empty));
 					return;
 				}
 
 				if (!eu.trentorise.smartcampus.jp.helper.Utils.validFromDateTime(fromDate, fromTime)) {
-					Toast.makeText(getActivity(), R.string.datetime_before_now, Toast.LENGTH_SHORT).show();
+					// Toast.makeText(getActivity(), R.string.datetime_before_now, Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), timeEditText, getResources().getString(R.string.datetime_before_now));
 					return;
 				}
 
@@ -238,7 +247,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 
 	protected void setUpTimingControls() {
 		Date now = new Date();
-		final EditText dateEditText = (EditText) getView().findViewById(R.id.plannew_date);
+		dateEditText = (EditText) getView().findViewById(R.id.plannew_date);
 		
 		/*check if date and time are stored*/
 		if (fromDate == null) {
@@ -258,7 +267,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			}
 		});
 
-		final EditText timeEditText = (EditText) getView().findViewById(R.id.plannew_time);
+		timeEditText = (EditText) getView().findViewById(R.id.plannew_time);
 		if (fromTime == null) {
 			timeEditText.setTag(now);
 			timeEditText.setText(Config.FORMAT_TIME_UI.format(now));
@@ -282,7 +291,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		List<Double> mapcenter = JPParamsHelper.getCenterMap();
 		double[] refLoc = mapcenter == null ? null : new double[] { mapcenter.get(0), mapcenter.get(1) };
 
-		AutoCompleteTextView fromEditText = (AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text);
+		fromEditText = (AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text);
 		GeocodingAutocompletionHelper fromAutocompletionHelper = new GeocodingAutocompletionHelper(
 				getSherlockActivity(), fromEditText, Config.TN_REGION, Config.TN_COUNTRY, Config.TN_ADM_AREA, refLoc);
 		fromAutocompletionHelper.setOnAddressSelectedListener(new OnAddressSelectedListener() {
@@ -295,7 +304,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			fromEditText.setText(fromPosition.getName());
 		}
 
-		AutoCompleteTextView toEditText = (AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text);
+		toEditText = (AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text);
 		GeocodingAutocompletionHelper toAutocompletionHelper = new GeocodingAutocompletionHelper(getSherlockActivity(),
 				toEditText, Config.TN_REGION, Config.TN_COUNTRY, Config.TN_ADM_AREA, refLoc);
 		toAutocompletionHelper.setOnAddressSelectedListener(new OnAddressSelectedListener() {
@@ -334,10 +343,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 						.toString().trim();
 				if (fromString.length() == 0 || isFavorite(fromString)) {
 					createFavoritesDialog(FROM);
-					// Toast.makeText(getActivity(), R.string.from_field_empty,
-					// Toast.LENGTH_SHORT).show();
 				} else {
-					// TODO: dialog to confirm
 					createFavoritesConfirmDialog(FROM);
 				}
 			}
@@ -352,10 +358,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 						.toString().trim();
 				if (toString.length() == 0 || isFavorite(toString)) {
 					createFavoritesDialog(TO);
-					// Toast.makeText(getActivity(), R.string.to_field_empty,
-					// Toast.LENGTH_SHORT).show();
 				} else {
-					// TODO: dialog to confirm
 					createFavoritesConfirmDialog(TO);
 				}
 			}
