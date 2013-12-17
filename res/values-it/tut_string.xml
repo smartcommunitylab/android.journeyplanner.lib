@@ -9,5 +9,13 @@
     <string name="jp_info_tut">Consulta le gli orari di bus e treni e verifica la disponibilità di parcheggi</string>
     <string name="jp_notif_tut">Verifica che il tuo autobus o il tuo treno siano in orario! </string>
     <string name="jp_prefs_tut">Configura qui le tue impostazioni predefinite</string>
+
+    <string name="jp_tut_bus_trento_timetable">bla-bla</string>
+    <string name="jp_tut_bus_rovereto_timetable">bla-bla</string>
+    <string name="jp_tut_suburban_timetable">bla-bla</string>
+    <string name="jp_tut_train_timetable">bla-bla</string>
+    <string name="jp_tut_parking_trento">bla-bla</string>
+    <string name="jp_tut_parking_rovereto">bla-bla</string>
+    <string name="jp_tut_alerts_rovereto">bla-bla</string>
     
 </resources>

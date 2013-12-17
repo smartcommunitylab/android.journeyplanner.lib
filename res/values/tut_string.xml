@@ -8,5 +8,13 @@
     <string name="jp_info_tut">Check the local bus or train schedule or find available parking in the city</string>
     <string name="jp_notif_tut">Check if the bus or train is on time </string>
     <string name="jp_prefs_tut">Set up your defaults here</string>
-    
+
+    <string name="jp_tut_bus_trento_timetable">bla-bla</string>
+    <string name="jp_tut_bus_rovereto_timetable">bla-bla</string>
+    <string name="jp_tut_suburban_timetable">bla-bla</string>
+    <string name="jp_tut_train_timetable">bla-bla</string>
+    <string name="jp_tut_parking_trento">bla-bla</string>
+    <string name="jp_tut_parking_rovereto">bla-bla</string>
+    <string name="jp_tut_alerts_rovereto">bla-bla</string>
+            
 </resources>

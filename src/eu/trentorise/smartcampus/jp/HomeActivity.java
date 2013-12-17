@@ -15,14 +15,19 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -33,32 +38,40 @@ import com.actionbarsherlock.view.SubMenu;
 
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.notifications.BroadcastNotificationsActivity;
 import eu.trentorise.smartcampus.jp.notifications.NotificationsFragmentActivityJP;
 
 public class HomeActivity extends TutorialManagerActivity {
 
-	private boolean mHiddenNotification;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ApplicationInfo ai;
-			try {
-				ai = getPackageManager().getApplicationInfo(
-						getPackageName(), PackageManager.GET_META_DATA);
-
-			Bundle aBundle = ai.metaData;
-			if (aBundle.getBoolean("hidden-notification"))
-					setContentView(R.layout.home_no_notif);
-			else setContentView(R.layout.home);
-			} catch (NameNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		setContentView(R.layout.home);
 		if (getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD)
 			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
+		List<View> list = createButtons();
+		LinearLayout ll = null;
+		LinearLayout parent = (LinearLayout)findViewById(R.id.homelayout);
+		for (int i = 0; i < list.size(); i++){
+			if (ll == null) {
+				ll = new LinearLayout(this);
+				ll.setOrientation(LinearLayout.HORIZONTAL);
+				ll.setGravity(Gravity.TOP | Gravity.CENTER);
+				ll.setWeightSum(3);
+				LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+					     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+				layoutParams.setMargins(0, 32, 0, 0);
+				parent.addView(ll, layoutParams);
+			}
+			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+			layoutParams.weight = 1;
+			ll.addView(list.get(i), layoutParams);
+			if ((i+1) % 3 == 0){
+				ll = null;
+			}
+		}
 		// DEBUG PURPOSE
 		// JPHelper.getTutorialPreferences(this).edit().clear().commit();
 
@@ -66,7 +79,7 @@ public class HomeActivity extends TutorialManagerActivity {
 		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
 				(RelativeLayout) findViewById(R.id.home_relative_layout_jp));
 
-		setHiddenNotification();
+//		setHiddenNotification();
 
 		if (JPHelper.isFirstLaunch(this)) {
 			showTourDialog();
@@ -136,7 +149,7 @@ public class HomeActivity extends TutorialManagerActivity {
 			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 			startActivity(intent);
 			return;
-		} else if (viewId == R.id.btn_monitorrecurrentjourney) {
+		} else if (viewId == R.id.btn_monitorrecurrent) {
 			intent = new Intent(this, MonitorJourneyActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 			startActivity(intent);
@@ -151,13 +164,8 @@ public class HomeActivity extends TutorialManagerActivity {
 			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 			startActivity(intent);
 			return;
-		} else if (viewId == R.id.btn_monitorsavedjourney) {
+		} else if (viewId == R.id.btn_monitorsaved) {
 			intent = new Intent(this, SavedJourneyActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-			startActivity(intent);
-			return;
-		} else if (viewId == R.id.btn_smart) {
-			intent = new Intent(this, SmartCheckActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 			startActivity(intent);
 			return;
@@ -172,21 +180,37 @@ public class HomeActivity extends TutorialManagerActivity {
 			return;
 		}
 	}
-
-	private void setHiddenNotification() {
-		try {
-			ApplicationInfo ai = getPackageManager().getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA);
-			Bundle aBundle = ai.metaData;
-			mHiddenNotification = aBundle.getBoolean("hidden-notification");
-		} catch (NameNotFoundException e) {
-			mHiddenNotification = false;
-			Log.e(HomeActivity.class.getName(), "you should set the hidden-notification metadata in app manifest");
+	
+	private List<View> createButtons() {
+		List<View> list = new ArrayList<View>();
+		// First, set the smart check options
+		String[] smartNames = getResources().getStringArray(R.array.smart_checks_list);
+		List<String> smartNamesFiltered = Arrays.asList(JPParamsHelper.getSmartCheckOptions());
+		TypedArray smartIds = getResources().obtainTypedArray(R.array.smart_check_list_ids);
+		TypedArray smartIcons = getResources().obtainTypedArray(R.array.smart_check_list_icons);
+		for (int i = 0; i < smartNames.length; i++) {
+			if (smartNamesFiltered.contains(smartNames[i])) {
+				Button b = (Button)getLayoutInflater().inflate(R.layout.home_btn, null);
+				b.setText(smartNames[i]);
+				b.setId(smartIds.getResourceId(i, 0));
+				b.setCompoundDrawablesWithIntrinsicBounds(null, smartIcons.getDrawable(i), null, null);
+				list.add(b);
+			}
 		}
-		if (mHiddenNotification) {
-			View notificationButton = findViewById(R.id.btn_notifications);
-			if (notificationButton != null)
-				notificationButton.setVisibility(View.GONE);
+		smartIcons.recycle();
+		smartIds.recycle();
+		String[] allNames = getResources().getStringArray(R.array.main_list);
+		TypedArray allIds = getResources().obtainTypedArray(R.array.main_list_ids);
+		TypedArray allIcons = getResources().obtainTypedArray(R.array.main_list_icons);
+		for (int i = 0; i < allNames.length; i++) {
+			Button b = (Button)getLayoutInflater().inflate(R.layout.home_btn, null);
+			b.setText(allNames[i]);
+			b.setId(allIds.getResourceId(i, 0));
+			b.setCompoundDrawablesWithIntrinsicBounds(null, allIcons.getDrawable(i), null, null);
+			list.add(b);
 		}
-	}
-
+		allIcons.recycle();
+		allIds.recycle();
+		return list;
+	}	
 }
