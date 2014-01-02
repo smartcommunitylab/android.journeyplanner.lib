@@ -18,36 +18,47 @@ package eu.trentorise.smartcampus.jp;
 import it.sayservice.platform.smartplanner.data.message.TType;
 import java.util.Arrays;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
+import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
+import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
+import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
+import eu.trentorise.smartcampus.jp.timetable.CTTTCacheUpdaterAsyncTask;
+import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
+import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class BaseActivity extends FeedbackFragmentActivity {
 
 	private void initDataManagement(Bundle savedInstanceState) {
+		JPHelper.init(getApplicationContext());
+		RoutesDBHelper.init(getApplicationContext());
 		try {
-			JPHelper.init(getApplicationContext());
-			String token = JPHelper.getAccessProvider().getAuthToken(this, null);
-			if (token != null) {
-				initData();
+			if (!JPHelper.getAccessProvider().login(this, null)) {
+				new SCAsyncTask<Void, Void, String>(this, new LoadToken(
+						BaseActivity.this)).execute();
 			}
-		} catch (Exception e) {
-			JPHelper.endAppFailure(this, R.string.app_failure_setup);
-		}
-	}
-	
+			else
+				JPHelper.endAppFailure(this, R.string.app_failure_security);
 
-	protected void initData() {
+		} catch (AACException e) {
+			JPHelper.endAppFailure(this, R.string.app_failure_security);
+			e.printStackTrace();
+		}
 	}
 
 	public void initializeSharedPreferences() {
-		SharedPreferences userPrefs = getSharedPreferences(Config.USER_PREFS, Context.MODE_PRIVATE);
+		SharedPreferences userPrefs = getSharedPreferences(Config.USER_PREFS,
+				Context.MODE_PRIVATE);
 
 		if (userPrefs.getString(Config.USER_PREFS_RTYPE, "").equals("")) {
 			// create default preferences
@@ -56,12 +67,14 @@ public class BaseActivity extends FeedbackFragmentActivity {
 			// transport types
 			for (int i = 0; i < Config.TTYPES_ALLOWED.length; i++) {
 				TType tType = Config.TTYPES_ALLOWED[i];
-				boolean enabled = Arrays.asList(Config.TTYPES_DEFAULT).contains(tType) ? true : false;
+				boolean enabled = Arrays.asList(Config.TTYPES_DEFAULT)
+						.contains(tType) ? true : false;
 				editor.putBoolean(tType.toString(), enabled);
 			}
 
 			// route type
-			editor.putString(Config.USER_PREFS_RTYPE, Config.RTYPE_DEFAULT.toString());
+			editor.putString(Config.USER_PREFS_RTYPE,
+					Config.RTYPE_DEFAULT.toString());
 
 			editor.commit();
 		}
@@ -76,24 +89,22 @@ public class BaseActivity extends FeedbackFragmentActivity {
 			initializeSharedPreferences();
 		}
 	}
-	
-
-	
-
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == SCAccessProvider.SC_AUTH_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				String token = data.getExtras().getString(AccountManager.KEY_AUTHTOKEN);
+				String token = data.getExtras().getString(
+						AccountManager.KEY_AUTHTOKEN);
 				if (token == null) {
 					JPHelper.endAppFailure(this, R.string.app_failure_security);
-				} else {
-					initData();
 				}
 			} else if (resultCode == RESULT_CANCELED) {
-				JPHelper.endAppFailure(this, R.string.token_required);
+				// TODO degio look for the missing string
+				// JPHelper.endAppFailure(this, R.string.token_required);
+				JPHelper.endAppFailure(this, R.string.app_failure_security);
+
 			}
 		}
 	}
@@ -110,6 +121,31 @@ public class BaseActivity extends FeedbackFragmentActivity {
 
 	@Override
 	public String getAuthToken() {
-		return JPHelper.getAuthToken();
+		try {
+			return JPHelper.getAuthToken(this);
+		} catch (AACException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private class LoadToken extends AbstractAsyncTaskProcessor<Void, String> {
+
+		public LoadToken(Activity activity) {
+			super(activity);
+		}
+
+		@Override
+		public String performAction(Void... params) throws SecurityException,
+				ConnectionException, Exception {
+			return JPHelper.getAuthToken(BaseActivity.this);
+		}
+
+		@Override
+		public void handleResult(String result) {
+			//ok
+		}
+
 	}
 }

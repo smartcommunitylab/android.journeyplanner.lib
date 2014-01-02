@@ -39,7 +39,7 @@ import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.jp.model.RouteDescriptor;
-import eu.trentorise.smartcampus.jp.model.TripData;
+import eu.trentorise.smartcampus.mobilityservice.model.TripData;
 
 public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 
@@ -98,6 +98,7 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 				holder.route.setText(tripData.getRouteShortName() + " - " + tripData.getRouteName());
 			}
 
+			rd.getNameResource();
 			holder.route.setVisibility(View.VISIBLE);
 		} else {
 			holder.route.setVisibility(View.GONE);
@@ -131,8 +132,8 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 		 * 
 		 */
 
-		Map<CreatorType, String> delays = tripData.getDelays();
-		if (delays != null) {
+		if (tripData.getDelay() != null && tripData.getDelay().getValues() != null) {
+			Map<CreatorType, String> delays = tripData.getDelay().getValues();
 			if (delays.get(CreatorType.USER) != null) {
 				holder.delayUser
 						.setText(mContext.getString(R.string.smart_check_stops_delay_user, delays.get(CreatorType.USER)));
@@ -168,8 +169,8 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 			delaysLinearLayout.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Map<CreatorType, String> delays = tripData.getDelays();
-					if (delays != null && !delays.isEmpty()) {
+					if (tripData.getDelay() != null && tripData.getDelay().getValues() != null && !tripData.getDelay().getValues().isEmpty()) {
+						Map<CreatorType, String> delays = tripData.getDelay().getValues();
 						DelaysDialogFragment delaysDialog = new DelaysDialogFragment();
 						Bundle args = new Bundle();
 						args.putSerializable(DelaysDialogFragment.ARG_DELAYS, (Serializable) delays);

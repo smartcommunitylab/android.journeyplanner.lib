@@ -15,15 +15,11 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom;
 
-import it.sayservice.platform.smartplanner.data.message.TType;
-
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,20 +29,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.jp.Config;
-import eu.trentorise.smartcampus.jp.MonitorJourneyFragment;
 import eu.trentorise.smartcampus.jp.R;
-import eu.trentorise.smartcampus.jp.custom.MyItinerariesListAdapter.MonitorMyItineraryProcessor;
-import eu.trentorise.smartcampus.jp.custom.data.BasicItinerary;
-import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourney;
-import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourneyParameters;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
-import eu.trentorise.smartcampus.jp.helper.Utils;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class MyRecurItinerariesListAdapter extends ArrayAdapter<BasicRecurrentJourney> {
@@ -199,7 +191,7 @@ public class MyRecurItinerariesListAdapter extends ArrayAdapter<BasicRecurrentJo
 			 position = (Integer) params[2];
 			// myItineraries=(List<BasicRecurrentJourneyParameters>) params[1];
 			 id =  (String) params[1];
-			return JPHelper.monitorMyRecItinerary(monitor, id);
+			return JPHelper.monitorMyRecItinerary(monitor, id,JPHelper.getAuthToken(context));
 		}
 
 		@Override

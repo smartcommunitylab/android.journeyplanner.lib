@@ -96,8 +96,7 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 				transportTypesList.add(l.getTransport().getType());
 			}
 
-			if ((!l.getAlertDelayList().isEmpty() || !l.getAlertParkingList().isEmpty() || !l.getAlertStrikeList()
-					.isEmpty() || !l.getAlertRoadList().isEmpty() || !l.getAlertAccidentList().isEmpty()) && !hasAlerts) {
+			if (Utils.containsAlerts(l) && !hasAlerts) {
 				hasAlerts = true;
 			}
 		}

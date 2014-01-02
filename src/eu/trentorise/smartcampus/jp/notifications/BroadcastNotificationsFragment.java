@@ -29,8 +29,6 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
-import eu.trentorise.smartcampus.ac.UserRegistration;
-import eu.trentorise.smartcampus.ac.authenticator.AMSCAccessProvider;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
@@ -82,25 +80,26 @@ public class BroadcastNotificationsFragment extends FeedbackFragment {
 					// fragment = new FormFragment();
 					Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.tmp, Toast.LENGTH_SHORT).show();
 				}
-
-				if (new AMSCAccessProvider().isUserAnonymous(getSherlockActivity())) {
-					// show dialog box
-					UserRegistration.upgradeuser(getSherlockActivity());
-
-				} else if (fragment != null) {
-
-					fragment.setArguments(bundle);
+				// TODO handle the anonymous user
+				// if (new
+				// AMSCAccessProvider().isUserAnonymous(getSherlockActivity()))
+				// {
+				// // show dialog box
+				// UserRegistration.upgradeuser(getSherlockActivity());
+				// }
+				// else 
+				if (fragment != null) {
+					 fragment.setArguments(bundle);
 					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
 							.beginTransaction();
 					// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-					// fragmentTransaction.detach(self);
-					fragmentTransaction.replace(Config.mainlayout, fragment, Config.NOTIFICATIONS);
-					fragmentTransaction.addToBackStack(fragment.getTag());
-					fragmentTransaction.commit();
-				}
+					 // fragmentTransaction.detach(self);
+					 fragmentTransaction.replace(Config.mainlayout, fragment, Config.NOTIFICATIONS);
+					 fragmentTransaction.addToBackStack(fragment.getTag());
+					 fragmentTransaction.commit();
+				 }
 			}
 		});
 
 	}
-
 }

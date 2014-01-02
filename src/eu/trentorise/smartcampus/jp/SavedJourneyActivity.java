@@ -15,18 +15,12 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 
 import eu.trentorise.smartcampus.jp.custom.TabListener;
-import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourney;
 
 public class SavedJourneyActivity extends BaseActivity {
 	

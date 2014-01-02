@@ -39,7 +39,7 @@ import eu.trentorise.smartcampus.jp.R;
  * @author raman
  *
  */
-public class DelaysView extends CustomGridView<Map<String,String>> {
+public class DelaysView extends CustomGridView<Map<CreatorType,String>> {
 
 	protected Paint mVLinePaint;
 	protected Paint mHLinePaint;
@@ -89,12 +89,12 @@ public class DelaysView extends CustomGridView<Map<String,String>> {
 	}
 
 	@Override
-	protected void handleClick(Map<String,String> item) {
+	protected void handleClick(Map<CreatorType,String> item) {
 		if (item == null) return;
 		final Map<CreatorType, String> delaysCreatorTypesMap = new HashMap<CreatorType, String>();
-		for (Entry<String, String> delay : item.entrySet()) {
+		for (Entry<CreatorType, String> delay : item.entrySet()) {
 			if (!delay.getValue().equalsIgnoreCase("0")) {
-				CreatorType ct = CreatorType.getAlertType(delay.getKey());
+				CreatorType ct = delay.getKey();
 				delaysCreatorTypesMap.put(ct, delay.getValue());
 			}
 		}	
@@ -108,13 +108,13 @@ public class DelaysView extends CustomGridView<Map<String,String>> {
 	}
 
 	@Override
-	protected void drawCell(Canvas canvas, Map<String,String> item, int row, int col, int x, int y) {
+	protected void drawCell(Canvas canvas, Map<CreatorType,String> item, int row, int col, int x, int y) {
 		Map<CreatorType,String> map = new HashMap<CreatorType, String>(2);
 		if (item != null) {
-			for (Iterator<Entry<String,String>> iterator = item.entrySet().iterator(); iterator.hasNext();) {
-				Entry<String,String> delay = iterator.next();
+			for (Iterator<Entry<CreatorType,String>> iterator = item.entrySet().iterator(); iterator.hasNext();) {
+				Entry<CreatorType,String> delay = iterator.next();
 				if (!delay.getValue().equalsIgnoreCase("0")) {
-					CreatorType ct = CreatorType.getAlertType(delay.getKey());
+					CreatorType ct = delay.getKey();
 					map.put(ct, delay.getValue());
 				}
 			}
@@ -135,7 +135,7 @@ public class DelaysView extends CustomGridView<Map<String,String>> {
 
 
 	@Override
-	public void setData(List<Map<String, String>> data) {
+	public void setData(List<Map<CreatorType, String>> data) {
 		super.setData(data);
 		setNumRows(1);
 		setNumCols(data == null ? 0 : data.size());

@@ -9,5 +9,13 @@
     <string name="jp_info_tut">Consulta le gli orari di bus e treni e verifica la disponibilità di parcheggi</string>
     <string name="jp_notif_tut">Verifica che il tuo autobus o il tuo treno siano in orario! </string>
     <string name="jp_prefs_tut">Configura qui le tue impostazioni predefinite</string>
+
+    <string name="jp_tut_bus_trento_timetable">Consulta l\'orario degli autobus urbani di Trento</string>
+    <string name="jp_tut_bus_rovereto_timetable">Consulta l\'orario degli autobus urbani di Rovereto</string>
+    <string name="jp_tut_suburban_timetable">Consulta l\'orario degli autobus extraurbani</string>
+    <string name="jp_tut_train_timetable">Consulta l\'orario dei treni</string>
+    <string name="jp_tut_parking_trento">Verifica la disponibilità di posteggi nelle strutture di Trento</string>
+    <string name="jp_tut_parking_rovereto">Verifica la disponibilità di posteggi nelle strutture di Rovereto</string>
+    <string name="jp_tut_alerts_rovereto">Informati sulle ordinanze comunali relative alla viabilità</string>
     
 </resources>

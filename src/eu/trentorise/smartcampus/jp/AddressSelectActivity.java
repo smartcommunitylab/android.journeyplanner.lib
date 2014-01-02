@@ -29,10 +29,12 @@ import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.maps.GeoPoint;
 
+import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.android.common.SCGeocoder;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.android.map.InfoDialog;
@@ -121,7 +123,13 @@ public class AddressSelectActivity extends BaseActivity implements OnMapLongClic
 
 	@Override
 	public String getAuthToken() {
-		return JPHelper.getAuthToken();
+		try {
+			return JPHelper.getAuthToken(this);
+		} catch (AACException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

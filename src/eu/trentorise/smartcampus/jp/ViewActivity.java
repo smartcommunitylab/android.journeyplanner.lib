@@ -22,9 +22,9 @@ import com.actionbarsherlock.app.SherlockFragment;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
-import eu.trentorise.smartcampus.jp.custom.data.BasicItinerary;
-import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class ViewActivity extends BaseActivity {
@@ -45,7 +45,6 @@ public class ViewActivity extends BaseActivity {
 		initData();
 	}
 
-	@Override
 	protected void initData() {
 		try {
 			new LoadTask().execute();
@@ -63,7 +62,7 @@ public class ViewActivity extends BaseActivity {
 				public Object performAction(Void... params) throws SecurityException, Exception {
 					String objectId = getIntent().getStringExtra(getString(R.string.view_intent_arg_object_id));
 					if (objectId != null) {
-						return JPHelper.getItineraryObject(objectId);
+						return JPHelper.getItineraryObject(objectId,JPHelper.getAuthToken(ViewActivity.this));
 					}
 					return null;
 				}
@@ -78,7 +77,7 @@ public class ViewActivity extends BaseActivity {
 				
 							fragment = new MyRecurItineraryFragment();
 							Bundle b = new Bundle();
-							b.putSerializable(MyRecurItineraryFragment.PARAMS, (BasicRecurrentJourney)result);
+							b.putSerializable(MyRecurItineraryFragment.PARAMS, ((BasicRecurrentJourney)result));
 							b.putBoolean(MyRecurItineraryFragment.PARAM_EDITING,false );
 
 							fragment.setArguments(b);

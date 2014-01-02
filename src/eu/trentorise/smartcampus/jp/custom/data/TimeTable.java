@@ -3,6 +3,8 @@ package eu.trentorise.smartcampus.jp.custom.data;
 import java.util.List;
 import java.util.Map;
 
+import eu.trentorise.smartcampus.mobilityservice.model.Delay;
+
 public class TimeTable {
 
 	private List<List<String>> tripIds;
@@ -31,11 +33,11 @@ public class TimeTable {
 		this.times = times;
 	}
 
-	public List<List<Map<String, String>>> getDelays() {
+	public List<Delay> getDelays() {
 		return delays;
 	}
 
-	public void setDelays(List<List<Map<String, String>>> delays) {
+	public void setDelays(List<Delay> delays) {
 		this.delays = delays;
 	}
 
@@ -50,7 +52,7 @@ public class TimeTable {
 	private List<String> stops;
 	private List<String> stopsId;
 	private List<List<List<String>>> times;
-	private List<List<Map<String, String>>> delays;
+	private List<Delay> delays;
 
 	// {
 	// "stops" : [ "piazza", "via"],

@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.jp.helper.processor;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
@@ -33,8 +34,10 @@ public class DeleteMyRecurItineraryProcessor extends AbstractAsyncTaskProcessor<
 
 	private String name;
 	private String mTag;
+	private Context ctx;
 	public DeleteMyRecurItineraryProcessor(SherlockFragmentActivity activity, String mTag) {
 		super(activity);
+		ctx = activity.getApplicationContext();
 		this.mTag = mTag;
 	}
 
@@ -42,7 +45,7 @@ public class DeleteMyRecurItineraryProcessor extends AbstractAsyncTaskProcessor<
 	public Void performAction(String... strings) throws SecurityException, Exception {
 		name = strings[0];
 		String id = strings[1];
-		JPHelper.deleteMyRecurItinerary(id);
+		JPHelper.deleteMyRecurItinerary(id,JPHelper.getAuthToken(ctx));
 		return null;
 	}
 

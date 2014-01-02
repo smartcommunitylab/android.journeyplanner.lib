@@ -23,14 +23,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
@@ -40,15 +37,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
-import eu.trentorise.smartcampus.jp.custom.ItinerariesListAdapter.RowHolder;
-import eu.trentorise.smartcampus.jp.custom.data.BasicItinerary;
-import eu.trentorise.smartcampus.jp.custom.draw.LineDrawView;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.Utils;
-import eu.trentorise.smartcampus.jp.helper.processor.MonitorMyItineraryProcessor;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class MyItinerariesListAdapter extends ArrayAdapter<BasicItinerary> {
@@ -230,7 +227,7 @@ public class MyItinerariesListAdapter extends ArrayAdapter<BasicItinerary> {
 			 position = (Integer) params[2];
 			 myItineraries=(List<BasicItinerary>) params[1];
 			 id =  myItineraries.get(position).getClientId();
-			return JPHelper.monitorMyItinerary(monitor, id);
+			return JPHelper.monitorMyItinerary(monitor, id,JPHelper.getAuthToken(context));
 		}
 
 		@Override

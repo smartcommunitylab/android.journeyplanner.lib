@@ -6,7 +6,7 @@
         <item>_A</item>
         <item>_B</item>
         <item>C</item>
-        <!-- <item>D</item> -->
+<!--         <item>D</item> -->
         <item>01</item>
         <item>02</item>
         <item>03</item>
@@ -32,7 +32,7 @@
         <item>@drawable/ic_f_a</item>
         <item>@drawable/ic_f_b</item>
         <item>@drawable/ic_f_c</item>
-        <!-- <item>@drawable/ic_f_d</item> -->
+<!--         <item>@drawable/ic_f_d</item> -->
         <item>@drawable/ic_f1</item>
         <item>@drawable/ic_f2</item>
         <item>@drawable/ic_f3</item>
@@ -57,7 +57,7 @@
         <item>#B9BAB5</item>
         <item>#717880</item>
         <item>#000</item>
-        <!-- <item>#000</item> -->
+<!--         <item>#000</item> -->
         <item>#174072</item>
         <item>#D65A2E</item>
         <item>#C02927</item>
@@ -300,8 +300,8 @@
     <string name="agency_12_route__B">Piazza Dante - Laste - Piazza Dante</string>
     <string name="agency_12_route_Ca">RSA S. Bartolomeo - RSA Ex Ospedalino</string>
     <string name="agency_12_route_Cr">RSA Ex Ospedalino - RSA S. Bartolomeo</string>
-    <!-- <string name="agency_12_route_Da">Servizio R.S.A.: Porta Nuova - S. Bartolomeo</string> -->
-    <!-- <string name="agency_12_route_Dr">SERVIZIO R.S.A.: S. Bartolomeo - Via Grazioli</string> -->
+<!--     <string name="agency_12_route_Da">Servizio R.S.A.: Porta Nuova - S. Bartolomeo</string> -->
+<!--     <string name="agency_12_route_Dr">SERVIZIO R.S.A.: S. Bartolomeo - Via Grazioli</string> -->
     <string name="agency_12_route_NPA">Navetta parcheggi: Ex Zuffo - Monte Baldo - Ex Zuffo</string>
     <string name="agency_12_route_01">Roncafort - P. Dante - Osp. S. Chiara- Roncafort</string>
     <string name="agency_12_route_02">Vela - P. Dante - Osp. S. Chiara - P. Dante -Vela</string>
@@ -833,5 +833,5 @@
     <string name="agency_16_route_N3R_Rov">Notturno: Stazione Fs Castellano</string>
     <string name="agency_16_route_N5R_Rov">Notturno: C.So Bettini Isera Nomi</string>
     <string name="agency_16_route_N6_Rov">Notturno: Nomi Besenello V.Cesari</string>
-
+    
 </resources>

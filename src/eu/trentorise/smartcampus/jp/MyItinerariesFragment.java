@@ -31,15 +31,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.custom.MyItinerariesListAdapter;
-import eu.trentorise.smartcampus.jp.custom.data.BasicItinerary;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class MyItinerariesFragment extends FeedbackFragment {
@@ -113,7 +112,7 @@ public class MyItinerariesFragment extends FeedbackFragment {
 
 		@Override
 		public List<BasicItinerary> performAction(Void... params) throws SecurityException, Exception {
-			return JPHelper.getMyItineraries();
+			return JPHelper.getMyItineraries(JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override

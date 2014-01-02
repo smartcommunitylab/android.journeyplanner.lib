@@ -44,7 +44,7 @@ public class DeleteMyItineraryProcessor extends AbstractAsyncTaskProcessor<Strin
 		// 1: id
 		name = strings[0];
 		String id = strings[1];
-		JPHelper.deleteMyItinerary(id);
+		JPHelper.deleteMyItinerary(id,JPHelper.getAuthToken(ctx));
 		return null;
 	}
 

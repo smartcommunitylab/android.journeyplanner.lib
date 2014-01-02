@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.helper.processor;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -22,23 +23,25 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import eu.trentorise.smartcampus.jp.MyItinerariesFragment;
-import eu.trentorise.smartcampus.jp.MyRecurItineraryFragment;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.SavedJourneyActivity;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
-import eu.trentorise.smartcampus.jp.custom.data.BasicItinerary;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class SaveItineraryProcessor extends AbstractAsyncTaskProcessor<BasicItinerary, Void> {
 
+	private Context ctx;
+
 	public SaveItineraryProcessor(SherlockFragmentActivity activity) {
 		super(activity);
+		ctx=activity.getApplicationContext();
 	}
 
 	@Override
 	public Void performAction(BasicItinerary... array) throws SecurityException, Exception {
-		JPHelper.saveItinerary(array[0]);
+		JPHelper.saveItinerary(array[0],JPHelper.getAuthToken(ctx));
 		return null;
 	}
 

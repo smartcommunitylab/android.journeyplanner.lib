@@ -16,7 +16,7 @@ import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater
 import eu.trentorise.smartcampus.jp.custom.SmartCheckRoutesListAdapter;
 import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckTripsProcessor;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
-import eu.trentorise.smartcampus.jp.model.TripData;
+import eu.trentorise.smartcampus.mobilityservice.model.TripData;
 
 public class SmartCheckStopFragment extends SherlockListFragment {
 

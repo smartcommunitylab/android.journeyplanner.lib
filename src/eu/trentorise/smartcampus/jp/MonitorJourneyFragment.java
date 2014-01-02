@@ -48,7 +48,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -59,10 +58,10 @@ import com.actionbarsherlock.view.SubMenu;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.common.validation.ValidatorHelper;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
-import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.PrefsHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.DeleteMyRecurItineraryProcessor;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class MonitorJourneyFragment extends PlanNewJourneyFragment {
@@ -185,7 +184,7 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 							new DeleteMyRecurItineraryProcessor(getSherlockActivity(), MonitorJourneyFragment.this.getTag()));
 					task.execute(params.getName(), params.getClientId());
 					dialog.dismiss();
-					// getSherlockActivity().getSupportFragmentManager().popBackStackImmediate();
+//					getSherlockActivity().getSupportFragmentManager().popBackStackImmediate();
 				}
 			});
 			deleteAlertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -479,7 +478,8 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 					rj.getRecurrence().add(1);
 
 				if (rj.getRecurrence().isEmpty()) {
-					Toast.makeText(getActivity(), R.string.no_days_selected, Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), getView().findViewById(R.id.monday_toggle), getResources().getString(R.string.no_days_selected));
+//					Toast.makeText(getActivity(), R.string.no_days_selected, Toast.LENGTH_SHORT).show();
 					return;
 				}
 
@@ -704,7 +704,7 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 			// 1: id
 			boolean monitor = Boolean.parseBoolean(strings[0]);
 			String id = strings[1];
-			return JPHelper.monitorMyRecItinerary(monitor, id);
+			return JPHelper.monitorMyRecItinerary(monitor, id, JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override

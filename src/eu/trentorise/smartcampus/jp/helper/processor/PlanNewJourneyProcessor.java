@@ -42,7 +42,7 @@ public class PlanNewJourneyProcessor extends AbstractAsyncTaskProcessor<SingleJo
 
 	@Override
 	public List<Itinerary> performAction(SingleJourney... array) throws SecurityException, Exception {
-		return JPHelper.planSingleJourney(array[0]);
+		return JPHelper.planSingleJourney(array[0],JPHelper.getAuthToken(activity));
 	}
 
 	@Override

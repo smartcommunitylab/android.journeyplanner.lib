@@ -18,6 +18,7 @@ package eu.trentorise.smartcampus.jp.helper.processor;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.widget.ArrayAdapter;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -25,16 +26,18 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
-import eu.trentorise.smartcampus.jp.model.TripData;
+import eu.trentorise.smartcampus.mobilityservice.model.TripData;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class SmartCheckTripsProcessor extends AbstractAsyncTaskProcessor<SmartCheckStop, List<TripData>> {
 
 	private ArrayAdapter<TripData> adapter;
+	private Context ctx;
 
 	public SmartCheckTripsProcessor(SherlockFragmentActivity activity, ArrayAdapter<TripData> adapter) {
 		super(activity);
 		this.adapter = adapter;
+		ctx= activity.getApplicationContext();
 	}
 
 	@Override
@@ -44,7 +47,7 @@ public class SmartCheckTripsProcessor extends AbstractAsyncTaskProcessor<SmartCh
 		for (int i = 0; i < params.length; i++) {
 			SmartCheckStop stop = params[i];
 			if (stop != null) {
-				list = JPHelper.getTrips(stop);
+				list = JPHelper.getTrips(stop,JPHelper.getAuthToken(ctx));
 				break;
 			}
 		}

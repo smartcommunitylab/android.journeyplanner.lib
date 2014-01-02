@@ -38,7 +38,7 @@ public class MonitorMyItineraryProcessor extends AbstractAsyncTaskProcessor<Stri
 		// 1: id
 		boolean monitor = Boolean.parseBoolean(strings[0]);
 		String id = strings[1];
-		JPHelper.monitorMyItinerary(monitor, id);
+		JPHelper.monitorMyItinerary(monitor, id,JPHelper.getAuthToken(ctx));
 		return null;
 	}
 

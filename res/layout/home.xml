@@ -35,107 +35,107 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:gravity="top"
-                android:orientation="horizontal"
-                android:weightSum="3" >
+<!--             <LinearLayout -->
+<!--                 android:layout_width="match_parent" -->
+<!--                 android:layout_height="wrap_content" -->
+<!--                 android:layout_marginTop="32dp" -->
+<!--                 android:gravity="top" -->
+<!--                 android:orientation="horizontal" -->
+<!--                 android:weightSum="3" > -->
 
-                <Button
-                    android:id="@+id/btn_planjourney"
-                    style="@style/homeButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_menu_planjourneys"
-                    android:onClick="goToFunctionality"
-                    android:text="@string/btn_planjourney"
-                    android:textAppearance="@android:style/TextAppearance.Small" />
+<!--                 <Button -->
+<!--                     android:id="@+id/btn_planjourney" -->
+<!--                     style="@style/homeButton" -->
+<!--                     android:layout_width="0dp" -->
+<!--                     android:layout_height="wrap_content" -->
+<!--                     android:layout_weight="1" -->
+<!--                     android:drawableTop="@drawable/ic_menu_planjourneys" -->
+<!--                     android:onClick="goToFunctionality" -->
+<!--                     android:text="@string/btn_planjourney" -->
+<!--                     android:textAppearance="@android:style/TextAppearance.Small" /> -->
 
-                <Button
-                    android:id="@+id/btn_monitorrecurrentjourney"
-                    style="@style/homeButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_menu_monitorjourneys"
-                    android:onClick="goToFunctionality"
-                    android:text="@string/btn_monitorrecurrent"
-                    android:textAppearance="@android:style/TextAppearance.Small" />
+<!--                 <Button -->
+<!--                     android:id="@+id/btn_monitorrecurrentjourney" -->
+<!--                     style="@style/homeButton" -->
+<!--                     android:layout_width="0dp" -->
+<!--                     android:layout_height="wrap_content" -->
+<!--                     android:layout_weight="1" -->
+<!--                     android:drawableTop="@drawable/ic_menu_monitorjourneys" -->
+<!--                     android:onClick="goToFunctionality" -->
+<!--                     android:text="@string/btn_monitorrecurrent" -->
+<!--                     android:textAppearance="@android:style/TextAppearance.Small" /> -->
 
-                <Button
-                    android:id="@+id/btn_monitorsavedjourney"
-                    style="@style/homeButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_menu_savedjourneys"
-                    android:onClick="goToFunctionality"
-                    android:text="@string/btn_monitorsaved"
-                    android:textAppearance="@android:style/TextAppearance.Small" />
-            </LinearLayout>
+<!--                 <Button -->
+<!--                     android:id="@+id/btn_monitorsavedjourney" -->
+<!--                     style="@style/homeButton" -->
+<!--                     android:layout_width="0dp" -->
+<!--                     android:layout_height="wrap_content" -->
+<!--                     android:layout_weight="1" -->
+<!--                     android:drawableTop="@drawable/ic_menu_savedjourneys" -->
+<!--                     android:onClick="goToFunctionality" -->
+<!--                     android:text="@string/btn_monitorsaved" -->
+<!--                     android:textAppearance="@android:style/TextAppearance.Small" /> -->
+<!--             </LinearLayout> -->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:gravity="top"
-                android:orientation="horizontal"
-                android:weightSum="3" >
+<!--             <LinearLayout -->
+<!--                 android:layout_width="match_parent" -->
+<!--                 android:layout_height="wrap_content" -->
+<!--                 android:layout_marginTop="32dp" -->
+<!--                 android:gravity="top" -->
+<!--                 android:orientation="horizontal" -->
+<!--                 android:weightSum="3" > -->
 
-                <Button
-                    android:id="@+id/btn_notifications"
-                    style="@style/homeButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_menu_notifications"
-                    android:onClick="goToFunctionality"
-                    android:text="@string/btn_notifications"
-                    android:textAppearance="@android:style/TextAppearance.Small" />
+<!--                 <Button -->
+<!--                     android:id="@+id/btn_notifications" -->
+<!--                     style="@style/homeButton" -->
+<!--                     android:layout_width="0dp" -->
+<!--                     android:layout_height="wrap_content" -->
+<!--                     android:layout_weight="1" -->
+<!--                     android:drawableTop="@drawable/ic_menu_notifications" -->
+<!--                     android:onClick="goToFunctionality" -->
+<!--                     android:text="@string/btn_notifications" -->
+<!--                     android:textAppearance="@android:style/TextAppearance.Small" /> -->
 
-                <Button
-                    android:id="@+id/btn_broadcast"
-                    style="@style/homeButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_menu_broadcast"
-                    android:onClick="goToFunctionality"
-                    android:text="@string/btn_broadcast"
-                    android:textAppearance="@android:style/TextAppearance.Small" />
+<!--                 <Button -->
+<!--                     android:id="@+id/btn_broadcast" -->
+<!--                     style="@style/homeButton" -->
+<!--                     android:layout_width="0dp" -->
+<!--                     android:layout_height="wrap_content" -->
+<!--                     android:layout_weight="1" -->
+<!--                     android:drawableTop="@drawable/ic_menu_broadcast" -->
+<!--                     android:onClick="goToFunctionality" -->
+<!--                     android:text="@string/btn_broadcast" -->
+<!--                     android:textAppearance="@android:style/TextAppearance.Small" /> -->
 
-                <Button
-                    android:id="@+id/btn_smart"
-                    style="@style/homeButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_menu_realtimeinfo"
-                    android:onClick="goToFunctionality"
-                    android:text="@string/btn_smartcheck"
-                    android:textAppearance="@android:style/TextAppearance.Small" />
-            </LinearLayout>
+<!--                 <Button -->
+<!--                     android:id="@+id/btn_smart" -->
+<!--                     style="@style/homeButton" -->
+<!--                     android:layout_width="0dp" -->
+<!--                     android:layout_height="wrap_content" -->
+<!--                     android:layout_weight="1" -->
+<!--                     android:drawableTop="@drawable/ic_menu_realtimeinfo" -->
+<!--                     android:onClick="goToFunctionality" -->
+<!--                     android:text="@string/btn_smartcheck" -->
+<!--                     android:textAppearance="@android:style/TextAppearance.Small" /> -->
+<!--             </LinearLayout> -->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:gravity="top|center_horizontal"
-                android:orientation="horizontal" >
+<!--             <LinearLayout -->
+<!--                 android:layout_width="match_parent" -->
+<!--                 android:layout_height="wrap_content" -->
+<!--                 android:layout_marginTop="32dp" -->
+<!--                 android:gravity="top|center_horizontal" -->
+<!--                 android:orientation="horizontal" > -->
 
-                <Button
-                    android:id="@+id/btn_myprofile"
-                    style="@style/homeButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_menu_preferences"
-                    android:onClick="goToFunctionality"
-                    android:text="@string/btn_myprofile"
-                    android:textAppearance="@android:style/TextAppearance.Small" />
-            </LinearLayout>
+<!--                 <Button -->
+<!--                     android:id="@+id/btn_myprofile" -->
+<!--                     style="@style/homeButton" -->
+<!--                     android:layout_width="wrap_content" -->
+<!--                     android:layout_height="wrap_content" -->
+<!--                     android:drawableTop="@drawable/ic_menu_preferences" -->
+<!--                     android:onClick="goToFunctionality" -->
+<!--                     android:text="@string/btn_myprofile" -->
+<!--                     android:textAppearance="@android:style/TextAppearance.Small" /> -->
+<!--             </LinearLayout> -->
         </LinearLayout>
     </ScrollView>
 

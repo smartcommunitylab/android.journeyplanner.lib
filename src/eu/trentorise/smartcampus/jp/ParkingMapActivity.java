@@ -40,6 +40,7 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
 
+import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.map.ParkingObjectMapItemTapListener;
@@ -226,6 +227,12 @@ public class ParkingMapActivity extends BaseActivity implements ParkingObjectMap
 
 	@Override
 	public String getAuthToken() {
-		return JPHelper.getAuthToken();
+		try {
+			return JPHelper.getAuthToken(this);
+		} catch (AACException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

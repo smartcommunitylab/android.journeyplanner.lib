@@ -35,8 +35,8 @@ import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.custom.MyRecurItinerariesListAdapter;
-import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class MyRecurItinerariesFragment extends FeedbackFragment {
@@ -120,7 +120,7 @@ public class MyRecurItinerariesFragment extends FeedbackFragment {
 		@Override
 		public List<BasicRecurrentJourney> performAction(Void... params)
 				throws SecurityException, Exception {
-			return JPHelper.getMyRecurItineraries();
+			return JPHelper.getMyRecurItineraries(JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override

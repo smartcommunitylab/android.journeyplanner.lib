@@ -38,7 +38,7 @@ public class SubmitAlertProcessor extends AbstractAsyncTaskProcessor<BasicAlert,
 
 	@Override
 	public Void performAction(BasicAlert... array) throws SecurityException, Exception {
-		JPHelper.submitAlert(array[0]);
+		JPHelper.submitAlert(array[0],JPHelper.getAuthToken(ctx));
 		return null;
 	}
 

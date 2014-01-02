@@ -36,7 +36,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -47,9 +46,9 @@ import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.custom.LegsListAdapter;
-import eu.trentorise.smartcampus.jp.custom.data.BasicItinerary;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.DeleteMyItineraryProcessor;
+import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class MyItineraryFragment extends FeedbackFragment {
@@ -262,7 +261,7 @@ public class MyItineraryFragment extends FeedbackFragment {
 			// 1: id
 			boolean monitor = Boolean.parseBoolean(strings[0]);
 			String id = strings[1];
-			return JPHelper.monitorMyItinerary(monitor, id);
+			return JPHelper.monitorMyItinerary(monitor, id, JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override
