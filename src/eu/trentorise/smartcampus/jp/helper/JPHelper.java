@@ -663,7 +663,7 @@ public class JPHelper {
 		filter.setClassName("eu.trentorise.smartcampus.dt.model.POIObject");
 
 		filter.setSkip(0);
-		filter.setLimit(-1);
+		filter.setLimit(50);
 		filter.setTypes(Collections.singletonList("Mobility"));
 
 		Map<String, Object> criteria = new HashMap<String, Object>();

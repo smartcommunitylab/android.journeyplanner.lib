@@ -130,7 +130,7 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements OnCam
 			loader.cancel(true);
 		}
 
-		loader = new StopsV2AsyncTask(mActivity, selectedAgencyIds, centerLatLng, getDiagonalLenght(), getSupportMap(),
+		loader = new StopsV2AsyncTask(mActivity, selectedAgencyIds, position.target, getDiagonalLenght(), getSupportMap(),
 				zoomLevelChanged, null);
 		loader.execute();
 	}
