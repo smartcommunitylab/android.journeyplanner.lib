@@ -36,6 +36,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
 
+import eu.trentorise.smartcampus.android.common.LauncherHelper;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
@@ -80,8 +81,8 @@ public class HomeActivity extends TutorialManagerActivity {
 				(RelativeLayout) findViewById(R.id.home_relative_layout_jp));
 
 //		setHiddenNotification();
-
-		if (JPHelper.isFirstLaunch(this)) {
+		
+		if (LauncherHelper.isLauncherInstalled(this, true) && JPHelper.isFirstLaunch(this)) {
 			showTourDialog();
 			JPHelper.disableFirstLaunch(this);
 		}
