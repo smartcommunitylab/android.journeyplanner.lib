@@ -35,7 +35,6 @@ import java.util.Map;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.json.JSONException;
 
 import android.app.Activity;
 import android.content.Context;
@@ -52,7 +51,6 @@ import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.LocationHelper;
 import eu.trentorise.smartcampus.jp.R;
-import eu.trentorise.smartcampus.jp.custom.TTHelper;
 import eu.trentorise.smartcampus.jp.custom.data.BasicAlert;
 import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourneyParameters;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
@@ -670,5 +668,16 @@ public class JPHelper {
 		}
 		return null;
 	}
+	
+	public static void userPromote(Context ctx) {
+		// TODO Auto-generated method stub
+		
+	}
 
+	public static boolean isUserAnonymous(Context ctx) {
+		// TODO Auto-generated method stub
+		
+		return false;
+	}
+	
 }
