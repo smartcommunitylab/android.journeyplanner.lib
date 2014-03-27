@@ -16,7 +16,9 @@
 package eu.trentorise.smartcampus.jp;
 
 import it.sayservice.platform.smartplanner.data.message.TType;
+
 import java.util.Arrays;
+
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
@@ -25,6 +27,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
@@ -40,6 +43,7 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 public class BaseActivity extends FeedbackFragmentActivity {
 
 	private void initDataManagement(Bundle savedInstanceState) {
+		long before=System.currentTimeMillis();
 		JPHelper.init(getApplicationContext());
 		RoutesDBHelper.init(getApplicationContext());
 		try {
@@ -54,6 +58,8 @@ public class BaseActivity extends FeedbackFragmentActivity {
 			JPHelper.endAppFailure(this, R.string.app_failure_security);
 			e.printStackTrace();
 		}
+		long after = System.currentTimeMillis();
+		Log.i(getClass().getName(),"Loading time: "+(after-before)+"ms");
 	}
 
 	public void initializeSharedPreferences() {
@@ -81,10 +87,17 @@ public class BaseActivity extends FeedbackFragmentActivity {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		if (!JPHelper.isInitialized()) {
+//			findViewById(android.R.id.content).post(new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					initDataManagement(savedInstanceState);
+//				}
+//			});
 			initDataManagement(savedInstanceState);
 			initializeSharedPreferences();
 		}
