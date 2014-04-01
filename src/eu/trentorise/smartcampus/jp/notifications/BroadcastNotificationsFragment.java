@@ -32,8 +32,10 @@ import com.actionbarsherlock.app.SherlockFragment;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
+import eu.trentorise.smartcampus.jp.helper.UserRegistration;
 
 public class BroadcastNotificationsFragment extends FeedbackFragment {
 
@@ -80,14 +82,14 @@ public class BroadcastNotificationsFragment extends FeedbackFragment {
 					// fragment = new FormFragment();
 					Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.tmp, Toast.LENGTH_SHORT).show();
 				}
-				// TODO handle the anonymous user
-				// if (new
-				// AMSCAccessProvider().isUserAnonymous(getSherlockActivity()))
-				// {
-				// // show dialog box
-				// UserRegistration.upgradeuser(getSherlockActivity());
-				// }
-				// else 
+				 if (JPHelper.isUserAnonymous(getSherlockActivity()))
+				 {
+				 // show dialog box
+					 //Toast 
+//					 Toast.makeText(getSherlockActivity(), "dialog upgrade", Toast.LENGTH_LONG).show();
+				 UserRegistration.upgradeuser(getSherlockActivity());
+				 }
+				 else 
 				if (fragment != null) {
 					 fragment.setArguments(bundle);
 					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()

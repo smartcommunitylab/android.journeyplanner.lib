@@ -42,10 +42,8 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class BaseActivity extends FeedbackFragmentActivity {
 
-	private void initDataManagement(Bundle savedInstanceState) {
-		long before=System.currentTimeMillis();
+	protected void initDataManagement(Bundle savedInstanceState) {
 		JPHelper.init(getApplicationContext());
-		RoutesDBHelper.init(getApplicationContext());
 		try {
 			if (!JPHelper.getAccessProvider().login(this, null)) {
 				new SCAsyncTask<Void, Void, String>(this, new LoadToken(
@@ -58,8 +56,6 @@ public class BaseActivity extends FeedbackFragmentActivity {
 			JPHelper.endAppFailure(this, R.string.app_failure_security);
 			e.printStackTrace();
 		}
-		long after = System.currentTimeMillis();
-		Log.i(getClass().getName(),"Loading time: "+(after-before)+"ms");
 	}
 
 	public void initializeSharedPreferences() {
