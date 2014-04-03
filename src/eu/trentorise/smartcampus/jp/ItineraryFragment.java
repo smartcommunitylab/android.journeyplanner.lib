@@ -97,7 +97,7 @@ public class ItineraryFragment extends FeedbackFragment {
 		super.onStart();
 
 		legs = itinerary.getLeg();
-
+		
 		TextView dateTextView = (TextView) getView().findViewById(R.id.itinerary_date);
 		dateTextView.setText(Config.FORMAT_DATE_UI.format(new Date(itinerary.getStartime())));
 
@@ -106,23 +106,23 @@ public class ItineraryFragment extends FeedbackFragment {
 
 		ListView legsListView = (ListView) getView().findViewById(R.id.itinerary_legs);
 
-		if (legsListView.getHeaderViewsCount() == 0) {
-			// HEADER (before setAdapter or it won't work!)
-			ViewGroup startLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, null);
-			TextView startLegTimeTextView = (TextView) startLayout.findViewById(R.id.leg_time);
-			startLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getStartime())));
-			TextView startLegDescTextView = (TextView) startLayout.findViewById(R.id.leg_description);
-			startLegDescTextView.setText(singleJourney.getFrom().getName());
-			legsListView.addHeaderView(startLayout);
-
-			// FOOTER (before setAdapter or it won't work!)
-			ViewGroup endLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, null);
-			TextView endLegTimeTextView = (TextView) endLayout.findViewById(R.id.leg_time);
-			endLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getEndtime())));
-			TextView endLegDescTextView = (TextView) endLayout.findViewById(R.id.leg_description);
-			endLegDescTextView.setText(singleJourney.getTo().getName());
-			legsListView.addFooterView(endLayout);
-		}
+//		if (legsListView.getHeaderViewsCount() == 0) {
+//			// HEADER (before setAdapter or it won't work!)
+//			ViewGroup startLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, null);
+//			TextView startLegTimeTextView = (TextView) startLayout.findViewById(R.id.leg_time);
+//			startLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getStartime())));
+//			TextView startLegDescTextView = (TextView) startLayout.findViewById(R.id.leg_description);
+//			startLegDescTextView.setText(singleJourney.getFrom().getName());
+//			legsListView.addHeaderView(startLayout);
+//
+//			// FOOTER (before setAdapter or it won't work!)
+//			ViewGroup endLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, null);
+//			TextView endLegTimeTextView = (TextView) endLayout.findViewById(R.id.leg_time);
+//			endLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getEndtime())));
+//			TextView endLegDescTextView = (TextView) endLayout.findViewById(R.id.leg_description);
+//			endLegDescTextView.setText(singleJourney.getTo().getName());
+//			legsListView.addFooterView(endLayout);
+//		}
 
 		legsListView.setAdapter(new LegsListAdapter(getSherlockActivity(), R.layout.itinerary_leg, singleJourney.getFrom(),
 				singleJourney.getTo(), legs));

@@ -53,7 +53,6 @@ public class LegsListAdapter extends ArrayAdapter<Leg> {
 		this.fromPosition = fromPosition;
 		this.toPosition = toPosition;
 		this.legs = legs;
-
 		this.renderer = new LegContentRenderer(this.context, fromPosition, toPosition, this.legs);
 	}
 
@@ -84,6 +83,11 @@ public class LegsListAdapter extends ArrayAdapter<Leg> {
 		Date time = new Date(leg.getStartime());
 		String timeFromString = Config.FORMAT_TIME_UI.format(time);
 		holder.time.setText(timeFromString);
+		
+		if(position==0)
+			leg.setFrom(fromPosition);
+		else if(position==getCount()-1)
+			leg.setTo(toPosition);
 
 		// description
 		holder.description.setText(renderer.buildDescription(leg, position));
