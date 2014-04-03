@@ -36,6 +36,7 @@ import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.custom.MyRecurItinerariesListAdapter;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.Utils;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
@@ -70,6 +71,8 @@ public class MyRecurItinerariesFragment extends FeedbackFragment {
 		adapter = new MyRecurItinerariesListAdapter(getSherlockActivity(),
 				R.layout.recur_itinerarychoices_row, myItineraries);
 		myJourneysList.setAdapter(adapter);
+		myJourneysList.setDivider(null);
+		myJourneysList.setDividerHeight(Utils.convertDpToPixel(6, getActivity()));
 
 		SCAsyncTask<Void, Void, List<BasicRecurrentJourney>> task = new SCAsyncTask<Void, Void, List<BasicRecurrentJourney>>(
 				getSherlockActivity(), new GetMyRecurItinerariesProcessor(

@@ -26,7 +26,7 @@
     android:background="@android:color/transparent"
     android:orientation="vertical"
     android:layout_weight="0.7"    
-    android:padding="5dp" >
+    android:padding="8dp" >
 
     <TextView
         android:id="@+id/itname"
@@ -95,6 +95,7 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="20dp"
     android:layout_weight="0.2"
+    android:orientation="horizontal"
     android:gravity="center_vertical" >
 </LinearLayout>
 

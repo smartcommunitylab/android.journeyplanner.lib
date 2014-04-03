@@ -38,6 +38,7 @@ import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.custom.MyItinerariesListAdapter;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.Utils;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
@@ -76,6 +77,8 @@ public class MyItinerariesFragment extends FeedbackFragment {
 		adapter = new MyItinerariesListAdapter(getSherlockActivity(),
 				R.layout.itinerarychoicessaved_row, myItineraries );
 		myJourneysList.setAdapter(adapter);
+		myJourneysList.setDivider(null);
+		myJourneysList.setDividerHeight(Utils.convertDpToPixel(6, getActivity()));
 
 		SCAsyncTask<Void, Void, List<BasicItinerary>> task = new SCAsyncTask<Void, Void, List<BasicItinerary>>(
 				getSherlockActivity(), new GetMyItinerariesProcessor(getSherlockActivity(), adapter));
