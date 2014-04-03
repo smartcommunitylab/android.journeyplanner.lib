@@ -17,9 +17,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    android:orientation="vertical"
-    android:padding="5dp" >
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/it_name"
@@ -32,17 +30,16 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="6dp"
+    	android:background="@drawable/list_selector_card" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
 
             <LinearLayout
                 android:id="@+id/it_timing"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
 
                 <TextView
                     android:id="@+id/it_time_from"
@@ -52,15 +49,21 @@
 
                 <FrameLayout
                     android:id="@+id/it_line"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" >
+                    android:layout_width="6dp"
+                    android:layout_height="match_parent" >
                 </FrameLayout>
 
                 <TextView
                     android:id="@+id/it_time_to"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:textColor="@android:color/black" />
+                <TextView
+                    android:id="@+id/it_time"
+                    android:layout_marginLeft="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/sc_gray" />
             </LinearLayout>
 
             <LinearLayout
@@ -68,22 +71,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
-                android:gravity="center_vertical" 
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:layout_below="@+id/it_timing"
+                android:orientation="horizontal" >
             </LinearLayout>
 
-            <ImageView
+            <!--
+                 <ImageView
                 android:id="@+id/it_alert"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/empty"
                 android:src="@drawable/ic_alert"
                 android:visibility="gone" />
+            -->
 
-        </LinearLayout>
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" >
 
-
-
+                <ImageView
+                    android:id="@+id/it_alert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/empty"
+                    android:src="@drawable/ic_alert"
+                    android:visibility="gone" />
+            </FrameLayout>
     </RelativeLayout>
 
 </LinearLayout>

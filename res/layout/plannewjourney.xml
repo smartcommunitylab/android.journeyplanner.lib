@@ -45,6 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal" >
 
                 <AutoCompleteTextView
@@ -81,6 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal" >
 
                 <AutoCompleteTextView
@@ -148,9 +150,10 @@
 
             <LinearLayout
                 android:id="@+id/plannew_options"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:minHeight="48dp"
                 android:gravity="center_vertical" >
 
                 <TextView
@@ -161,21 +164,20 @@
                     android:layout_weight="1"
                     android:text="@string/plan_preferences" />
 
-                <ToggleButton
+                <ImageView
                     android:id="@+id/plannew_options_toggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_weight="0.25"
-                    android:checked="false"
-                    android:textOff="@string/plan_custom_prefs_on"
-                    android:textOn="@string/plan_custom_prefs_off" />
+                    android:paddingTop="2dp"
+                    android:src="@drawable/ic_navigation_next_item"
+                    android:layout_weight="0.25" />
             </LinearLayout>
 
             <include
                 android:id="@+id/plannew_userprefs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 layout="@layout/userprefs" />
         </LinearLayout>
     </ScrollView>

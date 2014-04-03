@@ -45,10 +45,11 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.Toast;
-import android.widget.ToggleButton;
+import android.widget.ImageView;
 
 import com.google.android.maps.GeoPoint;
 
@@ -185,11 +186,10 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			@Override
 			public void onClick(View v) {
 				// user preferences
-				ToggleButton useCustomPrefsToggleBtn = (ToggleButton) getView().findViewById(
+				ImageView useCustomPrefsToggleBtn = (ImageView) getView().findViewById(
 						R.id.plannew_options_toggle);
 				View userPrefsLayout = (View) getView().findViewById(R.id.plannew_userprefs);
-
-				if (useCustomPrefsToggleBtn.isChecked()) {
+				if (userPrefsLayout.isShown()) {
 					TableLayout tTypesTableLayout = (TableLayout) userPrefsLayout
 							.findViewById(R.id.transporttypes_table);
 					RadioGroup rTypesRadioGroup = (RadioGroup) userPrefsLayout.findViewById(R.id.routetypes_radioGroup);
@@ -436,20 +436,19 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		final View userPrefsLayout = (View) getView().findViewById(R.id.plannew_userprefs);
 		PrefsHelper.buildUserPrefsView(getSherlockActivity(), userPrefsHolder, userPrefsLayout);
 
-		ToggleButton useCustomPrefsToggleBtn = (ToggleButton) getView().findViewById(R.id.plannew_options_toggle);
-		if (useCustomPrefsToggleBtn.isChecked()) {
-			userPrefsLayout.setVisibility(View.VISIBLE);
-		} else {
-			userPrefsLayout.setVisibility(View.GONE);
-		}
+		View useCustomPrefsToggleBtn = getView().findViewById(R.id.plannew_options);
 
-		useCustomPrefsToggleBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		useCustomPrefsToggleBtn.setOnClickListener(new View.OnClickListener() {
+			
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (isChecked) {
+			public void onClick(View arg0) {
+				ImageView imgv = (ImageView) getView().findViewById(R.id.plannew_options_toggle);
+				if (!userPrefsLayout.isShown()) {
 					userPrefsLayout.setVisibility(View.VISIBLE);
+					imgv.setImageResource(R.drawable.ic_navigation_expand);
 				} else {
 					userPrefsLayout.setVisibility(View.GONE);
+					imgv.setImageResource(R.drawable.ic_navigation_next_item);
 				}
 			}
 		});

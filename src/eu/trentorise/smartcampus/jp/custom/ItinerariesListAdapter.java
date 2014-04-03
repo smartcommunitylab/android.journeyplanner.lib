@@ -18,6 +18,7 @@ package eu.trentorise.smartcampus.jp.custom;
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
 import it.sayservice.platform.smartplanner.data.message.Leg;
 import it.sayservice.platform.smartplanner.data.message.TType;
+import it.sayservice.platform.smartplanner.data.message.Transport;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,20 +36,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.custom.data.BusStop;
 import eu.trentorise.smartcampus.jp.custom.draw.LineDrawView;
+import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.jp.helper.Utils;
 
 public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 
 	Context context;
 	int layoutResourceId;
-	List<Itinerary> itineraries;
 
-	public ItinerariesListAdapter(Context context, int layoutResourceId, List<Itinerary> itineraries) {
+	public ItinerariesListAdapter(Context context, int layoutResourceId,
+			List<Itinerary> itineraries) {
 		super(context, layoutResourceId, itineraries);
 		this.context = context;
 		this.layoutResourceId = layoutResourceId;
-		this.itineraries = itineraries;
 	}
 
 	@Override
@@ -64,7 +66,9 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 			holder.timeFrom = (TextView) row.findViewById(R.id.it_time_from);
 			holder.line = (FrameLayout) row.findViewById(R.id.it_line);
 			holder.timeTo = (TextView) row.findViewById(R.id.it_time_to);
-			holder.transportTypes = (LinearLayout) row.findViewById(R.id.it_transporttypes);
+			holder.time = (TextView) row.findViewById(R.id.it_time);
+			holder.transportTypes = (LinearLayout) row
+					.findViewById(R.id.it_transporttypes);
 			holder.alert = (ImageView) row.findViewById(R.id.it_alert);
 
 			row.setTag(holder);
@@ -72,7 +76,7 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 			holder = (RowHolder) row.getTag();
 		}
 
-		Itinerary itinerary = itineraries.get(position);
+		Itinerary itinerary = getItem(position);
 
 		// time from
 		Date timeFrom = new Date(itinerary.getStartime());
@@ -83,36 +87,33 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 		Date timeTo = new Date(itinerary.getEndtime());
 		String timeToString = Config.FORMAT_TIME_UI.format(timeTo);
 		holder.timeTo.setText(timeToString);
+		holder.time.setText("("+((timeTo.getTime()-timeFrom.getTime())/60000)+"m)");
 
 		// line between times
 		holder.line.addView(new LineDrawView(getContext()));
 
-		// transport types & alerts
-		boolean hasAlerts = false;
-
-		List<TType> transportTypesList = new ArrayList<TType>();
-		for (Leg l : itinerary.getLeg()) {
-			if (!transportTypesList.contains(l.getTransport().getType())) {
-				transportTypesList.add(l.getTransport().getType());
-			}
-
-			if (Utils.containsAlerts(l) && !hasAlerts) {
-				hasAlerts = true;
-			}
-		}
-
 		holder.transportTypes.removeAllViews();
-		for (TType t : transportTypesList) {
-			ImageView imgv = Utils.getImageByTType(getContext(), t);
-			if (imgv.getDrawable() != null) {
+		ImageView imgv = null;
+		
+		// transport types & alerts
+		for (Leg l : itinerary.getLeg()) {
+			Transport transp = l.getTransport();
+			TType t = transp.getType();
+			if (t.equals(TType.BUS)) {
+				String line = transp.getRouteShortName();
+				imgv = Utils.getImageByLine(getContext(), line);
+			} else {
+				imgv = Utils.getImageByTType(getContext(), t);
+			}
+			if (imgv.getBackground() != null || imgv.getDrawable() != null) {
+
 				holder.transportTypes.addView(imgv);
 			}
-		}
-
-		if (hasAlerts) {
-			holder.alert.setVisibility(View.VISIBLE);
-		} else {
-			holder.alert.setVisibility(View.GONE);
+			if (Utils.containsAlerts(l)) {
+				holder.alert.setVisibility(View.VISIBLE);
+			} else {
+				holder.alert.setVisibility(View.GONE);
+			}
 		}
 
 		return row;
@@ -122,6 +123,7 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 		TextView timeFrom;
 		FrameLayout line;
 		TextView timeTo;
+		TextView time;
 		LinearLayout transportTypes;
 		ImageView alert;
 	}

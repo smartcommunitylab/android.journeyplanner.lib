@@ -27,7 +27,18 @@ import java.util.Comparator;
 import java.util.Date;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.Paint.Align;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.widget.ImageView;
+import android.widget.TextView;
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
 
@@ -54,6 +65,69 @@ public class Utils {
 			break;
 		case TRANSIT:
 			imgv.setImageResource(R.drawable.ic_mt_bus);
+			break;
+		default:
+		}
+
+		return imgv;
+	}
+	
+	public static ImageView getImageByLine(Context ctx,String line) {
+		ImageView imgv = new ImageView(ctx);
+		Bitmap img = writeOnBitmap(ctx,R.drawable.ic_mt_bus, line);
+		imgv.setImageBitmap(img);
+		return imgv;
+	}
+	
+	private static Bitmap writeOnBitmap(Context mContext, int drawableId, String text) {
+		float scale = mContext.getResources().getDisplayMetrics().density;
+
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), drawableId).copy(Bitmap.Config.ARGB_8888,
+				true);
+
+		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		paint.setTextAlign(Align.CENTER);
+		paint.setTextSize(scale * 16);
+		paint.setAntiAlias(true);
+		paint.setARGB(255, 0, 0, 0);
+
+		Canvas canvas = new Canvas(bitmap);
+		Rect bounds = new Rect();
+		paint.getTextBounds(text, 0, text.length(), bounds);
+		float x = bitmap.getWidth() / 2;
+		float y = bitmap.getHeight() / 2 - Utils.convertDpToPixel(2.5f, mContext);
+		canvas.drawText(text, x, y, paint);
+
+		return bitmap;
+	}
+	
+	public static TextView getTextViewByTType(Context ctx, TType tType) {
+		TextView imgv = new TextView(ctx);
+		Resources r = ctx.getResources();
+		switch (tType) {
+		case BICYCLE:
+			imgv.setCompoundDrawables(null,
+					r.getDrawable(R.drawable.ic_mt_bicyle), null, null);
+			break;
+		case CAR:
+			imgv.setCompoundDrawables(null,
+					r.getDrawable(R.drawable.ic_mt_car), null, null);
+			break;
+		case BUS:
+			imgv.setCompoundDrawables(null,
+					r.getDrawable(R.drawable.ic_mt_bus), null, null);
+			break;
+		case WALK:
+			imgv.setCompoundDrawables(null,
+					r.getDrawable(R.drawable.ic_mt_foot), null, null);
+			break;
+		case TRAIN:
+			imgv.setCompoundDrawables(null,
+					r.getDrawable(R.drawable.ic_mt_train), null, null);
+			break;
+		case TRANSIT:
+			imgv.setCompoundDrawables(null,
+					r.getDrawable(R.drawable.ic_mt_bus), null, null);
 			break;
 		default:
 		}
@@ -333,5 +407,42 @@ public class Utils {
 				(leg.getAlertParkingList() != null && !leg.getAlertParkingList().isEmpty()) ||
 				(leg.getAlertRoadList() != null && !leg.getAlertRoadList().isEmpty()) ||
 				(leg.getAlertStrikeList() != null && !leg.getAlertStrikeList().isEmpty());
+	}
+	
+	/**
+	 * This method converts dp unit to equivalent pixels, depending on device
+	 * density.
+	 * 
+	 * @param dp
+	 *            A value in dp (density independent pixels) unit. Which we need
+	 *            to convert into pixels
+	 * @param context
+	 *            Context to get resources and device specific display metrics
+	 * @return A float value to represent px equivalent to dp depending on
+	 *         device density
+	 */
+	public static int convertDpToPixel(float dp, Context context) {
+		// Resources resources = context.getResources();
+		// DisplayMetrics metrics = resources.getDisplayMetrics();
+		// float px = dp * (metrics.densityDpi / 160f);
+		// return px;
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+	}
+
+	/**
+	 * This method converts device specific pixels to density independent
+	 * pixels.
+	 * 
+	 * @param px
+	 *            A value in px (pixels) unit. Which we need to convert into db
+	 * @param context
+	 *            Context to get resources and device specific display metrics
+	 * @return A float value to represent dp equivalent to px value
+	 */
+	public static float convertPixelsToDp(float px, Context context) {
+		Resources resources = context.getResources();
+		DisplayMetrics metrics = resources.getDisplayMetrics();
+		float dp = px / (metrics.densityDpi / 160f);
+		return dp;
 	}
 }

@@ -53,6 +53,8 @@
         <item>@drawable/ic_f_np</item>
         <item>@drawable/ic_f_cw</item>
     </array>
+    
+    
     <array name="smart_check_12_colors">
         <item>#B9BAB5</item>
         <item>#717880</item>

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom.draw;
 
+import eu.trentorise.smartcampus.jp.helper.Utils;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -29,7 +30,7 @@ public class LineDrawView extends View {
 		super(context);
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Paint.Style.FILL);
-		paint.setStrokeWidth(2);
+		paint.setStrokeWidth(Utils.convertDpToPixel(2, context));
 	}
 
 	@Override
@@ -37,7 +38,7 @@ public class LineDrawView extends View {
 		int w = canvas.getWidth();
 		int h = canvas.getHeight();
 
-		canvas.drawLine(w / 2, 0, w / 2, h, paint);
+		canvas.drawLine(0, h/2, w, h/2, paint);
 		// canvas.drawCircle(50, 0, 5, paint);
 		// canvas.drawCircle(50, 50, 5, paint);
 	}

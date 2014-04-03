@@ -16,12 +16,12 @@
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/sc_light_gray" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
         android:orientation="vertical" >
 
         <TextView
@@ -30,12 +30,15 @@
             android:layout_height="wrap_content"
 			android:padding="8dp"
 			android:gravity="left"
+			android:background="@android:color/white"
             android:text="@string/info_save_new_journey" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp" >
+            android:padding="10dp"
+            android:layout_marginTop="6dp"
+			android:background="@android:color/white" >
 
             <TextView
                 android:id="@+id/itinerary_date"
@@ -56,6 +59,8 @@
             android:id="@+id/itinerary_legs"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="1dp"
+			android:background="@android:color/white"
             android:layout_weight="1"
             android:cacheColorHint="@android:color/transparent" >
         </ListView>

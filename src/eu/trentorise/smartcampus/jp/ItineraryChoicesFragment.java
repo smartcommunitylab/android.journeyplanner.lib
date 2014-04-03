@@ -21,9 +21,14 @@ import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +112,9 @@ public class ItineraryChoicesFragment extends FeedbackFragment {
 		mNoItems.setVisibility(View.GONE);
 		adapter = new ItinerariesListAdapter(getSherlockActivity(), R.layout.itinerarychoices_row, itineraries);
 		choicesList.setAdapter(adapter);
+		choicesList.setDivider(null);
+		choicesList.setDividerHeight(Utils.convertDpToPixel(6, getActivity()));
+		
 
 		if (!mLoaded) {
 			SCAsyncTask<SingleJourney, Void, List<Itinerary>> task = new SCAsyncTask<SingleJourney, Void, List<Itinerary>>(
