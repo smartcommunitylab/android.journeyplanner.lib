@@ -279,5 +279,6 @@
     <string name="url_help">http://www.smartcampuslab.it/vivitrentoapp/</string>
     <string name="auth_question_upgrade">Authenticate yourself with your Google account to exploit all offered functionalities</string>
     <string name="not_now">Not now</string>
-    
+    <string name="auth_failed">Application initialization failed. Try connecting again.</string>
+
 </resources>

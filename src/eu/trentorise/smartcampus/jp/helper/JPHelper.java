@@ -32,12 +32,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -54,12 +51,7 @@ import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.LocationHelper;
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.jp.R;
-import eu.trentorise.smartcampus.jp.MyRecurItinerariesFragment.GetMyRecurItinerariesProcessor;
-import eu.trentorise.smartcampus.jp.R.layout;
-import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
-import eu.trentorise.smartcampus.jp.custom.SmartCheckBusAdapter;
 import eu.trentorise.smartcampus.jp.custom.data.BasicAlert;
 import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourneyParameters;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
@@ -83,7 +75,6 @@ import eu.trentorise.smartcampus.network.RemoteConnector.CLIENT_TYPE;
 import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.profileservice.BasicProfileService;
 import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
-import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 import eu.trentorise.smartcampus.protocolcarrier.ProtocolCarrier;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
@@ -111,6 +102,9 @@ public class JPHelper {
 
 	public static final String MOBILITY_URL = "/core.mobility";
 	private static final String TERRITORY_URL = "/core.territory";
+	public static final String MY_ITINERARIES = "my itineraries";
+	public static final String MY_RECURRENTJOURNEYS = "my recurrent journeys";
+	public static final String IS_ANONYMOUS = "is anonymous";
 	private static AccountProfile ap = null;
 
 	// tutorial's stuff
@@ -171,6 +165,18 @@ public class JPHelper {
 		setLocationHelper(new LocationHelper(mContext));
 	}
 
+	// public static void init(final Context mContext) {
+	// new Thread(new Runnable() {
+	//
+	// @Override
+	// public void run() {
+	// JPParamsHelper.init(mContext);
+	// }
+	// }).start();
+	// instance = new JPHelper(mContext);
+	// RoutesDBHelper.init(mContext);
+	// }
+
 	public static void init(final Context mContext) {
 		new Thread(new Runnable() {
 
@@ -181,23 +187,12 @@ public class JPHelper {
 		}).start();
 		instance = new JPHelper(mContext);
 		RoutesDBHelper.init(mContext);
+		getUserProfileInit();
 	}
 
-	public static void init(final Context mContext, final RefreshMenuInterface refresh) {
-		new Thread(new Runnable() {
+	public static void getUserProfileInit() {
 
-			@Override
-			public void run() {
-				JPParamsHelper.init(mContext);
-			}
-		}).start();
-		instance = new JPHelper(mContext);
-		RoutesDBHelper.init(mContext);
-		getUserProfileInit(refresh);
-	}
-	private static void getUserProfileInit(RefreshMenuInterface refresh) {
-
-		readAccountProfile(refresh);
+		readAccountProfile(null);
 
 	}
 
@@ -205,24 +200,23 @@ public class JPHelper {
 		return instance != null;
 	}
 
-	public static AccountProfile readAccountProfile(RefreshMenuInterface refresh) {
-		if (ap == null) {
-			try {
-				new GetAPAsncTask().execute(refresh);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	public static void readAccountProfile(AsyncTask task) {
+		try {
+			new GetAPAsncTask().execute(task);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return ap;
 	}
 
-	private static class GetAPAsncTask extends AsyncTask<RefreshMenuInterface, Void, AccountProfile> {
+	private static class GetAPAsncTask extends AsyncTask<AsyncTask, Void, AccountProfile> {
 
-		private RefreshMenuInterface refresh= null;
+		AsyncTask copyTask = null;
+
 		@Override
-		protected AccountProfile doInBackground(RefreshMenuInterface... params) {
-			refresh = params[0];
+		protected AccountProfile doInBackground(AsyncTask... params) {
 			BasicProfileService bps;
+			if (params[0] != null)
+				copyTask = params[0];
 			try {
 				bps = new BasicProfileService(GlobalConfig.getAppUrl(getInstance().mContext) + "/aac");
 				return bps.getAccountProfile(getAuthToken(mContext));
@@ -235,9 +229,8 @@ public class JPHelper {
 
 		protected void onPostExecute(AccountProfile result) {
 			ap = result;
-			refresh.refreshmenu();
-
-
+			if (copyTask != null)
+				copyTask.execute();
 		};
 
 	}
@@ -708,31 +701,36 @@ public class JPHelper {
 		return null;
 	}
 
+	/*
+	 *  promote the user from anonymous
+	 */
 	public static void userPromote(Activity activity) {
-		// TODO Auto-generated method stub
-		// memorizza vecchio token/dati
-		AccountProfile oldProfile = ap;
-		// esegui login
-		SCAccessProvider accessprovider =  SCAccessProvider.getInstance(activity);
-		try {
-			accessprovider.login(activity, null);
-		} catch (AACException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		// copia vecchi dati in quello nuovo
+		new PromoteTask(activity).execute();
+
 	}
 
-	public static boolean isUserAnonymous(Context ctx) {
-		//controlla se in ap ho anonymous e solo quello
-		if (ap!=null)
-		{
-			return (ap.getAccountNames().contains("anonymous")&& ap.getAccountNames().size()==1);
-		}
-		else {
-			return 
-					true;
-		}
+	/*
+	 * check if user us anonymous -> sharedPref has IS_ANONYMOUS.By default if
+	 * not present is snonymous
+	 */
+	public static boolean isUserAnonymous(Activity activity) {
+		SharedPreferences sharedPref = activity.getSharedPreferences(activity.getString(R.string.app_name),
+				Context.MODE_PRIVATE);
+		if (sharedPref.contains(IS_ANONYMOUS))
+			return sharedPref.getBoolean(IS_ANONYMOUS, true);
+		else
+			return true;
+
+	}
+
+	/*
+	 * set anonymous value -> sharedPref has IS_ANONYMOUS
+	 */
+	public static void setUserAnonymous(Activity activity, boolean value) {
+		SharedPreferences sharedPref = activity.getSharedPreferences(activity.getString(R.string.app_name),
+				Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		editor.putBoolean(JPHelper.IS_ANONYMOUS, value);
+		editor.commit();
 	}
 }

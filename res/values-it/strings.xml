@@ -276,5 +276,6 @@
     <string name="url_help">http://www.smartcampuslab.it/vivitrentoapp_it/</string>
     <string name="auth_question_upgrade">Registrati con il tuo account Google e potrai accedere a tutte le funzionalitá offerte dall\'app</string>
     <string name="not_now">Non adesso</string>
-    
+    <string name="auth_failed">Errore nell\'inizializzazione dell\'app. Riprova a breve.</string>
+
 </resources>
