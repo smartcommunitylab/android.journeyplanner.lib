@@ -32,10 +32,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.json.JSONException;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -45,14 +47,19 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.LocationHelper;
+import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.jp.R;
-import eu.trentorise.smartcampus.jp.custom.TTHelper;
+import eu.trentorise.smartcampus.jp.MyRecurItinerariesFragment.GetMyRecurItinerariesProcessor;
+import eu.trentorise.smartcampus.jp.R.layout;
+import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
+import eu.trentorise.smartcampus.jp.custom.SmartCheckBusAdapter;
 import eu.trentorise.smartcampus.jp.custom.data.BasicAlert;
 import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourneyParameters;
 import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
@@ -74,6 +81,9 @@ import eu.trentorise.smartcampus.mobilityservice.model.TripData;
 import eu.trentorise.smartcampus.network.RemoteConnector;
 import eu.trentorise.smartcampus.network.RemoteConnector.CLIENT_TYPE;
 import eu.trentorise.smartcampus.network.RemoteException;
+import eu.trentorise.smartcampus.profileservice.BasicProfileService;
+import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
+import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 import eu.trentorise.smartcampus.protocolcarrier.ProtocolCarrier;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
@@ -101,6 +111,7 @@ public class JPHelper {
 
 	public static final String MOBILITY_URL = "/core.mobility";
 	private static final String TERRITORY_URL = "/core.territory";
+	private static AccountProfile ap = null;
 
 	// tutorial's stuff
 
@@ -109,8 +120,7 @@ public class JPHelper {
 	private static final String FIRST_LAUNCH_PREFS = "jp_firstLaunch";
 
 	public static enum Tutorial {
-		PLAN("planTut"), MONITOR("monitorTut"), WATCH("watchTut"), NOTIF(
-				"notifTut"), SEND("sendTut"), INFO("infoTut"), PREFST(
+		PLAN("planTut"), MONITOR("monitorTut"), WATCH("watchTut"), NOTIF("notifTut"), SEND("sendTut"), INFO("infoTut"), PREFST(
 				"prefsTut");
 		/**
 		 * @param text
@@ -138,7 +148,6 @@ public class JPHelper {
 		if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.FROYO) {
 			RemoteConnector.setClientType(CLIENT_TYPE.CLIENT_WILDCARD);
 		}
-		
 
 		new Thread(new Runnable() {
 
@@ -157,8 +166,7 @@ public class JPHelper {
 			}
 		}).start();
 
-		setProtocolCarrier(new ProtocolCarrier(mContext,
-				JPParamsHelper.getAppToken()));
+		setProtocolCarrier(new ProtocolCarrier(mContext, JPParamsHelper.getAppToken()));
 
 		setLocationHelper(new LocationHelper(mContext));
 	}
@@ -172,6 +180,24 @@ public class JPHelper {
 			}
 		}).start();
 		instance = new JPHelper(mContext);
+		RoutesDBHelper.init(mContext);
+	}
+
+	public static void init(final Context mContext, final RefreshMenuInterface refresh) {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				JPParamsHelper.init(mContext);
+			}
+		}).start();
+		instance = new JPHelper(mContext);
+		RoutesDBHelper.init(mContext);
+		getUserProfileInit(refresh);
+	}
+	private static void getUserProfileInit(RefreshMenuInterface refresh) {
+
+		readAccountProfile(refresh);
 
 	}
 
@@ -179,24 +205,59 @@ public class JPHelper {
 		return instance != null;
 	}
 
-	public static List<Itinerary> planSingleJourney(SingleJourney sj,
-			String authToken) throws MobilityServiceException,
-			ProtocolException {
+	public static AccountProfile readAccountProfile(RefreshMenuInterface refresh) {
+		if (ap == null) {
+			try {
+				new GetAPAsncTask().execute(refresh);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return ap;
+	}
+
+	private static class GetAPAsncTask extends AsyncTask<RefreshMenuInterface, Void, AccountProfile> {
+
+		private RefreshMenuInterface refresh= null;
+		@Override
+		protected AccountProfile doInBackground(RefreshMenuInterface... params) {
+			refresh = params[0];
+			BasicProfileService bps;
+			try {
+				bps = new BasicProfileService(GlobalConfig.getAppUrl(getInstance().mContext) + "/aac");
+				return bps.getAccountProfile(getAuthToken(mContext));
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		protected void onPostExecute(AccountProfile result) {
+			ap = result;
+			refresh.refreshmenu();
+
+
+		};
+
+	}
+
+	public static List<Itinerary> planSingleJourney(SingleJourney sj, String authToken)
+			throws MobilityServiceException, ProtocolException {
 
 		if (sj != null) {
-			MobilityPlannerService plannerService = new MobilityPlannerService(
-					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+			MobilityPlannerService plannerService = new MobilityPlannerService(GlobalConfig.getAppUrl(mContext)
+					+ MOBILITY_URL);
 			return plannerService.planSingleJourney(sj, authToken);
 		}
 
 		return null;
 	}
 
-	public static void saveItinerary(BasicItinerary bi, String authToken)
-			throws ProtocolException, MobilityServiceException {
+	public static void saveItinerary(BasicItinerary bi, String authToken) throws ProtocolException,
+			MobilityServiceException {
 		if (bi != null) {
-			MobilityUserService userService = new MobilityUserService(
-					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+			MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			userService.saveSingleJourney(bi, authToken);
 		}
 	}
@@ -205,18 +266,15 @@ public class JPHelper {
 	 * 
 	 * @return a list with all saved journeys
 	 */
-	public static List<BasicItinerary> getMyItineraries(String authToken)
-			throws ProtocolException, MobilityServiceException {
-		MobilityUserService userService = new MobilityUserService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+	public static List<BasicItinerary> getMyItineraries(String authToken) throws ProtocolException,
+			MobilityServiceException {
+		MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return userService.getSingleJourneys(authToken);
 	}
 
-	public static List<Delay> getDelay(String routeId, long from_time,
-			long to_time, String authToken) throws ProtocolException,
-			MobilityServiceException {
-		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+	public static List<Delay> getDelay(String routeId, long from_time, long to_time, String authToken)
+			throws ProtocolException, MobilityServiceException {
+		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getDelays(routeId, authToken);
 	}
 
@@ -248,44 +306,35 @@ public class JPHelper {
 	 * @param id
 	 *            of the route
 	 */
-	public static void deleteMyItinerary(String id, String authToken)
-			throws ProtocolException, MobilityServiceException {
+	public static void deleteMyItinerary(String id, String authToken) throws ProtocolException,
+			MobilityServiceException {
 		if (id != null && id.length() > 0) {
-			MobilityUserService userService = new MobilityUserService(
-					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+			MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			userService.deleteSingleJourney(id, authToken);
 		}
 	}
 
-	public static boolean monitorMyItinerary(boolean monitor, String id,
-			String authToken) throws ProtocolException,
+	public static boolean monitorMyItinerary(boolean monitor, String id, String authToken) throws ProtocolException,
 			MobilityServiceException {
-		MobilityUserService userService = new MobilityUserService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return userService.monitorSingleJourney(id, monitor, authToken);
 	}
 
-	public static Map<String, CacheUpdateResponse> getCacheStatus(
-			Map<String, String> agencyIdsVersions, String authToken)
-			throws ProtocolException, SecurityException, RemoteException {
-		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+	public static Map<String, CacheUpdateResponse> getCacheStatus(Map<String, String> agencyIdsVersions,
+			String authToken) throws ProtocolException, SecurityException, RemoteException {
+		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getCacheStatus(agencyIdsVersions, authToken);
 	}
 
-	public static CompressedTransitTimeTable getCacheUpdate(String agencyId,
-			String fileName, String authToken) throws ProtocolException,
-			SecurityException, RemoteException {
-		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+	public static CompressedTransitTimeTable getCacheUpdate(String agencyId, String fileName, String authToken)
+			throws ProtocolException, SecurityException, RemoteException {
+		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getCachedTimetable(agencyId, fileName, authToken);
 	}
 
-	public static boolean monitorMyRecItinerary(boolean monitor, String id,
-			String authToken) throws ProtocolException,
+	public static boolean monitorMyRecItinerary(boolean monitor, String id, String authToken) throws ProtocolException,
 			MobilityServiceException {
-		MobilityUserService userService = new MobilityUserService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return userService.monitorRecurrentJourney(id, monitor, authToken);
 
 	}
@@ -293,26 +342,20 @@ public class JPHelper {
 	/*
 	 * BUS
 	 */
-	public static List<Route> getRoutesByAgencyId(String agencyId,
-			String authToken) throws ProtocolException,
+	public static List<Route> getRoutesByAgencyId(String agencyId, String authToken) throws ProtocolException,
 			MobilityServiceException {
-		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getRoutes(agencyId, authToken);
 	}
 
-	public static List<SmartLine> getSmartLinesByAgencyId(String agencyId)
-			throws ConnectionException, ProtocolException, SecurityException,
-			JsonParseException, JsonMappingException, IOException {
+	public static List<SmartLine> getSmartLinesByAgencyId(String agencyId) throws ConnectionException,
+			ProtocolException, SecurityException, JsonParseException, JsonMappingException, IOException {
 
 		List<Route> list = new ArrayList<Route>();
 		Resources resources = mContext.getResources();
-		String[] lines = resources
-				.getStringArray(R.array.smart_check_12_numbers);
-		TypedArray icons = resources
-				.obtainTypedArray(R.array.smart_check_12_icons);
-		TypedArray colors = resources
-				.obtainTypedArray(R.array.smart_check_12_colors);
+		String[] lines = resources.getStringArray(R.array.smart_check_12_numbers);
+		TypedArray icons = resources.obtainTypedArray(R.array.smart_check_12_icons);
+		TypedArray colors = resources.obtainTypedArray(R.array.smart_check_12_colors);
 
 		// get info from result (busRoutes)
 		Map<String, List<String>> singleRoutesShorts = new HashMap<String, List<String>>();
@@ -344,54 +387,39 @@ public class JPHelper {
 			// put them in the array
 			for (Route route : list) {
 				//
-				if ((route.getId().getId().toUpperCase()
-						.compareTo(lines[index].toUpperCase()) == 0)
-						|| route.getId().getId().toUpperCase()
-								.compareTo(lines[index].toUpperCase() + "R") == 0
-						|| route.getId().getId().toUpperCase()
-								.compareTo(lines[index].toUpperCase() + "A") == 0) {
+				if ((route.getId().getId().toUpperCase().compareTo(lines[index].toUpperCase()) == 0)
+						|| route.getId().getId().toUpperCase().compareTo(lines[index].toUpperCase() + "R") == 0
+						|| route.getId().getId().toUpperCase().compareTo(lines[index].toUpperCase() + "A") == 0) {
 					if (singleRoutesShorts.get(lines[index]) == null) {
-						singleRoutesShorts.put(lines[index],
-								new ArrayList<String>());
-						singleRoutesLong.put(lines[index],
-								new ArrayList<String>());
-						singleRoutesId.put(lines[index],
-								new ArrayList<String>());
+						singleRoutesShorts.put(lines[index], new ArrayList<String>());
+						singleRoutesLong.put(lines[index], new ArrayList<String>());
+						singleRoutesId.put(lines[index], new ArrayList<String>());
 
 					}
-					singleRoutesShorts.get(lines[index]).add(
-							route.getRouteShortName());
-					singleRoutesLong.get(lines[index]).add(
-							route.getRouteLongName());
+					singleRoutesShorts.get(lines[index]).add(route.getRouteShortName());
+					singleRoutesLong.get(lines[index]).add(route.getRouteLongName());
 					singleRoutesId.get(lines[index]).add(route.getId().getId());
 
 				}
 			}
-			SmartLine singleLine = new SmartLine(icons.getDrawable(index),
-					lines[index], colors.getColor(index, 0),
-					singleRoutesShorts.get(lines[index]),
-					singleRoutesLong.get(lines[index]),
+			SmartLine singleLine = new SmartLine(icons.getDrawable(index), lines[index], colors.getColor(index, 0),
+					singleRoutesShorts.get(lines[index]), singleRoutesLong.get(lines[index]),
 					singleRoutesId.get(lines[index]));
 			busLines.add(singleLine);
 		}
 		return busLines;
 	}
 
-	public static List<Stop> getStopsByAgencyIdRouteId(String agencyId,
-			String routeId, String authToken) throws ProtocolException,
-			MobilityServiceException {
-		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+	public static List<Stop> getStopsByAgencyIdRouteId(String agencyId, String routeId, String authToken)
+			throws ProtocolException, MobilityServiceException {
+		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getStops(agencyId, routeId, authToken);
 	}
 
-	public static List<StopTime> getStopTimesByAgencyIdRouteIdStopId(
-			String agencyId, String routeId, String stopId, String authToken)
-			throws ProtocolException, MobilityServiceException {
-		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		List<StopTime> res = dataService.getStopTimes(agencyId, routeId,
-				stopId, authToken);
+	public static List<StopTime> getStopTimesByAgencyIdRouteIdStopId(String agencyId, String routeId, String stopId,
+			String authToken) throws ProtocolException, MobilityServiceException {
+		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		List<StopTime> res = dataService.getStopTimes(agencyId, routeId, stopId, authToken);
 		for (StopTime st : res)
 			st.setTime(st.getTime() * 1000);
 
@@ -401,11 +429,10 @@ public class JPHelper {
 	/*
 	 * Alerts
 	 */
-	public static void submitAlert(BasicAlert ba, String authToken)
-			throws ProtocolException, MobilityServiceException {
+	public static void submitAlert(BasicAlert ba, String authToken) throws ProtocolException, MobilityServiceException {
 		if (ba != null) {
-			MobilityAlertService alertService = new MobilityAlertService(
-					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+			MobilityAlertService alertService = new MobilityAlertService(GlobalConfig.getAppUrl(mContext)
+					+ MOBILITY_URL);
 			alertService.sendUserAlert(ba.getContent(), authToken);
 		}
 	}
@@ -427,14 +454,12 @@ public class JPHelper {
 	}
 
 	public static void endAppFailure(Activity activity, int id) {
-		Toast.makeText(activity, activity.getResources().getString(id),
-				Toast.LENGTH_LONG).show();
+		Toast.makeText(activity, activity.getResources().getString(id), Toast.LENGTH_LONG).show();
 		activity.finish();
 	}
 
 	public static void showFailure(Activity activity, int id) {
-		Toast.makeText(activity, activity.getResources().getString(id),
-				Toast.LENGTH_LONG).show();
+		Toast.makeText(activity, activity.getResources().getString(id), Toast.LENGTH_LONG).show();
 	}
 
 	public ProtocolCarrier getProtocolCarrier() {
@@ -456,20 +481,18 @@ public class JPHelper {
 		JPHelper.mLocationHelper = mLocationHelper;
 	}
 
-	public static void deleteMyRecurItinerary(String id, String authToken)
-			throws MobilityServiceException, ProtocolException {
+	public static void deleteMyRecurItinerary(String id, String authToken) throws MobilityServiceException,
+			ProtocolException {
 		if (id != null && id.length() > 0) {
-			MobilityUserService userService = new MobilityUserService(
-					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+			MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			userService.deleteRecurrentJourney(id, authToken);
 		}
 	}
 
-	public static Object getItineraryObject(String objectId, String authToken)
-			throws ProtocolException, MobilityServiceException {
+	public static Object getItineraryObject(String objectId, String authToken) throws ProtocolException,
+			MobilityServiceException {
 		if (objectId != null) {
-			MobilityUserService userService = new MobilityUserService(
-					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+			MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			return userService.getRecurrentJourney(objectId, authToken);
 
 		}
@@ -494,56 +517,46 @@ public class JPHelper {
 		}
 	}
 
-	public static RecurrentJourney planRecurItinerary(
-			BasicRecurrentJourneyParameters brj, String authToken)
+	public static RecurrentJourney planRecurItinerary(BasicRecurrentJourneyParameters brj, String authToken)
 			throws ProtocolException, MobilityServiceException {
 		if (brj != null) {
-			MobilityPlannerService plannerService = new MobilityPlannerService(
-					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-			return plannerService
-					.planRecurrentJourney(brj.getData(), authToken);
+			MobilityPlannerService plannerService = new MobilityPlannerService(GlobalConfig.getAppUrl(mContext)
+					+ MOBILITY_URL);
+			return plannerService.planRecurrentJourney(brj.getData(), authToken);
 		}
 		return null;
 	}
 
-	public static Boolean saveMyRecurrentJourney(BasicRecurrentJourney brj,
-			String authToken) throws ProtocolException,
+	public static Boolean saveMyRecurrentJourney(BasicRecurrentJourney brj, String authToken) throws ProtocolException,
 			MobilityServiceException {
 		if (brj != null) {
-			MobilityUserService userService = new MobilityUserService(
-					GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+			MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 			if (brj.getClientId() == null) {
 				userService.saveRecurrentJourney(brj, authToken);
 			} else {
-				userService.updateRecurrentJourney(brj, brj.getClientId(),
-						authToken);
+				userService.updateRecurrentJourney(brj, brj.getClientId(), authToken);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	public static List<BasicRecurrentJourney> getMyRecurItineraries(
-			String authToken) throws ProtocolException,
+	public static List<BasicRecurrentJourney> getMyRecurItineraries(String authToken) throws ProtocolException,
 			MobilityServiceException {
-		MobilityUserService userService = new MobilityUserService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return userService.getRecurrentJourneys(authToken);
 	}
 
-	public static TimeTable getTransitTimeTableById(long from_day, long to_day,
-			String routeId, String authToken) throws ProtocolException,
-			MobilityServiceException {
-		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+	public static TimeTable getTransitTimeTableById(long from_day, long to_day, String routeId, String authToken)
+			throws ProtocolException, MobilityServiceException {
+		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		if (routeId != null) {
 			return dataService.getTimeTable(routeId, from_day, authToken);
 		}
 		return null;
 	}
 
-	public static List<SmartCheckStop> getStops(String[] agencyIds,
-			double[] location, double radius, String authToken)
+	public static List<SmartCheckStop> getStops(String[] agencyIds, double[] location, double radius, String authToken)
 			throws Exception {
 
 		ObjectFilter filter = new ObjectFilter();
@@ -568,8 +581,7 @@ public class JPHelper {
 			filter.setRadius(radius / 100000);
 		}
 
-		TerritoryService territoryService = new TerritoryService(
-				GlobalConfig.getAppUrl(mContext) + TERRITORY_URL);
+		TerritoryService territoryService = new TerritoryService(GlobalConfig.getAppUrl(mContext) + TERRITORY_URL);
 
 		return convertPOIs(territoryService.getPOIs(filter, authToken));
 	}
@@ -589,22 +601,16 @@ public class JPHelper {
 		return out;
 	}
 
-	public static List<TripData> getTrips(SmartCheckStop stop, String authToken)
-			throws Exception {
+	public static List<TripData> getTrips(SmartCheckStop stop, String authToken) throws Exception {
 
-		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return dataService.getNextTrips(stop.getCustomData().get("agencyId")
-				.toString(), stop.getCustomData().get("id").toString(), 3,
-				authToken);
+		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		return dataService.getNextTrips(stop.getCustomData().get("agencyId").toString(), stop.getCustomData().get("id")
+				.toString(), 3, authToken);
 	}
 
-	public static List<ParkingSerial> getParkings(String parkingAgencyId,
-			String authToken) throws Exception {
-		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return convertParkings(dataService.getParkings(parkingAgencyId,
-				authToken));
+	public static List<ParkingSerial> getParkings(String parkingAgencyId, String authToken) throws Exception {
+		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		return convertParkings(dataService.getParkings(parkingAgencyId, authToken));
 	}
 
 	public static List<ParkingSerial> convertParkings(List<Parking> l) {
@@ -622,12 +628,10 @@ public class JPHelper {
 		return out;
 	}
 
-	public static List<AlertRoadLoc> getAlertRoads(String agencyId,
-			long fromTime, long toTime, String authToken) throws Exception {
-		MobilityDataService dataService = new MobilityDataService(
-				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return convertAlertRoad(dataService.getRoadInfo(agencyId, fromTime,
-				toTime, authToken));
+	public static List<AlertRoadLoc> getAlertRoads(String agencyId, long fromTime, long toTime, String authToken)
+			throws Exception {
+		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		return convertAlertRoad(dataService.getRoadInfo(agencyId, fromTime, toTime, authToken));
 	}
 
 	public static List<AlertRoadLoc> convertAlertRoad(List<AlertRoad> roadInfo) {
@@ -643,8 +647,7 @@ public class JPHelper {
 	}
 
 	public static SharedPreferences getTutorialPreferences(Context ctx) {
-		SharedPreferences out = ctx.getSharedPreferences(TUT_PREFS,
-				Context.MODE_PRIVATE);
+		SharedPreferences out = ctx.getSharedPreferences(TUT_PREFS, Context.MODE_PRIVATE);
 		return out;
 	}
 
@@ -672,8 +675,7 @@ public class JPHelper {
 		return getTutorialPreferences(ctx).getBoolean(t.toString(), false);
 	}
 
-	public static void setTutorialVisibility(Context ctx, Tutorial t,
-			boolean visibility) {
+	public static void setTutorialVisibility(Context ctx, Tutorial t, boolean visibility) {
 		Editor edit = getTutorialPreferences(ctx).edit();
 		edit.putBoolean(t.toString(), visibility);
 		edit.commit();
@@ -706,4 +708,31 @@ public class JPHelper {
 		return null;
 	}
 
+	public static void userPromote(Activity activity) {
+		// TODO Auto-generated method stub
+		// memorizza vecchio token/dati
+		AccountProfile oldProfile = ap;
+		// esegui login
+		SCAccessProvider accessprovider =  SCAccessProvider.getInstance(activity);
+		try {
+			accessprovider.login(activity, null);
+		} catch (AACException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// copia vecchi dati in quello nuovo
+	}
+
+	public static boolean isUserAnonymous(Context ctx) {
+		//controlla se in ap ho anonymous e solo quello
+		if (ap!=null)
+		{
+			return (ap.getAccountNames().contains("anonymous")&& ap.getAccountNames().size()==1);
+		}
+		else {
+			return 
+					true;
+		}
+	}
 }
