@@ -26,6 +26,7 @@ import eu.trentorise.smartcampus.android.common.Utils;
 import eu.trentorise.smartcampus.mobilityservice.MobilityUserService;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
+import eu.trentorise.smartcampus.notifications.NotificationsHelper;
 
 /*
  * Task used for copying the data during the user's upgrading
@@ -48,8 +49,6 @@ public class CopyTask extends AsyncTask<Object, Void, String> {
 		this.listener = listener;
 	}
 
-
-
 	@Override
 	protected String doInBackground(Object... params) {
 		{
@@ -59,20 +58,30 @@ public class CopyTask extends AsyncTask<Object, Void, String> {
 				if (resultCode == activity.RESULT_OK) {
 					mToken = data.getExtras().getString(AccountManager.KEY_AUTHTOKEN);
 				}
-				//check if the user is logged
-				if (mToken != null) { 
-					//copy old itinerariesin the new one
-					List<BasicItinerary> listMyItinerary = Utils.convertJSONToObjects(
-							sharedPref.getString(JPHelper.MY_ITINERARIES, null), BasicItinerary.class);
-					List<BasicRecurrentJourney> listMyRecurrentJourneys = Utils.convertJSONToObjects(
-							sharedPref.getString(JPHelper.MY_RECURRENTJOURNEYS, null), BasicRecurrentJourney.class);
+				// check if the user is logged
+				if (mToken != null) {
 
-					for (BasicItinerary itinerary : listMyItinerary) {
-						userService.saveSingleJourney(itinerary, mToken);
+					// check if upgrade is already done
+					if (userService.getRecurrentJourneys(mToken) == null
+							&& userService.getSingleJourneys(mToken) == null) {
+						// copy old itinerariesin the new one
+						List<BasicItinerary> listMyItinerary = Utils.convertJSONToObjects(
+								sharedPref.getString(JPHelper.MY_ITINERARIES, null), BasicItinerary.class);
+						List<BasicRecurrentJourney> listMyRecurrentJourneys = Utils.convertJSONToObjects(
+								sharedPref.getString(JPHelper.MY_RECURRENTJOURNEYS, null), BasicRecurrentJourney.class);
 
-					}
-					for (BasicRecurrentJourney itinerary : listMyRecurrentJourneys) {
-						userService.saveRecurrentJourney(itinerary, mToken);
+						for (BasicItinerary itinerary : listMyItinerary) {
+							itinerary.setClientId(null);
+							userService.saveSingleJourney(itinerary, mToken);
+
+						}
+						for (BasicRecurrentJourney itinerary : listMyRecurrentJourneys) {
+							itinerary.setClientId(null);
+							userService.saveRecurrentJourney(itinerary, mToken);
+						}
+						
+						//dlete old notifications
+						NotificationsHelper.deleteAll(null);
 					}
 				}
 
@@ -87,7 +96,7 @@ public class CopyTask extends AsyncTask<Object, Void, String> {
 	@Override
 	protected void onPostExecute(String token) {
 		if (token == null) {
-			//remove the old data (Json) from sharedpref
+			// remove the old data (Json) from sharedpref
 			SharedPreferences.Editor editor = sharedPref.edit();
 			editor.remove(JPHelper.MY_ITINERARIES);
 			editor.remove(JPHelper.MY_RECURRENTJOURNEYS);
@@ -95,7 +104,7 @@ public class CopyTask extends AsyncTask<Object, Void, String> {
 			editor.commit();
 		}
 		// and refresh the token
-		if (listener!=null)
+		if (listener != null)
 			listener.onTaskCompleted(token);
 		activity.invalidateOptionsMenu();
 	}

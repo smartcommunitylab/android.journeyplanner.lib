@@ -486,7 +486,11 @@ public class JPHelper {
 			MobilityServiceException {
 		if (objectId != null) {
 			MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-			return userService.getRecurrentJourney(objectId, authToken);
+			BasicItinerary journey = userService.getSingleJourney(objectId, authToken);
+			if (journey == null)
+				return userService.getRecurrentJourney(objectId, authToken);
+			else
+				return journey;
 
 		}
 		return null;
@@ -702,7 +706,7 @@ public class JPHelper {
 	}
 
 	/*
-	 *  promote the user from anonymous
+	 * promote the user from anonymous
 	 */
 	public static void userPromote(Activity activity) {
 		new PromoteTask(activity).execute();
