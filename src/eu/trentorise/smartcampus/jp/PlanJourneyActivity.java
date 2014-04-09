@@ -45,7 +45,7 @@ public class PlanJourneyActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		//check 
 		setContentView(R.layout.empty_layout_jp);
 
 		// getSupportActionBar().setDisplayShowTitleEnabled(false);

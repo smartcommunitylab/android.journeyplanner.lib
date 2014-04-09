@@ -20,9 +20,11 @@ import it.sayservice.platform.smartplanner.data.message.TType;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -42,22 +44,20 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.Toast;
-import android.widget.ImageView;
 
 import com.google.android.maps.GeoPoint;
 
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper;
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper.OnAddressSelectedListener;
-import eu.trentorise.smartcampus.android.common.validation.ValidatorHelper;
 import eu.trentorise.smartcampus.android.common.SCGeocoder;
 import eu.trentorise.smartcampus.android.common.Utils;
+import eu.trentorise.smartcampus.android.common.validation.ValidatorHelper;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.android.map.InfoDialog;
 import eu.trentorise.smartcampus.jp.custom.UserPrefsHolder;
@@ -80,7 +80,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 	protected String time;
 	protected Date fromDate;
 	protected Date fromTime;
-	
+
 	protected UserPrefsHolder userPrefsHolder;
 
 	protected boolean fromFav = false;
@@ -90,7 +90,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 	protected AutoCompleteTextView toEditText;
 	protected EditText dateEditText;
 	protected EditText timeEditText;
-	
+
 	private ImageButton fromFavBtn;
 	private ImageButton toFavBtn;
 
@@ -144,8 +144,19 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			from = (Address) getArguments().getSerializable(getString(R.string.navigate_arg_from));
 			to = (Address) getArguments().getSerializable(getString(R.string.navigate_arg_to));
 		} else if (getActivity().getIntent() != null) {
-			from = (Address) getActivity().getIntent().getParcelableExtra(getString(R.string.navigate_arg_from));
-			to = (Address) getActivity().getIntent().getParcelableExtra(getString(R.string.navigate_arg_to));
+			if (getActivity().getIntent().getData() != null) {
+				// is it a google url?
+				Map<String, List<String>> locations = JPHelper.getLocationFromUrl(getActivity().getIntent().getData()
+						.toString());
+				String fromString = null;
+				String toString = null;
+				from = getLocationsFromParam("saddr", from, locations, fromString);
+				to = getLocationsFromParam("daddr", to, locations, toString);
+				
+			} else {
+				from = (Address) getActivity().getIntent().getParcelableExtra(getString(R.string.navigate_arg_from));
+				to = (Address) getActivity().getIntent().getParcelableExtra(getString(R.string.navigate_arg_to));
+			}
 		}
 
 		if (from != null) {
@@ -155,6 +166,19 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		if (to != null) {
 			findAddressForField(TO, new GeoPoint((int) (to.getLatitude() * 1E6), (int) (to.getLongitude() * 1E6)));
 		}
+	}
+
+	private Address getLocationsFromParam(String param, Address from, Map<String, List<String>> locations, String fromString) {
+		if (locations.containsKey(param))
+			fromString = locations.get(param).get(0);
+		if (fromString != null) {
+			from = new Address(Locale.getDefault());
+			List<String> fromList = Arrays.asList(fromString.split(","));
+
+			from.setLatitude(Double.parseDouble(fromList.get(0)));
+			from.setLongitude(Double.parseDouble(fromList.get(1)));
+		}
+		return from;
 	}
 
 	@Override
@@ -186,8 +210,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			@Override
 			public void onClick(View v) {
 				// user preferences
-				ImageView useCustomPrefsToggleBtn = (ImageView) getView().findViewById(
-						R.id.plannew_options_toggle);
+				ImageView useCustomPrefsToggleBtn = (ImageView) getView().findViewById(R.id.plannew_options_toggle);
 				View userPrefsLayout = (View) getView().findViewById(R.id.plannew_userprefs);
 				if (userPrefsLayout.isShown()) {
 					TableLayout tTypesTableLayout = (TableLayout) userPrefsLayout
@@ -202,19 +225,25 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 				Date fromTime = (Date) timeEditText.getTag();
 
 				if (fromPosition == null) {
-					// Toast.makeText(getActivity(), R.string.from_field_empty, Toast.LENGTH_SHORT).show();
-					ValidatorHelper.highlight(getSherlockActivity(), fromEditText, getResources().getString(R.string.from_field_empty));
+					// Toast.makeText(getActivity(), R.string.from_field_empty,
+					// Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), fromEditText,
+							getResources().getString(R.string.from_field_empty));
 					return;
 				}
 				if (toPosition == null) {
-					// Toast.makeText(getActivity(), R.string.to_field_empty, Toast.LENGTH_SHORT).show();
-					ValidatorHelper.highlight(getSherlockActivity(), toEditText, getResources().getString(R.string.to_field_empty));
+					// Toast.makeText(getActivity(), R.string.to_field_empty,
+					// Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), toEditText,
+							getResources().getString(R.string.to_field_empty));
 					return;
 				}
 
 				if (!eu.trentorise.smartcampus.jp.helper.Utils.validFromDateTime(fromDate, fromTime)) {
-					// Toast.makeText(getActivity(), R.string.datetime_before_now, Toast.LENGTH_SHORT).show();
-					ValidatorHelper.highlight(getSherlockActivity(), timeEditText, getResources().getString(R.string.datetime_before_now));
+					// Toast.makeText(getActivity(),
+					// R.string.datetime_before_now, Toast.LENGTH_SHORT).show();
+					ValidatorHelper.highlight(getSherlockActivity(), timeEditText,
+							getResources().getString(R.string.datetime_before_now));
 					return;
 				}
 
@@ -231,7 +260,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 				sj.setTransportTypes((TType[]) userPrefsHolder.getTransportTypes());
 				sj.setRouteType(userPrefsHolder.getRouteType());
 
-				FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
+				FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
+						.beginTransaction();
 				Fragment fragment = ItineraryChoicesFragment.newInstance(sj);
 				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 				fragmentTransaction.replace(Config.mainlayout, fragment, fragment.getTag());
@@ -248,8 +278,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 	protected void setUpTimingControls() {
 		Date now = new Date();
 		dateEditText = (EditText) getView().findViewById(R.id.plannew_date);
-		
-		/*check if date and time are stored*/
+
+		/* check if date and time are stored */
 		if (fromDate == null) {
 			dateEditText.setTag(now);
 			dateEditText.setText(Config.FORMAT_DATE_UI.format(now));
@@ -281,7 +311,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 				DialogFragment f = TimePickerDialogFragment.newInstance((EditText) v);
 				f.setArguments(TimePickerDialogFragment.prepareData(timeEditText.toString()));
 				f.show(getSherlockActivity().getSupportFragmentManager(), "timePicker");
-				
+
 			}
 		});
 		fromDate = fromTime = now;
@@ -415,9 +445,9 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			imm.hideSoftInputFromWindow(timeEditText.getWindowToken(), 0);
 		}
 		if (getView() != null && getView().findViewById(R.id.plannew_date) != null) {
-			/*save date and time for future use*/
-			 fromDate = (Date) getView().findViewById(R.id.plannew_date).getTag();
-			 fromTime = (Date) getView().findViewById(R.id.plannew_time).getTag();
+			/* save date and time for future use */
+			fromDate = (Date) getView().findViewById(R.id.plannew_date).getTag();
+			fromTime = (Date) getView().findViewById(R.id.plannew_time).getTag();
 		}
 	}
 
@@ -439,7 +469,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		View useCustomPrefsToggleBtn = getView().findViewById(R.id.plannew_options);
 
 		useCustomPrefsToggleBtn.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				ImageView imgv = (ImageView) getView().findViewById(R.id.plannew_options_toggle);
