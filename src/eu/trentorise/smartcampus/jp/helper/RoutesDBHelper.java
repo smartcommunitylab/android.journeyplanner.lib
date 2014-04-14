@@ -126,6 +126,7 @@ public class RoutesDBHelper {
 		tt.setTripIds(tripIds != null ? Arrays.asList(tripIds.split(",")) : Collections.<String> emptyList());
 		String compressedTimes = c.getString(c.getColumnIndex(RoutesDatabase.COMPRESSED_TIMES_KEY));
 		tt.setCompressedTimes(compressedTimes != null ? compressedTimes : "");
+		c.close();
 	}
 
 	private static Map<String, Long> queryVersions(SQLiteDatabase db) {
@@ -137,6 +138,7 @@ public class RoutesDBHelper {
 			Long version = c.getLong(c.getColumnIndex(RoutesDatabase.VERSION_KEY));
 			versionsMap.put(agencyId, version);
 		}
+		c.close();
 		return versionsMap;
 	}
 
@@ -173,6 +175,7 @@ public class RoutesDBHelper {
 		c.moveToFirst();
 		String calString = c.getString(c.getColumnIndex(RoutesDatabase.CAL_KEY));
 		CompressedCalendar cal = JsonUtils.toObject(calString, CompressedCalendar.class);
+		c.close();
 		return cal;
 	}
 

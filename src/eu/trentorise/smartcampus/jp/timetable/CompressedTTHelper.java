@@ -38,6 +38,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.util.Log;
 import eu.trentorise.smartcampus.android.common.Utils;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
@@ -58,7 +59,7 @@ public class CompressedTTHelper {
 	protected CompressedTTHelper(Context mContext) {
 		super();
 		CompressedTTHelper.mContext = mContext;
-		calendar = loadCalendars();
+//		calendar = loadCalendars();
 	}
 
 	public static CompressedTTHelper getInstance() {
@@ -128,11 +129,11 @@ public class CompressedTTHelper {
 	}
 
 	private Map<String,CompressedCalendar> loadCalendarsByAgencyId(String agencyId) {
-		AssetManager assetManager = mContext.getResources().getAssets();
+		Resources resources = mContext.getResources();
 		InputStream in = null;
 		String jsonParams = null;
 		Map<String, CompressedCalendar> calendars = new HashMap<String, CompressedCalendar>();
-
+		AssetManager assetManager= resources.getAssets();
 		try {
 			String[] files = assetManager.list(agencyId);
 			CompressedCalendar cc = null;
@@ -160,6 +161,7 @@ public class CompressedTTHelper {
 						cc.getEntries().put(date, mapping);
 					}
 					calendars.put(f.substring(0,f.lastIndexOf(calendarFilenamePost)), cc);
+					in.close();
 				}
 			}
 		} catch (IOException e) {
@@ -171,35 +173,37 @@ public class CompressedTTHelper {
 
 	private Map<String, Map<String, CompressedCalendar>> loadCalendars() {
 		Map<String, Map<String, CompressedCalendar>> calendarGlobal = new HashMap<String, Map<String, CompressedCalendar>>();
-		for (String agencyId : RoutesHelper.AGENCYIDS) {
-			Map<String, CompressedCalendar> calendars = loadCalendarsByAgencyId(agencyId);
-			if (!calendars.isEmpty()) {
-				calendarGlobal.put(agencyId, calendars);
-			}
-		}
+//		for (String agencyId : RoutesHelper.AGENCYIDS) {
+//			Map<String, CompressedCalendar> calendars = loadCalendarsByAgencyId(agencyId);
+//			if (!calendars.isEmpty()) {
+//				calendarGlobal.put(agencyId, calendars);
+//			}
+//		}
 		return calendarGlobal;
 	}
-
-	public static TimeTable getTTwithRouteIdAndTime(String routeId,
-			long from_time, long to_time) {
-		TimeTable tt = null;
-		try {
-			// convert time to date
-			String date = convertMsToDateFormat(from_time);
-			// get correct name of file
-			String nameFile = RoutesHelper.getAgencyIdByRouteId(routeId)
-					+ "/"
-					+ routeId
-					+ "_"
-					+ calendar.get(RoutesHelper.getAgencyIdByRouteId(routeId))
-							.get(date) + ".js";
-			// get the new tt
-			tt = getTimeTable(nameFile, routeId, from_time, to_time);
-		} catch (Exception e) {
-		}
-		return tt;
-
-	}
+	
+	
+//commented because calendar initialization crashes in android 2.2
+//	public static TimeTable getTTwithRouteIdAndTime(String routeId,
+//			long from_time, long to_time) {
+//		TimeTable tt = null;
+//		try {
+//			// convert time to date
+//			String date = convertMsToDateFormat(from_time);
+//			// get correct name of file
+//			String nameFile = RoutesHelper.getAgencyIdByRouteId(routeId)
+//					+ "/"
+//					+ routeId
+//					+ "_"
+//					+ calendar.get(RoutesHelper.getAgencyIdByRouteId(routeId))
+//							.get(date) + ".js";
+//			// get the new tt
+//			tt = getTimeTable(nameFile, routeId, from_time, to_time);
+//		} catch (Exception e) {
+//		}
+//		return tt;
+//
+//	}
 
 	private static TimeTable getTimeTable(String nameFile, String routeId,
 			long from_time, long to_time) {

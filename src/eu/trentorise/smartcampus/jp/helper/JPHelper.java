@@ -181,6 +181,7 @@ public class JPHelper {
 	// }
 
 	public static void init(final Context mContext) {
+
 		new Thread(new Runnable() {
 
 			@Override

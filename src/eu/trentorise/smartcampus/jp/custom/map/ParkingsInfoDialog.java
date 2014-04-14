@@ -61,8 +61,10 @@ public class ParkingsInfoDialog extends SherlockDialogFragment {
 
 		GeoPoint myGeoPoint = JPHelper.getLocationHelper().getLocation();
 		myLocation = new Location("");
-		myLocation.setLatitude(myGeoPoint.getLatitudeE6() / 1e6);
-		myLocation.setLongitude(myGeoPoint.getLongitudeE6() / 1e6);
+		if (myGeoPoint != null) {
+			myLocation.setLatitude(myGeoPoint.getLatitudeE6() / 1e6);
+			myLocation.setLongitude(myGeoPoint.getLongitudeE6() / 1e6);
+		}
 	}
 
 	@Override
@@ -86,15 +88,15 @@ public class ParkingsInfoDialog extends SherlockDialogFragment {
 		if (parkingsList != null) {
 			// multiple stops
 			ParkingSerial firstParking = parkingsList.get(0);
-			View parkingView = SmartCheckParkingsAdapter.buildParking(getSherlockActivity(), R.layout.smartcheck_parking_row,
-					myLocation, firstParking, null, null);
+			View parkingView = SmartCheckParkingsAdapter.buildParking(getSherlockActivity(),
+					R.layout.smartcheck_parking_row, myLocation, firstParking, null, null);
 
 			LinearLayout entryLayout = (LinearLayout) getDialog().findViewById(R.id.parkings_dialog_entry);
 			entryLayout.addView(parkingView, 0);
 		} else if (parking != null) {
 			// single stop
-			View parkingView = SmartCheckParkingsAdapter.buildParking(getSherlockActivity(), R.layout.smartcheck_parking_row,
-					myLocation, parking, null, null);
+			View parkingView = SmartCheckParkingsAdapter.buildParking(getSherlockActivity(),
+					R.layout.smartcheck_parking_row, myLocation, parking, null, null);
 
 			LinearLayout entryLayout = (LinearLayout) getDialog().findViewById(R.id.parkings_dialog_entry);
 			entryLayout.addView(parkingView, 0);
