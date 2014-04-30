@@ -39,6 +39,7 @@ public abstract class AbstractAsyncTaskProcessorNoDialog<Params, Result> impleme
 	@Override
 	public void handleFailure(Exception e) {
 		Log.e(activity.getClass().getName(), ""+e.toString());
+		e.printStackTrace();
 		JPHelper.showFailure(activity, R.string.app_failure_operation);
 	}
 

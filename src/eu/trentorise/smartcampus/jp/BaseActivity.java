@@ -25,34 +25,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
-import eu.trentorise.smartcampus.android.common.LauncherHelper;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.activity.FeedbackFragmentActivity;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
-import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
-import eu.trentorise.smartcampus.jp.timetable.CTTTCacheUpdaterAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class BaseActivity extends FeedbackFragmentActivity {
 
-	private void initDataManagement(Bundle savedInstanceState) {
+	protected void initDataManagement(Bundle savedInstanceState) {
 
 		JPHelper.init(getApplicationContext());
-		RoutesDBHelper.init(getApplicationContext());
 
 		try {
 			if (!JPHelper.getAccessProvider().login(this, null)) {
 				new SCAsyncTask<Void, Void, String>(this, new LoadToken(
 						BaseActivity.this)).execute();
-			} else
+			} 
+			else
 				JPHelper.endAppFailure(this, R.string.app_failure_security);
 
 		} catch (AACException e) {
