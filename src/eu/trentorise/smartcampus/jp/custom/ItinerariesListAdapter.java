@@ -63,9 +63,7 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 			row = inflater.inflate(layoutResourceId, parent, false);
 
 			holder = new RowHolder();
-			holder.timeFrom = (TextView) row.findViewById(R.id.it_time_from);
-			holder.line = (FrameLayout) row.findViewById(R.id.it_line);
-			holder.timeTo = (TextView) row.findViewById(R.id.it_time_to);
+			holder.timeFromTo = (TextView) row.findViewById(R.id.it_time_from);
 			holder.time = (TextView) row.findViewById(R.id.it_time);
 			holder.transportTypes = (LinearLayout) row
 					.findViewById(R.id.it_transporttypes);
@@ -81,16 +79,15 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 		// time from
 		Date timeFrom = new Date(itinerary.getStartime());
 		String timeFromString = Config.FORMAT_TIME_UI.format(timeFrom);
-		holder.timeFrom.setText(timeFromString);
 
 		// time to
 		Date timeTo = new Date(itinerary.getEndtime());
 		String timeToString = Config.FORMAT_TIME_UI.format(timeTo);
-		holder.timeTo.setText(timeToString);
+		holder.timeFromTo.setText(context.getString(R.string.itinerary_timing, timeFromString, timeToString));
+
 		holder.time.setText("("+((timeTo.getTime()-timeFrom.getTime())/60000)+"m)");
 
-		// line between times
-		holder.line.addView(new LineDrawView(getContext()));
+//		holder.line.addView(new LineDrawView(getContext()));
 
 		holder.transportTypes.removeAllViews();
 		ImageView imgv = null;
@@ -120,9 +117,7 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 	}
 
 	static class RowHolder {
-		TextView timeFrom;
-		FrameLayout line;
-		TextView timeTo;
+		TextView timeFromTo;
 		TextView time;
 		LinearLayout transportTypes;
 		ImageView alert;

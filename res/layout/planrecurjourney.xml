@@ -301,34 +301,34 @@
 
             <LinearLayout
                 android:id="@+id/plannew_options"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:minHeight="48dp"
                 android:gravity="center_vertical" >
 
-                <!-- android:textAppearance="@android:style/TextAppearance.Medium" -->
-
                 <TextView
+                    android:id="@+id/plannew_options_label"
                     style="@style/label_jp"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/plan_custom_prefs" />
+                    android:text="@string/plan_preferences" />
 
-                <ToggleButton
+                <ImageView
                     android:id="@+id/plannew_options_toggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:checked="false"
-                    android:textOff="@string/plan_custom_prefs_on"
-                    android:textOn="@string/plan_custom_prefs_off" />
+                    android:paddingTop="2dp"
+                    android:src="@drawable/ic_navigation_next_item"
+                    android:layout_weight="0.25" />
             </LinearLayout>
 
             <include
                 android:id="@+id/plannew_userprefs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 layout="@layout/userprefs" />
         </LinearLayout>
     </ScrollView>

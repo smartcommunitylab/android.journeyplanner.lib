@@ -281,5 +281,7 @@
     <string name="not_now">Not now</string>
     <string name="auth_failed">Application initialization failed. Try connecting again.</string>
 
+    <string name="itinerary_timing">%1$s - %2$s</string>
+    
 </resources>
 
