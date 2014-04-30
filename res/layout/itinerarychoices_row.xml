@@ -47,17 +47,6 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black" />
 
-                <FrameLayout
-                    android:id="@+id/it_line"
-                    android:layout_width="6dp"
-                    android:layout_height="match_parent" >
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/it_time_to"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/black" />
                 <TextView
                     android:id="@+id/it_time"
                     android:layout_marginLeft="3dp"

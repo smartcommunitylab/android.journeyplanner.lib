@@ -37,6 +37,7 @@ public abstract class AbstractAsyncTaskProcessor<Params, Result> implements SCAs
 
 	@Override
 	public void handleFailure(Exception e) {
+		e.printStackTrace();
 		Log.e(activity.getClass().getName(), "" + e.toString());
 		JPHelper.showFailure(activity, R.string.app_failure_operation);
 	}
