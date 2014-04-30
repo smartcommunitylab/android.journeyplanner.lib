@@ -82,7 +82,7 @@ public class HomeActivity extends TutorialManagerActivity {
 
 //		setHiddenNotification();
 		
-		if (LauncherHelper.isLauncherInstalled(this, true) && JPHelper.isFirstLaunch(this)) {
+		if (JPHelper.isFirstLaunch(this)) {
 			showTourDialog();
 			JPHelper.disableFirstLaunch(this);
 		}
