@@ -90,7 +90,6 @@ public class PromoteTask extends AsyncTask<Void, Void, SCAccessProvider> {
 		super.onPostExecute(result);
 		if (result != null) {
 			Bundle bundle = new Bundle();
-			bundle.putString(Constants.KEY_AUTHORITY, AuthorityHelper.A_GOOGLE_LOCAL);
 			try {
 				result.login(activity, bundle);
 			} catch (AACException e) {

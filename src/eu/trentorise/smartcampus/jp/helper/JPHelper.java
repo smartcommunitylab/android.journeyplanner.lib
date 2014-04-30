@@ -51,6 +51,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
 import eu.trentorise.smartcampus.ac.AACException;
+import eu.trentorise.smartcampus.ac.Constants;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.LocationHelper;
@@ -222,7 +223,7 @@ public class JPHelper {
 			if (params[0] != null)
 				copyTask = params[0];
 			try {
-				bps = new BasicProfileService(GlobalConfig.getAppUrl(getInstance().mContext) + "/aac");
+				bps = new BasicProfileService(Constants.getAuthUrl(mContext));
 				return bps.getAccountProfile(getAuthToken(mContext));
 
 			} catch (Exception e) {
