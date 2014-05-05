@@ -269,10 +269,9 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 			@Override
 			public void onClick(View v) {
 				// user preferences
-				ToggleButton useCustomPrefsToggleBtn = (ToggleButton) getView().findViewById(R.id.plannew_options_toggle);
 				View userPrefsLayout = (View) getView().findViewById(R.id.plannew_userprefs);
 				alwaysCheckbox = (CheckBox) getView().findViewById(R.id.always_checkbox);
-				if (useCustomPrefsToggleBtn.isChecked()) {
+				if (userPrefsLayout.isShown()) {
 					TableLayout tTypesTableLayout = (TableLayout) userPrefsLayout.findViewById(R.id.transporttypes_table);
 					RadioGroup rTypesRadioGroup = (RadioGroup) userPrefsLayout.findViewById(R.id.routetypes_radioGroup);
 					userPrefsHolder = PrefsHelper.userPrefsViews2Holder(tTypesTableLayout, rTypesRadioGroup, userPrefs);

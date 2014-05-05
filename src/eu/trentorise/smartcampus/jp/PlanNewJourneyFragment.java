@@ -210,7 +210,6 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			@Override
 			public void onClick(View v) {
 				// user preferences
-				ImageView useCustomPrefsToggleBtn = (ImageView) getView().findViewById(R.id.plannew_options_toggle);
 				View userPrefsLayout = (View) getView().findViewById(R.id.plannew_userprefs);
 				if (userPrefsLayout.isShown()) {
 					TableLayout tTypesTableLayout = (TableLayout) userPrefsLayout
