@@ -140,7 +140,7 @@ public class ItineraryFragment extends FeedbackFragment {
 						Log.e(ItineraryFragment.class.getSimpleName(), e.getMessage());
 					}
 				}
-				i.putExtra(LegMapActivity.ACTIVE_POS, position - 1);
+				i.putExtra(LegMapActivity.ACTIVE_POS, position);
 				getActivity().startActivity(i);
 			}
 		});

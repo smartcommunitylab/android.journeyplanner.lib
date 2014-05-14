@@ -32,7 +32,9 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.graphics.Paint.Align;
 import android.util.DisplayMetrics;
@@ -76,7 +78,22 @@ public class Utils {
 		ImageView imgv = new ImageView(ctx);
 		Bitmap img = writeOnBitmap(ctx,R.drawable.ic_mt_bus, line);
 		imgv.setImageBitmap(img);
+		colorizeLineDrawable(ctx, line, imgv);
 		return imgv;
+	}
+
+	private static void colorizeLineDrawable(Context ctx, String line,
+			ImageView imgv) {
+		TypedArray colors = ctx.getResources().obtainTypedArray(R.array.smart_check_12_colors);
+		TypedArray lines = ctx.getResources().obtainTypedArray(R.array.smart_check_12_numbers);
+		for(int index =0; index<lines.length();index++){
+			if(line.equals(lines.getString(index).replace("0", ""))){
+				int c = colors.getColor(index, 0xFFF);
+				imgv.setColorFilter(c);
+			}
+		}
+		lines.recycle();
+		colors.recycle();
 	}
 	
 	private static Bitmap writeOnBitmap(Context mContext, int drawableId, String text) {
@@ -97,7 +114,6 @@ public class Utils {
 		float x = bitmap.getWidth() / 2;
 		float y = bitmap.getHeight() / 2 - Utils.convertDpToPixel(2.5f, mContext);
 		canvas.drawText(text, x, y, paint);
-
 		return bitmap;
 	}
 	
