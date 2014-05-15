@@ -78,7 +78,7 @@ public class Utils {
 		ImageView imgv = new ImageView(ctx);
 		Bitmap img = writeOnBitmap(ctx,R.drawable.ic_mt_bus, line);
 		imgv.setImageBitmap(img);
-		colorizeLineDrawable(ctx, line, imgv);
+		//colorizeLineDrawable(ctx, line, imgv);
 		return imgv;
 	}
 
