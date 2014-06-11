@@ -21,6 +21,7 @@ import it.sayservice.platform.smartplanner.data.message.cache.CacheUpdateRespons
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.GeolocalizedStopRequest;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Stop;
@@ -86,9 +87,7 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 import eu.trentorise.smartcampus.storage.DataException;
 import eu.trentorise.smartcampus.storage.sync.SyncStorage;
 import eu.trentorise.smartcampus.storage.sync.SyncStorageWithPaging;
-import eu.trentorise.smartcampus.territoryservice.TerritoryService;
-import eu.trentorise.smartcampus.territoryservice.model.ObjectFilter;
-import eu.trentorise.smartcampus.territoryservice.model.POIObject;
+
 
 public class JPHelper {
 
@@ -558,49 +557,45 @@ public class JPHelper {
 		return null;
 	}
 
+	// da rifare
+
 	public static List<SmartCheckStop> getStops(String[] agencyIds, double[] location, double radius, String authToken)
 			throws Exception {
 
-		ObjectFilter filter = new ObjectFilter();
-		filter.setSkip(0);
-		filter.setLimit(-1);
-		filter.setTypes(Collections.singletonList("Mobility"));
-
-		Map<String, Object> criteria = new HashMap<String, Object>();
-		criteria.put("source", "smartplanner-transitstops");
-
+		//set filter's options
+		GeolocalizedStopRequest geoLocStop = new GeolocalizedStopRequest();
 		if (agencyIds != null && agencyIds.length > 0) {
-			criteria.put("customData.agencyId", agencyIds);
+			geoLocStop.setAgencyId(agencyIds[0]);
 		}
 
-		filter.setCriteria(criteria);
-
-		// filter by near me
 		if (location != null) {
-			filter.setCenter(location);
+			geoLocStop.setCoordinates(new double[] { location[0], location[1] });
 			// radius is in meter. As for interface, the radius unit corresponds
 			// to ~ 100 km
-			filter.setRadius(radius / 100000);
+			geoLocStop.setRadius(radius / 100000);
 		}
-
-		TerritoryService territoryService = new TerritoryService(GlobalConfig.getAppUrl(mContext) + TERRITORY_URL);
-
-		return convertPOIs(territoryService.getPOIs(filter, authToken));
+		MobilityDataService mobilityDataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext)
+				+ MOBILITY_URL);
+		List<Stop> geoStop = mobilityDataService.getGeolocalizedStops(geoLocStop, authToken);
+		List<SmartCheckStop> returnGeoStops = new ArrayList<SmartCheckStop>();
+		for (Stop stop : geoStop) {
+			SmartCheckStop singleStop = new SmartCheckStop();
+			singleStop = fromSmartCheckStopToStop(stop, agencyIds[0]);
+			returnGeoStops.add(singleStop);
+		}
+		return returnGeoStops;
 	}
 
-	public static List<SmartCheckStop> convertPOIs(List<POIObject> l) {
-		List<SmartCheckStop> out = new ArrayList<SmartCheckStop>();
-		for (POIObject obj : l) {
-			SmartCheckStop toAdd = new SmartCheckStop();
-			toAdd.setCustomData(obj.getCustomData());
-			toAdd.setId(obj.getId());
-			toAdd.setLocation(obj.getLocation());
-			toAdd.setTitle(obj.getTitle());
-			toAdd.setUpdateTime(obj.getUpdateTime());
-			toAdd.setVersion(obj.getVersion());
-			out.add(toAdd);
-		}
-		return out;
+	private static SmartCheckStop fromSmartCheckStopToStop(Stop stop, String agencyId) {
+		SmartCheckStop singleStop = new SmartCheckStop();
+		singleStop.setTitle(stop.getName());
+		singleStop.setId(stop.getId());
+		singleStop.setLocation(new double[] { stop.getLatitude(), stop.getLongitude() });
+		HashMap<String, Object> customData = new HashMap<String, Object>();
+		customData.put("agencyId", agencyId);
+		customData.put("id", stop.getId());
+		singleStop.setCustomData(customData);
+		return singleStop;
 	}
 
 	public static List<TripData> getTrips(SmartCheckStop stop, String authToken) throws Exception {
@@ -744,31 +739,31 @@ public class JPHelper {
 	}
 
 	public static Map<String, List<String>> getLocationFromUrl(String string) {
-		    try {
-		        Map<String, List<String>> params = new HashMap<String, List<String>>();
-		        String[] urlParts = string.split("\\?");
-		        if (urlParts.length > 1) {
-		            String query = urlParts[1];
-		            for (String param : query.split("&")) {
-		                String[] pair = param.split("=");
-		                String key = URLDecoder.decode(pair[0], "UTF-8");
-		                String value = "";
-		                if (pair.length > 1) {
-		                    value = URLDecoder.decode(pair[1], "UTF-8");
-		                }
+		try {
+			Map<String, List<String>> params = new HashMap<String, List<String>>();
+			String[] urlParts = string.split("\\?");
+			if (urlParts.length > 1) {
+				String query = urlParts[1];
+				for (String param : query.split("&")) {
+					String[] pair = param.split("=");
+					String key = URLDecoder.decode(pair[0], "UTF-8");
+					String value = "";
+					if (pair.length > 1) {
+						value = URLDecoder.decode(pair[1], "UTF-8");
+					}
 
-		                List<String> values = params.get(key);
-		                if (values == null) {
-		                    values = new ArrayList<String>();
-		                    params.put(key, values);
-		                }
-		                values.add(value);
-		            }
-		        }
+					List<String> values = params.get(key);
+					if (values == null) {
+						values = new ArrayList<String>();
+						params.put(key, values);
+					}
+					values.add(value);
+				}
+			}
 
-		        return params;
-		    } catch (UnsupportedEncodingException ex) {
-		        throw new AssertionError(ex);
-		    }
-		}		
+			return params;
+		} catch (UnsupportedEncodingException ex) {
+			throw new AssertionError(ex);
+		}
+	}
 }
