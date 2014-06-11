@@ -576,18 +576,17 @@ public class JPHelper {
 			geoLocStop.setRadius(radius / 100000);
 		}
 
-		List<Stop> geoStops = new ArrayList<Stop>();
+		List<SmartCheckStop> returnGeoStops = new ArrayList<SmartCheckStop>();
 		for (String agencyId : agencyIds) {
 			geoLocStop.setAgencyId(agencyId);
-			geoStops.addAll(mobilityDataService.getGeolocalizedStops(geoLocStop, authToken));
+			List<Stop> geoStops = mobilityDataService.getGeolocalizedStops(geoLocStop, authToken); 
+			for (Stop stop : geoStops) {
+				SmartCheckStop singleStop = new SmartCheckStop();
+				singleStop = fromSmartCheckStopToStop(stop, agencyId);
+				returnGeoStops.add(singleStop);
+			}
 		}
 
-		List<SmartCheckStop> returnGeoStops = new ArrayList<SmartCheckStop>();
-		for (Stop stop : geoStops) {
-			SmartCheckStop singleStop = new SmartCheckStop();
-			singleStop = fromSmartCheckStopToStop(stop, agencyIds[0]);
-			returnGeoStops.add(singleStop);
-		}
 		return returnGeoStops;
 	}
 
@@ -595,7 +594,7 @@ public class JPHelper {
 		SmartCheckStop singleStop = new SmartCheckStop();
 		singleStop.setTitle(stop.getName());
 		singleStop.setId(stop.getId());
-		singleStop.setLocation(new double[] { stop.getLatitude(), stop.getLongitude() });
+		singleStop.setLocation(stop.getCoordinates());
 		HashMap<String, Object> customData = new HashMap<String, Object>();
 		customData.put("agencyId", agencyId);
 		customData.put("id", stop.getId());
