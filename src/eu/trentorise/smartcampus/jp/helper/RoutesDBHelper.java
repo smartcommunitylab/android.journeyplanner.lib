@@ -71,7 +71,7 @@ public class RoutesDBHelper {
 
 	public static void updateAgencies(AgencyDescriptor... agencies) {
 		SQLiteDatabase db = RoutesDBHelper.routesDB.getWritableDatabase();
-
+		try {
 		// delete all
 		for (AgencyDescriptor agency : agencies) {
 			removeHashesForAgency(agency, db);
@@ -90,7 +90,9 @@ public class RoutesDBHelper {
 			
 			Log.e(RoutesDBHelper.class.getCanonicalName(), "Agency " + agency.agencyId + " updated.");
 		}
-		db.close();
+		} catch (Exception e) {
+//			db.close();	
+		}
 	}
 
 	public static CompressedTransitTimeTable getTimeTable(String date, String agencyId, String routeId) {
@@ -107,7 +109,7 @@ public class RoutesDBHelper {
 			tt.setCompressedTimes("");
 			return tt;
 		} finally {
-			db.close();
+//			db.close();
 		}
 		return out;
 	}
