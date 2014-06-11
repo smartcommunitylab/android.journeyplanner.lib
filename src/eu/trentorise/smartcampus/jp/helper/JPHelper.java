@@ -562,23 +562,28 @@ public class JPHelper {
 	public static List<SmartCheckStop> getStops(String[] agencyIds, double[] location, double radius, String authToken)
 			throws Exception {
 
+		if (agencyIds == null || agencyIds.length == 0) return Collections.emptyList();
+		
+		MobilityDataService mobilityDataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext)
+				+ MOBILITY_URL);
+
 		//set filter's options
 		GeolocalizedStopRequest geoLocStop = new GeolocalizedStopRequest();
-		if (agencyIds != null && agencyIds.length > 0) {
-			geoLocStop.setAgencyId(agencyIds[0]);
-		}
-
 		if (location != null) {
 			geoLocStop.setCoordinates(new double[] { location[0], location[1] });
 			// radius is in meter. As for interface, the radius unit corresponds
 			// to ~ 100 km
 			geoLocStop.setRadius(radius / 100000);
 		}
-		MobilityDataService mobilityDataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext)
-				+ MOBILITY_URL);
-		List<Stop> geoStop = mobilityDataService.getGeolocalizedStops(geoLocStop, authToken);
+
+		List<Stop> geoStops = new ArrayList<Stop>();
+		for (String agencyId : agencyIds) {
+			geoLocStop.setAgencyId(agencyId);
+			geoStops.addAll(mobilityDataService.getGeolocalizedStops(geoLocStop, authToken));
+		}
+
 		List<SmartCheckStop> returnGeoStops = new ArrayList<SmartCheckStop>();
-		for (Stop stop : geoStop) {
+		for (Stop stop : geoStops) {
 			SmartCheckStop singleStop = new SmartCheckStop();
 			singleStop = fromSmartCheckStopToStop(stop, agencyIds[0]);
 			returnGeoStops.add(singleStop);
