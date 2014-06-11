@@ -31,6 +31,7 @@ public class JPParamsHelper {
 	public static final String KEY_CENTER_MAP = "center_map";
 	public static final String KEY_ZOOM_MAP = "zoom_map";
 
+	private static final Integer DEFAULT_ZOOM_LEVEL = 15;
 	private Map<Object, Object> paramsAsset;
 
 	protected JPParamsHelper(Context mContext) {
@@ -108,7 +109,9 @@ public class JPParamsHelper {
 	 * MAP
 	 */
 	public static int getZoomLevelMap() {
-		return (Integer) getInstance().getParamsAsset().get(KEY_ZOOM_MAP);
+		if (getInstance() != null && getInstance().getParamsAsset() != null)
+			return (Integer) getInstance().getParamsAsset().get(KEY_ZOOM_MAP);
+		else return DEFAULT_ZOOM_LEVEL;
 	}
 
 	public static List<Double> getCenterMap() {
