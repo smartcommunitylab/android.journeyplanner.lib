@@ -16,8 +16,8 @@ import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper.AgencyDescriptor;
+import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.network.RemoteException;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
@@ -47,9 +47,28 @@ public class CTTTCacheNetworkUpdaterAsyncTask extends
 	@Override
 	protected Map<String, AgencyDescriptor> doInBackground(
 			Map<String, Long>... params) {
+		
 		Map<String, String> versionsMap = new HashMap<String, String>();
+		
+		Map<String, Map<String,String>> subUrban = new HashMap<String, Map<String,String>>();
+		
 		for (Entry<String, Long> entry : params[0].entrySet()) {
-			versionsMap.put(entry.getKey(), entry.getValue().toString());
+			//esclude gli extraurbani di cui fare il management dopo.
+			if(!entry.getKey().equals(RoutesHelper.AGENCYID_BUS_SUBURBAN))
+				versionsMap.put(entry.getKey(), entry.getValue().toString());
+			else{
+				//TODO inserire le routes
+				Map<String,String> routes = new HashMap<String, String>();
+				routes.put("version", entry.getValue().toString());
+				String sroutes =  RoutesHelper.getRoutesIdsList(mContext, new String[]{RoutesHelper.AGENCYID_BUS_SUBURBAN}).toString();
+				sroutes=sroutes.substring(1,sroutes.length()-1);
+				String sfinal = "";
+//				for(String s : sroutes.split(","))
+//					sfinal+="\""+s.replace(" ", "")+"\",";
+				sfinal = sroutes.split(",")[0];
+				routes.put("routes",sfinal.substring(0, sfinal.length()-1));
+				subUrban.put(entry.getKey(), routes);
+			}
 			// Test
 			// versionsMap.put(entry.getKey(), "0");
 		}
@@ -106,15 +125,19 @@ public class CTTTCacheNetworkUpdaterAsyncTask extends
 				}
 
 			}
+			if(!subUrban.isEmpty()){
+				//TODO avviare un service/asynctask che ti fa queste cose.
+				Map<String, CacheUpdateResponse> res = JPHelper.getPartialCacheStatus(subUrban,
+					JPHelper.getAuthToken(mContext));
+				res.size();
+			}
 		} catch (ProtocolException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (AACException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

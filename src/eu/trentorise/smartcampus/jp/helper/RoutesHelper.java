@@ -54,6 +54,15 @@ public class RoutesHelper {
 
 		return list;
 	}
+	public static List<String> getRoutesIdsList(Context ctx, String[] agencyIds) {
+		List<String> list = new ArrayList<String>();
+		List<RouteDescriptor> routeDescriptorsList = getRouteDescriptorsList(ctx, agencyIds);
+		for (RouteDescriptor r : routeDescriptorsList) {
+			list.add(routeDescriptor2route(ctx, r).getId().getId());
+		}
+
+		return list;
+	}
 
 	public static List<RouteDescriptor> getRouteDescriptorsList(Context ctx, String[] agencyIds) {
 		// if agencyIds are not provided use all
