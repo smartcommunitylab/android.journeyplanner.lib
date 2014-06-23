@@ -647,7 +647,7 @@ public class RoutesHelper {
 	 * Suburban NEW!!!
 	 */
 	private static final List<RouteDescriptor> RoutesDescriptorsList_17 = Arrays.asList(new RouteDescriptor[] {
-/*			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "1_17_0", R.string.agency_17_route_1_17_0, "101"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "1_17_0", R.string.agency_17_route_1_17_0, "101"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "1_17_1", R.string.agency_17_route_1_17_1, "101"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "3_17_0", R.string.agency_17_route_3_17_0, "102"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "3_17_1", R.string.agency_17_route_3_17_1, "102"),
@@ -877,14 +877,14 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "604_17_1", R.string.agency_17_route_604_17_1, "120"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "618_17_0", R.string.agency_17_route_618_17_0, "502"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "618_17_1", R.string.agency_17_route_618_17_1, "502"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "634_17_0", R.string.agency_17_route_634_17_0, "332"),*/
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "634_17_1", R.string.agency_17_route_634_17_1, "332")
-/*			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "636_17_0", R.string.agency_17_route_636_17_0, "231"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "634_17_0", R.string.agency_17_route_634_17_0, "332"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "634_17_1", R.string.agency_17_route_634_17_1, "332"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "636_17_0", R.string.agency_17_route_636_17_0, "231"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "636_17_1", R.string.agency_17_route_636_17_1, "231"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "638_17_0", R.string.agency_17_route_638_17_0, "140"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "638_17_1", R.string.agency_17_route_638_17_1, "140"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "640_17_0", R.string.agency_17_route_640_17_0, "468"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "640_17_1", R.string.agency_17_route_640_17_1, "468")*/ });
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "640_17_1", R.string.agency_17_route_640_17_1, "468") }); 
 
 	public static final Map<String, List<RouteDescriptor>> ROUTES = new HashMap<String, List<RouteDescriptor>>() {
 		private static final long serialVersionUID = 8472504007546826470L;

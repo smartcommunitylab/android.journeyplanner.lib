@@ -192,6 +192,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 					.getColor(R.color.transparent_white));
 			lineDay.setTextColor(getSherlockActivity().getResources().getColor(
 					R.color.transparent_white));
+			
 		}
 		// set the buttons for navigation
 
