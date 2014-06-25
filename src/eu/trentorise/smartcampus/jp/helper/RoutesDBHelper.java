@@ -393,7 +393,10 @@ public class RoutesDBHelper {
 		private static final String DELETE_TABLE  = "DROP TABLE IF EXISTS %s";
 		
 		public RoutesDatabase(Context context) {
-			super(context, Environment.getExternalStorageDirectory() + "/" + DB_NAME, null, DB_VERSION);
+//			test
+//			super(context, Environment.getExternalStorageDirectory() + "/" + DB_NAME, null, DB_VERSION);
+			super(context, DB_NAME, null, DB_VERSION);
+
 		}
 
 		@Override
