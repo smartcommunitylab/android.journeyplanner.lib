@@ -47,13 +47,13 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.location.Location;
 import android.location.LocationListener;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.Constants;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
+import eu.trentorise.smartcampus.ac.authorities.AuthorityHelper;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.LocationHelper;
 import eu.trentorise.smartcampus.jp.R;
@@ -104,11 +104,9 @@ public class JPHelper {
 	private SyncStorageWithPaging storage = null;
 
 	public static final String MOBILITY_URL = "/core.mobility";
-	private static final String TERRITORY_URL = "/core.territory";
 	public static final String MY_ITINERARIES = "my itineraries";
 	public static final String MY_RECURRENTJOURNEYS = "my recurrent journeys";
 	public static final String IS_ANONYMOUS = "is anonymous";
-	private static AccountProfile ap = null;
 
 	// tutorial's stuff
 
@@ -232,7 +230,6 @@ public class JPHelper {
 		}
 
 		protected void onPostExecute(AccountProfile result) {
-			ap = result;
 			if (copyTask != null)
 				copyTask.execute();
 		};
@@ -742,6 +739,23 @@ public class JPHelper {
 		editor.commit();
 	}
 
+	/**
+	 * Login helper wrapping up the login type
+	 * @param activity
+	 * @return
+	 * @throws AACException
+	 */
+	public static boolean login(Activity activity) throws AACException {
+		SCAccessProvider provider = mContext == null ? SCAccessProvider.getInstance(activity) : getAccessProvider();
+		if (isUserAnonymous(activity)) {
+			Bundle bundle = new Bundle();
+			bundle.putString(Constants.KEY_AUTHORITY, AuthorityHelper.A_ANONYMOUS);
+			return provider.login(activity, bundle);
+		} else {
+			return provider.login(activity, null);
+		}
+	}
+	
 	public static Map<String, List<String>> getLocationFromUrl(String string) {
 		try {
 			Map<String, List<String>> params = new HashMap<String, List<String>>();

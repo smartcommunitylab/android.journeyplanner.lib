@@ -53,9 +53,8 @@ public abstract class AbstractAsyncTaskProcessorNoDialog<Params, Result> impleme
 
 	@Override
 	public void handleSecurityError() {
-		SCAccessProvider accessProvider =  JPHelper.getAccessProvider();
 		try {
-			accessProvider.login(activity, null);
+			JPHelper.login(activity);
 		} catch (Exception e) {
 			Log.e(activity.getClass().getName(),""+ e.toString());
 			JPHelper.showFailure(activity, R.string.app_failure_security);

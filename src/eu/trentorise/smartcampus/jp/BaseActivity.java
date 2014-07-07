@@ -19,6 +19,8 @@ import it.sayservice.platform.smartplanner.data.message.TType;
 
 import java.util.Arrays;
 
+import org.apache.http.HttpStatus;
+
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
@@ -26,6 +28,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
@@ -43,12 +46,12 @@ public class BaseActivity extends FeedbackFragmentActivity {
 		JPHelper.init(getApplicationContext());
 
 		try {
-			if (!JPHelper.getAccessProvider().login(this, null)) {
+			if (!JPHelper.login(this)) {
 				new SCAsyncTask<Void, Void, String>(this, new LoadToken(
 						BaseActivity.this)).execute();
 			} 
-			else
-				JPHelper.endAppFailure(this, R.string.app_failure_security);
+//			else
+//				JPHelper.endAppFailure(this, R.string.app_failure_security);
 
 		} catch (AACException e) {
 			JPHelper.endAppFailure(this, R.string.app_failure_security);
@@ -144,14 +147,31 @@ public class BaseActivity extends FeedbackFragmentActivity {
 		}
 
 		@Override
-		public String performAction(Void... params) throws SecurityException,
-				ConnectionException, Exception {
-			return JPHelper.getAuthToken(BaseActivity.this);
+		public String performAction(Void... params) throws SecurityException, ConnectionException, Exception {
+			try {
+				return JPHelper.getAuthToken(BaseActivity.this);
+			} catch (AACException e) {
+				Log.e(getClass().getName(), "" + e.getMessage());
+				switch (e.getStatus()) {
+				case HttpStatus.SC_UNAUTHORIZED:
+					try {
+						JPHelper.getAccessProvider().logout(BaseActivity.this);
+						throw new SecurityException(e.getMessage());
+					} catch (AACException e1) {
+						e1.printStackTrace();
+					}
+				default:
+					break;
+				}
+				return null;
+			}
 		}
 
 		@Override
 		public void handleResult(String result) {
-			// ok
+			if (result == null) {
+				JPHelper.endAppFailure(BaseActivity.this, R.string.app_failure_security);
+			}
 		}
 
 	}

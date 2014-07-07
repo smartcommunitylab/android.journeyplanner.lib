@@ -17,10 +17,8 @@ package eu.trentorise.smartcampus.jp.custom;
 
 import android.app.Activity;
 import android.util.Log;
-import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.HandleExceptionHelper;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask.SCAsyncTaskProcessor;
-import eu.trentorise.smartcampus.jp.HomeActivity;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 
@@ -50,9 +48,8 @@ public abstract class AbstractAsyncTaskProcessor<Params, Result> implements SCAs
 
 	@Override
 	public void handleSecurityError() {
-		SCAccessProvider accessProvider = JPHelper.getAccessProvider();
 		try {
-			accessProvider.login(activity, null);
+			JPHelper.login(activity);
 			
 		} catch (Exception e) {
 			Log.e(activity.getClass().getName(), "" + e.toString());
