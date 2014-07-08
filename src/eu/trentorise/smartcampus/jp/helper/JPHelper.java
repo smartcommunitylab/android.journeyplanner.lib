@@ -41,6 +41,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
@@ -49,7 +50,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
+
+import com.google.android.gcm.GCMRegistrar;
+
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.Constants;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
@@ -102,6 +107,8 @@ public class JPHelper {
 	private static LocationHelper mLocationHelper;
 
 	private SyncStorageWithPaging storage = null;
+
+
 
 	public static final String MOBILITY_URL = "/core.mobility";
 	public static final String MY_ITINERARIES = "my itineraries";
@@ -177,6 +184,8 @@ public class JPHelper {
 	// instance = new JPHelper(mContext);
 	// RoutesDBHelper.init(mContext);
 	// }
+	
+	protected static String PROJECT_ID ="220741898329";
 
 	public static void init(final Context mContext) {
 
@@ -190,6 +199,57 @@ public class JPHelper {
 		instance = new JPHelper(mContext);
 		RoutesDBHelper.init(mContext);
 		getUserProfileInit();
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				IntentFilter gcmFilter = new IntentFilter();
+				gcmFilter.addAction("GCM_RECEIVED_ACTION");
+
+				String regId="";
+					// This registerClient() method checks the current device, checks the
+				// manifest for the appropriate rights, and then retrieves a registration id
+				// from the GCM cloud.  If there is no registration id, GCMRegistrar will
+				// register this device for the specified project, which will return a
+				// registration id.
+					try {
+						// Check that the device supports GCM (should be in a try / catch)
+						GCMRegistrar.checkDevice(mContext);
+
+						// Check the manifest to be sure this app has all the required
+						// permissions.
+						GCMRegistrar.checkManifest(mContext);
+
+						// Get the existing registration id, if it exists.
+						regId = GCMRegistrar.getRegistrationId(mContext);
+
+						if (regId.equals("")) {
+
+							// register this device for this project
+							GCMRegistrar.register(mContext, PROJECT_ID);
+							regId = GCMRegistrar.getRegistrationId(mContext);
+
+
+						} else {
+
+							//Already registered;
+
+						}
+						
+						
+					} catch (Exception e) {
+						
+						Log.e("JPHELPER", e.toString());
+						
+					}
+					
+					// This is part of our CHEAT.  For this demo, you'll need to
+					// capture this registration id so it can be used in our demo web
+					// service.
+					Log.e("REGID:", regId);
+
+				}
+		}).start();
 	}
 
 	public static void getUserProfileInit() {
