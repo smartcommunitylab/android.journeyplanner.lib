@@ -17,6 +17,8 @@ package eu.trentorise.smartcampus.jp.helper;
 
 import java.util.List;
 
+import com.actionbarsherlock.app.SherlockActivity;
+
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
@@ -26,7 +28,6 @@ import eu.trentorise.smartcampus.android.common.Utils;
 import eu.trentorise.smartcampus.mobilityservice.MobilityUserService;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
-import eu.trentorise.smartcampus.notifications.NotificationsHelper;
 
 /*
  * Task used for copying the data during the user's upgrading
@@ -80,8 +81,9 @@ public class CopyTask extends AsyncTask<Object, Void, String> {
 							userService.saveRecurrentJourney(itinerary, mToken);
 						}
 						
+						//TODO remove this once push works.
 						//dlete old notifications
-						NotificationsHelper.deleteAll(null);
+//						NotificationsHelper.deleteAll(null);
 					}
 				}
 
@@ -106,7 +108,7 @@ public class CopyTask extends AsyncTask<Object, Void, String> {
 		// and refresh the token
 		if (listener != null)
 			listener.onTaskCompleted(token);
-		activity.invalidateOptionsMenu();
+		((SherlockActivity)activity).supportInvalidateOptionsMenu();
 	}
 
 }
