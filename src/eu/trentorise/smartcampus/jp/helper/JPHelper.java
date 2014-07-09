@@ -109,6 +109,10 @@ public class JPHelper {
 
 	private static LocationHelper mLocationHelper;
 
+	private static String GCM_APP_ID = "core.mobility";
+
+	private static String GCM_SERVER_URL = "https://tn.smartcampuslab.it/core.communicator";
+
 	private SyncStorageWithPaging storage = null;
 
 	public static final String MOBILITY_URL = "/core.mobility";
@@ -188,8 +192,6 @@ public class JPHelper {
 	// RoutesDBHelper.init(mContext);
 	// }
 
-	protected static String PROJECT_ID = "220741898329";
-
 	public static void init(final Context mContext) {
 
 		new Thread(new Runnable() {
@@ -203,78 +205,29 @@ public class JPHelper {
 		RoutesDBHelper.init(mContext);
 		getUserProfileInit();
 
-		new Thread(new Runnable() {
+		// CommunicatorConnector mConnector = new CommunicatorConnector(
+		// "https://tn.smartcampuslab.it/core.communicator",
+		// "core.mobility");
+
+		new AsyncTask<Void, Void, Void>() {
 
 			@Override
-			public void run() {
-				IntentFilter gcmFilter = new IntentFilter();
-				gcmFilter.addAction("GCM_RECEIVED_ACTION");
-
-				String regId = "";
-				// This registerClient() method checks the current device,
-				// checks the
-				// manifest for the appropriate rights, and then retrieves a
-				// registration id
-				// from the GCM cloud. If there is no registration id,
-				// GCMRegistrar will
-				// register this device for the specified project, which will
-				// return a
-				// registration id.
+			protected Void doInBackground(Void... params) {
+				PushServiceConnector connector = new PushServiceConnector();
 				try {
-					// Check that the device supports GCM (should be in a try /
-					// catch)
-					GCMRegistrar.checkDevice(mContext);
+					connector.init(mContext, getAuthToken(mContext),
+							GCM_APP_ID, GCM_SERVER_URL);
 
-					// Check the manifest to be sure this app has all the
-					// required
-					// permissions.
-					GCMRegistrar.checkManifest(mContext);
-
-					// Get the existing registration id, if it exists.
-					regId = GCMRegistrar.getRegistrationId(mContext);
-
-					if (regId.equals("")) {
-
-						CommunicatorConnector mConnector = new CommunicatorConnector(
-								"https://tn.smartcampuslab.it/core.communicator",
-								"core.mobility");
-						Map<String, Object> mapKey = mConnector
-								.requestPublicConfigurationToPush(
-										"core.mobility", getAuthToken(mContext));
-
-						// find senderid
-						String senderid = String.valueOf(mapKey
-								.get("GCM_SENDER_ID"));
-						// register this device for this project
-						GCMRegistrar.register(mContext, senderid);
-						regId = GCMRegistrar.getRegistrationId(mContext);
-						if (regId!=null && regId.length() > 0) {
-							UserSignature signUserSignature = new UserSignature();
-							signUserSignature.setAppName("core.mobility");
-							signUserSignature.setRegistrationId(regId);
-							mConnector.registerUserToPush(signUserSignature,
-									"core.mobility", getAuthToken(mContext));
-						}
-					} else {
-
-						// Already registered;
-
-					}
-
-				} catch (Exception e) {
-
+				} catch (CommunicatorConnectorException e) {
 					Log.e("JPHELPER", e.toString());
-
+				} catch (AACException e) {
+					Log.e("JPHELPER", e.toString());
 				}
-
-				// This is part of our CHEAT. For this demo, you'll need to
-				// capture this registration id so it can be used in our demo
-				// web
-				// service.
-				Log.e("REGID:", regId);
-
+				return null;
 			}
-		}).start();
+
+		}.execute();
+
 	}
 
 	public static void getUserProfileInit() {
