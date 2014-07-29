@@ -41,7 +41,6 @@ import org.codehaus.jackson.map.JsonMappingException;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
@@ -52,18 +51,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.google.android.gcm.GCMRegistrar;
-
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.Constants;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.ac.authorities.AuthorityHelper;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.LocationHelper;
-import eu.trentorise.smartcampus.communicator.CommunicatorConnector;
 import eu.trentorise.smartcampus.communicator.CommunicatorConnectorException;
-import eu.trentorise.smartcampus.communicator.model.UserSignature;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.data.BasicAlert;
 import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourneyParameters;
@@ -92,6 +86,7 @@ import eu.trentorise.smartcampus.protocolcarrier.ProtocolCarrier;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
+import eu.trentorise.smartcampus.pushservice.NotificationCenter;
 import eu.trentorise.smartcampus.pushservice.PushServiceConnector;
 import eu.trentorise.smartcampus.storage.DataException;
 import eu.trentorise.smartcampus.storage.sync.SyncStorage;
@@ -112,6 +107,9 @@ public class JPHelper {
 	private static String GCM_APP_ID = "core.mobility";
 
 	private static String GCM_SERVER_URL = "https://tn.smartcampuslab.it/core.communicator";
+
+	public static NotificationCenter notificationCenter;
+
 
 	private SyncStorageWithPaging storage = null;
 
@@ -205,10 +203,6 @@ public class JPHelper {
 		RoutesDBHelper.init(mContext);
 		getUserProfileInit();
 
-		// CommunicatorConnector mConnector = new CommunicatorConnector(
-		// "https://tn.smartcampuslab.it/core.communicator",
-		// "core.mobility");
-
 		new AsyncTask<Void, Void, Void>() {
 
 			@Override
@@ -227,6 +221,12 @@ public class JPHelper {
 			}
 
 		}.execute();
+		
+		notificationCenter = new NotificationCenter(mContext);
+
+		// CommunicatorConnector mConnector = new CommunicatorConnector(
+		// "https://tn.smartcampuslab.it/core.communicator",
+		// "core.mobility");
 
 	}
 

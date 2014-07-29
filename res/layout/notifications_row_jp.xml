@@ -44,13 +44,13 @@
             android:textIsSelectable="false" />
     </LinearLayout>
 
-    <ImageView
+<!--     <ImageView
         android:id="@+id/notification_ttype"
         android:layout_width="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
         android:contentDescription="@string/notifications_unread"
-        android:src="@drawable/ic_notifications_p" />
+        android:src="@drawable/ic_notifications_p" /> -->
 
     <ImageView
         android:id="@+id/notification_read"

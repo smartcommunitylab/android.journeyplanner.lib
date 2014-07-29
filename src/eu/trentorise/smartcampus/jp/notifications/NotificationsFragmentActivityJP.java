@@ -16,8 +16,11 @@ public class NotificationsFragmentActivityJP extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if(!JPHelper.isInitialized())
+			JPHelper.init(this);
 		setContentView(R.layout.notification_fragment_jp);
 		setUpContent();
+		
 	}
 
 	private void setUpContent() {

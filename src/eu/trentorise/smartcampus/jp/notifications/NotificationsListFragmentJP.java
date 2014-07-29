@@ -5,16 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.pushservice.NotificationCenter;
 
 public class NotificationsListFragmentJP extends SherlockListFragment {
 
-//	private NotificationsListAdapterJP adapter;
+	private NotificationsListAdapterJP adapter;
 	private final static String CORE_MOBILITY = "core.mobility";
 	private static final int MAX_MSG = 50;
 
@@ -31,30 +33,21 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 		FeedbackFragmentInflater.inflateHandleButton(getSherlockActivity(),
 				getView());
 
-//		adapter = new NotificationsListAdapterJP(getActivity(),
-//				R.layout.notifications_row_jp);
-//		setListAdapter(adapter);
-//		adapter.clear();
+		adapter = new NotificationsListAdapterJP(getActivity(),
+				R.layout.notifications_row_jp);
+		setListAdapter(adapter);
+		adapter.clear();
+		TextView empty = new TextView(getActivity());
+		empty.setText(R.string.notifications_list_empty_jp);
+		getListView().setEmptyView(empty);
+		
 
 		// instantiate again JPHelper if needed
 		if (!JPHelper.isInitialized()) {
 			JPHelper.init(getSherlockActivity());
 		}
-//TODO remove this once push works
-//		if (!NotificationsHelper.isInstantiated()) {
-//			try {
-//				NotificationsHelper.init(getSherlockActivity(), JPParamsHelper.getAppToken(), null, CORE_MOBILITY, MAX_MSG);
-//			} catch (Exception e) {
-//				Log.e(getClass().getName(), e.toString());
-//				Toast.makeText(getActivity().getApplicationContext(),
-//						getString(R.string.app_failure_operation),
-//						Toast.LENGTH_SHORT).show();
-//				getActivity().finish();
-//			}
-//		}
-//
-//		new SCAsyncTask<Void, Void, List<Notification>>(getSherlockActivity(), new NotificationsLoader(getSherlockActivity())).execute();
 
+		adapter.addAll(JPHelper.notificationCenter.getNotifications());
 	}
 
 	@Override
@@ -74,11 +67,7 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 	//TODO remove all this comments when push works
 	@Override
 	public void onDestroy() {
-//		try {
-//			NotificationsHelper.markAllAsRead(getNotificationFilter());
-//		} catch (Exception e) {
-//			Log.e(this.getClass().getName(), e.getMessage());
-//		}
+		JPHelper.notificationCenter.markAllNotificationAsRead();
 
 		super.onDestroy();
 	}
