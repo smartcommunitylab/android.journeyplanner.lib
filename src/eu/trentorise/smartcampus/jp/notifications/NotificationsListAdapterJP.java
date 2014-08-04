@@ -106,34 +106,17 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 			description.append(mContext.getString(R.string.notifications_itinerary_on_time));
 		}
 
-		// line/train (with train number) and direction
-		String line = notification.getRouteShortName();
-		if (line != null && line.length() > 0) {
-			description.append("\n");
-			
-			//TODO little hack for the missing direction
-			String direction="";
-			if (RoutesHelper.AGENCYIDS_BUSES.contains(notification.getAgencyId())) {
-				description.append(mContext.getString(R.string.notifications_itinerary_delay_bus, line, direction));
-			} else if (RoutesHelper.AGENCYIDS_TRAINS.contains(notification.getAgencyId())) {
-				String train = line;
-				if (notification.getTripId() != null) {
-					train += " " + notification.getTripId();
-				}
-				description.append(mContext.getString(R.string.notifications_itinerary_delay_train, train, direction));
-			}
-		}
 
 		//TODO something is missing from the model
 		// original data
-//		if (originalFromTime != null && stopName != null) {
-//			Calendar origCal = Calendar.getInstance();
-//			origCal.setTimeInMillis(originalFromTime);
-//			String originalFromTimeString = timeFormat.format(origCal.getTime());
-//			description.append("\n");
-//			description.append(mContext.getString(R.string.notifications_itinerary_delay_original_schedule,
-//					originalFromTimeString, stopName));
-//		}
+		if (notification.getFromTime() != null && notification.getStation() != null) {
+			Calendar origCal = Calendar.getInstance();
+			origCal.setTimeInMillis(notification.getFromTime());
+			String originalFromTimeString = timeFormat.format(origCal.getTime());
+			description.append("\n");
+			description.append(mContext.getString(R.string.notifications_itinerary_delay_original_schedule,
+					originalFromTimeString, notification.getStation()));
+		}
 
 		holder.desc.setText(description.toString());
 	}
