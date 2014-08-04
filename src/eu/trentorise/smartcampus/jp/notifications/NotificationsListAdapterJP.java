@@ -58,7 +58,6 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 			holder = new Holder();
 			holder.title = (TextView) row.findViewById(R.id.notification_title);
 			holder.desc = (TextView) row.findViewById(R.id.notification_desc);
-//			holder.ttype = (ImageView) row.findViewById(R.id.notification_ttype);
 			holder.read = (ImageView) row.findViewById(R.id.notification_read);
 			row.setTag(holder);
 		} else {
@@ -81,7 +80,6 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 	private class Holder {
 		public TextView title;
 		public TextView desc;
-		public ImageView ttype;
 		public ImageView read;
 	}
 
@@ -89,77 +87,45 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 	 * Builders
 	 */
 	private void buildHolder(Holder holder, PushNotification notification) {
-		// missing custom data
-		if (notification.getContent() == null) {
-			String title = notification.getTitle();
-			String description = notification.getDescription();
-			holder.title.setText(title != null ? title : "Title");
-			holder.desc.setText(description != null ? description : "Description");
-			return;
+
+		// title
+		holder.title.setText(mContext.getString(R.string.notifications_itinerary_delay_title, notification.getTitle()));
+
+		// description
+		StringBuilder description = new StringBuilder();
+
+		// delay
+		if (notification.getDelay() != null && notification.getDelay() > 0) {
+			int minutes = notification.getDelay() / 60000;
+			if (minutes == 1) {
+				description.append(mContext.getString(R.string.notifications_itinerary_delay_min, minutes));
+			} else {
+				description.append(mContext.getString(R.string.notifications_itinerary_delay_mins, minutes));
+			}
+		} else if (notification.getDelay() == 0) {
+			description.append(mContext.getString(R.string.notifications_itinerary_on_time));
 		}
 
-//		Map<String, Object> content = notification.getContent();
-//		String journeyName = notification.getTitle();
-//		String agencyId = (String) content.get("agencyId");
-//		Integer delay = (Integer) content.get("delay"); // milliseconds
-//		String line = "?";
-//		if (content.get("routeShortName") != null) {
-//			line = (String) content.get("routeShortName");
-//		} else if (content.get("routeId") != null) {
-//			line = (String) content.get("routeId");
-//		}
-//		String tripId = (String) content.get("tripId");
-//		String direction = (String) content.get("direction");
-//		Long originalFromTime = (Long) content.get("from"); // milliseconds
-//		String stopName = (String) content.get("station");
-//
-//		// transport type icon
-//		holder.ttype.setVisibility(View.GONE);
-//		if (agencyId != null) {
-//			ImageView imgv = Utils.getImageByAgencyId(getContext(),
-//					Integer.parseInt((String) notification.getContent().get("agencyId")));
-//
-//			if (imgv.getDrawable() != null) {
-//				holder.ttype.setImageDrawable(imgv.getDrawable());
-//				holder.ttype.setVisibility(View.VISIBLE);
-//			}
-//		}
-//
-//		// title
-//		if (journeyName != null && journeyName.length() != 0) {
-//			holder.title.setText(mContext.getString(R.string.notifications_itinerary_delay_title, journeyName));
-//		}
-//
-//		// description
-//		StringBuilder description = new StringBuilder();
-//
-//		// delay
-//		if (delay != null && delay > 0) {
-//			int minutes = delay / 60000;
-//			if (minutes == 1) {
-//				description.append(mContext.getString(R.string.notifications_itinerary_delay_min, minutes));
-//			} else {
-//				description.append(mContext.getString(R.string.notifications_itinerary_delay_mins, minutes));
-//			}
-//		} else if (delay == 0) {
-//			description.append(mContext.getString(R.string.notifications_itinerary_on_time));
-//		}
-//
-//		// line/train (with train number) and direction
-//		if (line != null && line.length() > 0 && direction != null && direction.length() > 0) {
-//			description.append("\n");
-//			if (RoutesHelper.AGENCYIDS_BUSES.contains(agencyId)) {
-//				description.append(mContext.getString(R.string.notifications_itinerary_delay_bus, line, direction));
-//			} else if (RoutesHelper.AGENCYIDS_TRAINS.contains(agencyId)) {
-//				String train = line;
-//				if (tripId != null) {
-//					train += " " + tripId;
-//				}
-//				description.append(mContext.getString(R.string.notifications_itinerary_delay_train, train, direction));
-//			}
-//		}
-//
-//		// original data
+		// line/train (with train number) and direction
+		String line = notification.getRouteShortName();
+		if (line != null && line.length() > 0) {
+			description.append("\n");
+			
+			//TODO little hack for the missing direction
+			String direction="";
+			if (RoutesHelper.AGENCYIDS_BUSES.contains(notification.getAgencyId())) {
+				description.append(mContext.getString(R.string.notifications_itinerary_delay_bus, line, direction));
+			} else if (RoutesHelper.AGENCYIDS_TRAINS.contains(notification.getAgencyId())) {
+				String train = line;
+				if (notification.getTripId() != null) {
+					train += " " + notification.getTripId();
+				}
+				description.append(mContext.getString(R.string.notifications_itinerary_delay_train, train, direction));
+			}
+		}
+
+		//TODO something is missing from the model
+		// original data
 //		if (originalFromTime != null && stopName != null) {
 //			Calendar origCal = Calendar.getInstance();
 //			origCal.setTimeInMillis(originalFromTime);
@@ -168,8 +134,8 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 //			description.append(mContext.getString(R.string.notifications_itinerary_delay_original_schedule,
 //					originalFromTimeString, stopName));
 //		}
-//
-//		holder.desc.setText(description.toString());
+
+		holder.desc.setText(description.toString());
 	}
 
 }
