@@ -77,10 +77,11 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 		return row;
 	}
 
-	private class Holder {
+	public class Holder {
 		public TextView title;
 		public TextView desc;
 		public ImageView read;
+		public String journeyId;
 	}
 
 	/*
@@ -105,6 +106,20 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 		} else if (notification.getDelay() == 0) {
 			description.append(mContext.getString(R.string.notifications_itinerary_on_time));
 		}
+		
+		String line = notification.getRouteShortName();
+		if (line != null && line.length() > 0) {
+			description.append("\n");
+			if (RoutesHelper.AGENCYIDS_BUSES.contains(notification.getAgencyId())) {
+				description.append(mContext.getString(R.string.notifications_itinerary_delay_bus, line));
+			} else if (RoutesHelper.AGENCYIDS_TRAINS.contains(notification.getAgencyId())) {
+				String train = line;
+				if (notification.getTripId() != null) {
+					train += " " + notification.getTripId();
+				}
+				description.append(mContext.getString(R.string.notifications_itinerary_delay_train, train));
+			}
+		}
 
 
 		//TODO something is missing from the model
@@ -119,6 +134,7 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 		}
 
 		holder.desc.setText(description.toString());
+		holder.journeyId=notification.getJourneyId();
 	}
 
 }

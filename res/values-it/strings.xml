@@ -243,8 +243,12 @@
     <string name="notifications_itinerary_delay_min">%s minuto</string>
     <string name="notifications_itinerary_delay_mins">%s minuti</string>
     <string name="notifications_itinerary_on_time">In orario</string>
-    <string name="notifications_itinerary_delay_bus">Linea %1$s per %2$s</string>
-    <string name="notifications_itinerary_delay_train">Treno %1$s per %2$s</string>
+    <string name="notifications_itinerary_delay_bus">Linea %1$s</string>
+<!--      <string name="notifications_itinerary_delay_bus">Linea %1$s per %2$s</string> -->
+
+    <string name="notifications_itinerary_delay_train">Treno %1$s</string>
+
+    <!-- <string name="notifications_itinerary_delay_train">Treno %1$s per %2$s</string> -->
     <string name="notifications_itinerary_delay_original_schedule">atteso alle %1$s a %2$s</string>
     <string name="dialog_are_you_sure">Sei sicuro?</string>
     <string name="dialog_delete_itinerary">Cancellazione di \"%s\"</string>

@@ -428,7 +428,7 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 		@Override
 		public void handleResult(Boolean result) {
 			params.setMonitor(result);
-			getSherlockActivity().invalidateOptionsMenu();
+			getSherlockActivity().supportInvalidateOptionsMenu();
 
 		}
 
