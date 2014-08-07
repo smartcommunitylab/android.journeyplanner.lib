@@ -4,6 +4,7 @@ import it.sayservice.platform.smartplanner.data.message.cache.CacheUpdateRespons
 import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,8 @@ import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper.AgencyDescriptor;
+import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.network.RemoteException;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
@@ -47,12 +48,25 @@ public class CTTTCacheNetworkUpdaterAsyncTask extends
 	@Override
 	protected Map<String, AgencyDescriptor> doInBackground(
 			Map<String, Long>... params) {
+
 		Map<String, String> versionsMap = new HashMap<String, String>();
+
+		Map<String, Map<String, Object>> subUrban = new HashMap<String, Map<String, Object>>();
+
 		for (Entry<String, Long> entry : params[0].entrySet()) {
+
 			versionsMap.put(entry.getKey(), entry.getValue().toString());
-			// Test
-			// versionsMap.put(entry.getKey(), "0");
+			if (entry.getKey().equals(RoutesHelper.AGENCYID_BUS_SUBURBAN)) {
+				Map<String, Object> inner = new HashMap<String, Object>();
+				inner.put("version", entry.getKey());
+				List<String> routes = RoutesHelper.getRoutesIdsList(mContext,
+						new String[] { RoutesHelper.AGENCYID_BUS_SUBURBAN });
+				inner.put("routes", routes);
+				subUrban.put(entry.getKey(), inner);
+			}
+
 		}
+
 		Map<String, CacheUpdateResponse> cacheUpdateResponsesMap = null;
 		Map<String, AgencyDescriptor> agencyDescriptorsMap = new HashMap<String, AgencyDescriptor>();
 
@@ -60,65 +74,80 @@ public class CTTTCacheNetworkUpdaterAsyncTask extends
 			cacheUpdateResponsesMap = JPHelper.getCacheStatus(versionsMap,
 					JPHelper.getAuthToken(mContext));
 
-			for (Entry<String, CacheUpdateResponse> curEntry : cacheUpdateResponsesMap
-					.entrySet()) {
-				String agencyId = curEntry.getKey();
-				List<String> addedList = curEntry.getValue().getAdded();
-				List<String> removedList = curEntry.getValue().getRemoved();
-				Long onlineVersion = curEntry.getValue().getVersion();
-				Long dbVersion = Long.parseLong(versionsMap.get(agencyId));
-				List<CompressedTransitTimeTable> ctttList = new ArrayList<CompressedTransitTimeTable>();
+			doUpdate(versionsMap, cacheUpdateResponsesMap, agencyDescriptorsMap);
 
-				if (onlineVersion > dbVersion) {
-					Log.e(getClass().getCanonicalName(), "Updating Agency "
-							+ agencyId);
-					updatedAgency++;
-
-					for (String removedFileName : removedList) {
-						Log.e(getClass().getCanonicalName(),
-								"Update of removedFileName: " + removedFileName);
-					}
-
-					for (String addedFileName : addedList) {
-						Log.e(getClass().getCanonicalName(),
-								"Update of addedFileName: " + addedFileName);
-						CompressedTransitTimeTable cttt = JPHelper
-								.getCacheUpdate(agencyId, addedFileName,
-										JPHelper.getAuthToken(mContext));
-						ctttList.add(cttt);
-					}
-
-					AgencyDescriptor agencyDescriptor = RoutesDBHelper
-							.buildAgencyDescriptor(agencyId,
-									curEntry.getValue(), ctttList);
-					agencyDescriptorsMap.put(agencyId, agencyDescriptor);
-
-					RoutesDBHelper.updateAgencies(agencyDescriptor); // Here
-																		// start
-																		// the
-																		// updating
-																		// of DB
-					Log.e(RoutesDBHelper.class.getCanonicalName(),
-							"Agencies updated.");
-				} else {
-					Log.e(getClass().getCanonicalName(),
-							"No update found for Agency " + agencyId);
-				}
-
+			//se ci sono extraurbani
+			if (!subUrban.isEmpty()) {
+				Map<String, CacheUpdateResponse> res = JPHelper
+						.getPartialCacheStatus(subUrban,
+								JPHelper.getAuthToken(mContext));
+				doUpdate(versionsMap, res, agencyDescriptorsMap);
 			}
+
 		} catch (ProtocolException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (AACException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return agencyDescriptorsMap;
+	}
+
+	private void doUpdate(Map<String, String> versionsMap,
+			Map<String, CacheUpdateResponse> cacheUpdateResponsesMap,
+			Map<String, AgencyDescriptor> agencyDescriptorsMap)
+			throws ProtocolException, SecurityException, RemoteException,
+			AACException {
+		for (Entry<String, CacheUpdateResponse> curEntry : cacheUpdateResponsesMap
+				.entrySet()) {
+			String agencyId = curEntry.getKey();
+			List<String> addedList = curEntry.getValue().getAdded();
+			List<String> removedList = curEntry.getValue().getRemoved();
+			Long onlineVersion = curEntry.getValue().getVersion();
+			Long dbVersion = Long.parseLong(versionsMap.get(agencyId));
+			List<CompressedTransitTimeTable> ctttList = new ArrayList<CompressedTransitTimeTable>();
+
+			if (onlineVersion > dbVersion) {
+				Log.e(getClass().getCanonicalName(), "Updating Agency "
+						+ agencyId);
+				updatedAgency++;
+
+				for (String removedFileName : removedList) {
+					Log.e(getClass().getCanonicalName(),
+							"Update of removedFileName: " + removedFileName);
+				}
+
+				for (String addedFileName : addedList) {
+					Log.e(getClass().getCanonicalName(),
+							"Update of addedFileName: " + addedFileName);
+					CompressedTransitTimeTable cttt = JPHelper.getCacheUpdate(
+							agencyId, addedFileName,
+							JPHelper.getAuthToken(mContext));
+					ctttList.add(cttt);
+				}
+
+				AgencyDescriptor agencyDescriptor = RoutesDBHelper
+						.buildAgencyDescriptor(agencyId, curEntry.getValue(),
+								ctttList);
+				agencyDescriptorsMap.put(agencyId, agencyDescriptor);
+
+				RoutesDBHelper.updateAgencies(agencyDescriptor); // Here
+																	// start
+																	// the
+																	// updating
+																	// of DB
+				Log.e(RoutesDBHelper.class.getCanonicalName(),
+						"Agencies updated.");
+			} else {
+				Log.e(getClass().getCanonicalName(),
+						"No update found for Agency " + agencyId);
+			}
+
+		}
 	}
 
 	@Override

@@ -54,6 +54,15 @@ public class RoutesHelper {
 
 		return list;
 	}
+	public static List<String> getRoutesIdsList(Context ctx, String[] agencyIds) {
+		List<String> list = new ArrayList<String>();
+		List<RouteDescriptor> routeDescriptorsList = getRouteDescriptorsList(ctx, agencyIds);
+		for (RouteDescriptor r : routeDescriptorsList) {
+			list.add(routeDescriptor2route(ctx, r).getId().getId());
+		}
+
+		return list;
+	}
 
 	public static List<RouteDescriptor> getRouteDescriptorsList(Context ctx, String[] agencyIds) {
 		// if agencyIds are not provided use all
@@ -875,7 +884,7 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "638_17_0", R.string.agency_17_route_638_17_0, "140"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "638_17_1", R.string.agency_17_route_638_17_1, "140"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "640_17_0", R.string.agency_17_route_640_17_0, "468"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "640_17_1", R.string.agency_17_route_640_17_1, "468") });
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "640_17_1", R.string.agency_17_route_640_17_1, "468") }); 
 
 	public static final Map<String, List<RouteDescriptor>> ROUTES = new HashMap<String, List<RouteDescriptor>>() {
 		private static final long serialVersionUID = 8472504007546826470L;

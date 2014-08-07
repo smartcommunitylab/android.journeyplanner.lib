@@ -368,6 +368,11 @@ public class JPHelper {
 				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getCacheStatus(agencyIdsVersions, authToken);
 	}
+	public static Map<String, CacheUpdateResponse> getPartialCacheStatus(Map agencyIdsVersions,
+			String authToken) throws ProtocolException, SecurityException, RemoteException {
+		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		return dataService.getPartialCacheStatus(((Map<String,Map>)agencyIdsVersions), authToken);
+	}
 
 	public static CompressedTransitTimeTable getCacheUpdate(String agencyId,
 			String fileName, String authToken) throws ProtocolException,
