@@ -161,11 +161,10 @@
     <string name="smart_check_train_choose_stop_text">Scegli la fermata:</string>
     <string name="smart_check_train_choose_line_text">Scegli la linea:</string>
     <string name="choose_direction_label">Scegli la direzione:</string>
-    <string name="typeLabel">Tipo</string>   
+    <string name="typeLabel">Tipo</string>
     <string name="delaysLabel">Ritardi</string>
     <string name="dayLabel">Giorni</string>
     <string name="loading_dialog_label">Creazione tabella &#8230;</string>
-    
     <string name="leg_from">da</string>
     <string name="leg_to">a</string>
     <string name="leg_bike_pick_up">prendi una bicicletta a</string>
@@ -176,7 +175,6 @@
     <string name="leg_train">treno</string>
     <string name="leg_move">Prosegui</string>
     <string name="leg_delay">Ritardo:</string>
-    
     <string name="broadcast_notifications_accident">Incidente</string>
     <string name="broadcast_notifications_bus_trento_delay">Ritardo autobus di Trento</string>
     <string name="broadcast_notifications_bus_rovereto_delay">Ritardo autobus di Rovereto</string>
@@ -186,7 +184,6 @@
     <string name="broadcast_notifications_strike">Sciopero</string>
     <string name="broadcast_notifications_traffic_jam">Coda</string>
     <string name="broadcast_notifications_diversion">Deviazione</string>
-    
     <string name="smart_check_list_bus_trento_timetable">Orario autobus di Trento</string>
     <string name="smart_check_list_bus_rovereto_timetable">Orario autobus di Rovereto</string>
     <string name="smart_check_list_suburban_timetable">Orario autobus extraurbano</string>
@@ -194,7 +191,6 @@
     <string name="smart_check_list_parking_trento">Disponibilità parcheggi Trento</string>
     <string name="smart_check_list_parking_rovereto">Disponibilità parcheggi Rovereto</string>
     <string name="smart_check_list_alerts_rovereto">Ordinanze Rovereto</string>
-    
     <string name="smart_check_stops_type_mobility">Mobilità</string>
     <string name="smart_check_stops_delay">ritardo %s\'</string>
     <string name="smart_check_stops_delay_user">ritardo %s\'u</string>
@@ -208,38 +204,31 @@
     <string name="smart_check_alerts_time">dal %1$s al %2$s</string>
     <string name="smart_check_alerts_numbers">dal n. %1$s al n. %2$s</string>
     <string name="smart_check_alerts_intersections">dall\'intersezione con %1$s all\'intersezione con %2$s</string>
-    
-        <string name="parking_alert">%1$s: %2$s posti disponibili</string>
-    
+    <string name="parking_alert">%1$s: %2$s posti disponibili</string>
     <string name="smart_check_routes_empty">Nessuna corsa</string>
     <string name="smart_check_parkings_empty">Nessun parcheggio</string>
     <string name="smart_check_alerts_empty">Nessuna ordinanza</string>
-    
     <string name="ttype_transit">Mezzi pubblici</string>
     <string name="ttype_car">Auto</string>
     <string name="ttype_bicycle">Bici</string>
-<!--     <string name="ttype_sharedbike">Bici condivisa</string> -->
-<!--     <string name="ttype_sharedbike_wo_station">Bici pubbliche senza stazione</string> -->
+    <!-- <string name="ttype_sharedbike">Bici condivisa</string> -->
+    <!-- <string name="ttype_sharedbike_wo_station">Bici pubbliche senza stazione</string> -->
     <string name="ttype_sharedbike_wo_station">Bici condivisa</string>
-
     <string name="ttype_car_w_parking">Auto con parcheggio</string>
-<!--     <string name="ttype_sharedcar">Car sharing</string> -->
-<!--     <string name="ttype_sharedcar_wo_station">Car sharing senza stazione</string> -->
+    <!-- <string name="ttype_sharedcar">Car sharing</string> -->
+    <!-- <string name="ttype_sharedcar_wo_station">Car sharing senza stazione</string> -->
     <string name="ttype_sharedcar_wo_station">Car sharing</string>
-
     <string name="ttype_bus">Bus</string>
     <string name="ttype_train">Treno</string>
     <string name="ttype_walk">A piedi</string>
     <string name="ttype_gondola">Gondola</string>
     <string name="ttype_shuttle">Shuttle</string>
-    
     <string name="rtype_fastest">Il più veloce</string>
     <string name="rtype_greenest">Più ecologico</string>
     <string name="rtype_healthy">Più salutare</string>
     <string name="rtype_least_changes">Con meno cambi</string>
     <string name="rtype_least_walking">Minimo tragitto a piedi</string>
     <string name="rtype_safest">Più sicuro</string>
-    
     <string name="toast_position">Posizione</string>
     <string name="toast_deleted">%s eliminata</string>
     <string name="toast_position_deleted">Posizione %s eliminata</string>
@@ -248,7 +237,6 @@
     <string name="toast_notification_sent">La tua notifica è stata inviata!</string>
     <string name="toast_itinerary_not_saved">Itinerario NON salvato</string>
     <string name="toast_itinerary_name_empty">Devi assegnare un nome all\'itinerario</string>
-    
     <string name="notifications_unread">Notifiche non lette</string>
     <string name="notifications_list_empty_jp">Non hai ancora ricevuto notifiche.</string>
     <string name="notifications_itinerary_delay_title">Ritardo itinerario \"%s\"</string>
@@ -258,15 +246,12 @@
     <string name="notifications_itinerary_delay_bus">Linea %1$s per %2$s</string>
     <string name="notifications_itinerary_delay_train">Treno %1$s per %2$s</string>
     <string name="notifications_itinerary_delay_original_schedule">atteso alle %1$s a %2$s</string>
-    
     <string name="dialog_are_you_sure">Sei sicuro?</string>
     <string name="dialog_delete_itinerary">Cancellazione di \"%s\"</string>
     <string name="minutes">m</string>
-	<string name="problem_loading">Problema di caricamento</string>
-	
+    <string name="problem_loading">Problema di caricamento</string>
     <string name="toast_nextday_loaded">Nuovo giorno caricato!</string>
     <string name="toast_prevday_loaded">Giorno precedente caricato</string>
-     
     <string name="dialog_delays">Ritardi</string>
     <string name="dialog_delay_system">%s minuti di ritardo segnalati dal sistema</string>
     <string name="dialog_delay_system_1">%s minuto di ritardo segnalato dal sistema</string>
@@ -281,15 +266,13 @@
     <string name="friday_short">V</string>
     <string name="saturday_short">S</string>
     <string name="sunday_short">D</string>
-    <string name="tt_previous">  Precedente </string>  
+    <string name="tt_previous">  Precedente </string>
     <string name="tt_today">  Oggi </string>
     <string name="tt_next">  Prossimo  </string>
-    
     <string name="info_save_new_journey"> Salvando questo itinerario, sarai informato di eventuali ritardi o problemi che lo possano influenzare.</string>
     <string name="info_save_rec_journey">  Scegli le linee dei mezzi pubblici che ti interessa monitorare, ossia per le quali vuoi essere informato in caso di ritardi.</string>
-    
     <string name="menu_help">Aiuto</string>
     <string name="menu_tutorial">Tour guidato</string>
-    
     <string name="url_help">http://www.smartcampuslab.it/vivitrentoapp_it/</string>
+
 </resources>
