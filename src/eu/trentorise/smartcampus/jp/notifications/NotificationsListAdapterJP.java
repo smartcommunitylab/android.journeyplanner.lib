@@ -36,14 +36,12 @@ import eu.trentorise.smartcampus.pushservice.PushNotification;
 
 public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 
-	private Context mContext;
 	private int layoutResourceId;
 
 	private static final DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
 	public NotificationsListAdapterJP(Context context, int layoutResourceId) {
 		super(context, layoutResourceId);
-		this.mContext = context;
 		this.layoutResourceId = layoutResourceId;
 	}
 
@@ -52,7 +50,7 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 		View row = convertView;
 		Holder holder = null;
 		if (row == null) {
-			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			row = inflater.inflate(layoutResourceId, parent, false);
 
 			holder = new Holder();
@@ -89,8 +87,9 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 	 */
 	private void buildHolder(Holder holder, PushNotification notification) {
 
+
 		// title
-		holder.title.setText(mContext.getString(R.string.notifications_itinerary_delay_title, notification.getTitle()));
+		holder.title.setText(getContext().getString(R.string.notifications_itinerary_delay_title, notification.getTitle()));
 
 		// description
 		StringBuilder description = new StringBuilder();
@@ -99,25 +98,25 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 		if (notification.getDelay() != null && notification.getDelay() > 0) {
 			int minutes = notification.getDelay() / 60000;
 			if (minutes == 1) {
-				description.append(mContext.getString(R.string.notifications_itinerary_delay_min, minutes));
+				description.append(getContext().getString(R.string.notifications_itinerary_delay_min, minutes));
 			} else {
-				description.append(mContext.getString(R.string.notifications_itinerary_delay_mins, minutes));
+				description.append(getContext().getString(R.string.notifications_itinerary_delay_mins, minutes));
 			}
 		} else if (notification.getDelay() == 0) {
-			description.append(mContext.getString(R.string.notifications_itinerary_on_time));
+			description.append(getContext().getString(R.string.notifications_itinerary_on_time));
 		}
 		
 		String line = notification.getRouteShortName();
 		if (line != null && line.length() > 0) {
 			description.append("\n");
 			if (RoutesHelper.AGENCYIDS_BUSES.contains(notification.getAgencyId())) {
-				description.append(mContext.getString(R.string.notifications_itinerary_delay_bus, line));
+				description.append(getContext().getString(R.string.notifications_itinerary_delay_bus, line));
 			} else if (RoutesHelper.AGENCYIDS_TRAINS.contains(notification.getAgencyId())) {
 				String train = line;
 				if (notification.getTripId() != null) {
 					train += " " + notification.getTripId();
 				}
-				description.append(mContext.getString(R.string.notifications_itinerary_delay_train, train));
+				description.append(getContext().getString(R.string.notifications_itinerary_delay_train, train));
 			}
 		}
 
@@ -129,7 +128,7 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 			origCal.setTimeInMillis(notification.getFromTime());
 			String originalFromTimeString = timeFormat.format(origCal.getTime());
 			description.append("\n");
-			description.append(mContext.getString(R.string.notifications_itinerary_delay_original_schedule,
+			description.append(getContext().getString(R.string.notifications_itinerary_delay_original_schedule,
 					originalFromTimeString, notification.getStation()));
 		}
 
