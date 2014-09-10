@@ -55,7 +55,7 @@
         <item>@drawable/ic_train</item>
         <item>@drawable/ic_parking</item>
         <item>@drawable/ic_parking</item>
-        <item>@drawable/ic_menu_planjourneys</item>
+        <item>@drawable/ic_menu_realtimeinfo</item>
     </array>
     
     <array name="smart_check_list_ids">
