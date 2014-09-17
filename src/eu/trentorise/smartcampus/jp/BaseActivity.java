@@ -164,14 +164,16 @@ public class BaseActivity extends FeedbackFragmentActivity {
 					break;
 				}
 				return null;
+			} catch (Exception e) {
+				return null;
 			}
 		}
 
 		@Override
 		public void handleResult(String result) {
-			if (result == null) {
-				JPHelper.endAppFailure(BaseActivity.this, R.string.app_failure_security);
-			}
+//			if (result == null) {
+//				JPHelper.endAppFailure(BaseActivity.this, R.string.app_failure_security);
+//			}
 		}
 
 	}
