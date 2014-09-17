@@ -108,7 +108,9 @@ public class CopyTask extends AsyncTask<Object, Void, String> {
 		// and refresh the token
 		if (listener != null)
 			listener.onTaskCompleted(token);
-		((SherlockActivity)activity).supportInvalidateOptionsMenu();
+		
+		if(activity instanceof SherlockActivity)
+			((SherlockActivity)activity).supportInvalidateOptionsMenu();
 	}
 
 }
