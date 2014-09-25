@@ -26,14 +26,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import eu.trentorise.smartcampus.ac.AACException;
-import eu.trentorise.smartcampus.ac.Constants;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
-import eu.trentorise.smartcampus.ac.authorities.AuthorityHelper;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.mobilityservice.MobilityUserService;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
+import eu.trentorise.smartcampus.pushservice.PushServiceConnector;
 
 /*
  * Task for user's promotion. Store the user's itineraries and monitors from the user data to the shared preferences.
@@ -58,6 +57,8 @@ public class PromoteTask extends AsyncTask<Void, Void, SCAccessProvider> {
 	protected SCAccessProvider doInBackground(Void... params) {
 		SCAccessProvider accessprovider = null;
 		try {
+			PushServiceConnector.reset(activity); 
+			
 			accessprovider = SCAccessProvider.getInstance(activity);
 			String oldToken = accessprovider.readToken(activity);
 			MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(activity)

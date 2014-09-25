@@ -1,10 +1,13 @@
 package eu.trentorise.smartcampus.jp.notifications;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +18,19 @@ import com.actionbarsherlock.app.SherlockListFragment;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
+import eu.trentorise.smartcampus.communicator.model.Notification;
+import eu.trentorise.smartcampus.communicator.model.NotificationFilter;
+import eu.trentorise.smartcampus.communicator.model.NotificationsConstants.ORDERING;
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.MyItineraryFragment;
 import eu.trentorise.smartcampus.jp.MyRecurItineraryFragment;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicRecurrentJourney;
+import eu.trentorise.smartcampus.notifications.NotificationsHelper;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 
 public class NotificationsListFragmentJP extends SherlockListFragment {
@@ -41,8 +49,7 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		FeedbackFragmentInflater.inflateHandleButton(getSherlockActivity(),
-				getView());
+		FeedbackFragmentInflater.inflateHandleButton(getSherlockActivity(), getView());
 
 		adapter = new NotificationsListAdapterJP(getActivity(),
 				R.layout.notifications_row_jp);
@@ -57,31 +64,44 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 		if (!JPHelper.isInitialized()) {
 			JPHelper.init(getSherlockActivity());
 		}
-
-		adapter.addAll(JPHelper.notificationCenter.getNotifications());
+		
+		try {
+			NotificationsHelper.init(getSherlockActivity(), JPParamsHelper.getAppToken(), null, CORE_MOBILITY, MAX_MSG);
+			new SCAsyncTask<Void, Void, List<Notification>>(getSherlockActivity(), new NotificationsLoader(getSherlockActivity())).execute();		
+		} catch (Exception e) {
+			Log.e(getClass().getName(), ""+e.getMessage());
+		}
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
+		if (adapter.getItem(position).getEntities() != null
+				&& !adapter.getItem(position).getEntities().isEmpty()) {
+			String objectId = adapter.getItem(position).getEntities().get(0)
+					.getId();
 			SCAsyncTask<String, Void, Object> viewDetailsTask = new SCAsyncTask<String, Void, Object>(
 					getSherlockActivity(),
 					new NotificationsAsyncTaskProcessorJP(getSherlockActivity()));
-			viewDetailsTask.execute(((NotificationsListAdapterJP.Holder)v.getTag()).journeyId);
+			viewDetailsTask.execute(objectId);
+		}
+
 	}
 
-	//TODO remove all this comments when push works
 	@Override
 	public void onDestroy() {
-		JPHelper.notificationCenter.markAllNotificationAsRead();
-
+		try {
+			NotificationsHelper.markAllAsRead(getNotificationFilter());
+		} catch (Exception e) {
+			Log.e(getClass().getName(), ""+e.getMessage());
+		}
 		super.onDestroy();
 	}
 
-//	public static NotificationFilter getNotificationFilter() {
-//		NotificationFilter filter = new NotificationFilter();
-//		filter.setOrdering(ORDERING.ORDER_BY_ARRIVAL);
-//		return filter;
-//	}
+	public static NotificationFilter getNotificationFilter() {
+		NotificationFilter filter = new NotificationFilter();
+		filter.setOrdering(ORDERING.ORDER_BY_ARRIVAL);
+		return filter;
+	}
 
 	/*
 	 * AsyncTask
@@ -138,38 +158,43 @@ public class NotificationsListFragmentJP extends SherlockListFragment {
 		}
 
 	}
+	private class NotificationsLoader extends
+			AbstractAsyncTaskProcessor<Void, List<Notification>> {
+
+		private static final long SYNC_THRESHOLD = 1000*60*5; // 5 mins
+
+		public NotificationsLoader(Activity activity) {
+			super(activity);
+		}
+
+		@Override
+		public List<Notification> performAction(Void... params)
+				throws SecurityException, ConnectionException, Exception {
+			try {
+				NotificationsHelper.synchronizeBefore(System.currentTimeMillis() - SYNC_THRESHOLD);
+			} catch (Exception e) {
+				Log.e(getClass().getName(), ""+e.getMessage());
+			}
+			return NotificationsHelper.getNotifications(
+					getNotificationFilter(), 0, -1, 0);
+		}
+
+		@Override
+		public void handleResult(List<Notification> notificationsList) {
+			TextView listEmptyTextView = (TextView) getView().findViewById(
+					R.id.jp_list_text_empty);
+
+			if (!notificationsList.isEmpty()) {
+				adapter.clear();
+				for (Notification n : notificationsList) {
+					adapter.add(n);
+				}
+				listEmptyTextView.setVisibility(View.GONE);
+				adapter.notifyDataSetChanged();
+			} else if (adapter.isEmpty()) {
+				listEmptyTextView.setVisibility(View.VISIBLE);
+			}
+		}
+	}
+
 }
-//TODO remove this once push works
-//	private class NotificationsLoader extends
-//			AbstractAsyncTaskProcessor<Void, List<Notification>> {
-//
-//		public NotificationsLoader(Activity activity) {
-//			super(activity);
-//		}
-//
-//		@Override
-//		public List<Notification> performAction(Void... params)
-//				throws SecurityException, ConnectionException, Exception {
-//			return NotificationsHelper.getNotifications(
-//					getNotificationFilter(), 0, -1, 0);
-//		}
-//
-//		@Override
-//		public void handleResult(List<Notification> notificationsList) {
-//			TextView listEmptyTextView = (TextView) getView().findViewById(
-//					R.id.jp_list_text_empty);
-//
-//			if (!notificationsList.isEmpty()) {
-//				adapter.clear();
-//				for (Notification n : notificationsList) {
-//					adapter.add(n);
-//				}
-//				listEmptyTextView.setVisibility(View.GONE);
-//				adapter.notifyDataSetChanged();
-//			} else if (adapter.isEmpty()) {
-//				listEmptyTextView.setVisibility(View.VISIBLE);
-//			}
-//		}
-//	}
-//
-//}

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.content.Context;
 import android.location.Location;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.model.ParkingSerial;
@@ -21,6 +22,15 @@ public class ParkingsHelper {
 	public static final int PARKING_FULL = 0;
 	public static final int PARKING_LOW_AVAIL = 5;
 	public static final int PARKING_HIGH_AVAIL = 20;
+
+	private static final String BIKE_SHARING_TRENTO = "BIKE_SHARING_TRENTO";
+	private static final String BIKE_SHARING_ROVERETO = "BIKE_SHARING_ROVERETO";
+	private static final String BIKE_SHARING_TO_BIKE_TRENTO = "BIKE_SHARING_TOBIKE_TRENTO";
+	private static final String BIKE_SHARING_TO_BIKE_ROVERETO = "BIKE_SHARING_TOBIKE_ROVERETO";
+
+	private static final String CAR_PARKING_TRENTO = "COMUNE_DI_TRENTO";
+	private static final String CAR_PARKING_ROVERETO = "COMUNE_DI_ROVERETO";
+	private static final String CAR_SHARING_TRENTO = "CAR_SHARING_SERVICE";
 
 	private static Location myLocation;
 
@@ -160,4 +170,31 @@ public class ParkingsHelper {
 		parkingsNames = Collections.unmodifiableMap(map);
 	}
 
+	public static String getParkingAgencyName(Context ctx, String agencyId) {
+		if (BIKE_SHARING_TRENTO.equals(agencyId)) {
+			return ctx.getString(R.string.BIKE_SHARING_TRENTO);
+		}
+		if (BIKE_SHARING_ROVERETO.equals(agencyId)) {
+			return ctx.getString(R.string.BIKE_SHARING_ROVERETO);
+		}
+		if (BIKE_SHARING_TO_BIKE_TRENTO.equals(agencyId)) {
+			return ctx.getString(R.string.BIKE_SHARING_TOBIKE_TRENTO);
+		}
+		if (BIKE_SHARING_TO_BIKE_ROVERETO.equals(agencyId)) {
+			return ctx.getString(R.string.BIKE_SHARING_TOBIKE_ROVERETO);
+		}
+		if (BIKE_SHARING_TO_BIKE_ROVERETO.equals(agencyId)) {
+			return ctx.getString(R.string.BIKE_SHARING_TOBIKE_ROVERETO);
+		}
+		if (CAR_PARKING_ROVERETO.equals(agencyId)) {
+			return ctx.getString(R.string.CAR_PARKING_ROVERETO);
+		}
+		if (CAR_PARKING_TRENTO.equals(agencyId)) {
+			return ctx.getString(R.string.CAR_PARKING_TRENTO);
+		}
+		if (CAR_SHARING_TRENTO.equals(agencyId)) {
+			return ctx.getString(R.string.CAR_SHARING_TRENTO);
+		}
+		return agencyId;
+	}
 }
