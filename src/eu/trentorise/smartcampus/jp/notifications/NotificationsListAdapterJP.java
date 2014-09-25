@@ -15,10 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.notifications;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 import java.util.Map;
 
 import android.content.Context;
@@ -30,18 +26,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import eu.trentorise.smartcampus.communicator.model.Notification;
 import eu.trentorise.smartcampus.jp.R;
-import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
-import eu.trentorise.smartcampus.jp.helper.Utils;
-import eu.trentorise.smartcampus.pushservice.PushNotification;
+import eu.trentorise.smartcampus.jp.notifications.NotificationBuilder.JPNotificationBean;
 
-public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
+public class NotificationsListAdapterJP extends ArrayAdapter<Notification> {
 
 	private int layoutResourceId;
-
-	private static final DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+	private Context mContext;
 
 	public NotificationsListAdapterJP(Context context, int layoutResourceId) {
 		super(context, layoutResourceId);
+		this.mContext = context;
 		this.layoutResourceId = layoutResourceId;
 	}
 
@@ -62,9 +56,9 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 			holder = (Holder) row.getTag();
 		}
 
-		PushNotification notification = getItem(position);
+		Notification notification = getItem(position);
 
-		if (notification.isRead()) {
+		if (notification.isReaded()) {
 			holder.read.setVisibility(View.INVISIBLE);
 		} else {
 			holder.read.setVisibility(View.VISIBLE);
@@ -79,61 +73,74 @@ public class NotificationsListAdapterJP extends ArrayAdapter<PushNotification> {
 		public TextView title;
 		public TextView desc;
 		public ImageView read;
-		public String journeyId;
 	}
 
 	/*
 	 * Builders
 	 */
-	private void buildHolder(Holder holder, PushNotification notification) {
+	private void buildHolder(Holder holder, Notification notification) {
+		// missing custom data
+		if (notification.getContent() == null) {
+			String title = notification.getTitle();
+			String description = notification.getDescription();
+			holder.title.setText(title != null ? title : "Title");
+			holder.desc.setText(description != null ? description : "Description");
+			return;
+		}
 
-
-		// title
-		holder.title.setText(getContext().getString(R.string.notifications_itinerary_delay_title, notification.getTitle()));
-
-		// description
-		StringBuilder description = new StringBuilder();
-
-		// delay
-		if (notification.getDelay() != null && notification.getDelay() > 0) {
-			int minutes = notification.getDelay() / 60000;
-			if (minutes == 1) {
-				description.append(getContext().getString(R.string.notifications_itinerary_delay_min, minutes));
-			} else {
-				description.append(getContext().getString(R.string.notifications_itinerary_delay_mins, minutes));
-			}
-		} else if (notification.getDelay() == 0) {
-			description.append(getContext().getString(R.string.notifications_itinerary_on_time));
+		Map<String, Object> content = notification.getContent();
+		String type = (String)content.get("type");
+		String journeyName = notification.getTitle();
+		String agencyId = (String) content.get("agencyId");
+		Integer delay = (Integer) content.get("delay"); // milliseconds
+		String routeId = "?";
+		if (content.get("routeShortName") != null) {
+			routeId = (String) content.get("routeShortName");
+		} else if (content.get("routeId") != null) {
+			routeId = (String) content.get("routeId");
+		}
+		String tripId = (String) content.get("tripId");
+//		String direction = (String) content.get("direction");
+		Long originalFromTime = (Long) content.get("from"); // milliseconds
+		String stopName = (String) content.get("station");
+		String placesAvailable = (String) content.get("placesAvailable");
+		
+		JPNotificationBean bean = NotificationBuilder.buildNotification(mContext, 
+				type,
+				journeyName, 
+				delay, 
+				agencyId, 
+				routeId, 
+				tripId, 
+//				direction, 
+				originalFromTime, 
+				stopName,
+				placesAvailable);
+		if (bean == null) {
+			bean = new JPNotificationBean();
+			bean.title = notification.getTitle();
+			bean.description = notification.getDescription();
 		}
 		
-		String line = notification.getRouteShortName();
-		if (line != null && line.length() > 0) {
-			description.append("\n");
-			if (RoutesHelper.AGENCYIDS_BUSES.contains(notification.getAgencyId())) {
-				description.append(getContext().getString(R.string.notifications_itinerary_delay_bus, line));
-			} else if (RoutesHelper.AGENCYIDS_TRAINS.contains(notification.getAgencyId())) {
-				String train = line;
-				if (notification.getTripId() != null) {
-					train += " " + notification.getTripId();
-				}
-				description.append(getContext().getString(R.string.notifications_itinerary_delay_train, train));
-			}
+		// transport type icon
+//		holder.ttype.setVisibility(View.GONE);
+//		if (agencyId != null) {
+//			ImageView imgv = Utils.getImageByAgencyId(getContext(),
+//					Integer.parseInt((String) notification.getContent().get("agencyId")));
+//
+//			if (imgv.getDrawable() != null) {
+//				holder.ttype.setImageDrawable(imgv.getDrawable());
+//				holder.ttype.setVisibility(View.VISIBLE);
+//			}
+//		}
+
+		// title
+		if (bean.title != null && bean.title.length() != 0) {
+			holder.title.setText(bean.title);
 		}
-
-
-		//TODO something is missing from the model
-		// original data
-		if (notification.getFromTime() != null && notification.getStation() != null) {
-			Calendar origCal = Calendar.getInstance();
-			origCal.setTimeInMillis(notification.getFromTime());
-			String originalFromTimeString = timeFormat.format(origCal.getTime());
-			description.append("\n");
-			description.append(getContext().getString(R.string.notifications_itinerary_delay_original_schedule,
-					originalFromTimeString, notification.getStation()));
+		if (bean.description != null && bean.description.length() != 0) {
+			holder.desc.setText(bean.description);
 		}
-
-		holder.desc.setText(description.toString());
-		holder.journeyId=notification.getJourneyId();
 	}
 
 }

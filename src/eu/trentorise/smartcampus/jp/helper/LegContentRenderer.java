@@ -74,7 +74,7 @@ public class LegContentRenderer {
 					from += ", ";
 				}
 				from += this.ctx.getString(R.string.leg_bike_pick_up) + " "
-						+ bold(leg.getFrom().getStopId().getAgencyId() + " " + leg.getFrom().getStopId().getId());
+						+ bold(ParkingsHelper.getParkingAgencyName(this.ctx, leg.getFrom().getStopId().getAgencyId()) + " " + leg.getFrom().getStopId().getId());
 			}
 
 			if (leg.getTo().getStopId() != null) {
@@ -82,7 +82,7 @@ public class LegContentRenderer {
 					to += ", ";
 				}
 				to += this.ctx.getString(R.string.leg_bike_leave) + " "
-						+ bold(leg.getTo().getStopId().getAgencyId() + " " + leg.getTo().getStopId().getId());
+						+ bold(ParkingsHelper.getParkingAgencyName(this.ctx, leg.getFrom().getStopId().getAgencyId()) + " " + leg.getTo().getStopId().getId());
 			}
 		} else if (tType.equals(TType.CAR)) {
 			if (isBadString(leg.getFrom().getName())) {

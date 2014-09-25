@@ -49,7 +49,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.Constants;
@@ -57,7 +56,6 @@ import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.ac.authorities.AuthorityHelper;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.LocationHelper;
-import eu.trentorise.smartcampus.communicator.CommunicatorConnectorException;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.data.BasicAlert;
 import eu.trentorise.smartcampus.jp.custom.data.BasicRecurrentJourneyParameters;
@@ -86,7 +84,6 @@ import eu.trentorise.smartcampus.protocolcarrier.ProtocolCarrier;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
-import eu.trentorise.smartcampus.pushservice.NotificationCenter;
 import eu.trentorise.smartcampus.pushservice.PushServiceConnector;
 import eu.trentorise.smartcampus.storage.DataException;
 import eu.trentorise.smartcampus.storage.sync.SyncStorage;
@@ -107,9 +104,6 @@ public class JPHelper {
 	private static String GCM_APP_ID = "core.mobility";
 
 	private static String GCM_SERVER_URL = "https://tn.smartcampuslab.it/core.communicator";
-
-	public static NotificationCenter notificationCenter;
-
 
 	private SyncStorageWithPaging storage = null;
 
@@ -202,32 +196,6 @@ public class JPHelper {
 		instance = new JPHelper(mContext);
 		RoutesDBHelper.init(mContext);
 		getUserProfileInit();
-
-		new AsyncTask<Void, Void, Void>() {
-
-			@Override
-			protected Void doInBackground(Void... params) {
-				PushServiceConnector connector = new PushServiceConnector();
-				try {
-					connector.init(mContext, getAuthToken(mContext),
-							GCM_APP_ID, GCM_SERVER_URL);
-
-				} catch (CommunicatorConnectorException e) {
-					Log.e("JPHELPER", e.toString());
-				} catch (AACException e) {
-					Log.e("JPHELPER", e.toString());
-				}
-				return null;
-			}
-
-		}.execute();
-		
-		notificationCenter = new NotificationCenter(mContext);
-
-		// CommunicatorConnector mConnector = new CommunicatorConnector(
-		// "https://tn.smartcampuslab.it/core.communicator",
-		// "core.mobility");
-
 	}
 
 	public static void getUserProfileInit() {
@@ -256,11 +224,14 @@ public class JPHelper {
 		@Override
 		protected AccountProfile doInBackground(AsyncTask... params) {
 			BasicProfileService bps;
+			PushServiceConnector connector = new PushServiceConnector();
 			if (params[0] != null)
 				copyTask = params[0];
 			try {
 				bps = new BasicProfileService(Constants.getAuthUrl(mContext));
-				return bps.getAccountProfile(getAuthToken(mContext));
+				String authToken = getAuthToken(mContext);
+				connector.init(mContext, authToken, GCM_APP_ID, GCM_SERVER_URL);
+				return bps.getAccountProfile(authToken);
 
 			} catch (Exception e) {
 				e.printStackTrace();
