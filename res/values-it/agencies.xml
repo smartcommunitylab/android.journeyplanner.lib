@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="BIKE_SHARING_TRENTO">Trento bike sharing</string>
+    <string name="BIKE_SHARING_ROVERETO">Rovereto bike sharing</string>
+    <string name="BIKE_SHARING_TOBIKE_ROVERETO">Bike sharing eMotion</string>
+    <string name="BIKE_SHARING_TOBIKE_TRENTO">Bike sharing eMotion</string>
+    <string name="CAR_PARKING_TRENTO">Parcheggi Trento</string>
+    <string name="CAR_SHARING_TRENTO">Trento car sharing</string>
+    <string name="CAR_PARKING_ROVERETO">Parcheggi Rovereto</string>
+    
+</resources>
