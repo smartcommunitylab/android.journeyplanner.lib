@@ -41,9 +41,11 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.util.Log;
 import eu.trentorise.smartcampus.android.common.Utils;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper.AgencyDescriptor;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
+import eu.trentorise.smartcampus.jp.model.RouteDescriptor;
 import eu.trentorise.smartcampus.mobilityservice.model.Delay;
 import eu.trentorise.smartcampus.mobilityservice.model.TimeTable;
 
@@ -72,7 +74,7 @@ public class CompressedTTHelper {
 		InputStream in;
 		Map<String, Long> versions = new HashMap<String, Long>();
 
-		for (String agencyId : RoutesHelper.AGENCYIDS) {
+		for (String agencyId : JPParamsHelper.getAgencyID()) {
 			try {
 				in = assetManager.open(agencyId + indexFilename);
 				String jsonParams = getStringFromInputStream(in);
@@ -101,13 +103,15 @@ public class CompressedTTHelper {
 			AssetManager assetManager = mContext.getResources().getAssets();
 			InputStream in;
 			String[] fileNames = assetManager.list(agencyId);
-
+			//ho tutti i file della cartella ma li devo ancora filtrare per params
 			List<String> lineHashFiles = new ArrayList<String>();
 			List<CompressedTransitTimeTable> ctttList = new ArrayList<CompressedTransitTimeTable>();
+			List<String> routes = JPParamsHelper.getRoutesParamsIDByAgencyID(agencyId);
 
 			for (int i = 0; i < fileNames.length; i++) {
 				String fileName = fileNames[i];
-				if (!fileName.startsWith(calendarFilenamePre)) {
+				//controllo se il file inizia come con i parametri in params_jp
+				if (!fileName.startsWith(calendarFilenamePre)&&(fileIsParameter(fileName,agencyId,routes))) {
 					lineHashFiles.add(fileName.replace(".js", ""));
 					in = assetManager.open(agencyId + "/" + fileName);
 					String jsonParams = getStringFromInputStream(in);
@@ -126,6 +130,17 @@ public class CompressedTTHelper {
 		}
 
 		return agencyDescriptor;
+	}
+
+	private static boolean fileIsParameter(String fileName, String agencyId,List<String> routes) {
+		if (routes.size() == 0)
+				return true;
+		for (String route: routes)
+		{
+			if (fileName.startsWith(route))
+			 return true;
+		}
+		return false;
 	}
 
 	private Map<String,CompressedCalendar> loadCalendarsByAgencyId(String agencyId) {

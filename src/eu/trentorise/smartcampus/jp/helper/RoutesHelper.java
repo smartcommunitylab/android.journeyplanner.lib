@@ -47,29 +47,40 @@ public class RoutesHelper {
 
 	public static List<Route> getRoutesList(Context ctx, String[] agencyIds) {
 		List<Route> list = new ArrayList<Route>();
-		List<RouteDescriptor> routeDescriptorsList = getRouteDescriptorsList(ctx, agencyIds);
+		List<RouteDescriptor> routeDescriptorsList = getRouteDescriptorsListFiltered(ctx, agencyIds);
 		for (RouteDescriptor r : routeDescriptorsList) {
 			list.add(routeDescriptor2route(ctx, r));
 		}
 
 		return list;
 	}
+//	public static List<String> getRoutesIdsList(Context ctx, String[] agencyIds) {
+//		List<String> list = new ArrayList<String>();
+//		List<RouteDescriptor> routeDescriptorsList = getRouteDescriptorsList(ctx, agencyIds);
+//		for (RouteDescriptor r : routeDescriptorsList) {
+//			list.add(routeDescriptor2route(ctx, r).getId().getId());
+//		}
+//
+//		return list;
+//	}
+	
 	public static List<String> getRoutesIdsList(Context ctx, String[] agencyIds) {
 		List<String> list = new ArrayList<String>();
-		List<RouteDescriptor> routeDescriptorsList = getRouteDescriptorsList(ctx, agencyIds);
+		List<RouteDescriptor> routeDescriptorsList = getRouteDescriptorsListFiltered(ctx, agencyIds);
 		for (RouteDescriptor r : routeDescriptorsList) {
 			list.add(routeDescriptor2route(ctx, r).getId().getId());
 		}
 
 		return list;
 	}
-
-	public static List<RouteDescriptor> getRouteDescriptorsList(Context ctx, String[] agencyIds) {
+	public static List<RouteDescriptor> getRouteDescriptorsListFiltered(Context ctx, String[] agencyIds) {
 		// if agencyIds are not provided use all
+//		if (agencyIds == null || agencyIds.length == 0) {
+//			agencyIds = AGENCYIDS.toArray(new String[] {});
+//		}
 		if (agencyIds == null || agencyIds.length == 0) {
-			agencyIds = AGENCYIDS.toArray(new String[] {});
+			JPParamsHelper.getAgencyID().toArray(agencyIds);
 		}
-
 		List<RouteDescriptor> list = new ArrayList<RouteDescriptor>();
 		for (int i = 0; i < agencyIds.length; i++) {
 			String agencyId = agencyIds[i];
@@ -84,10 +95,16 @@ public class RoutesHelper {
 				lines = ctx.getResources().getStringArray(R.array.smart_check_17_zones);
 				lines = filterSuburbanLines(lines);
 			}
-
-			for (RouteDescriptor r : ROUTES.get(agencyId)) {
+			//ritorna [null null 3 null null 6]
+			List <RouteDescriptor> routes = null;
+			//if param agencyid the prendi il parametro, altrimenti prendi tutto
+			routes=JPParamsHelper.getRoutesIDByAgencyID(agencyId);
+			
+			for (RouteDescriptor r : routes) {
 				if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
+					//solo se e' extraurbano
 					for (int index = 0; index < lines.length; index++) {
+						//per tutte le zone extraurbane
 						if (lines[index] != null && validateRouteDescriptor(ctx, agencyId, r, lines[index], index)) {
 							list.add(r);
 						}
@@ -99,6 +116,41 @@ public class RoutesHelper {
 		}
 		return list;
 	}
+//	public static List<RouteDescriptor> getRouteDescriptorsList(Context ctx, String[] agencyIds) {
+//		// if agencyIds are not provided use all
+//		if (agencyIds == null || agencyIds.length == 0) {
+//			agencyIds = AGENCYIDS.toArray(new String[] {});
+//		}
+//
+//		List<RouteDescriptor> list = new ArrayList<RouteDescriptor>();
+//		for (int i = 0; i < agencyIds.length; i++) {
+//			String agencyId = agencyIds[i];
+//
+//			if (ROUTES.get(agencyId) == null) {
+//				continue;
+//			}
+//
+//			String[] lines = new String[] {};
+//			if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
+//				// filter for suburban zones in app parameters!
+//				lines = ctx.getResources().getStringArray(R.array.smart_check_17_zones);
+//				lines = filterSuburbanLines(lines);
+//			}
+//
+//			for (RouteDescriptor r : ROUTES.get(agencyId)) {
+//				if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
+//					for (int index = 0; index < lines.length; index++) {
+//						if (lines[index] != null && validateRouteDescriptor(ctx, agencyId, r, lines[index], index)) {
+//							list.add(r);
+//						}
+//					}
+//				} else {
+//					list.add(r);
+//				}
+//			}
+//		}
+//		return list;
+//	}
 
 	public static String getAgencyIdByRouteId(String routeId) {
 		for (List<RouteDescriptor> list : ROUTES.values()) {
@@ -116,7 +168,7 @@ public class RoutesHelper {
 
 		String[] agencyIds = agencyId != null ? new String[] { agencyId } : null;
 
-		for (RouteDescriptor rd : getRouteDescriptorsList(context, agencyIds)) {
+		for (RouteDescriptor rd : getRouteDescriptorsListFiltered(context, agencyIds)) {
 			if (rd.getRouteId().equalsIgnoreCase(routeId)) {
 				routeDescriptor = rd;
 				break;

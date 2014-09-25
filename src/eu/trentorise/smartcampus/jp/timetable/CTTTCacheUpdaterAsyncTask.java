@@ -8,6 +8,7 @@ import java.util.Map;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper;
 import eu.trentorise.smartcampus.jp.helper.RoutesDBHelper.AgencyDescriptor;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
@@ -40,7 +41,8 @@ public class CTTTCacheUpdaterAsyncTask extends AsyncTask<Void, Integer, Void> {
 		List<AgencyDescriptor> adList = new ArrayList<AgencyDescriptor>();
 		dbVersions = RoutesDBHelper.getVersions();
 		assetsVersions = CompressedTTHelper.getVersionsFromAssets();
-		for (String agencyId : RoutesHelper.AGENCYIDS) {
+		//update onl
+		for (String agencyId : JPParamsHelper.getAgencyID()) {
 			Long dbVersion = this.dbVersions.get(agencyId);
 			Long assetsVersion = this.assetsVersions.get(agencyId);
 

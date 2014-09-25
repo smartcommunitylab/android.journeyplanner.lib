@@ -56,14 +56,17 @@ public class CTTTCacheNetworkUpdaterAsyncTask extends
 		for (Entry<String, Long> entry : params[0].entrySet()) {
 
 			versionsMap.put(entry.getKey(), entry.getValue().toString());
-			if (entry.getKey().equals(RoutesHelper.AGENCYID_BUS_SUBURBAN)) {
+//			if (entry.getKey().equals(RoutesHelper.AGENCYID_BUS_SUBURBAN)) {
 				Map<String, Object> inner = new HashMap<String, Object>();
 				inner.put("version", entry.getKey());
+//				get routedescriptors List Filtered
+//				List<String> routes = RoutesHelper.getRoutesIdsList(mContext,
+//						new String[] { RoutesHelper.AGENCYID_BUS_SUBURBAN });
 				List<String> routes = RoutesHelper.getRoutesIdsList(mContext,
-						new String[] { RoutesHelper.AGENCYID_BUS_SUBURBAN });
+						new String[] { entry.getKey() });
 				inner.put("routes", routes);
 				subUrban.put(entry.getKey(), inner);
-			}
+//			}
 
 		}
 

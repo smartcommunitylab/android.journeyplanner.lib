@@ -25,27 +25,24 @@
     <item name="menu_item_list" type="id"/>
     <item name="menu_item_pref" type="id"/>
     <item name="ttTimeTable" type="id"/>
-    
     <item name="menu_item_notifications" type="id"/>
-    <item name="delays_row" type="id" />
-    <item name="type_row" type="id" />
-    
+    <item name="delays_row" type="id"/>
+    <item name="type_row" type="id"/>
     <item name="menu_item_help" type="id"/>
     <item name="menu_item_tutorial" type="id"/>
+    <item name="smart_check_list_bus_trento_timetable" type="id"/>
+    <item name="smart_check_list_bus_rovereto_timetable" type="id"/>
+    <item name="smart_check_list_suburban_timetable" type="id"/>
+    <item name="smart_check_list_train_timetable" type="id"/>
+    <item name="smart_check_list_parking_trento" type="id"/>
+    <item name="smart_check_list_parking_rovereto" type="id"/>
+    <item name="smart_check_list_alerts_rovereto" type="id"/>
+    <item name="btn_planjourney" type="id"/>
+    <item name="btn_monitorrecurrent" type="id"/>
+    <item name="btn_monitorsaved" type="id"/>
+    <item name="btn_notifications" type="id"/>
+    <item name="btn_broadcast" type="id"/>
+    <item name="btn_myprofile" type="id"/>
+    <item name="btn_smartcheck" type="id"/>
 
-    <item type="id" name="smart_check_list_bus_trento_timetable"/>
-    <item type="id" name="smart_check_list_bus_rovereto_timetable"/>
-    <item type="id" name="smart_check_list_suburban_timetable"/>
-    <item type="id" name="smart_check_list_train_timetable"/>
-    <item type="id" name="smart_check_list_parking_trento"/>
-    <item type="id" name="smart_check_list_parking_rovereto"/>
-    <item type="id" name="smart_check_list_alerts_rovereto"/>
-
-    <item type="id" name="btn_planjourney"/>
-        <item type="id" name="btn_monitorrecurrent"/>
-        <item type="id" name="btn_monitorsaved"/>
-        <item type="id" name="btn_notifications"/>
-        <item type="id" name="btn_broadcast"/>
-        <item type="id" name="btn_myprofile"/>
-    
 </resources>
