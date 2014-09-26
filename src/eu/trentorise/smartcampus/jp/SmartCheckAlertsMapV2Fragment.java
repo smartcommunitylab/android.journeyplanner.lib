@@ -26,7 +26,8 @@ import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckAlertRoadsMapProcessor;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 
-public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements OnCameraChangeListener, OnMarkerClickListener,
+public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements 
+		OnCameraChangeListener, OnMarkerClickListener,
 		OnDetailsClick {
 
 	protected static final String PARAM_AID = "alertsAgencyId";
@@ -131,8 +132,9 @@ public class SmartCheckAlertsMapV2Fragment extends SupportMapFragment implements
 
 		if (AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK) == null
 				|| AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK).isEmpty()) {
-			new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(mActivity, new SmartCheckAlertRoadsMapProcessor(mActivity,
-					getSupportMap(), agencyId, null, null, AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK, false)).execute();
+//			new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(mActivity, new SmartCheckAlertRoadsMapProcessor(mActivity,
+//					getSupportMap(), agencyId, null, null, AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK, false)).execute();
+			new SmartCheckAlertRoadsMapProcessor(mActivity,getSupportMap(), agencyId, null, null, AlertRoadsHelper.ALERTS_CACHE_SMARTCHECK, false).execute();
 		} else {
 			getSupportMap().clear();
 

@@ -142,7 +142,16 @@ public class CompressedTTHelper {
 		}
 		return false;
 	}
-
+	private static boolean calendarIsParameter(String fileName, String agencyId,List<String> routes) {
+		if (routes.size() == 0)
+				return true;
+		for (String route: routes)
+		{
+			if (fileName.substring(0,fileName.length()-3).endsWith(route))
+			 return true;
+		}
+		return false;
+	}
 	private Map<String,CompressedCalendar> loadCalendarsByAgencyId(String agencyId) {
 		Resources resources = mContext.getResources();
 		InputStream in = null;
@@ -151,10 +160,12 @@ public class CompressedTTHelper {
 		AssetManager assetManager= resources.getAssets();
 		try {
 			String[] files = assetManager.list(agencyId);
+			List<String> routes = JPParamsHelper.getRoutesParamsIDByAgencyID(agencyId);
+
 			CompressedCalendar cc = null;
 			if (files == null) throw new IOException("empty agency folder");
 			for (String f : files) {
-				if (f.startsWith(calendarFilenamePre)) {
+				if (f.startsWith(calendarFilenamePre) && (calendarIsParameter(f,agencyId,routes))) {
 					in = assetManager.open(agencyId + "/" + f);
 					jsonParams = getStringFromInputStream(in);
 					cc = new CompressedCalendar();

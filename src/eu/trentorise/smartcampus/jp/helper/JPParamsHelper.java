@@ -30,9 +30,9 @@ public class JPParamsHelper {
 	public static final String KEY_ALERTROADS_PLANNING_AGENCYID = "alertroads_in_planning_agencyid";
 	public static final String KEY_SMARTCHECK_OPTIONS = "smartcheck_options";
 	public static final String KEY_SUBURBAN_ZONES = "suburban_zones";
-	public static final String KEY_AGENCY ="agency";
-	public static final String KEY_AGENCY_ID ="agency_id";
-	public static final String KEY_ROUTES_ID ="routes_id";
+	public static final String KEY_AGENCY = "agency";
+	public static final String KEY_AGENCY_ID = "agency_id";
+	public static final String KEY_ROUTES_ID = "routes_id";
 	public static final String KEY_BROADCAST_NOTIFICATIONS_OPTIONS = "broadcast_notifications_options";
 	public static final String KEY_CENTER_MAP = "center_map";
 	public static final String KEY_ZOOM_MAP = "zoom_map";
@@ -110,61 +110,66 @@ public class JPParamsHelper {
 		}
 		return suburbanZones;
 	}
+
 	public static List<String> getAgencyID() {
 		List<String> agencyIDs = new ArrayList<String>();
-		List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) getInstance().getParamsAsset().get(KEY_AGENCY);
+		List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) getInstance().getParamsAsset().get(
+				KEY_AGENCY);
 		if (result != null) {
 			for (HashMap<String, Object> n : result) {
-				
-				agencyIDs.add((String) n.get(KEY_AGENCY_ID));
+				if (n != null) {
+					agencyIDs.add((String) n.get(KEY_AGENCY_ID));
+				}
 			}
-		} else{
-			agencyIDs= RoutesHelper.AGENCYIDS;
+		} else {
+			agencyIDs = RoutesHelper.AGENCYIDS;
 		}
 		return agencyIDs;
 	}
-	
+
 	public static List<RouteDescriptor> getRoutesIDByAgencyID(String agencyID) {
 		List<RouteDescriptor> routes = new ArrayList<RouteDescriptor>();
-		List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) getInstance().getParamsAsset().get(KEY_AGENCY);
+		List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) getInstance().getParamsAsset().get(
+				KEY_AGENCY);
 		if (result != null) {
 			for (HashMap<String, Object> n : result) {
-				if (((String) n.get(KEY_AGENCY_ID)).equals(agencyID))
-					{
-					routes=(RoutesHelper.ROUTES.get((String) n.get(KEY_AGENCY_ID)));
+				if (((String) n.get(KEY_AGENCY_ID)).equals(agencyID)) {
+					routes = (RoutesHelper.ROUTES.get((String) n.get(KEY_AGENCY_ID)));
 					break;
-					}
+				}
 			}
-		} else{
-			routes=RoutesHelper.ROUTES.get(agencyID);
+		} else {
+			routes = RoutesHelper.ROUTES.get(agencyID);
 		}
 		return routes;
 	}
 
 	public static List<String> getRoutesParamsIDByAgencyID(String agencyID) {
 		List<String> routes = new ArrayList<String>();
-		List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) getInstance().getParamsAsset().get(KEY_AGENCY);
+		List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) getInstance().getParamsAsset().get(
+				KEY_AGENCY);
 		if (result != null) {
 			for (HashMap<String, Object> n : result) {
-				if (((String) n.get(KEY_AGENCY_ID)).equals(agencyID))
-					{
+				if (((String) n.get(KEY_AGENCY_ID)).equals(agencyID)) {
 					ArrayList<String> routesParams = (ArrayList<String>) n.get(KEY_ROUTES_ID);
-					if (routesParams==null)
+					if (routesParams == null)
 						return new ArrayList<String>();
-					routes=routesParams;
+					routes = routesParams;
 					break;
-					}
+				}
 			}
 		}
 		return routes;
 	}
+
 	/*
 	 * MAP
 	 */
 	public static int getZoomLevelMap() {
 		if (getInstance() != null && getInstance().getParamsAsset() != null)
 			return (Integer) getInstance().getParamsAsset().get(KEY_ZOOM_MAP);
-		else return DEFAULT_ZOOM_LEVEL;
+		else
+			return DEFAULT_ZOOM_LEVEL;
 	}
 
 	public static List<Double> getCenterMap() {

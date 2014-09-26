@@ -15,32 +15,57 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.helper.processor;
 
+import it.sayservice.platform.smartplanner.data.message.RoadElement;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoad;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.gms.maps.GoogleMap;
 
 import eu.trentorise.smartcampus.jp.LegMapActivity;
-import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class SmartCheckAlertRoadsMapProcessor extends AbstractAsyncTaskProcessor<Void, List<AlertRoadLoc>> {
+
+
+public class SmartCheckAlertRoadsMapProcessor extends AsyncTask<Object, List<AlertRoadLoc>, List<AlertRoadLoc>> {
+
+//	public interface OnAlertLoadingFinished {
+//		public void onAlertLoadingFinished(boolean result, double[] location, double diagonal);
+//	}
+
+	private final String TAG = "SmartCheckAlertRoadsMapProcessor";
 
 	private SherlockFragmentActivity mActivity;
-	private String agencyId;
+
+//	private OnAlertLoadingFinished mOnAlertLoadingFinished;
+
+	private String[] selectedAgencyIds;
+	private double[] location;
+	private boolean zoomLevelChanged;
+	private double diagonal;
 	private GoogleMap map;
+	private Context ctx;
+	private String agencyId;
 	private Long fromTime;
 	private Long period;
 	private String cacheToUpdate;
 	private boolean filterByProjection;
+	private long time;
 
-	public SmartCheckAlertRoadsMapProcessor(SherlockFragmentActivity activity, GoogleMap map, String agencyId, Long fromTime,
-			Long period, String cacheToUpdate, boolean filterByProjection) {
-		super(activity);
+	List<AlertRoadLoc> alert = new ArrayList<AlertRoadLoc>();
+
+	public SmartCheckAlertRoadsMapProcessor(SherlockFragmentActivity activity, GoogleMap map, String agencyId,
+			Long fromTime, Long period, String cacheToUpdate, boolean filterByProjection) {
+		super();
 		this.mActivity = activity;
 		this.map = map;
 		this.agencyId = agencyId;
@@ -51,24 +76,54 @@ public class SmartCheckAlertRoadsMapProcessor extends AbstractAsyncTaskProcessor
 	}
 
 	@Override
-	public List<AlertRoadLoc> performAction(Void... params) throws SecurityException, Exception {
-		long start = fromTime != null ? fromTime : System.currentTimeMillis();
-		long end = period != null ? (start + period) : (start + (1000 * 60 * 60 * 24));
-		return JPHelper.getAlertRoads(agencyId, start, end,JPHelper.getAuthToken(mActivity));
+	protected void onPreExecute() {
+		mActivity.setSupportProgressBarIndeterminateVisibility(true);
+		super.onPreExecute();
 	}
 
 	@Override
-	public void handleResult(List<AlertRoadLoc> result) {
-		if (cacheToUpdate != null) {
-			// force cache update
-			AlertRoadsHelper.setCache(cacheToUpdate, result);
-		}
+	protected List<AlertRoadLoc> doInBackground(Object... params) {
+		try {
 
-		if (filterByProjection) {
-			result = LegMapActivity.filterByProjection(map, result);
+			long start = fromTime != null ? fromTime : System.currentTimeMillis();
+			long end = period != null ? (start + period) : (start + (1000 * 60 * 60 * 24));
+			alert= JPHelper.getAlertRoads(agencyId, start, end,JPHelper.getAuthToken(mActivity));
+			return alert;
+		} catch (Exception e) {
+			Log.e(getClass().getSimpleName(), e.toString());
+			return null;
 		}
-
-		MapManager.ClusteringHelper.render(map, MapManager.ClusteringHelper.cluster(mActivity, map, result));
 	}
 
+	@Override
+	protected void onPostExecute(List<AlertRoadLoc> result) {
+		super.onPostExecute(result);
+
+		if (cacheToUpdate != null) {
+		// force cache update
+		AlertRoadsHelper.setCache(cacheToUpdate, result);
+	}
+
+	if (filterByProjection) {
+		result = LegMapActivity.filterByProjection(map, result);
+	}
+//	AlertRoad ar = new AlertRoad();
+//	ar.setFrom(1411746519000L);
+//	ar.setFrom(2411746519000L);
+//	AlertRoadLoc arl = new AlertRoadLoc(ar);
+//	arl.setRoad(new RoadElement()).location(new double[]{45.887207,11.038882});
+//	result.add(arl);
+	MapManager.ClusteringHelper.render(map, MapManager.ClusteringHelper.cluster(mActivity, map, result));
+//	if (mOnAlertLoadingFinished != null) {
+//		OnAlertLoadingFinished.onAlertLoadingFinished(result, location, diagonal);
+//	} else {
+		mActivity.setProgressBarIndeterminateVisibility(false);
+//	}
+	}
+
+	@Override
+	protected void onCancelled() {
+		mActivity.setSupportProgressBarIndeterminateVisibility(false);
+		super.onCancelled();
+	}
 }
