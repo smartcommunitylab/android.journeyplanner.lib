@@ -74,7 +74,7 @@
         <item>@string/btn_monitorsaved</item>
         <item>@string/btn_notifications</item>
         <item>@string/btn_broadcast</item>
-        <item>@string/btn_myprofile</item>
+<!--         <item>@string/btn_myprofile</item> -->
     </string-array>
     <string-array name="main_list_tut">
         <item>@string/jp_plan_tut</item>
@@ -82,7 +82,7 @@
         <item>@string/jp_watch_tut</item>
         <item>@string/jp_notif_tut</item>
         <item>@string/jp_send_tut</item>
-        <item>@string/jp_prefs_tut</item>
+<!--         <item>@string/jp_prefs_tut</item> -->
     </string-array>
     <array name="main_list_icons">
         <item>@drawable/ic_menu_planjourneys</item>
