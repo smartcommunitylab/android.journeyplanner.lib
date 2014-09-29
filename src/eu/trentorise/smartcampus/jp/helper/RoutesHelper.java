@@ -79,7 +79,7 @@ public class RoutesHelper {
 //			agencyIds = AGENCYIDS.toArray(new String[] {});
 //		}
 		if (agencyIds == null || agencyIds.length == 0) {
-			JPParamsHelper.getAgencyID().toArray(agencyIds);
+			agencyIds = JPParamsHelper.getAgencyID().toArray(new String[] {});
 		}
 		List<RouteDescriptor> list = new ArrayList<RouteDescriptor>();
 		for (int i = 0; i < agencyIds.length; i++) {
