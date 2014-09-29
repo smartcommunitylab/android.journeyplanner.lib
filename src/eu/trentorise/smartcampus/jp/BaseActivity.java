@@ -42,16 +42,15 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 public class BaseActivity extends FeedbackFragmentActivity {
 
 	protected void initDataManagement(Bundle savedInstanceState) {
-
-		JPHelper.init(getApplicationContext());
+		if (!JPHelper.isInitialized())
+			JPHelper.init(getApplicationContext());
 
 		try {
 			if (!JPHelper.login(this)) {
-				new SCAsyncTask<Void, Void, String>(this, new LoadToken(
-						BaseActivity.this)).execute();
-			} 
-//			else
-//				JPHelper.endAppFailure(this, R.string.app_failure_security);
+				new SCAsyncTask<Void, Void, String>(this, new LoadToken(BaseActivity.this)).execute();
+			}
+			// else
+			// JPHelper.endAppFailure(this, R.string.app_failure_security);
 
 		} catch (AACException e) {
 			JPHelper.endAppFailure(this, R.string.app_failure_security);
@@ -60,8 +59,7 @@ public class BaseActivity extends FeedbackFragmentActivity {
 	}
 
 	public void initializeSharedPreferences() {
-		SharedPreferences userPrefs = getSharedPreferences(Config.USER_PREFS,
-				Context.MODE_PRIVATE);
+		SharedPreferences userPrefs = getSharedPreferences(Config.USER_PREFS, Context.MODE_PRIVATE);
 
 		if (userPrefs.getString(Config.USER_PREFS_RTYPE, "").equals("")) {
 			// create default preferences
@@ -70,14 +68,12 @@ public class BaseActivity extends FeedbackFragmentActivity {
 			// transport types
 			for (int i = 0; i < Config.TTYPES_ALLOWED.length; i++) {
 				TType tType = Config.TTYPES_ALLOWED[i];
-				boolean enabled = Arrays.asList(Config.TTYPES_DEFAULT)
-						.contains(tType) ? true : false;
+				boolean enabled = Arrays.asList(Config.TTYPES_DEFAULT).contains(tType) ? true : false;
 				editor.putBoolean(tType.toString(), enabled);
 			}
 
 			// route type
-			editor.putString(Config.USER_PREFS_RTYPE,
-					Config.RTYPE_DEFAULT.toString());
+			editor.putString(Config.USER_PREFS_RTYPE, Config.RTYPE_DEFAULT.toString());
 
 			editor.commit();
 		}
@@ -88,13 +84,13 @@ public class BaseActivity extends FeedbackFragmentActivity {
 		super.onCreate(savedInstanceState);
 
 		if (!JPHelper.isInitialized()) {
-//			findViewById(android.R.id.content).post(new Runnable() {
-//				
-//				@Override
-//				public void run() {
-//					initDataManagement(savedInstanceState);
-//				}
-//			});
+			// findViewById(android.R.id.content).post(new Runnable() {
+			//
+			// @Override
+			// public void run() {
+			// initDataManagement(savedInstanceState);
+			// }
+			// });
 			initDataManagement(savedInstanceState);
 			initializeSharedPreferences();
 		}
@@ -105,8 +101,7 @@ public class BaseActivity extends FeedbackFragmentActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == SCAccessProvider.SC_AUTH_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				String token = data.getExtras().getString(
-						AccountManager.KEY_AUTHTOKEN);
+				String token = data.getExtras().getString(AccountManager.KEY_AUTHTOKEN);
 				if (token == null) {
 					JPHelper.endAppFailure(this, R.string.app_failure_security);
 				}
@@ -171,9 +166,10 @@ public class BaseActivity extends FeedbackFragmentActivity {
 
 		@Override
 		public void handleResult(String result) {
-//			if (result == null) {
-//				JPHelper.endAppFailure(BaseActivity.this, R.string.app_failure_security);
-//			}
+			// if (result == null) {
+			// JPHelper.endAppFailure(BaseActivity.this,
+			// R.string.app_failure_security);
+			// }
 		}
 
 	}
