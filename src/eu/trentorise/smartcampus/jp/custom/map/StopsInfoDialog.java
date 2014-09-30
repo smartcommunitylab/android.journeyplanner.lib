@@ -82,16 +82,14 @@ public class StopsInfoDialog extends SherlockDialogFragment {
 		if (stopObjectsList != null) {
 			// multiple stops
 			stopsRadioGroup = (RadioGroup) getDialog().findViewById(R.id.mapdialogmulti_rg);
-			//stopsRadioGroup.removeAllViews();
 			for (SmartCheckStop stop : stopObjectsList) {
 				RadioButton rb = new RadioButton(getSherlockActivity());
 				rb.setTag(stop);
 				rb.setText(stop.getTitle());
-//				rb.setTextColor(getResources().getColor(R.color.radio_text_dialog));
-				//rb.setTextAppearance(getSherlockActivity(), R.style.RadioTextDialog);
 				stopsRadioGroup.addView(rb);
 			}
-			stopsRadioGroup.getChildAt(0).setSelected(true);
+			//set by default the first element of the radiogroup
+			((RadioButton) stopsRadioGroup.getChildAt(0)).setChecked(true);
 		} else if (stopObject != null) {
 			// single stop
 			TextView msg = (TextView) getDialog().findViewById(R.id.mapdialog_msg);
