@@ -19,6 +19,8 @@ import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Stop;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +35,7 @@ import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.Utils;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class GetBroadcastDataProcessor extends
-		AbstractAsyncTaskProcessor<String, Map<String, List<?>>> {
+public class GetBroadcastDataProcessor extends AbstractAsyncTaskProcessor<String, Map<String, List<?>>> {
 
 	private static final String ROUTES = "routes";
 	private static final String STOPS = "stops";
@@ -46,9 +47,8 @@ public class GetBroadcastDataProcessor extends
 
 	private Context ctx;
 
-	public GetBroadcastDataProcessor(SherlockFragmentActivity activity,
-			ArrayAdapter<Route> routesAdapter, ArrayAdapter<Stop> stopsAdapter,
-			ArrayAdapter<StopTime> stopTimesAdapter) {
+	public GetBroadcastDataProcessor(SherlockFragmentActivity activity, ArrayAdapter<Route> routesAdapter,
+			ArrayAdapter<Stop> stopsAdapter, ArrayAdapter<StopTime> stopTimesAdapter) {
 		super(activity);
 		ctx = activity.getApplicationContext();
 		this.routesAdapter = routesAdapter;
@@ -57,8 +57,7 @@ public class GetBroadcastDataProcessor extends
 	}
 
 	@Override
-	public Map<String, List<?>> performAction(String... params)
-			throws SecurityException, Exception {
+	public Map<String, List<?>> performAction(String... params) throws SecurityException, Exception {
 		// 0: agencyId
 		// 1: routeId
 		// 2: stopId
@@ -84,24 +83,30 @@ public class GetBroadcastDataProcessor extends
 		}
 
 		if (routeId == null) {
-			List<Route> routesList = (List<Route>) JPHelper
-					.getRoutesByAgencyId(agencyId, JPHelper.getAuthToken(ctx));
+			List<Route> routesList = (List<Route>) JPHelper.getRoutesByAgencyId(agencyId, JPHelper.getAuthToken(ctx));
 			map.put(ROUTES, routesList);
 			routeId = routesList.get(0).getId().getId();
 		}
 
 		if (stopId == null) {
-			List<Stop> stopsList = (List<Stop>) JPHelper
-					.getStopsByAgencyIdRouteId(agencyId, routeId,
-							JPHelper.getAuthToken(ctx));
+			List<Stop> stopsList = (List<Stop>) JPHelper.getStopsByAgencyIdRouteId(agencyId, routeId,
+					JPHelper.getAuthToken(ctx));
 			map.put(STOPS, stopsList);
 			stopId = stopsList.get(0).getId();
 		}
 
-		List<StopTime> stopTimesList = (List<StopTime>) JPHelper
-				.getStopTimesByAgencyIdRouteIdStopId(agencyId, routeId, stopId,
-						JPHelper.getAuthToken(ctx));
-		map.put(STOPTIMES, stopTimesList);
+		List<StopTime> stopTimesList = (List<StopTime>) JPHelper.getStopTimesByAgencyIdRouteIdStopId(agencyId, routeId,
+				stopId, JPHelper.getAuthToken(ctx));
+		List<StopTime> stopTimesListRetun = new ArrayList<StopTime>();
+		Date now = new Date();
+		for (StopTime stoptime : stopTimesList) {
+			if (now.getTime() >= stoptime.getTime())
+			{
+				stopTimesListRetun.add(stoptime);
+
+			}
+		}
+		map.put(STOPTIMES, stopTimesListRetun);
 
 		return map;
 	}
