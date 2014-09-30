@@ -49,8 +49,8 @@ public class JPPushNotificationBuilder implements PushNotificationBuilder {
 				i.getStringExtra(FIELD_TITLE), 
 				i.hasExtra(FIELD_DELAY) ? Integer.parseInt(i.getStringExtra(FIELD_DELAY)) : null,
 				i.getStringExtra(FIELD_AGENCYID), 
-				i.getStringExtra(FIELD_TRIPID), 
 				route, 
+				i.getStringExtra(FIELD_TRIPID), 
 				i.hasExtra(FIELD_FROMTIME) ? Long.parseLong(i.getStringExtra(FIELD_FROMTIME)) : null, 
 				i.getStringExtra(FIELD_STATION),
 				i.getStringExtra(FIELD_PLACES_AVAILABLE));
