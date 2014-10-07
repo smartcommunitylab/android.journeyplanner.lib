@@ -32,6 +32,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -50,9 +51,6 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.Toast;
-
-import com.google.android.maps.GeoPoint;
-
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper;
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper.OnAddressSelectedListener;
 import eu.trentorise.smartcampus.android.common.SCGeocoder;
@@ -152,7 +150,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 				String toString = null;
 				from = getLocationsFromParam("saddr", from, locations, fromString);
 				to = getLocationsFromParam("daddr", to, locations, toString);
-				
+
 			} else {
 				from = (Address) getActivity().getIntent().getParcelableExtra(getString(R.string.navigate_arg_from));
 				to = (Address) getActivity().getIntent().getParcelableExtra(getString(R.string.navigate_arg_to));
@@ -160,11 +158,17 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		}
 
 		if (from != null) {
-			findAddressForField(FROM, new GeoPoint((int) (from.getLatitude() * 1E6), (int) (from.getLongitude() * 1E6)));
+			Location location = new Location("");
+			location.setLatitude(from.getLatitude());
+			location.setLongitude(from.getLongitude());
+			findAddressForField(FROM, location);
 		}
 
 		if (to != null) {
-			findAddressForField(TO, new GeoPoint((int) (to.getLatitude() * 1E6), (int) (to.getLongitude() * 1E6)));
+			Location location = new Location("");
+			location.setLatitude(to.getLatitude());
+			location.setLongitude(to.getLongitude());
+			findAddressForField(TO, location);
 		}
 	}
 
@@ -212,8 +216,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 				// user preferences
 				View userPrefsLayout = (View) getView().findViewById(R.id.plannew_userprefs);
 				if (userPrefsLayout.isShown()) {
-					TableLayout tTypesTableLayout = (TableLayout) userPrefsLayout
-							.findViewById(R.id.transporttypes_table);
+					TableLayout tTypesTableLayout = (TableLayout) userPrefsLayout.findViewById(R.id.transporttypes_table);
 					RadioGroup rTypesRadioGroup = (RadioGroup) userPrefsLayout.findViewById(R.id.routetypes_radioGroup);
 					userPrefsHolder = PrefsHelper.userPrefsViews2Holder(tTypesTableLayout, rTypesRadioGroup, userPrefs);
 				} else {
@@ -259,8 +262,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 				sj.setTransportTypes((TType[]) userPrefsHolder.getTransportTypes());
 				sj.setRouteType(userPrefsHolder.getRouteType());
 
-				FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
-						.beginTransaction();
+				FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
 				Fragment fragment = ItineraryChoicesFragment.newInstance(sj);
 				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 				fragmentTransaction.replace(Config.mainlayout, fragment, fragment.getTag());
@@ -269,8 +271,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			}
 		});
 		// hide keyboard if it is still open
-		InputMethodManager imm = (InputMethodManager) getSherlockActivity().getSystemService(
-				Context.INPUT_METHOD_SERVICE);
+		InputMethodManager imm = (InputMethodManager) getSherlockActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(searchBtn.getWindowToken(), 0);
 	}
 
@@ -321,8 +322,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		double[] refLoc = mapcenter == null ? null : new double[] { mapcenter.get(0), mapcenter.get(1) };
 
 		fromEditText = (AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text);
-		GeocodingAutocompletionHelper fromAutocompletionHelper = new GeocodingAutocompletionHelper(
-				getSherlockActivity(), fromEditText, Config.TN_REGION, Config.TN_COUNTRY, Config.TN_ADM_AREA, refLoc);
+		GeocodingAutocompletionHelper fromAutocompletionHelper = new GeocodingAutocompletionHelper(getSherlockActivity(),
+				fromEditText, Config.TN_REGION, Config.TN_COUNTRY, Config.TN_ADM_AREA, refLoc);
 		fromAutocompletionHelper.setOnAddressSelectedListener(new OnAddressSelectedListener() {
 			@Override
 			public void onAddressSelected(Address address) {
@@ -383,8 +384,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		toFavBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String toString = ((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text)).getText()
-						.toString().trim();
+				String toString = ((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text)).getText().toString()
+						.trim();
 				if (toString.length() == 0 || isFavorite(toString)) {
 					createFavoritesDialog(TO);
 				} else {
@@ -397,8 +398,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		fromEditText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {
-				boolean fav = isFavorite(((AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text))
-						.getText().toString());
+				boolean fav = isFavorite(((AutoCompleteTextView) getView().findViewById(R.id.plannew_from_text)).getText()
+						.toString());
 				toggleStar(fromFavBtn, fav);
 			}
 
@@ -414,8 +415,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		toEditText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {
-				boolean fav = isFavorite(((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text))
-						.getText().toString());
+				boolean fav = isFavorite(((AutoCompleteTextView) getView().findViewById(R.id.plannew_to_text)).getText()
+						.toString());
 				toggleStar(toFavBtn, fav);
 			}
 
@@ -437,8 +438,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		// JPHelper.getLocationHelper().stop();
 
 		// hide keyboard if it is still open
-		InputMethodManager imm = (InputMethodManager) getSherlockActivity().getSystemService(
-				Context.INPUT_METHOD_SERVICE);
+		InputMethodManager imm = (InputMethodManager) getSherlockActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		EditText timeEditText = (EditText) getView().findViewById(R.id.plannew_time);
 		if (timeEditText != null) {
 			imm.hideSoftInputFromWindow(timeEditText.getWindowToken(), 0);
@@ -558,11 +558,9 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			public void onClick(DialogInterface dialog, int item) {
 				switch (item) {
 				case 0:
-					// GeoPoint hereGeoPoint =
-					// MapManager.requestMyLocation(getSherlockActivity());
-					GeoPoint hereGeoPoint = JPHelper.getLocationHelper().getLocation();
-					if (hereGeoPoint != null) {
-						findAddressForField(field, hereGeoPoint);
+					Location hereLocation = JPHelper.getLocationHelper().getLocation();
+					if (hereLocation != null) {
+						findAddressForField(field, hereLocation);
 					}
 					break;
 				case 1:
@@ -581,15 +579,15 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		return builder.create();
 	}
 
-	private void findAddressForField(final String field, GeoPoint point) {
-		List<Address> hereAddressesList = new SCGeocoder(getSherlockActivity()).findAddressesAsync(point);
+	private void findAddressForField(final String field, Location location) {
+		List<Address> hereAddressesList = new SCGeocoder(getSherlockActivity()).findAddressesAsync(location);
 		if (hereAddressesList != null && !hereAddressesList.isEmpty()) {
 			Address hereAddress = hereAddressesList.get(0);
 			savePosition(hereAddress, field);
 		} else {
 			Address customAddress = new Address(Locale.getDefault());
-			customAddress.setLatitude(point.getLatitudeE6() / 1E6);
-			customAddress.setLongitude(point.getLongitudeE6() / 1E6);
+			customAddress.setLatitude(location.getLatitude());
+			customAddress.setLongitude(location.getLongitude());
 			customAddress.setAddressLine(
 					0,
 					"LON " + Double.toString(customAddress.getLongitude()) + ", LAT "
@@ -599,8 +597,7 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 	}
 
 	protected void createFavoritesDialog(final String field) {
-		if (userPrefsHolder != null && userPrefsHolder.getFavorites() != null
-				&& !userPrefsHolder.getFavorites().isEmpty()) {
+		if (userPrefsHolder != null && userPrefsHolder.getFavorites() != null && !userPrefsHolder.getFavorites().isEmpty()) {
 			final List<Position> list = userPrefsHolder.getFavorites();
 			String[] items = new String[list.size()];
 			for (int i = 0; i < items.length; i++) {

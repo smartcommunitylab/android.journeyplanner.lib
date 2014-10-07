@@ -38,11 +38,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapView;
 
 import eu.trentorise.smartcampus.jp.R;
-import eu.trentorise.smartcampus.jp.custom.BetterMapView;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
@@ -54,13 +51,10 @@ import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
 public class MapManager {
 
-	private static MapView mapView;
-	private static BetterMapView betterMapView;
-
 	private static MapCache cache;
 
 	public static int ZOOM_DEFAULT = 15;
-	public static GeoPoint DEFAULT_POINT = new GeoPoint((int) (46.0696727540531 * 1E6), (int) (11.1212700605392 * 1E6)); // Trento
+	public static LatLng DEFAULT_POINT = new LatLng(46.0696727540531, 11.1212700605392); // Trento
 
 	public static void initWithParams() {
 		int zoom = JPParamsHelper.getZoomLevelMap();
@@ -72,29 +66,11 @@ public class MapManager {
 		if (centerMap != null) {
 			Double latitute = centerMap.get(0);
 			Double longitude = centerMap.get(1);
-			DEFAULT_POINT = new GeoPoint((int) (latitute * 1E6), (int) (longitude * 1E6));
+			DEFAULT_POINT = new LatLng(latitute, longitude);
 		}
 	}
 
-	public static MapView getMapView() {
-		return mapView;
-	}
-
-	public static void setMapView(MapView mapView) {
-		MapManager.mapView = mapView;
-		MapManager.mapView.setClickable(true);
-		MapManager.mapView.setBuiltInZoomControls(true);
-	}
-
-	public static BetterMapView getBetterMapView() {
-		return betterMapView;
-	}
-
-	public static void setBetterMapView(BetterMapView betterMapView) {
-		MapManager.betterMapView = betterMapView;
-	}
-
-	public static GeoPoint requestMyLocation(Context ctx) {
+	public static Location requestMyLocation(Context ctx) {
 		return JPHelper.getLocationHelper().getLocation();
 	}
 

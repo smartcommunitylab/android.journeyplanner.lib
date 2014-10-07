@@ -31,9 +31,8 @@ import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.model.LocatedObject;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
-public class SmartCheckMapV2Fragment extends SupportMapFragment implements
-		OnCameraChangeListener, OnMarkerClickListener, OnDetailsClick,
-		OnStopLoadingFinished {
+public class SmartCheckMapV2Fragment extends SupportMapFragment implements OnCameraChangeListener, OnMarkerClickListener,
+		OnDetailsClick, OnStopLoadingFinished {
 
 	public final static String ARG_AGENCY_IDS = "agencyIds";
 	public final static String ARG_STOP = "stop";
@@ -55,12 +54,9 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements
 		mActivity = (SherlockFragmentActivity) getActivity();
 
 		// get arguments
-		if (savedInstanceState != null
-				&& savedInstanceState.containsKey(ARG_AGENCY_IDS)) {
-			selectedAgencyIds = savedInstanceState
-					.getStringArray(ARG_AGENCY_IDS);
-		} else if (getArguments() != null
-				&& getArguments().containsKey(ARG_AGENCY_IDS)) {
+		if (savedInstanceState != null && savedInstanceState.containsKey(ARG_AGENCY_IDS)) {
+			selectedAgencyIds = savedInstanceState.getStringArray(ARG_AGENCY_IDS);
+		} else if (getArguments() != null && getArguments().containsKey(ARG_AGENCY_IDS)) {
 			selectedAgencyIds = getArguments().getStringArray(ARG_AGENCY_IDS);
 		}
 
@@ -93,17 +89,14 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements
 		// show my location
 		getSupportMap().setMyLocationEnabled(true);
 		// move to my location
-		if (JPHelper.getLocationHelper().getLocation() != null) {
-			centerLatLng = new LatLng(JPHelper.getLocationHelper()
-					.getLocation().getLatitudeE6() / 1e6, JPHelper
-					.getLocationHelper().getLocation().getLongitudeE6() / 1e6);
-
-			getSupportMap().moveCamera(
-					CameraUpdateFactory.newLatLngZoom(centerLatLng, zoomLevel));
+		Location location = JPHelper.getLocationHelper().getLocation();
+		if (location != null) {
+			centerLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+			getSupportMap().moveCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, zoomLevel));
 		} else {
 			List<Double> defaultLoc = JPParamsHelper.getCenterMap();
 			if (defaultLoc != null) {
-				centerLatLng = new LatLng(defaultLoc.get(0),defaultLoc.get(1));
+				centerLatLng = new LatLng(defaultLoc.get(0), defaultLoc.get(1));
 				getSupportMap().moveCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, zoomLevel));
 			} else {
 				getSupportMap().moveCamera(CameraUpdateFactory.zoomTo(zoomLevel));
@@ -139,9 +132,8 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements
 			loader.cancel(true);
 		}
 
-		loader = new StopsV2AsyncTask(mActivity, selectedAgencyIds,
-				centerLatLng, getDiagonalLenght(), getSupportMap(),
-				zoomLevelChanged, null,getActivity());
+		loader = new StopsV2AsyncTask(mActivity, selectedAgencyIds, centerLatLng, getDiagonalLenght(), getSupportMap(),
+				zoomLevelChanged, null, getActivity());
 		loader.execute();
 	}
 
@@ -149,22 +141,18 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements
 	public boolean onMarkerClick(Marker marker) {
 		String id = marker.getTitle();
 
-		List<LocatedObject> list = MapManager.ClusteringHelper
-				.getFromGridId(id);
+		List<LocatedObject> list = MapManager.ClusteringHelper.getFromGridId(id);
 
 		if (list == null || list.isEmpty()) {
 			return true;
 		}
 
-		if (list.size() > 1
-				&& getSupportMap().getCameraPosition().zoom == getSupportMap()
-						.getMaxZoomLevel()) {
+		if (list.size() > 1 && getSupportMap().getCameraPosition().zoom == getSupportMap().getMaxZoomLevel()) {
 			StopsInfoDialog stopInfoDialog = new StopsInfoDialog(this);
 			Bundle args = new Bundle();
-			args.putSerializable(StopsInfoDialog.ARG_STOPS, (ArrayList) list);
+			args.putSerializable(StopsInfoDialog.ARG_STOPS, (ArrayList<LocatedObject>) list);
 			stopInfoDialog.setArguments(args);
-			stopInfoDialog.show(mActivity.getSupportFragmentManager(),
-					"stopselected");
+			stopInfoDialog.show(mActivity.getSupportFragmentManager(), "stopselected");
 		} else if (list.size() > 1) {
 			// getSupportMap().animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),
 			// zoomLevel + 1));
@@ -176,8 +164,7 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements
 				Bundle args = new Bundle();
 				args.putSerializable(StopsInfoDialog.ARG_STOP, stop);
 				stopInfoDialog.setArguments(args);
-				stopInfoDialog.show(mActivity.getSupportFragmentManager(),
-						"stopselected");
+				stopInfoDialog.show(mActivity.getSupportFragmentManager(), "stopselected");
 			}
 		}
 		// // default behavior
@@ -187,14 +174,12 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements
 
 	@Override
 	public void OnDialogDetailsClick(SmartCheckStop stop) {
-		FragmentTransaction fragmentTransaction = mActivity
-				.getSupportFragmentManager().beginTransaction();
+		FragmentTransaction fragmentTransaction = mActivity.getSupportFragmentManager().beginTransaction();
 		Fragment fragment = new SmartCheckStopFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(SmartCheckStopFragment.ARG_STOP, stop);
 		fragment.setArguments(args);
-		fragmentTransaction
-				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		fragmentTransaction.addToBackStack(fragment.getTag());
 		fragmentTransaction.add(Config.mainlayout, fragment, "lines");
 		// fragmentTransaction.commitAllowingStateLoss();
@@ -210,8 +195,7 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements
 		// double w = lu.latitude - rd.latitude;
 		LatLngBounds llb = getSupportMap().getProjection().getVisibleRegion().latLngBounds;
 		float[] diagonal = new float[2];
-		Location.distanceBetween(llb.northeast.latitude,
-				llb.northeast.longitude, llb.southwest.latitude,
+		Location.distanceBetween(llb.northeast.latitude, llb.northeast.longitude, llb.southwest.latitude,
 				llb.southwest.longitude, diagonal);
 		// double diagonal = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2));
 		return diagonal[0];
@@ -219,15 +203,13 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements
 
 	private GoogleMap getSupportMap() {
 		if (mMap == null) {
-			mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(
-					Config.mainlayout)).getMap();
+			mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(Config.mainlayout)).getMap();
 		}
 		return mMap;
 	}
 
 	@Override
-	public void onStopLoadingFinished(boolean result, double[] location,
-			double diagonal) {
+	public void onStopLoadingFinished(boolean result, double[] location, double diagonal) {
 		getActivity().setProgressBarIndeterminateVisibility(false);
 
 	}

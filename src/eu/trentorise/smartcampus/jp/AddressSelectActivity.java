@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.widget.RelativeLayout;
@@ -29,10 +30,8 @@ import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.maps.GeoPoint;
 
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.android.common.SCGeocoder;
@@ -62,10 +61,10 @@ public class AddressSelectActivity extends BaseActivity implements OnMapLongClic
 
 			LatLng centerLatLng = null;
 			if (JPParamsHelper.getCenterMap() != null) {
-				centerLatLng = new LatLng(JPParamsHelper.getCenterMap().get(0),JPParamsHelper.getCenterMap().get(1));
+				centerLatLng = new LatLng(JPParamsHelper.getCenterMap().get(0), JPParamsHelper.getCenterMap().get(1));
 			} else if (JPHelper.getLocationHelper().getLocation() != null) {
-				centerLatLng = new LatLng(JPHelper.getLocationHelper().getLocation().getLatitudeE6() / 1e6,
-						JPHelper.getLocationHelper().getLocation().getLongitudeE6() / 1e6);
+				centerLatLng = new LatLng(JPHelper.getLocationHelper().getLocation().getLatitude(), JPHelper.getLocationHelper()
+						.getLocation().getLongitude());
 			}
 			if (centerLatLng != null) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, JPParamsHelper.getZoomLevelMap()));
@@ -100,8 +99,10 @@ public class AddressSelectActivity extends BaseActivity implements OnMapLongClic
 		Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 		vibrator.vibrate(100);
 
-		GeoPoint p = new GeoPoint((int) (point.latitude * 1e6), (int) (point.longitude * 1e6));
-		List<Address> addresses = new SCGeocoder(getApplicationContext()).findAddressesAsync(p);
+		Location l = new Location("");
+		l.setLatitude(point.latitude);
+		l.setLongitude(point.longitude);
+		List<Address> addresses = new SCGeocoder(getApplicationContext()).findAddressesAsync(l);
 
 		if (addresses != null && !addresses.isEmpty()) {
 			new InfoDialog(AddressSelectActivity.this, addresses.get(0)).show(getSupportFragmentManager(), "me");
