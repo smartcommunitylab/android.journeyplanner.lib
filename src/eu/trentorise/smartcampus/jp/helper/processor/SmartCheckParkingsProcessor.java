@@ -24,7 +24,6 @@ import android.location.Location;
 import android.widget.ArrayAdapter;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.google.android.maps.GeoPoint;
 
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
@@ -40,7 +39,7 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 	private String parkingAid;
 
 	public SmartCheckParkingsProcessor(SherlockFragmentActivity activity, ArrayAdapter<ParkingSerial> adapter,
-			GeoPoint myLocation, String parkingAid) {
+			Location myLocation, String parkingAid) {
 		super(activity);
 		this.mActivity = activity;
 		this.adapter = adapter;
@@ -48,16 +47,13 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 		this.parkingAid = parkingAid;
 
 		if (myLocation != null) {
-			Location location = new Location("");
-			location.setLatitude(myLocation.getLatitudeE6() / 1e6);
-			location.setLongitude(myLocation.getLongitudeE6() / 1e6);
-			this.myLocation = location;
+			this.myLocation = myLocation;
 		}
 	}
 
 	@Override
 	public List<ParkingSerial> performAction(Void... params) throws SecurityException, Exception {
-		return JPHelper.getParkings(parkingAid,JPHelper.getAuthToken(mActivity));
+		return JPHelper.getParkings(parkingAid, JPHelper.getAuthToken(mActivity));
 	}
 
 	@Override

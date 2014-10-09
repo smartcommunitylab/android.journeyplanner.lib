@@ -42,21 +42,6 @@ public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoadLoc> {
 		this.layoutResourceId = layoutResourceId;
 	}
 
-	// public void setMyLocation(Location location) {
-	// this.myLocation = location;
-	// }
-	//
-	// public void setMyLocation(GeoPoint geoPoint) {
-	// if (geoPoint != null) {
-	// Location location = new Location("");
-	// location.setLatitude(geoPoint.getLatitudeE6() / 1e6);
-	// location.setLongitude(geoPoint.getLongitudeE6() / 1e6);
-	// this.myLocation = location;
-	// } else {
-	// this.myLocation = null;
-	// }
-	// }
-
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		AlertRoadLoc alertRoad = getItem(position);
@@ -118,7 +103,7 @@ public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoadLoc> {
 	 */
 	private static String extractShortDescription(AlertRoadLoc alertRoad) {
 		if (alertRoad.getDescription().indexOf(':') > 0) {
-			return alertRoad.getDescription().substring(alertRoad.getDescription().indexOf(':')+1).trim();
+			return alertRoad.getDescription().substring(alertRoad.getDescription().indexOf(':') + 1).trim();
 		}
 		return alertRoad.getDescription();
 	}

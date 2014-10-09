@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,12 +35,12 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.maps.GeoPoint;
 
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper;
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper.OnAddressSelectedListener;
@@ -58,7 +59,7 @@ public class FavoritesFragment extends FeedbackFragment {
 	private UserPrefsHolder userPrefsHolder = null;
 	private FavoritesAdapter favoritesAdapter;
 	private Position newFavPosition;
-	
+
 	private View addDialogView;
 
 	@Override
@@ -118,7 +119,8 @@ public class FavoritesFragment extends FeedbackFragment {
 	private void createAddDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
 		builder.setTitle(getString(R.string.favorites_title));
-		addDialogView = getSherlockActivity().getLayoutInflater().inflate(R.layout.addfavorite, null);
+		addDialogView = getSherlockActivity().getLayoutInflater().inflate(R.layout.addfavorite,
+				new LinearLayout(getSherlockActivity()), false);
 
 		List<Double> mapcenter = JPParamsHelper.getCenterMap();
 		double[] refLoc = mapcenter == null ? null : new double[] { mapcenter.get(0), mapcenter.get(1) };
@@ -221,11 +223,9 @@ public class FavoritesFragment extends FeedbackFragment {
 			public void onClick(DialogInterface dialog, int item) {
 				switch (item) {
 				case 0:
-					// GeoPoint hereGeoPoint =
-					// MapManager.requestMyLocation(getSherlockActivity());
-					GeoPoint hereGeoPoint = JPHelper.getLocationHelper().getLocation();
-					if (hereGeoPoint != null) {
-						findAddressForField(hereGeoPoint);
+					Location hereLocation = JPHelper.getLocationHelper().getLocation();
+					if (hereLocation != null) {
+						findAddressForField(hereLocation);
 					}
 					break;
 				case 1:
@@ -244,15 +244,15 @@ public class FavoritesFragment extends FeedbackFragment {
 		return builder.create();
 	}
 
-	private void findAddressForField(GeoPoint point) {
-		List<Address> hereAddressesList = new SCGeocoder(getSherlockActivity()).findAddressesAsync(point);
+	private void findAddressForField(Location location) {
+		List<Address> hereAddressesList = new SCGeocoder(getSherlockActivity()).findAddressesAsync(location);
 		if (hereAddressesList != null && !hereAddressesList.isEmpty()) {
 			Address hereAddress = hereAddressesList.get(0);
 			savePosition(hereAddress);
 		} else {
 			Address customAddress = new Address(Locale.getDefault());
-			customAddress.setLatitude(point.getLatitudeE6() / 1E6);
-			customAddress.setLongitude(point.getLongitudeE6() / 1E6);
+			customAddress.setLatitude(location.getLatitude());
+			customAddress.setLongitude(location.getLongitude());
 			customAddress.setAddressLine(
 					0,
 					"LON " + Double.toString(customAddress.getLongitude()) + ", LAT "

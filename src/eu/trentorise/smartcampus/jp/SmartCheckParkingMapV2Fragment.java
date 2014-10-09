@@ -19,7 +19,6 @@ import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.custom.map.ParkingsInfoDialog;
-import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckParkingMapProcessor;
@@ -60,10 +59,11 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 			focusedParking = (ParkingSerial) getArguments().getSerializable(ARG_PARKING_FOCUSED);
 		}
 
-		if (ParkingsHelper.getFocused() != null && ParkingsHelper.getFocused() != focusedParking) {
-			focusedParking = ParkingsHelper.getFocused();
-			ParkingsHelper.setFocused(null);
-		}
+		// if (ParkingsHelper.getFocused() != null &&
+		// ParkingsHelper.getFocused() != focusedParking) {
+		// focusedParking = ParkingsHelper.getFocused();
+		// ParkingsHelper.setFocused(null);
+		// }
 
 		setHasOptionsMenu(true);
 	}
@@ -78,8 +78,9 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 	public void onResume() {
 		super.onResume();
 
-		if (getSupportMap() == null)
+		if (getSupportMap() == null) {
 			return;
+		}
 
 		// features disabled waiting for a better clustering grid
 		getSupportMap().getUiSettings().setRotateGesturesEnabled(false);
@@ -89,6 +90,11 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 
 		// show my location
 		getSupportMap().setMyLocationEnabled(true);
+
+		if (ParkingsHelper.getFocused() != null && ParkingsHelper.getFocused() != focusedParking) {
+			focusedParking = ParkingsHelper.getFocused();
+			ParkingsHelper.setFocused(null);
+		}
 
 		if (focusedParking != null) {
 			zoomLevel--;
@@ -152,7 +158,7 @@ public class SmartCheckParkingMapV2Fragment extends SupportMapFragment implement
 		if (list.size() > 1 && getSupportMap().getCameraPosition().zoom == getSupportMap().getMaxZoomLevel()) {
 			ParkingsInfoDialog parkingsInfoDialog = new ParkingsInfoDialog();
 			Bundle args = new Bundle();
-			args.putSerializable(ParkingsInfoDialog.ARG_PARKINGS, (ArrayList) list);
+			args.putSerializable(ParkingsInfoDialog.ARG_PARKINGS, (ArrayList<LocatedObject>) list);
 			parkingsInfoDialog.setArguments(args);
 			parkingsInfoDialog.show(mActivity.getSupportFragmentManager(), "parking_selected");
 		} else if (list.size() > 1) {

@@ -31,8 +31,9 @@ import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.model.LocatedObject;
 import eu.trentorise.smartcampus.jp.model.SmartCheckStop;
 
-public class SmartCheckMapV2Fragment extends SupportMapFragment implements OnCameraChangeListener,
-		OnMarkerClickListener, OnDetailsClick, OnStopLoadingFinished {
+
+public class SmartCheckMapV2Fragment extends SupportMapFragment implements OnCameraChangeListener, OnMarkerClickListener,
+		OnDetailsClick, OnStopLoadingFinished {
 
 	public final static String ARG_AGENCY_IDS = "agencyIds";
 	public final static String ARG_STOP = "stop";
@@ -89,10 +90,10 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements OnCam
 		// show my location
 		getSupportMap().setMyLocationEnabled(true);
 		// move to my location
-		if (JPHelper.getLocationHelper().getLocation() != null) {
-			centerLatLng = new LatLng(JPHelper.getLocationHelper().getLocation().getLatitudeE6() / 1e6, JPHelper
-					.getLocationHelper().getLocation().getLongitudeE6() / 1e6);
 
+		Location location = JPHelper.getLocationHelper().getLocation();
+		if (location != null) {
+			centerLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 			getSupportMap().moveCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, zoomLevel));
 		} else {
 			List<Double> defaultLoc = JPParamsHelper.getCenterMap();
@@ -153,7 +154,7 @@ public class SmartCheckMapV2Fragment extends SupportMapFragment implements OnCam
 		if (list.size() > 1 && getSupportMap().getCameraPosition().zoom == getSupportMap().getMaxZoomLevel()) {
 			StopsInfoDialog stopInfoDialog = new StopsInfoDialog(this);
 			Bundle args = new Bundle();
-			args.putSerializable(StopsInfoDialog.ARG_STOPS, (ArrayList) list);
+			args.putSerializable(StopsInfoDialog.ARG_STOPS, (ArrayList<LocatedObject>) list);
 			stopInfoDialog.setArguments(args);
 			stopInfoDialog.show(mActivity.getSupportFragmentManager(), "stopselected");
 		} else if (list.size() > 1) {

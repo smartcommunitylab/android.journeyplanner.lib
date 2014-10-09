@@ -23,9 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import com.google.android.maps.GeoPoint;
-
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 import eu.trentorise.smartcampus.jp.model.ParkingSerial;
@@ -44,17 +41,6 @@ public class SmartCheckParkingsAdapter extends ArrayAdapter<ParkingSerial> {
 
 	public void setMyLocation(Location location) {
 		this.myLocation = location;
-	}
-
-	public void setMyLocation(GeoPoint geoPoint) {
-		if (geoPoint != null) {
-			Location location = new Location("");
-			location.setLatitude(geoPoint.getLatitudeE6() / 1e6);
-			location.setLongitude(geoPoint.getLongitudeE6() / 1e6);
-			this.myLocation = location;
-		} else {
-			this.myLocation = null;
-		}
 	}
 
 	@Override
