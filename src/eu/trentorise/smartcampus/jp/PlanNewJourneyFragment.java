@@ -39,6 +39,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,7 +151,6 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 				String toString = null;
 				from = getLocationsFromParam("saddr", from, locations, fromString);
 				to = getLocationsFromParam("daddr", to, locations, toString);
-
 			} else {
 				from = (Address) getActivity().getIntent().getParcelableExtra(getString(R.string.navigate_arg_from));
 				to = (Address) getActivity().getIntent().getParcelableExtra(getString(R.string.navigate_arg_to));
@@ -173,12 +173,14 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 	}
 
 	private Address getLocationsFromParam(String param, Address from, Map<String, List<String>> locations, String fromString) {
-		if (locations.containsKey(param))
+		if (locations.containsKey(param)) {
 			fromString = locations.get(param).get(0);
+		}
+
 		if (fromString != null) {
 			from = new Address(Locale.getDefault());
 			List<String> fromList = Arrays.asList(fromString.split(","));
-
+			Log.e(getClass().getSimpleName(), fromString);
 			from.setLatitude(Double.parseDouble(fromList.get(0)));
 			from.setLongitude(Double.parseDouble(fromList.get(1)));
 		}

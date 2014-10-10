@@ -30,26 +30,25 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class SmartCheckParkingMapProcessor extends AbstractAsyncTaskProcessor<Void, List<ParkingSerial>> {
 
-	private SherlockFragmentActivity mActivity;
 	private String parkingAid;
 	private GoogleMap map;
-	private Context ctx;
+	private Context mCtx;
 
 	public SmartCheckParkingMapProcessor(SherlockFragmentActivity activity, GoogleMap map, String parkingAid) {
 		super(activity);
 		this.map = map;
 		this.parkingAid = parkingAid;
-		this.ctx=activity.getApplicationContext();
+		this.mCtx = activity.getApplicationContext();
 	}
 
 	@Override
 	public List<ParkingSerial> performAction(Void... params) throws SecurityException, Exception {
-		return JPHelper.getParkings(parkingAid,JPHelper.getAuthToken(ctx));
+		return JPHelper.getParkings(parkingAid, JPHelper.getAuthToken(mCtx));
 	}
 
 	@Override
 	public void handleResult(List<ParkingSerial> result) {
-		MapManager.ClusteringHelper.render(map, MapManager.ClusteringHelper.cluster(mActivity, map, result));
+		MapManager.ClusteringHelper.render(map, MapManager.ClusteringHelper.cluster(mCtx, map, result));
 	}
 
 }
