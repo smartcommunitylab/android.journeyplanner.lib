@@ -190,6 +190,16 @@ public class MapManager {
 						int binY = (int) (Math.abs((objLatLng.latitude * 1E6) - startY) / step);
 
 						item2group.put(idx, new int[] { binX, binY });
+
+						// grid controls
+						if (binX >= grid.size()) {
+							binX = grid.size() - 1;
+						}
+
+						if (binY >= grid.get(binX).size()) {
+							binY = grid.get(binX).size() - 1;
+						}
+
 						// just push the reference
 						grid.get(binX).get(binY).add(basicObject);
 					}
