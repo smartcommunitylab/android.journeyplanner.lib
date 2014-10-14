@@ -27,7 +27,6 @@
         <item>@string/broadcast_notifications_traffic_jam</item>
         <item>@string/broadcast_notifications_diversion</item>
     </string-array>
-  
     <string-array name="smart_checks_list">
         <item>@string/smart_check_list_bus_trento_timetable</item>
         <item>@string/smart_check_list_bus_rovereto_timetable</item>
@@ -37,7 +36,7 @@
         <item>@string/smart_check_list_parking_rovereto</item>
         <item>@string/smart_check_list_alerts_rovereto</item>
     </string-array>
-    
+
     <array name="smart_check_list_tut">
         <item>@string/jp_tut_bus_trento_timetable</item>
         <item>@string/jp_tut_bus_rovereto_timetable</item>
@@ -47,7 +46,6 @@
         <item>@string/jp_tut_parking_rovereto</item>
         <item>@string/jp_tut_alerts_rovereto</item>
     </array>
-    
     <array name="smart_check_list_icons">
         <item>@drawable/ic_bus</item>
         <item>@drawable/ic_bus</item>
@@ -57,7 +55,6 @@
         <item>@drawable/ic_parking</item>
         <item>@drawable/ic_menu_realtimeinfo</item>
     </array>
-    
     <array name="smart_check_list_ids">
         <item>@id/smart_check_list_bus_trento_timetable</item>
         <item>@id/smart_check_list_bus_rovereto_timetable</item>
@@ -67,14 +64,14 @@
         <item>@id/smart_check_list_parking_rovereto</item>
         <item>@id/smart_check_list_alerts_rovereto</item>
     </array>
-    
+
     <string-array name="main_list">
         <item>@string/btn_planjourney</item>
         <item>@string/btn_monitorrecurrent</item>
         <item>@string/btn_monitorsaved</item>
         <item>@string/btn_notifications</item>
         <item>@string/btn_broadcast</item>
-<!--         <item>@string/btn_myprofile</item> -->
+        <!-- <item>@string/btn_myprofile</item> -->
     </string-array>
     <string-array name="main_list_tut">
         <item>@string/jp_plan_tut</item>
@@ -82,15 +79,16 @@
         <item>@string/jp_watch_tut</item>
         <item>@string/jp_notif_tut</item>
         <item>@string/jp_send_tut</item>
-<!--         <item>@string/jp_prefs_tut</item> -->
+        <!-- <item>@string/jp_prefs_tut</item> -->
     </string-array>
+
     <array name="main_list_icons">
         <item>@drawable/ic_menu_planjourneys</item>
         <item>@drawable/ic_menu_monitorjourneys</item>
         <item>@drawable/ic_menu_savedjourneys</item>
         <item>@drawable/ic_menu_notifications</item>
         <item>@drawable/ic_menu_broadcast</item>
-<!--         <item>@drawable/ic_menu_preferences</item> -->
+        <!-- <item>@drawable/ic_menu_preferences</item> -->
     </array>
     <array name="main_list_ids">
         <item>@id/btn_planjourney</item>
@@ -100,5 +98,15 @@
         <item>@id/btn_broadcast</item>
         <item>@id/btn_myprofile</item>
     </array>
-    
+
+    <string-array name="days_2chars">
+        <item>@string/days_su</item>
+        <item>@string/days_mo</item>
+        <item>@string/days_tu</item>
+        <item>@string/days_we</item>
+        <item>@string/days_th</item>
+        <item>@string/days_fr</item>
+        <item>@string/days_sa</item>
+    </string-array>
+
 </resources>

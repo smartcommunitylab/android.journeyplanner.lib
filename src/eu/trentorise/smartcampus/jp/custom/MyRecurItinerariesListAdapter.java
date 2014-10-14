@@ -17,13 +17,12 @@ package eu.trentorise.smartcampus.jp.custom;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +45,7 @@ public class MyRecurItinerariesListAdapter extends ArrayAdapter<BasicRecurrentJo
 	Context context;
 	int layoutResourceId;
 	List<BasicRecurrentJourney> myItineraries;
-    static Map<Integer,String> mp=new HashMap<Integer,String>();  
-
+	static SparseArray<String> mp = new SparseArray<String>();
 
 	public MyRecurItinerariesListAdapter(Context context, int layoutResourceId, List<BasicRecurrentJourney> myItineraries) {
 		super(context, layoutResourceId, myItineraries);
@@ -58,13 +56,10 @@ public class MyRecurItinerariesListAdapter extends ArrayAdapter<BasicRecurrentJo
 	}
 
 	private void init() {
-        mp.put(1,"Su");  
-        mp.put(2,"Mo");  
-        mp.put(3,"Tu");  
-        mp.put(4,"We");  
-        mp.put(5,"Th");  
-        mp.put(6,"Fr");  
-        mp.put(7,"Sa");  		
+		String[] daysArray = context.getResources().getStringArray(R.array.days_2chars);
+		for (int i = 0; i < 7; i++) {
+			mp.put(i + 1, daysArray[i]);
+		}
 	}
 
 	@Override
@@ -78,14 +73,15 @@ public class MyRecurItinerariesListAdapter extends ArrayAdapter<BasicRecurrentJo
 
 			holder = new RowHolder();
 			holder.name = (TextView) row.findViewById(R.id.it_name);
-//			holder.timeFrom = (TextView) row.findViewById(R.id.it_time_from);
-//			holder.timeTo = (TextView) row.findViewById(R.id.it_time_to);
+			// holder.timeFrom = (TextView) row.findViewById(R.id.it_time_from);
+			// holder.timeTo = (TextView) row.findViewById(R.id.it_time_to);
 			holder.from = (TextView) row.findViewById(R.id.itlocation_from);
 			holder.to = (TextView) row.findViewById(R.id.itlocation_to);
 			holder.recurrence = (TextView) row.findViewById(R.id.recurrence);
 			holder.monitor = (ToggleButton) row.findViewById(R.id.its_monitor);
 
-			//holder.transportTypes = (LinearLayout) row.findViewById(R.id.it_transporttypes);
+			// holder.transportTypes = (LinearLayout)
+			// row.findViewById(R.id.it_transporttypes);
 			row.setTag(holder);
 		} else {
 			holder = (RowHolder) row.getTag();
@@ -101,46 +97,51 @@ public class MyRecurItinerariesListAdapter extends ArrayAdapter<BasicRecurrentJo
 		try {
 			Date time = Config.FORMAT_TIME_SMARTPLANNER.parse(myItinerary.getData().getParameters().getTime());
 			// time from
-//			holder.timeFrom.setText(Config.FORMAT_TIME_UI.format(time));
+			// holder.timeFrom.setText(Config.FORMAT_TIME_UI.format(time));
 			// time to
-			time.setTime(time.getTime()+myItinerary.getData().getParameters().getInterval());
-//			holder.timeTo.setText(Config.FORMAT_TIME_UI.format(time));
+			time.setTime(time.getTime() + myItinerary.getData().getParameters().getInterval());
+			// holder.timeTo.setText(Config.FORMAT_TIME_UI.format(time));
 		} catch (ParseException e) {
 		}
 		// position from
-		holder.from.setText(Html.fromHtml("<i>"+context.getString(R.string.label_from)+" </i>"+myItinerary.getData().getParameters().getFrom().getName()));
+		holder.from.setText(Html.fromHtml("<i>" + context.getString(R.string.label_from) + " </i>"
+				+ myItinerary.getData().getParameters().getFrom().getName()));
 		// position to
-		holder.to.setText(Html.fromHtml("<i>"+context.getString(R.string.label_to)+" </i>"+myItinerary.getData().getParameters().getTo().getName()));
-		
-		// recurrence 
-//		holder.recurrence.setText(PlanRecurJourneyFragment.getRecurrenceString(myItinerary.getData().getRecurrence()));
-		
-//		holder.recurrence.setText(Html.fromHtml("<i>"+context.getString(R.string.label_days)+" </i>"+"Mo Tu We Th Fr Sa Su"));
-		holder.recurrence.setText(Html.fromHtml("<i>"+context.getString(R.string.label_days)+" </i>"+setRecurrenceByNumber(myItinerary.getData().getParameters().getRecurrence())));
+		holder.to.setText(Html.fromHtml("<i>" + context.getString(R.string.label_to) + " </i>"
+				+ myItinerary.getData().getParameters().getTo().getName()));
 
-//		// transport types
-//		holder.transportTypes.removeAllViews();
-//		for (TType t : myItinerary.getData().getTransportTypes()) {
-//			ImageView imgv = Utils.getImageByTType(getContext(), t);
-//			if (imgv.getDrawable() != null) {
-//				holder.transportTypes.addView(imgv);
-//			}
-//		}
-		/*Set monitor on or off and clicklistener*/
+		// recurrence
+		// holder.recurrence.setText(PlanRecurJourneyFragment.getRecurrenceString(myItinerary.getData().getRecurrence()));
+
+		// holder.recurrence.setText(Html.fromHtml("<i>"+context.getString(R.string.label_days)+" </i>"+"Mo Tu We Th Fr Sa Su"));
+		holder.recurrence.setText(Html.fromHtml("<i>" + context.getString(R.string.label_days) + " </i>"
+				+ setRecurrenceByNumber(myItinerary.getData().getParameters().getRecurrence())));
+
+		// // transport types
+		// holder.transportTypes.removeAllViews();
+		// for (TType t : myItinerary.getData().getTransportTypes()) {
+		// ImageView imgv = Utils.getImageByTType(getContext(), t);
+		// if (imgv.getDrawable() != null) {
+		// holder.transportTypes.addView(imgv);
+		// }
+		// }
+		/* Set monitor on or off and clicklistener */
 
 		holder.monitor.setOnCheckedChangeListener(null);
 		holder.monitor.setChecked(myItinerary.isMonitor());
-		if (myItinerary.isMonitor())
-			holder.monitor.setBackgroundResource(R.drawable.ic_monitor_on); 
-		else holder.monitor.setBackgroundResource(R.drawable.ic_monitor_off);
-		 holder.monitor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		if (myItinerary.isMonitor()) {
+			holder.monitor.setBackgroundResource(R.drawable.ic_monitor_on);
+		} else {
+			holder.monitor.setBackgroundResource(R.drawable.ic_monitor_off);
+		}
+		holder.monitor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				
 				if (buttonView.getId() == R.id.its_monitor) {
-					SCAsyncTask<Object, Void, Boolean> task = new SCAsyncTask<Object,Void , Boolean>((SherlockFragmentActivity) context,
-						new MonitorMyRecItineraryProcessor((SherlockFragmentActivity) context));
-					task.execute(Boolean.toString(isChecked), myItineraries.get(position).getClientId(),position);
+					SCAsyncTask<Object, Void, Boolean> task = new SCAsyncTask<Object, Void, Boolean>(
+							(SherlockFragmentActivity) context, new MonitorMyRecItineraryProcessor(
+									(SherlockFragmentActivity) context));
+					task.execute(Boolean.toString(isChecked), myItineraries.get(position).getClientId(), position);
 				} else {
 					return;
 				}
@@ -152,16 +153,14 @@ public class MyRecurItinerariesListAdapter extends ArrayAdapter<BasicRecurrentJo
 	private String setRecurrenceByNumber(List<Integer> list) {
 		String daysOfWeek = new String();
 		for (Integer day : list) {
-			daysOfWeek=daysOfWeek+" "+checkDay(day);
+			daysOfWeek = daysOfWeek + " " + checkDay(day);
 		}
 		return daysOfWeek;
 	}
-	public static String checkDay(Integer day)  
-    {  
-     
-        return mp.get(day);  
-    }  
-	
+
+	public static String checkDay(Integer day) {
+		return mp.get(day);
+	}
 
 	static class RowHolder {
 		TextView name;
@@ -169,16 +168,13 @@ public class MyRecurItinerariesListAdapter extends ArrayAdapter<BasicRecurrentJo
 		TextView to;
 		TextView recurrence;
 		ToggleButton monitor;
-
 	}
-	
 
 	public class MonitorMyRecItineraryProcessor extends AbstractAsyncTaskProcessor<Object, Boolean> {
-
 		Integer position;
-		//List<BasicRecurrentJourneyParameters> myItineraries;
+		// List<BasicRecurrentJourneyParameters> myItineraries;
 		String id;
-		
+
 		public MonitorMyRecItineraryProcessor(SherlockFragmentActivity activity) {
 			super(activity);
 		}
@@ -188,18 +184,18 @@ public class MyRecurItinerariesListAdapter extends ArrayAdapter<BasicRecurrentJo
 			// 0: monitor
 			// 1: id
 			boolean monitor = Boolean.parseBoolean((String) params[0]);
-			 position = (Integer) params[2];
+			position = (Integer) params[2];
 			// myItineraries=(List<BasicRecurrentJourneyParameters>) params[1];
-			 id =  (String) params[1];
-			return JPHelper.monitorMyRecItinerary(monitor, id,JPHelper.getAuthToken(context));
+			id = (String) params[1];
+			return JPHelper.monitorMyRecItinerary(monitor, id, JPHelper.getAuthToken(context));
 		}
 
 		@Override
 		public void handleResult(Boolean result) {
-			//cambia background in funzione a quello che ho
+			// cambia background in funzione a quello che ho
 			myItineraries.get(position).setMonitor(result);
 			notifyDataSetChanged();
-
 		}
 	}
+
 }

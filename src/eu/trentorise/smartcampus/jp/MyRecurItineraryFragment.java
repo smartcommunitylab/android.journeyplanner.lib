@@ -19,10 +19,14 @@ import it.sayservice.platform.smartplanner.data.message.Position;
 import it.sayservice.platform.smartplanner.data.message.SimpleLeg;
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -34,6 +38,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,35 +97,32 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 		} else if (getArguments() != null && getArguments().containsKey(PARAMS)) {
 			this.params = (BasicRecurrentJourney) getArguments().getSerializable(PARAMS);
 		}
+
 		if (params != null) {
 			if (params.getData().getParameters().getFrom() != null)
 				fromPosition = params.getData().getParameters().getFrom();
 			if (params.getData().getParameters().getTo() != null)
 				toPosition = params.getData().getParameters().getTo();
-//			if (params.getClientId() != null)
+			// if (params.getClientId() != null)
 			if (getArguments() != null && getArguments().containsKey(PARAMS)) {
 				this.edited = getArguments().getBoolean(PARAM_EDITING);
-			if (!this.edited){
-				myItineraries = createItineraryFromLegs(params.getData());
-
+				if (!this.edited) {
+					myItineraries = createItineraryFromLegs(params.getData());
+				} else {
+					/* find itineraries */
+					SCAsyncTask<BasicRecurrentJourneyParameters, Void, RecurrentJourney> task = new SCAsyncTask<BasicRecurrentJourneyParameters, Void, RecurrentJourney>(
+							getSherlockActivity(), new PlanRecurJourneyProcessor(getSherlockActivity()));
+					BasicRecurrentJourneyParameters parameters = new BasicRecurrentJourneyParameters();
+					/* fill the params */
+					parameters.setClientId(params.getClientId());
+					parameters.setData(params.getData().getParameters());
+					parameters.setMonitor(true);
+					parameters.setName(params.getName());
+					task.execute(parameters);
 				}
-			else {
-				/* find itineraries */
-				SCAsyncTask<BasicRecurrentJourneyParameters, Void, RecurrentJourney> task = new SCAsyncTask<BasicRecurrentJourneyParameters, Void, RecurrentJourney>(
-						getSherlockActivity(), new PlanRecurJourneyProcessor(getSherlockActivity()));
-				BasicRecurrentJourneyParameters parameters = new BasicRecurrentJourneyParameters();
-				/* fill the params */
-				parameters.setClientId(params.getClientId());
-				parameters.setData(params.getData().getParameters());
-				parameters.setMonitor(true);
-				parameters.setName(params.getName());
-				task.execute(parameters);
-			}
 			}
 			setHasOptionsMenu(true);
-
 		}
-
 	}
 
 	private List<RecurrentItinerary> createItineraryFromLegs(RecurrentJourney recurrentJourney) {
@@ -141,21 +143,21 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 		if (params.getClientId() != null) {
 			alllegslist = params.getData().getLegs();
 			mylegsmonitor = params.getData().getMonitorLegs();
-
 		} else {
 			alllegslist = recurrentJourney.getLegs();
 			mylegsmonitor = recurrentJourney.getMonitorLegs();
 		}
+
 		for (SimpleLeg leg : alllegslist) {
-			if (alllegs.get(leg.getTransport().getAgencyId() + "_" + leg.getTransport().getRouteId()) != null)
+			if (alllegs.get(leg.getTransport().getAgencyId() + "_" + leg.getTransport().getRouteId()) != null) {
 				alllegs.get(leg.getTransport().getAgencyId() + "_" + leg.getTransport().getRouteId()).add(leg);
-			else {
+			} else {
 				alllegs.put(leg.getTransport().getAgencyId() + "_" + leg.getTransport().getRouteId(),
 						new ArrayList<SimpleLeg>());
 				alllegs.get(leg.getTransport().getAgencyId() + "_" + leg.getTransport().getRouteId()).add(leg);
 			}
-
 		}
+
 		/* per tutte le chiavi, se sono a true inserisco la lista in mylegs */
 		for (Entry<String, Boolean> entry : mylegsmonitor.entrySet()) {
 			String key = entry.getKey();
@@ -166,7 +168,7 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 				mylegs.put(key, alllegs.get(key));
 			}
 		}
-		return new ArrayList(itineraryInformation.values());
+		return new ArrayList<RecurrentItinerary>(itineraryInformation.values());
 	}
 
 	@Override
@@ -178,11 +180,11 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 
 		submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_edit, Menu.NONE, R.string.menu_item_edit);
 		submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_delete, Menu.NONE, R.string.menu_item_delete);
-		if (params.isMonitor())
+		if (params.isMonitor()) {
 			submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_monitor, Menu.NONE, R.string.menu_item_monitor_off);
-		else
+		} else {
 			submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_monitor, Menu.NONE, R.string.menu_item_monitor_on);
-
+		}
 	}
 
 	@Override
@@ -210,7 +212,7 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 							new DeleteMyRecurItineraryProcessor(getSherlockActivity(), MyRecurItineraryFragment.this.getTag()));
 					task.execute(params.getName(), params.getClientId());
 					dialog.dismiss();
-//					getSherlockActivity().getSupportFragmentManager().popBackStackImmediate();
+					// getSherlockActivity().getSupportFragmentManager().popBackStackImmediate();
 				}
 			});
 			deleteAlertDialog.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
@@ -233,9 +235,10 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//		if (getSherlockActivity().getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_TABS) {
-//			getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-//		}
+		// if (getSherlockActivity().getSupportActionBar().getNavigationMode()
+		// != ActionBar.NAVIGATION_MODE_TABS) {
+		// getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		// }
 
 		return inflater.inflate(R.layout.myrecitinerary, container, false);
 	}
@@ -250,17 +253,16 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 		myRecTime = (TextView) getView().findViewById(R.id.myrecitinerary_time);
 		saveButton = (Button) getView().findViewById(R.id.myrecitinerary_save);
 		saveLayout = (LinearLayout) getView().findViewById(R.id.save_layout);
-		
-		if (!this.edited)
-		{saveLayout.setVisibility(View.GONE);
-			}
-		else {
+
+		if (!this.edited) {
+			saveLayout.setVisibility(View.GONE);
+		} else {
 			saveLayout.setVisibility(View.VISIBLE);
 		}
 		// fill labels
 		myRecName.setText(params.getName());
 		myRecDate.setText(Config.FORMAT_DATE_UI.format(new Date(params.getData().getParameters().getFromDate())));
-		myRecTime.setText(params.getData().getParameters().getTime());
+		myRecTime.setText(formatTime(params.getData().getParameters().getTime()));
 		myRecFrom.setText((Html.fromHtml("<i>" + getString(R.string.label_from) + " </i>"
 				+ params.getData().getParameters().getFrom().getName())));
 		myRecTo.setText((Html.fromHtml("<i>" + getString(R.string.label_to) + " </i>"
@@ -344,6 +346,18 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 		myJourneysList.setAdapter(adapter);
 
 	}
+	
+	private String formatTime(String time) {
+		SimpleDateFormat inFormat = new SimpleDateFormat("hh:mmaa", Locale.getDefault());
+		DateFormat outFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
+		try {
+			Date date = inFormat.parse(time);
+			String out = outFormat.format(date);
+			return out;
+		} catch (ParseException e) {
+			return time;
+		}
+	}
 
 	private class PlanRecurJourneyProcessor extends
 			AbstractAsyncTaskProcessor<BasicRecurrentJourneyParameters, RecurrentJourney> {
@@ -354,7 +368,7 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 
 		@Override
 		public RecurrentJourney performAction(BasicRecurrentJourneyParameters... array) throws SecurityException, Exception {
-			return JPHelper.planRecurItinerary(array[0],JPHelper.getAuthToken(getActivity()));
+			return JPHelper.planRecurItinerary(array[0], JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override
@@ -390,17 +404,18 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 
 		@Override
 		public Boolean performAction(BasicRecurrentJourney... array) throws SecurityException, Exception {
-			return JPHelper.saveMyRecurrentJourney(array[0],JPHelper.getAuthToken(getActivity()));
+			return JPHelper.saveMyRecurrentJourney(array[0], JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override
 		public void handleResult(Boolean result) {
-//			if (params.getClientId() == null)
-//				activity.finish();
-//			else
-//				((SherlockFragmentActivity) activity).getSupportFragmentManager().popBackStack();
+			// if (params.getClientId() == null)
+			// activity.finish();
+			// else
+			// ((SherlockFragmentActivity)
+			// activity).getSupportFragmentManager().popBackStack();
 			activity.finish();
-			/*call activity with list of one off itinerary*/
+			/* call activity with list of one off itinerary */
 			Intent intent = new Intent(activity, SavedJourneyActivity.class);
 			Bundle b = new Bundle();
 			intent.putExtra(SavedJourneyActivity.PARAMS, MyRecurItinerariesFragment.class.getName());
@@ -422,7 +437,7 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 			// 1: id
 			boolean monitor = Boolean.parseBoolean(strings[0]);
 			String id = strings[1];
-			return JPHelper.monitorMyRecItinerary(monitor, id,JPHelper.getAuthToken(getActivity()));
+			return JPHelper.monitorMyRecItinerary(monitor, id, JPHelper.getAuthToken(getActivity()));
 		}
 
 		@Override

@@ -285,5 +285,14 @@
 
     <string name="itinerary_timing">%1$s - %2$s</string>
     
+    <!-- Short days (2 characters) -->
+    <string name="days_su">Su</string>
+    <string name="days_mo">Mo</string>
+    <string name="days_tu">Tu</string>
+    <string name="days_we">We</string>
+    <string name="days_th">Th</string>
+    <string name="days_fr">Fr</string>
+    <string name="days_sa">Sa</string>
+    
 </resources>
 

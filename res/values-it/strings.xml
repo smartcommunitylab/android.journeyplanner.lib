@@ -244,7 +244,7 @@
     <string name="notifications_itinerary_delay_mins">%s minuti</string>
     <string name="notifications_itinerary_on_time">In orario</string>
     <string name="notifications_itinerary_delay_bus">Linea %1$s</string>
-<!--      <string name="notifications_itinerary_delay_bus">Linea %1$s per %2$s</string> -->
+    <!-- <string name="notifications_itinerary_delay_bus">Linea %1$s per %2$s</string> -->
 
     <string name="notifications_itinerary_delay_train">Treno %1$s</string>
 
@@ -281,5 +281,14 @@
     <string name="auth_question_upgrade">Registrati con il tuo account Google e potrai accedere a tutte le funzionalitá offerte dall\'app</string>
     <string name="not_now">Non adesso</string>
     <string name="auth_failed">Errore nell\'inizializzazione dell\'app. Riprova a breve.</string>
+
+    <!-- Short days (2 characters) -->
+    <string name="days_su">Do</string>
+    <string name="days_mo">Lu</string>
+    <string name="days_tu">Ma</string>
+    <string name="days_we">Me</string>
+    <string name="days_th">Gi</string>
+    <string name="days_fr">Ve</string>
+    <string name="days_sa">Sa</string>
 
 </resources>
