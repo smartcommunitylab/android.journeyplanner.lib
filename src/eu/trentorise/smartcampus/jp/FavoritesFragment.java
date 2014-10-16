@@ -31,6 +31,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -164,21 +165,53 @@ public class FavoritesFragment extends FeedbackFragment {
 			}
 		});
 
-		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(android.R.string.ok, null);
+
+		final AlertDialog dialog = builder.create();
+		dialog.show();
+
+		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View v) {
 				if (newFavPosition == null) {
 					Toast.makeText(getActivity(), R.string.favorites_empty_address, Toast.LENGTH_SHORT).show();
-				} else if (saveFavorite(newFavPosition, userPrefsHolder)) {
-					Toast.makeText(getActivity(), R.string.favorites_saved, Toast.LENGTH_SHORT).show();
-					favoritesAdapter.notifyDataSetChanged();
-					editText.setText("");
-					dialog.dismiss();
+				} else {
+					// find if favorite already exists (same coordinates or
+					// same name)
+					Position alreadyExistsPosition = null;
+					for (Position p : userPrefsHolder.getFavorites()) {
+						// && p.getName().equals(newFavPosition.getName())
+						if ((p.getLat().equals(newFavPosition.getLat()) && p.getLon().equals(newFavPosition.getLon()))
+								|| (p.getName().equals(newFavPosition.getName()))) {
+							alreadyExistsPosition = p;
+							break;
+						}
+					}
+
+					if (alreadyExistsPosition != null) {
+						// favorite already exists!
+						if (alreadyExistsPosition.getLat().equals(newFavPosition.getLat())
+								&& alreadyExistsPosition.getLon().equals(newFavPosition.getLon())) {
+							// same coordinates
+							Toast.makeText(
+									getActivity(),
+									getResources().getString(R.string.favorites_already_exists_geo,
+											alreadyExistsPosition.getName()), Toast.LENGTH_SHORT).show();
+						} else if (alreadyExistsPosition.getName().equals(newFavPosition.getName())) {
+							// same name
+							Toast.makeText(getActivity(), R.string.favorites_already_exists_name, Toast.LENGTH_SHORT).show();
+						}
+						return;
+					} else if (saveFavorite(newFavPosition, userPrefsHolder)) {
+						// save new favorite
+						Toast.makeText(getActivity(), R.string.favorites_saved, Toast.LENGTH_SHORT).show();
+						favoritesAdapter.notifyDataSetChanged();
+						newFavPosition = null;
+						dialog.dismiss();
+					}
 				}
 			}
 		});
-
-		builder.create().show();
 	}
 
 	private void savePosition(Address address) {
@@ -283,12 +316,7 @@ public class FavoritesFragment extends FeedbackFragment {
 		if (holder.getFavorites() == null) {
 			holder.setFavorites(new ArrayList<Position>());
 		}
-		for (Position p : holder.getFavorites()) {
-			if (p.getLat().equals(position.getLat()) && p.getLon().equals(position.getLon())
-					&& p.getName().equals(position.getName())) {
-				return true;
-			}
-		}
+
 		holder.getFavorites().add(position);
 		String json = Utils.convertToJSON(holder.getFavorites());
 		SharedPreferences.Editor prefsEditor = userPrefs.edit();

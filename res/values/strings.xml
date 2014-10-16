@@ -95,6 +95,8 @@
     <string name="no_days_selected">No days are selected!</string>
     <string name="favorites_empty_address">Select a valid address</string>
     <string name="favorites_saved">Added to favorites</string>
+    <string name="favorites_already_exists_geo">This favorite already exists named \"%s\"</string>
+    <string name="favorites_already_exists_name">A favorite with this name already exists</string>
     <string name="favorites_title">Favorites</string>
     <string name="favorites_add_confirmation">Do you want to add\n\n%s\n\nto your favorite places?</string>
     <string name="favorites_empty_list">You have no favorite places yet</string>

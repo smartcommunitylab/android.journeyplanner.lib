@@ -93,6 +93,8 @@
     <string name="no_days_selected">Devi selezionare almeno un giorno in cui viaggiare!</string>
     <string name="favorites_empty_address">Scegli un indirizzo valido</string>
     <string name="favorites_saved">Aggiunto ai preferiti</string>
+    <string name="favorites_already_exists_geo">Questo preferito esiste già con il nome \"%s\"</string>
+    <string name="favorites_already_exists_name">Un preferito con questo nome esiste già</string>
     <string name="favorites_title">Preferiti</string>
     <string name="favorites_add_confirmation">Vuoi aggiungere\n\n%s\n\nai tuoi luoghi preferiti?</string>
     <string name="favorites_empty_list">Non hai ancora aggiunto luoghi preferiti</string>
