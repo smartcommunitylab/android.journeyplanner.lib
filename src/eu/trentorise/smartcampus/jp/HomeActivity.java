@@ -27,7 +27,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -53,22 +52,22 @@ public class HomeActivity extends TutorialManagerActivity {
 
 		List<View> list = createButtons();
 		LinearLayout ll = null;
-		LinearLayout parent = (LinearLayout)findViewById(R.id.homelayout);
-		for (int i = 0; i < list.size(); i++){
+		LinearLayout parent = (LinearLayout) findViewById(R.id.homelayout);
+		for (int i = 0; i < list.size(); i++) {
 			if (ll == null) {
 				ll = new LinearLayout(this);
 				ll.setOrientation(LinearLayout.HORIZONTAL);
 				ll.setGravity(Gravity.TOP | Gravity.CENTER);
 				ll.setWeightSum(3);
-				LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-					     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+				LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+						LinearLayout.LayoutParams.WRAP_CONTENT);
 				layoutParams.setMargins(0, 32, 0, 0);
 				parent.addView(ll, layoutParams);
 			}
 			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
 			layoutParams.weight = 1;
 			ll.addView(list.get(i), layoutParams);
-			if ((i+1) % 3 == 0){
+			if ((i + 1) % 3 == 0) {
 				ll = null;
 			}
 		}
@@ -79,13 +78,14 @@ public class HomeActivity extends TutorialManagerActivity {
 		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
 				(RelativeLayout) findViewById(R.id.home_relative_layout_jp));
 
-//		setHiddenNotification();
-		
+		// setHiddenNotification();
+
 		if (JPHelper.isFirstLaunch(this)) {
 			showTourDialog();
 			JPHelper.disableFirstLaunch(this);
 		}
 	}
+
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -190,13 +190,13 @@ public class HomeActivity extends TutorialManagerActivity {
 				}
 			}
 			smartIds.recycle();
-			
+
 			Toast toast = Toast.makeText(getApplicationContext(), R.string.tmp, Toast.LENGTH_SHORT);
 			toast.show();
 			return;
 		}
 	}
-	
+
 	private List<View> createButtons() {
 		List<View> list = new ArrayList<View>();
 		// First, set the smart check options
@@ -206,7 +206,7 @@ public class HomeActivity extends TutorialManagerActivity {
 		TypedArray smartIcons = getResources().obtainTypedArray(R.array.smart_check_list_icons);
 		for (int i = 0; i < smartNames.length; i++) {
 			if (smartNamesFiltered.contains(smartNames[i])) {
-				Button b = (Button)getLayoutInflater().inflate(R.layout.home_btn, null);
+				Button b = (Button) getLayoutInflater().inflate(R.layout.home_btn, null);
 				b.setText(smartNames[i]);
 				b.setId(smartIds.getResourceId(i, 0));
 				b.setCompoundDrawablesWithIntrinsicBounds(null, smartIcons.getDrawable(i), null, null);
@@ -219,7 +219,7 @@ public class HomeActivity extends TutorialManagerActivity {
 		TypedArray allIds = getResources().obtainTypedArray(R.array.main_list_ids);
 		TypedArray allIcons = getResources().obtainTypedArray(R.array.main_list_icons);
 		for (int i = 0; i < allNames.length; i++) {
-			Button b = (Button)getLayoutInflater().inflate(R.layout.home_btn, null);
+			Button b = (Button) getLayoutInflater().inflate(R.layout.home_btn, null);
 			b.setText(allNames[i]);
 			b.setId(allIds.getResourceId(i, 0));
 			b.setCompoundDrawablesWithIntrinsicBounds(null, allIcons.getDrawable(i), null, null);
@@ -228,5 +228,5 @@ public class HomeActivity extends TutorialManagerActivity {
 		allIcons.recycle();
 		allIds.recycle();
 		return list;
-	}	
+	}
 }
