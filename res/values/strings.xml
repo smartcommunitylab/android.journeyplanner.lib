@@ -190,8 +190,8 @@
     <string name="smart_check_list_bus_rovereto_timetable">Rovereto Bus Timetable</string>
     <string name="smart_check_list_suburban_timetable">Extraurban Bus Timetable</string>
     <string name="smart_check_list_train_timetable">Train Timetable</string>
-    <string name="smart_check_list_parking_trento">Trento Parking Availability</string>
-    <string name="smart_check_list_parking_rovereto">Rovereto Parking Availability</string>
+    <string name="smart_check_list_parking_trento">Trento Parking\nAvailability</string>
+    <string name="smart_check_list_parking_rovereto">Rovereto Parking\nAvailability</string>
     <string name="smart_check_list_alerts_rovereto">Rovereto Traffic Decrees</string>
     <string name="smart_check_stops_type_mobility">Mobility</string>
     <string name="smart_check_stops_delay">%s\' delay</string>
@@ -202,6 +202,7 @@
     <string name="smart_check_parking_full">full</string>
     <string name="smart_check_parking_dialog_title">Parking</string>
     <string name="smart_check_parking_dialog_directions">Directions</string>
+    <string name="smart_check_parking_all_unavailable_toast">Real time parking availability is currently not available. It will be restored as soon as possible.</string>
     <string name="smart_check_alerts_dialog_title">Alerts</string>
     <string name="smart_check_alerts_dialog_ok">Details</string>
     <string name="smart_check_alerts_time">from %1$s to %2$s</string>
@@ -282,9 +283,8 @@
     <string name="auth_question_upgrade">Authenticate yourself with your Google account to exploit all offered functionalities</string>
     <string name="not_now">Not now</string>
     <string name="auth_failed">Application initialization failed. Try connecting again.</string>
-
     <string name="itinerary_timing">%1$s - %2$s</string>
-    
+
     <!-- Short days (2 characters) -->
     <string name="days_su">Su</string>
     <string name="days_mo">Mo</string>
@@ -293,6 +293,5 @@
     <string name="days_th">Th</string>
     <string name="days_fr">Fr</string>
     <string name="days_sa">Sa</string>
-    
-</resources>
 
+</resources>

@@ -22,9 +22,11 @@ import java.util.List;
 
 import android.location.Location;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
+import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
@@ -113,10 +115,26 @@ public class SmartCheckParkingsProcessor extends AbstractAsyncTaskProcessor<Void
 
 		adapter.notifyDataSetChanged();
 
+		Boolean allDataUnavailable = null;
+		for (ParkingSerial parking : result) {
+			// Check for availability
+			if (parking.isMonitored()) {
+				allDataUnavailable = true;
+				if (parking.getSlotsAvailable() != ParkingsHelper.PARKING_UNAVAILABLE) {
+					allDataUnavailable = false;
+					break;
+				}
+			}
+		}
+
+		if (allDataUnavailable != null && allDataUnavailable == true) {
+			// "Sorry, all data unavailable" toast
+			Toast.makeText(mActivity, R.string.smart_check_parking_all_unavailable_toast, Toast.LENGTH_LONG).show();
+		}
+
 		// save in cache
 		ParkingsHelper.setCache(orderedList);
 
 		mActivity.setSupportProgressBarIndeterminateVisibility(false);
 	}
-
 }

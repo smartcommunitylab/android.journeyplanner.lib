@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="jp_first_launch">Quest’app ti permetterà di consultare gli orari degli autobus e dei treni, verificare la disponibilità dei parcheggi, pianificare viaggi ed informare la community di eventuali ritardi di treni ed autobus.</string>
-    <string name="jp_plan_tut">Pianifica qui il tuo prossimo viaggio</string>
-    <string name="jp_monitor_tut">Imposta le tratte che percorri abitualmente per essere informato di eventuali ritardi!</string>
-    <string name="jp_watch_tut">Tieni d’occhio i tuoi viaggi abituali</string>
-    <string name="jp_send_tut">Segnala ritardi, incidenti o deviazioni </string>
-    <string name="jp_info_tut">Consulta le gli orari di bus e treni e verifica la disponibilità di parcheggi</string>
-    <string name="jp_notif_tut">Verifica che il tuo autobus o il tuo treno siano in orario! </string>
-    <string name="jp_prefs_tut">Configura qui le tue impostazioni predefinite</string>
 
-    <string name="jp_tut_bus_trento_timetable">Check the Trento city buses\' timetable</string>
-    <string name="jp_tut_bus_rovereto_timetable">Check the Rovereto city buses\' timetable</string>
-    <string name="jp_tut_suburban_timetable">Check the suburban buses\' timetable</string>
-    <string name="jp_tut_train_timetable">Check the local trains\' timetable</string>
-    <string name="jp_tut_parking_trento">Check the availability of city parking slots</string>
-    <string name="jp_tut_parking_rovereto">Check the availability of Rovereto parking slots</string>
-    <string name="jp_tut_alerts_rovereto">Learn about the municipality decrees about mobility</string>
-            
+    <string name="jp_first_launch">Quest\'app ti permetterà di consultare gli orari degli autobus e dei treni, verificare la disponibilità dei parcheggi, pianificare viaggi ed informare la community di eventuali ritardi di treni ed autobus.</string>
+    <string name="jp_plan_tut">Pianifica qui il tuo prossimo viaggio.</string>
+    <string name="jp_monitor_tut">Imposta le tratte che percorri abitualmente per essere informato di eventuali ritardi!</string>
+    <string name="jp_watch_tut">Tieni d\'occhio i tuoi viaggi abituali.</string>
+    <string name="jp_send_tut">Segnala ritardi, incidenti o deviazioni.</string>
+    <string name="jp_info_tut">Consulta le gli orari di bus e treni e verifica la disponibilità di parcheggi.</string>
+    <string name="jp_notif_tut">Verifica che il tuo autobus o il tuo treno siano in orario!</string>
+    <string name="jp_prefs_tut">Configura qui le tue impostazioni predefinite.</string>
+    <string name="jp_tut_bus_trento_timetable">Controlla l\'orario degli autobus di Trento e della funivia di Sardagna. Puoi anche verificare se ci sono ritardi segnalati dagli altri utenti.</string>
+    <string name="jp_tut_bus_rovereto_timetable">Controlla l\'orario degli autobus di Rovereto. Puoi anche verificare se ci sono ritardi segnalati dagli altri utenti.</string>
+    <string name="jp_tut_suburban_timetable">Controlla l\'orario degli autobus extra-urbani. </string>
+    <string name="jp_tut_train_timetable">Controlla l\'orario delle linee ferroviarie che attraversano il Trentino. Puoi anche verificare eventuali ritardi segnalati dai gestori o dagli utenti.</string>
+    <string name="jp_tut_parking_trento">Controlla la disponibilità dei parcheggi di Trento in tempo reale. Se il dato in tempo reale non è aggiornato viene mostrata la capienza del parcheggio.</string>
+    <string name="jp_tut_parking_rovereto">Controlla la disponibilità dei parcheggi di Trento in tempo reale. Se il dato in tempo reale non è aggiornato viene mostrata la capienza del parcheggio.</string>
+    <string name="jp_tut_alerts_rovereto">Rimani aggiornato sulle ordinanze emesse dal Comune di Rovereto in tema di mobilità (sosta, velocità, transito).</string>
+
 </resources>

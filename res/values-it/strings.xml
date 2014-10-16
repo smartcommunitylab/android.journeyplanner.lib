@@ -188,8 +188,8 @@
     <string name="smart_check_list_bus_rovereto_timetable">Orario autobus di Rovereto</string>
     <string name="smart_check_list_suburban_timetable">Orario autobus extraurbano</string>
     <string name="smart_check_list_train_timetable">Orario treni</string>
-    <string name="smart_check_list_parking_trento">Disponibilità parcheggi Trento</string>
-    <string name="smart_check_list_parking_rovereto">Disponibilità parcheggi Rovereto</string>
+    <string name="smart_check_list_parking_trento">Disponibilità parcheggi\nTrento</string>
+    <string name="smart_check_list_parking_rovereto">Disponibilità parcheggi\nRovereto</string>
     <string name="smart_check_list_alerts_rovereto">Ordinanze Rovereto</string>
     <string name="smart_check_stops_type_mobility">Mobilità</string>
     <string name="smart_check_stops_delay">ritardo %s\'</string>
@@ -199,6 +199,7 @@
     <string name="smart_check_parking_full">completo</string>
     <string name="smart_check_parking_dialog_title">Parcheggio</string>
     <string name="smart_check_parking_dialog_directions">Indicazioni stradali</string>
+    <string name="smart_check_parking_all_unavailable_toast">La disponibilità dei parcheggi in tempo reale non è attualmente disponibile. Verrà ripristinata al più presto.</string>
     <string name="smart_check_alerts_dialog_title">Ordinanze</string>
     <string name="smart_check_alerts_dialog_ok">Dettagli</string>
     <string name="smart_check_alerts_time">dal %1$s al %2$s</string>

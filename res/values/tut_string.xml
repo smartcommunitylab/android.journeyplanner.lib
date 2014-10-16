@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   
-    <string name="jp_first_launch">Welcome! This app lets you consult bus and train timetables, city parking slots availability, plan journeys, and even inform the community of train or bus delays.</string>
-    <string name="jp_plan_tut">Plan your next trip here</string>
-    <string name="jp_monitor_tut">Set up your usual routes to be notified about possible delays</string>
-    <string name="jp_watch_tut">Keep track of your usual travel routes here</string>
-    <string name="jp_send_tut">Notify users about train or city bus delays</string>
-    <string name="jp_info_tut">Check the local bus or train schedule or find available parking in the city</string>
-    <string name="jp_notif_tut">Read notifications about the journeys you saved</string>
-    <string name="jp_prefs_tut">Set up your defaults here</string>
 
-    <string name="jp_tut_bus_trento_timetable">Check the Trento city buses\' timetable</string>
-    <string name="jp_tut_bus_rovereto_timetable">Check the Rovereto city buses\' timetable</string>
-    <string name="jp_tut_suburban_timetable">Check the suburban buses\' timetable</string>
-    <string name="jp_tut_train_timetable">Check the local trains\' timetable</string>
-    <string name="jp_tut_parking_trento">Check the availability of city parking slots</string>
-    <string name="jp_tut_parking_rovereto">Check the availability of Rovereto parking slots</string>
-    <string name="jp_tut_alerts_rovereto">Learn about the municipality decrees about mobility</string>
-            
+    <string name="jp_first_launch">Welcome! This app lets you consult bus and train timetables, city parking slots availability, plan journeys, and even inform the community of train or bus delays.</string>
+    <string name="jp_plan_tut">Plan your next trip here.</string>
+    <string name="jp_monitor_tut">Set up your usual routes to be notified about possible delays!</string>
+    <string name="jp_watch_tut">Keep track of your usual travel routes here.</string>
+    <string name="jp_send_tut">Notify users about train or city bus delays.</string>
+    <string name="jp_info_tut">Check the local bus or train schedule or find available parking in the city.</string>
+    <string name="jp_notif_tut">Read notifications about the journeys you saved!</string>
+    <string name="jp_prefs_tut">Set up your defaults here.</string>
+    <string name="jp_tut_bus_trento_timetable">Check the schedule of Trento buses and of the cable car to Sardagna. You can also check if there are delays reported by other users.</string>
+    <string name="jp_tut_bus_rovereto_timetable">Check the schedule of Rovereto buses. You can also check if there are delays reported by other users.</string>
+    <string name="jp_tut_suburban_timetable">Check the schedule of extraurban buses.</string>
+    <string name="jp_tut_train_timetable">Check the schedule of railway lines across Trentino. You can also check for any delays reported by the service provider or by other users.</string>
+    <string name="jp_tut_parking_trento">Check the real time availability of parkings in Trento. If the real time data is not available then the parking capacity is shown.</string>
+    <string name="jp_tut_parking_rovereto">Check the real time availability of parkings in Rovereto. If the real time data is not available then the parking capacity is shown.</string>
+    <string name="jp_tut_alerts_rovereto">Stay up to date on the orders issued by the Municipality of Rovereto in terms of mobility (stop, speed, transit).</string>
+
 </resources>
