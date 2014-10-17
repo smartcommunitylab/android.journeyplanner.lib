@@ -44,24 +44,26 @@ public class SmartCheckAlertsFragment extends SherlockListFragment {
 
 		setHasOptionsMenu(true);
 
+		setEmptyText(getString(R.string.smart_check_alerts_empty));
+		
 		adapter = new SmartCheckAlertsAdapter(getSherlockActivity(), R.layout.smartcheck_alert_row);
 		// adapter.setMyLocation(JPHelper.getLocationHelper().getLocation());
-		adapter.registerDataSetObserver(new DataSetObserver() {
-			@Override
-			public void onChanged() {
-				if (getView() != null) {
-					TextView smartcheckRoutesMsg = (TextView) getView().findViewById(R.id.smartcheck_none);
-					smartcheckRoutesMsg.setText(getString(R.string.smart_check_alerts_empty));
-
-					if (adapter.getCount() == 0) {
-						smartcheckRoutesMsg.setVisibility(View.VISIBLE);
-					} else {
-						smartcheckRoutesMsg.setVisibility(View.GONE);
-					}
-					super.onChanged();
-				}
-			}
-		});
+//		adapter.registerDataSetObserver(new DataSetObserver() {
+//			@Override
+//			public void onChanged() {
+//				if (getView() != null) {
+//					TextView smartcheckRoutesMsg = (TextView) getView().findViewById(R.id.smartcheck_none);
+//					smartcheckRoutesMsg.setText(getString(R.string.smart_check_alerts_empty));
+//
+//					if (adapter.getCount() == 0) {
+//						smartcheckRoutesMsg.setVisibility(View.VISIBLE);
+//					} else {
+//						smartcheckRoutesMsg.setVisibility(View.GONE);
+//					}
+//					super.onChanged();
+//				}
+//			}
+//		});
 
 		setListAdapter(adapter);
 

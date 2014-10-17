@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="mapIconText">15dp</dimen>
+    <dimen name="mapIconTextSize">15sp</dimen>
+
+    <!-- Custom dimensions -->
+    <dimen name="sc_mini">4dp</dimen>
+    <dimen name="sc_small">8dp</dimen>
+    <dimen name="sc_medium">16dp</dimen>
+    <dimen name="sc_large">24dp</dimen>
+    <dimen name="sc_maxi">32dp</dimen>
+
+</resources>

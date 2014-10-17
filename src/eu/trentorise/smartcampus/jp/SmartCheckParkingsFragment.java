@@ -52,22 +52,24 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 		// actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		setHasOptionsMenu(true);
 
+		setEmptyText(getString(R.string.smart_check_parkings_empty));
+		
 		adapter = new SmartCheckParkingsAdapter(getSherlockActivity(), R.layout.smartcheck_parking_row);
 		adapter.setMyLocation(JPHelper.getLocationHelper().getLocation());
-		adapter.registerDataSetObserver(new DataSetObserver() {
-			@Override
-			public void onChanged() {
-				if (getView() != null) {
-					TextView smartcheckRoutesMsg = (TextView) getView().findViewById(R.id.smartcheck_none);
-					if (adapter.getCount() == 0) {
-						smartcheckRoutesMsg.setVisibility(View.VISIBLE);
-					} else {
-						smartcheckRoutesMsg.setVisibility(View.GONE);
-					}
-					super.onChanged();
-				}
-			}
-		});
+//		adapter.registerDataSetObserver(new DataSetObserver() {
+//			@Override
+//			public void onChanged() {
+//				if (getView() != null) {
+//					TextView smartcheckRoutesMsg = (TextView) getView().findViewById(R.id.smartcheck_none);
+//					if (adapter.getCount() == 0) {
+//						smartcheckRoutesMsg.setVisibility(View.VISIBLE);
+//					} else {
+//						smartcheckRoutesMsg.setVisibility(View.GONE);
+//					}
+//					super.onChanged();
+//				}
+//			}
+//		});
 
 		setListAdapter(adapter);
 
