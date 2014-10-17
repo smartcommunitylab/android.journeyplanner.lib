@@ -52,24 +52,23 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 		// actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		setHasOptionsMenu(true);
 
-		setEmptyText(getString(R.string.smart_check_parkings_empty));
-		
 		adapter = new SmartCheckParkingsAdapter(getSherlockActivity(), R.layout.smartcheck_parking_row);
 		adapter.setMyLocation(JPHelper.getLocationHelper().getLocation());
-//		adapter.registerDataSetObserver(new DataSetObserver() {
-//			@Override
-//			public void onChanged() {
-//				if (getView() != null) {
-//					TextView smartcheckRoutesMsg = (TextView) getView().findViewById(R.id.smartcheck_none);
-//					if (adapter.getCount() == 0) {
-//						smartcheckRoutesMsg.setVisibility(View.VISIBLE);
-//					} else {
-//						smartcheckRoutesMsg.setVisibility(View.GONE);
-//					}
-//					super.onChanged();
-//				}
-//			}
-//		});
+		// adapter.registerDataSetObserver(new DataSetObserver() {
+		// @Override
+		// public void onChanged() {
+		// if (getView() != null) {
+		// TextView smartcheckRoutesMsg = (TextView)
+		// getView().findViewById(R.id.smartcheck_none);
+		// if (adapter.getCount() == 0) {
+		// smartcheckRoutesMsg.setVisibility(View.VISIBLE);
+		// } else {
+		// smartcheckRoutesMsg.setVisibility(View.GONE);
+		// }
+		// super.onChanged();
+		// }
+		// }
+		// });
 
 		setListAdapter(adapter);
 
@@ -81,12 +80,6 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 	}
 
 	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		ParkingSerial parking = adapter.getItem(position);
-		goToMap(parking);
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.smartcheck_list, container, false);
 	}
@@ -94,6 +87,7 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
+		((TextView) getActivity().findViewById(android.R.id.empty)).setText(getString(R.string.smart_check_parkings_empty));
 		FeedbackFragmentInflater.inflateHandleButton(getSherlockActivity(), getView());
 	}
 
@@ -115,8 +109,15 @@ public class SmartCheckParkingsFragment extends SherlockListFragment {
 			loader.cancel(true);
 		}
 		SherlockFragmentActivity sfa = getSherlockActivity();
-		if (sfa != null)
+		if (sfa != null) {
 			sfa.setSupportProgressBarIndeterminateVisibility(false);
+		}
+	}
+
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		ParkingSerial parking = adapter.getItem(position);
+		goToMap(parking);
 	}
 
 	// @Override

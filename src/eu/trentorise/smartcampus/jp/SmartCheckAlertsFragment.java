@@ -2,7 +2,6 @@ package eu.trentorise.smartcampus.jp;
 
 import java.util.List;
 
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -18,7 +17,6 @@ import com.actionbarsherlock.app.SherlockListFragment;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.custom.SmartCheckAlertsAdapter;
-import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.SmartCheckAlertRoadsProcessor;
 import eu.trentorise.smartcampus.jp.model.AlertRoadLoc;
 
@@ -44,26 +42,25 @@ public class SmartCheckAlertsFragment extends SherlockListFragment {
 
 		setHasOptionsMenu(true);
 
-		setEmptyText(getString(R.string.smart_check_alerts_empty));
-		
 		adapter = new SmartCheckAlertsAdapter(getSherlockActivity(), R.layout.smartcheck_alert_row);
 		// adapter.setMyLocation(JPHelper.getLocationHelper().getLocation());
-//		adapter.registerDataSetObserver(new DataSetObserver() {
-//			@Override
-//			public void onChanged() {
-//				if (getView() != null) {
-//					TextView smartcheckRoutesMsg = (TextView) getView().findViewById(R.id.smartcheck_none);
-//					smartcheckRoutesMsg.setText(getString(R.string.smart_check_alerts_empty));
-//
-//					if (adapter.getCount() == 0) {
-//						smartcheckRoutesMsg.setVisibility(View.VISIBLE);
-//					} else {
-//						smartcheckRoutesMsg.setVisibility(View.GONE);
-//					}
-//					super.onChanged();
-//				}
-//			}
-//		});
+		// adapter.registerDataSetObserver(new DataSetObserver() {
+		// @Override
+		// public void onChanged() {
+		// if (getView() != null) {
+		// TextView smartcheckRoutesMsg = (TextView)
+		// getView().findViewById(R.id.smartcheck_none);
+		// smartcheckRoutesMsg.setText(getString(R.string.smart_check_alerts_empty));
+		//
+		// if (adapter.getCount() == 0) {
+		// smartcheckRoutesMsg.setVisibility(View.VISIBLE);
+		// } else {
+		// smartcheckRoutesMsg.setVisibility(View.GONE);
+		// }
+		// super.onChanged();
+		// }
+		// }
+		// });
 
 		setListAdapter(adapter);
 
@@ -72,6 +69,31 @@ public class SmartCheckAlertsFragment extends SherlockListFragment {
 		loader = new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(getSherlockActivity(), new SmartCheckAlertRoadsProcessor(
 				getSherlockActivity(), adapter, agencyId));
 		loader.execute();
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.smartcheck_list, container, false);
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		((TextView) getActivity().findViewById(android.R.id.empty)).setText(getString(R.string.smart_check_alerts_empty));
+		FeedbackFragmentInflater.inflateHandleButton(getSherlockActivity(), getView());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+
+		if (loader != null) {
+			loader.cancel(true);
+		}
+		SherlockFragmentActivity sfa = getSherlockActivity();
+		if (sfa != null) {
+			sfa.setSupportProgressBarIndeterminateVisibility(false);
+		}
 	}
 
 	@Override
@@ -88,29 +110,6 @@ public class SmartCheckAlertsFragment extends SherlockListFragment {
 		fragmentTransaction.addToBackStack(fragment.getTag());
 		// fragmentTransaction.commitAllowingStateLoss();
 		fragmentTransaction.commit();
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.smartcheck_list, container, false);
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		FeedbackFragmentInflater.inflateHandleButton(getSherlockActivity(), getView());
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-
-		if (loader != null) {
-			loader.cancel(true);
-		}
-		SherlockFragmentActivity sfa = getSherlockActivity();
-		if (sfa != null)
-			sfa.setSupportProgressBarIndeterminateVisibility(false);
 	}
 
 	// @Override
