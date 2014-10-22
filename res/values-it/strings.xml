@@ -50,7 +50,7 @@
     <string name="plan_address">Indirizzo&#8230;</string>
     <string name="plan_date">Data</string>
     <string name="plan_time">Ora</string>
-    <string name="plan_search">Vai</string>
+    <string name="plan_search">Trova soluzioni</string>
     <string name="no_items">Nessun risultato trovato</string>
     <string name="plan_custom_prefs">Preferenze</string>
     <string name="plan_custom_prefs_off">Nascondi</string>
