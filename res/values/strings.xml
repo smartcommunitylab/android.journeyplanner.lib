@@ -52,7 +52,7 @@
     <string name="plan_address">Address&#8230;</string>
     <string name="plan_date">Date</string>
     <string name="plan_time">Time</string>
-    <string name="plan_search">Go</string>
+    <string name="plan_search">Find solutions</string>
     <string name="no_items">No items found</string>
     <string name="plan_custom_prefs">Preferences</string>
     <string name="plan_custom_prefs_off">Hide</string>
