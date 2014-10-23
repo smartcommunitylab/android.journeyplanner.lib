@@ -31,7 +31,12 @@ public class ParkingsHelper {
 	private static final String CAR_PARKING_TRENTO = "COMUNE_DI_TRENTO";
 	private static final String CAR_PARKING_ROVERETO = "COMUNE_DI_ROVERETO";
 	private static final String CAR_SHARING_TRENTO = "CAR_SHARING_SERVICE";
-
+	
+	public static final String PARKING_EXTRA_SEARCHTIME = "searchTime";
+	public static final String PARKING_EXTRA_SEARCHTIME_MIN = "min";
+	public static final String PARKING_EXTRA_SEARCHTIME_MAX = "max";
+	public static final String PARKING_EXTRA_COST = "cost";
+	
 	private static Location myLocation;
 
 	private static ParkingSerial focusedParking = null;

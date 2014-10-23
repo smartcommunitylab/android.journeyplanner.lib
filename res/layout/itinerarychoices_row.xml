@@ -26,67 +26,89 @@
         android:textColor="@android:color/black"
         android:textStyle="bold"
         android:visibility="gone" />
-    <!-- android:visibility="gone" -->
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="6dp"
-    	android:background="@drawable/list_selector_card" >
+        android:orientation="horizontal"
+        android:padding="@dimen/dimen_xs" >
 
+        <LinearLayout
+            android:id="@+id/it_timing"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/dimen_xs"
+            android:orientation="vertical" >
 
-            <LinearLayout
-                android:id="@+id/it_timing"
+            <TextView
+                android:id="@+id/it_time_from"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:layout_weight="1"
+                android:gravity="top"
+                android:textColor="@android:color/black" />
 
-                <TextView
-                    android:id="@+id/it_time_from"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:id="@+id/it_time"
-                    android:layout_marginLeft="3dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/sc_gray" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/it_transporttypes"
+            <TextView
+                android:id="@+id/it_time_to"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:textColor="@android:color/black" />
+
+            <!-- <TextView -->
+            <!-- android:id="@+id/it_time" -->
+            <!-- android:layout_width="wrap_content" -->
+            <!-- android:layout_height="wrap_content" -->
+            <!-- android:layout_marginLeft="@dimen/dimen_xs" -->
+            <!-- android:gravity="bottom" -->
+            <!-- android:textColor="@color/sc_gray" /> -->
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/it_transporttypes"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/it_parkingdata"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/it_parkingdata_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_look_for_parking"
+                android:drawableStart="@drawable/ic_look_for_parking"
                 android:gravity="center_vertical"
-                android:layout_below="@+id/it_timing"
-                android:orientation="horizontal" >
-            </LinearLayout>
-
-            <!--
-                 <ImageView
-                android:id="@+id/it_alert"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/empty"
-                android:src="@drawable/ic_alert"
                 android:visibility="gone" />
-            -->
+            <!-- android:text="5&apos;-10&apos; per parcheggiare" -->
 
-            <FrameLayout
+            <TextView
+                android:id="@+id/it_parkingdata_cost"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" >
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_parking_thin"
+                android:drawableStart="@drawable/ic_parking_thin"
+                android:gravity="center_vertical"
+                android:visibility="gone" />
+            <!-- android:text="0,80 €/h" -->
+        </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/it_alert"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/empty"
-                    android:src="@drawable/ic_alert"
-                    android:visibility="gone" />
-            </FrameLayout>
-    </RelativeLayout>
+        <ImageView
+            android:id="@+id/it_alert"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_alert"
+            android:visibility="gone" />
+    </LinearLayout>
 
 </LinearLayout>

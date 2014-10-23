@@ -29,7 +29,7 @@
     <string name="btn_save">Salva</string>
     <string name="btn_delete">Cancella</string>
     <string name="backstring">Indietro</string>
-    <string name="btn_startmonitoring">Salva</string>
+    <string name="btn_startmonitoring">Salva per ricevere le notifiche</string>
     <string name="tab_plannew">Nuovo viaggio</string>
     <string name="tab_myjourneys">I miei viaggi</string>
     <string name="tab_profile">Preferenze viaggio</string>
@@ -147,6 +147,9 @@
     <string name="title_monitor_journey">Monitoraggio</string>
     <string name="tab_myoneoffjourneys">VIAGGI</string>
     <string name="tab_myrecjourneys">MONITORAGGI</string>
+    <string name="promoted_itineraries">ITINERARI SOSTENIBILI</string>
+    <string name="promoted_itinerary">Itinerario sostenibile</string>
+    
     <!-- days of the week -->
     <string name="monday">Lun</string>
     <string name="tuesday">Mar</string>

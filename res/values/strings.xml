@@ -31,7 +31,7 @@
     <string name="btn_save">Save</string>
     <string name="btn_delete">Delete</string>
     <string name="backstring">Back</string>
-    <string name="btn_startmonitoring">Save</string>
+    <string name="btn_startmonitoring">Save to receive notifications</string>
     <string name="tab_plannew">New journey</string>
     <string name="tab_myjourneys">My journeys</string>
     <string name="tab_profile">Preferences</string>
@@ -149,6 +149,9 @@
     <string name="title_monitor_journey">Monitor journey</string>
     <string name="tab_myoneoffjourneys">JOURNEYS</string>
     <string name="tab_myrecjourneys">MONITORING</string>
+    <string name="promoted_itineraries">SUSTAINABLE ITINERARIES</string>
+    <string name="promoted_itinerary">Sustainable itinerary</string>
+    
     <!-- days of the week -->
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>

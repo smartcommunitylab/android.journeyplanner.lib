@@ -21,14 +21,9 @@ import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,21 +31,24 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.actionbarsherlock.app.SherlockFragment;
+
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
-import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.ItinerariesListAdapter;
 import eu.trentorise.smartcampus.jp.helper.Utils;
 import eu.trentorise.smartcampus.jp.helper.processor.PlanNewJourneyProcessor;
 
-public class ItineraryChoicesFragment extends FeedbackFragment {
+public class ItineraryChoicesFragment extends SherlockFragment {
 
 	private static final String ITINERARIES = "itineraries";
 	private static final String JOURNEY = "journey";
 	private static final String LOADED = "loaded";
 	private SingleJourney singleJourney;
 	private List<Itinerary> itineraries = new ArrayList<Itinerary>();
-	private ItinerariesListAdapter adapter;
-	private LinearLayout mNoItems;
+	private ItinerariesListAdapter itinerariesAdapter;
+	private ItinerariesListAdapter itinerariesPromotedAdapter;
+	private LinearLayout noItemsView;
 	private boolean mLoaded = false;
 
 	public static ItineraryChoicesFragment newInstance(SingleJourney singleJourney) {
@@ -58,27 +56,29 @@ public class ItineraryChoicesFragment extends FeedbackFragment {
 		f.singleJourney = singleJourney;
 		return f;
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
-		if (singleJourney != null) arg0.putSerializable(JOURNEY, singleJourney);
+		if (singleJourney != null)
+			arg0.putSerializable(JOURNEY, singleJourney);
 		if (itineraries != null) {
 			arg0.putSerializable(ITINERARIES, new ArrayList<Itinerary>(itineraries));
 		}
 		arg0.putBoolean(LOADED, mLoaded);
 	}
 
-
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(JOURNEY)) singleJourney = (SingleJourney) savedInstanceState.get(JOURNEY);
-			if (savedInstanceState.containsKey(ITINERARIES)) itineraries = (List<Itinerary>) savedInstanceState.get(ITINERARIES);
-			if (savedInstanceState.containsKey(LOADED)) mLoaded = savedInstanceState.getBoolean(LOADED);
+			if (savedInstanceState.containsKey(JOURNEY))
+				singleJourney = (SingleJourney) savedInstanceState.get(JOURNEY);
+			if (savedInstanceState.containsKey(ITINERARIES))
+				itineraries = (List<Itinerary>) savedInstanceState.get(ITINERARIES);
+			if (savedInstanceState.containsKey(LOADED))
+				mLoaded = savedInstanceState.getBoolean(LOADED);
 		}
 	}
 
@@ -92,13 +92,16 @@ public class ItineraryChoicesFragment extends FeedbackFragment {
 		super.onStart();
 
 		TextView dateTextView = (TextView) getView().findViewById(R.id.choices_date);
-//		Date dateDate = Utils.sjDateString2date(singleJourney.getDate());
-//		dateTextView.setText(new SimpleDateFormat(Config.FORMAT_DATE_UI, Locale.US).format(dateDate));
+		// Date dateDate = Utils.sjDateString2date(singleJourney.getDate());
+		// dateTextView.setText(new SimpleDateFormat(Config.FORMAT_DATE_UI,
+		// Locale.US).format(dateDate));
 		dateTextView.setText(Utils.serverDate2UIDate(singleJourney.getDate()));
 
 		TextView timeTextView = (TextView) getView().findViewById(R.id.choices_time);
-//		Date timeDate = Utils.sjTimeString2date(singleJourney.getDepartureTime());
-//		timeTextView.setText(new SimpleDateFormat(Config.FORMAT_TIME_UI, Locale.ITALY).format(timeDate));
+		// Date timeDate =
+		// Utils.sjTimeString2date(singleJourney.getDepartureTime());
+		// timeTextView.setText(new SimpleDateFormat(Config.FORMAT_TIME_UI,
+		// Locale.ITALY).format(timeDate));
 		timeTextView.setText(Utils.serverTime2UITime(singleJourney.getDepartureTime()));
 
 		TextView fromTextView = (TextView) getView().findViewById(R.id.choices_from);
@@ -107,27 +110,30 @@ public class ItineraryChoicesFragment extends FeedbackFragment {
 		TextView toTextView = (TextView) getView().findViewById(R.id.choices_to);
 		toTextView.setText(singleJourney.getTo().getName());
 
-		ListView choicesList = (ListView) getView().findViewById(R.id.choices_listView);
-		mNoItems = (LinearLayout) getView().findViewById(R.id.no_items_label);
-		mNoItems.setVisibility(View.GONE);
-		adapter = new ItinerariesListAdapter(getSherlockActivity(), R.layout.itinerarychoices_row, itineraries);
-		choicesList.setAdapter(adapter);
-		choicesList.setDivider(null);
-		choicesList.setDividerHeight(Utils.convertDpToPixel(6, getActivity()));
-		
+		View itinerariesPromotedView = getView().findViewById(R.id.choices_promoted_layout);
+		ListView itinerariesPromotedList = (ListView) getView().findViewById(R.id.choices_promoted_listView);
+		ListView itinerariesList = (ListView) getView().findViewById(R.id.choices_listView);
+		noItemsView = (LinearLayout) getView().findViewById(R.id.no_items_label);
+		noItemsView.setVisibility(View.GONE);
+
+		itinerariesPromotedAdapter = new ItinerariesListAdapter(getSherlockActivity(), R.layout.itinerarychoices_row);
+		itinerariesPromotedList.setAdapter(itinerariesPromotedAdapter);
+		itinerariesAdapter = new ItinerariesListAdapter(getSherlockActivity(), R.layout.itinerarychoices_row);
+		itinerariesList.setAdapter(itinerariesAdapter);
 
 		if (!mLoaded) {
 			SCAsyncTask<SingleJourney, Void, List<Itinerary>> task = new SCAsyncTask<SingleJourney, Void, List<Itinerary>>(
-					getSherlockActivity(), new PlanNewJourneyProcessor(getSherlockActivity(), adapter, mNoItems));
+					getSherlockActivity(), new PlanNewJourneyProcessor(getSherlockActivity(), itinerariesList,
+							itinerariesAdapter, itinerariesPromotedView, itinerariesPromotedAdapter, noItemsView));
 			task.execute(singleJourney);
 			mLoaded = true;
 		}
-		choicesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+		itinerariesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
-						.beginTransaction();
-				Fragment fragment = ItineraryFragment.newInstance(singleJourney, adapter.getItem(position));
+				FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
+				Fragment fragment = ItineraryFragment.newInstance(singleJourney, itinerariesAdapter.getItem(position));
 				// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 				fragmentTransaction.replace(Config.mainlayout, fragment, ItineraryChoicesFragment.this.getTag());
 				fragmentTransaction.addToBackStack(fragment.getTag());
