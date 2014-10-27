@@ -18,7 +18,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:padding="6dp" >
+    android:orientation="horizontal"
+    android:padding="@dimen/dimen_xs" >
 
     <TextView
         android:id="@+id/leg_time"
@@ -27,22 +28,28 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
-    <TextView
-        android:id="@+id/leg_description"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dimen_m"
         android:layout_weight="1"
-        android:textColor="@android:color/black" />
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/leg_alerts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_alert"
-        android:gravity="center_vertical"
-        android:textColor="@color/red"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/leg_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_m"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/leg_alerts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_alert"
+            android:gravity="center_vertical"
+            android:textColor="@color/red"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <!-- <FrameLayout -->
     <!-- android:id="@+id/leg_transporttype" -->

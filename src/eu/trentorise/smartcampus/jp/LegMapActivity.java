@@ -160,7 +160,7 @@ public class LegMapActivity extends BaseActivity implements OnCameraChangeListen
 			// alerts
 			if (AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN) == null
 					|| AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN).isEmpty()) {
-				Log.e("DATE IN MILLIS!", Long.toString(date));
+				// Log.e("DATE IN MILLIS!", Long.toString(date));
 				// new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(this, new
 				// SmartCheckAlertRoadsMapProcessor(this,
 				// getSupportMap(), JPParamsHelper.getAlertroadsAgencyId(),
