@@ -16,11 +16,23 @@
 -->
 <resources>
 
-    <string name="leg_from">from: </string>
-    <string name="leg_to">to: </string>
-    <string name="leg_walk">Walk for %s meters</string>
-    <string name="leg_bus">Take the bus, %s line</string>
-    <string name="leg_bike">Ride for %s meters</string>
-    <string name="leg_car">Drive</string>
+    <!-- descriptive strings -->
+    <string name="leg_from">From</string>
+    <string name="leg_to">To</string>
+    <string name="leg_bike_pick_up">pick up a bike at</string>
+    <string name="leg_bike_leave">leave the bike at</string>
+    <string name="leg_car_pick_up">pick up a car at</string>
+    <string name="leg_car_leave">leave the car at</string>
+    <string name="leg_bus_line">line</string>
+    <string name="leg_train">train</string>
+    <string name="leg_move">Move</string>
+    <string name="leg_delay">There is a delay:</string>
+
+    <!-- new strings -->
+    <string name="leg_walk">Walk</string>
+    <string name="leg_bus_take">Take the bus, line %s</string>
+    <string name="leg_train_take">Take the train, line %s</string>
+    <string name="leg_bike_ride">Ride</string>
+    <string name="leg_car_drive">Drive</string>
 
 </resources>

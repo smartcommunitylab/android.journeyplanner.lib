@@ -36,19 +36,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="left"
-            android:text="22/10/2014" />
+            android:gravity="left" />
 
         <TextView
             android:id="@+id/itinerary_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="right"
-            android:text="15:15" />
+            android:gravity="right" />
     </LinearLayout>
 
     <TextView
+        android:id="@+id/promoted_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/promoted"
@@ -58,7 +57,8 @@
         android:paddingLeft="@dimen/dimen_xs"
         android:paddingRight="@dimen/dimen_xs"
         android:text="@string/promoted_itinerary"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
 
     <ListView
         android:id="@+id/itinerary_legs"

@@ -172,16 +172,6 @@
     <string name="delaysLabel">Delays</string>
     <string name="dayLabel">Day</string>
     <string name="loading_dialog_label">Creating timetable &#8230;</string>
-    <string name="leg_from">from</string>
-    <string name="leg_to">to</string>
-    <string name="leg_bike_pick_up">pick up a bike at</string>
-    <string name="leg_bike_leave">leave the bike at</string>
-    <string name="leg_car_pick_up">pick up a car at</string>
-    <string name="leg_car_leave">leave the car at</string>
-    <string name="leg_bus_line">line</string>
-    <string name="leg_train">train</string>
-    <string name="leg_move">Move</string>
-    <string name="leg_delay">There is a delay:</string>
     <string name="broadcast_notifications_accident">Accidents</string>
     <string name="broadcast_notifications_bus_trento_delay">Trento bus delays</string>
     <string name="broadcast_notifications_bus_rovereto_delay">Rovereto bus delays</string>

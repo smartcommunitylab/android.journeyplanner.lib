@@ -170,16 +170,6 @@
     <string name="delaysLabel">Ritardi</string>
     <string name="dayLabel">Giorni</string>
     <string name="loading_dialog_label">Creazione tabella &#8230;</string>
-    <string name="leg_from">da</string>
-    <string name="leg_to">a</string>
-    <string name="leg_bike_pick_up">prendi una bicicletta a</string>
-    <string name="leg_bike_leave">lascia la bicicletta a</string>
-    <string name="leg_car_pick_up">prendi un\'auto a</string>
-    <string name="leg_car_leave">lascia l\'auto a</string>
-    <string name="leg_bus_line">linea</string>
-    <string name="leg_train">treno</string>
-    <string name="leg_move">Prosegui</string>
-    <string name="leg_delay">Ritardo:</string>
     <string name="broadcast_notifications_accident">Incidente</string>
     <string name="broadcast_notifications_bus_trento_delay">Ritardo autobus di Trento</string>
     <string name="broadcast_notifications_bus_rovereto_delay">Ritardo autobus di Rovereto</string>

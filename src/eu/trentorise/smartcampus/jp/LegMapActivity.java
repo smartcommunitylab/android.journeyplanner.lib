@@ -161,11 +161,13 @@ public class LegMapActivity extends BaseActivity implements OnCameraChangeListen
 			if (AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN) == null
 					|| AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN).isEmpty()) {
 				Log.e("DATE IN MILLIS!", Long.toString(date));
-//				new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(this, new SmartCheckAlertRoadsMapProcessor(this,
-//						getSupportMap(), JPParamsHelper.getAlertroadsAgencyId(), (date > 0 ? date : null), null,
-//						JPParamsHelper.getAlertroadsAgencyId(), true)).execute();
-				new SmartCheckAlertRoadsMapProcessor(this,getSupportMap(), JPParamsHelper.getAlertroadsAgencyId(), (date > 0 ? date : null), null,
-						JPParamsHelper.getAlertroadsAgencyId(), true).execute();
+				// new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(this, new
+				// SmartCheckAlertRoadsMapProcessor(this,
+				// getSupportMap(), JPParamsHelper.getAlertroadsAgencyId(),
+				// (date > 0 ? date : null), null,
+				// JPParamsHelper.getAlertroadsAgencyId(), true)).execute();
+				new SmartCheckAlertRoadsMapProcessor(this, getSupportMap(), JPParamsHelper.getAlertroadsAgencyId(),
+						(date > 0 ? date : null), null, JPParamsHelper.getAlertroadsAgencyId(), true).execute();
 			} else {
 				List<AlertRoadLoc> newFilteredList = filterByProjection(getSupportMap(),
 						AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN));
@@ -384,13 +386,14 @@ public class LegMapActivity extends BaseActivity implements OnCameraChangeListen
 						BitmapDescriptorFactory.fromResource(R.drawable.ic_stop)));
 			}
 		}
-		if (index == -1)// show start leg
+		if (index == -1) {// show start leg
 			drawPath(map, legsPoints.get(index + 1), getApplicationContext().getResources().getColor(R.color.path_actual));
-		else if (index == legsPoints.size())// show end leg
+		} else if (index >= legsPoints.size()) {// show end leg
 			drawPath(map, legsPoints.get(legsPoints.size() - 1),
 					getApplicationContext().getResources().getColor(R.color.path_actual));
-		else
+		} else {
 			drawPath(map, legsPoints.get(index), getApplicationContext().getResources().getColor(R.color.path_actual));
+		}
 
 		return true;
 	}

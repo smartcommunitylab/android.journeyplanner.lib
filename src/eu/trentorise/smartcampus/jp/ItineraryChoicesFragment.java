@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -60,11 +61,14 @@ public class ItineraryChoicesFragment extends SherlockFragment {
 	@Override
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
-		if (singleJourney != null)
+		if (singleJourney != null) {
 			arg0.putSerializable(JOURNEY, singleJourney);
+		}
+
 		if (itineraries != null) {
 			arg0.putSerializable(ITINERARIES, new ArrayList<Itinerary>(itineraries));
 		}
+
 		arg0.putBoolean(LOADED, mLoaded);
 	}
 
@@ -73,12 +77,15 @@ public class ItineraryChoicesFragment extends SherlockFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(JOURNEY))
+			if (savedInstanceState.containsKey(JOURNEY)) {
 				singleJourney = (SingleJourney) savedInstanceState.get(JOURNEY);
-			if (savedInstanceState.containsKey(ITINERARIES))
+			}
+			if (savedInstanceState.containsKey(ITINERARIES)) {
 				itineraries = (List<Itinerary>) savedInstanceState.get(ITINERARIES);
-			if (savedInstanceState.containsKey(LOADED))
+			}
+			if (savedInstanceState.containsKey(LOADED)) {
 				mLoaded = savedInstanceState.getBoolean(LOADED);
+			}
 		}
 	}
 
@@ -116,9 +123,14 @@ public class ItineraryChoicesFragment extends SherlockFragment {
 		noItemsView = (LinearLayout) getView().findViewById(R.id.no_items_label);
 		noItemsView.setVisibility(View.GONE);
 
-		itinerariesPromotedAdapter = new ItinerariesListAdapter(getSherlockActivity(), R.layout.itinerarychoices_row);
+		if (itinerariesPromotedAdapter == null) {
+			itinerariesPromotedAdapter = new ItinerariesListAdapter(getSherlockActivity(), R.layout.itinerarychoices_row);
+		}
 		itinerariesPromotedList.setAdapter(itinerariesPromotedAdapter);
-		itinerariesAdapter = new ItinerariesListAdapter(getSherlockActivity(), R.layout.itinerarychoices_row);
+
+		if (itinerariesAdapter == null) {
+			itinerariesAdapter = new ItinerariesListAdapter(getSherlockActivity(), R.layout.itinerarychoices_row);
+		}
 		itinerariesList.setAdapter(itinerariesAdapter);
 
 		if (!mLoaded) {
@@ -129,17 +141,45 @@ public class ItineraryChoicesFragment extends SherlockFragment {
 			mLoaded = true;
 		}
 
-		itinerariesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
-				Fragment fragment = ItineraryFragment.newInstance(singleJourney, itinerariesAdapter.getItem(position));
-				// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-				fragmentTransaction.replace(Config.mainlayout, fragment, ItineraryChoicesFragment.this.getTag());
-				fragmentTransaction.addToBackStack(fragment.getTag());
-				fragmentTransaction.commit();
+				ArrayAdapter<Itinerary> adapter = null;
+				if (parent.getId() == R.id.choices_promoted_listView) {
+					adapter = itinerariesPromotedAdapter;
+				} else if ((parent.getId() == R.id.choices_listView)) {
+					adapter = itinerariesAdapter;
+				}
+
+				if (adapter != null) {
+					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
+							.beginTransaction();
+					Fragment fragment = ItineraryFragment.newInstance(singleJourney, adapter.getItem(position));
+					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+					fragmentTransaction.replace(Config.mainlayout, fragment, ItineraryChoicesFragment.this.getTag());
+					fragmentTransaction.addToBackStack(fragment.getTag());
+					fragmentTransaction.commit();
+				}
 			}
-		});
+		};
+
+		itinerariesPromotedList.setOnItemClickListener(onClickListener);
+		itinerariesList.setOnItemClickListener(onClickListener);
+
+		itinerariesPromotedAdapter.notifyDataSetChanged();
+		itinerariesAdapter.notifyDataSetChanged();
+
+		if (itinerariesPromotedAdapter.isEmpty()) {
+			itinerariesPromotedView.setVisibility(View.GONE);
+		} else {
+			itinerariesPromotedView.setVisibility(View.VISIBLE);
+		}
+
+		if (itinerariesAdapter.isEmpty()) {
+			itinerariesList.setVisibility(View.GONE);
+		} else {
+			itinerariesList.setVisibility(View.VISIBLE);
+		}
 	}
 
 	public SingleJourney getSingleJourney() {

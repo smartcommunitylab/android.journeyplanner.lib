@@ -54,6 +54,7 @@ public class ItineraryFragment extends SherlockFragment {
 	private SingleJourney singleJourney;
 	private Itinerary itinerary;
 	private List<Leg> legs;
+	private LegsListAdapter legsListAdapter;
 
 	public static ItineraryFragment newInstance(SingleJourney singleJourney, Itinerary itinerary) {
 		ItineraryFragment f = new ItineraryFragment();
@@ -104,7 +105,7 @@ public class ItineraryFragment extends SherlockFragment {
 
 		legs = itinerary.getLeg();
 
-		ListView legsListView = (ListView) getView().findViewById(R.id.itinerary_legs);
+		final ListView legsListView = (ListView) getView().findViewById(R.id.itinerary_legs);
 
 		// date & time
 		TextView dateTextView = (TextView) getView().findViewById(R.id.itinerary_date);
@@ -112,25 +113,38 @@ public class ItineraryFragment extends SherlockFragment {
 		TextView timeTextView = (TextView) getView().findViewById(R.id.itinerary_time);
 		timeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getStartime())));
 
-		// add header (before setAdapter or it won't work!)
-		View headerView = getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, legsListView, false);
-		TextView headerTimeTextView = (TextView) headerView.findViewById(R.id.leg_time);
-		TextView headerDescTextView = (TextView) headerView.findViewById(R.id.leg_description);
-		headerTimeTextView.setText(Config.FORMAT_TIME_UI.format(itinerary.getStartime()));
-		headerDescTextView.setText(singleJourney.getFrom().getName());
-		headerDescTextView.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Medium);
-		legsListView.addHeaderView(headerView);
-		// add footer (before setAdapter or it won't work!)
-		View footerView = getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, legsListView, false);
-		TextView footerTimeTextView = (TextView) footerView.findViewById(R.id.leg_time);
-		TextView footerDescTextView = (TextView) footerView.findViewById(R.id.leg_description);
-		footerTimeTextView.setText(Config.FORMAT_TIME_UI.format(itinerary.getEndtime()));
-		footerDescTextView.setText(singleJourney.getTo().getName());
-		footerDescTextView.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Medium);
-		legsListView.addFooterView(footerView);
+		// promoted
+		if (itinerary.isPromoted()) {
+			TextView promotedTextView = (TextView) getView().findViewById(R.id.promoted_textview);
+			promotedTextView.setVisibility(View.VISIBLE);
+		}
 
-		legsListView.setAdapter(new LegsListAdapter(getSherlockActivity(), R.layout.itinerary_leg, singleJourney.getFrom(),
-				singleJourney.getTo(), legs));
+		// add header (before setAdapter or it won't work!)
+		if (legsListView.getHeaderViewsCount() == 0) {
+			View headerView = getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, legsListView, false);
+			TextView headerTimeTextView = (TextView) headerView.findViewById(R.id.leg_time);
+			TextView headerDescTextView = (TextView) headerView.findViewById(R.id.leg_description);
+			headerTimeTextView.setText(Config.FORMAT_TIME_UI.format(itinerary.getStartime()));
+			headerDescTextView.setText(singleJourney.getFrom().getName());
+			headerDescTextView.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Medium);
+			legsListView.addHeaderView(headerView);
+		}
+		// add footer (before setAdapter or it won't work!)
+		if (legsListView.getFooterViewsCount() == 0) {
+			View footerView = getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, legsListView, false);
+			TextView footerTimeTextView = (TextView) footerView.findViewById(R.id.leg_time);
+			TextView footerDescTextView = (TextView) footerView.findViewById(R.id.leg_description);
+			footerTimeTextView.setText(Config.FORMAT_TIME_UI.format(itinerary.getEndtime()));
+			footerDescTextView.setText(singleJourney.getTo().getName());
+			footerDescTextView.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Medium);
+			legsListView.addFooterView(footerView);
+		}
+
+		if (legsListAdapter == null) {
+			legsListAdapter = new LegsListAdapter(getSherlockActivity(), R.layout.itinerary_leg, singleJourney.getFrom(),
+					singleJourney.getTo(), legs);
+		}
+		legsListView.setAdapter(legsListAdapter);
 
 		legsListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -145,6 +159,12 @@ public class ItineraryFragment extends SherlockFragment {
 						Log.e(ItineraryFragment.class.getSimpleName(), e.getMessage());
 					}
 				}
+				
+				// header increases list size!!!
+				if (legsListView.getHeaderViewsCount() > 0) {
+					position--;
+				}
+				
 				i.putExtra(LegMapActivity.ACTIVE_POS, position);
 				getActivity().startActivity(i);
 			}

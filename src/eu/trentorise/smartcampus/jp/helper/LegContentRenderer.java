@@ -49,13 +49,13 @@ public class LegContentRenderer {
 	public Spanned buildDescription(Leg leg, int index) {
 		String desc = "";
 		String from = this.mCtx.getString(R.string.leg_from) + " " + bold(leg.getFrom().getName());
-		String to = " " + this.mCtx.getString(R.string.leg_to) + " " + bold(leg.getTo().getName());
+		String to = this.mCtx.getString(R.string.leg_to) + " " + bold(leg.getTo().getName());
 
 		TType tType = leg.getTransport().getType();
 
 		if (tType.equals(TType.WALK)) {
 			desc += mCtx.getString(R.string.leg_walk);
-			
+
 			if (isBadString(leg.getFrom().getName())) {
 				from = buildDescriptionFrom(index);
 			}
@@ -63,6 +63,8 @@ public class LegContentRenderer {
 				to = buildDescriptionTo(index);
 			}
 		} else if (tType.equals(TType.BICYCLE)) {
+			desc += mCtx.getString(R.string.leg_bike_ride);
+
 			if (isBadString(leg.getFrom().getName())) {
 				from = buildDescriptionFrom(index);
 			}
@@ -91,6 +93,8 @@ public class LegContentRenderer {
 								+ leg.getTo().getStopId().getId());
 			}
 		} else if (tType.equals(TType.CAR)) {
+			desc += mCtx.getString(R.string.leg_car_drive);
+
 			if (isBadString(leg.getFrom().getName())) {
 				from = buildDescriptionFrom(index);
 			}
@@ -115,16 +119,14 @@ public class LegContentRenderer {
 						+ bold(ParkingsHelper.getName(leg.getTo().getStopId().getId()));
 			}
 		} else if (tType.equals(TType.BUS)) {
-			to += " ("
-					+ this.mCtx.getString(R.string.leg_bus_line)
-					+ " "
-					+ bold(RoutesHelper.getShortNameByRouteIdAndAgencyID(leg.getTransport().getRouteId(), leg.getTransport()
-							.getAgencyId())) + ")";
+			desc += mCtx.getString(R.string.leg_bus_take, RoutesHelper.getShortNameByRouteIdAndAgencyID(leg.getTransport()
+					.getRouteId(), leg.getTransport().getAgencyId()));
 		} else if (tType.equals(TType.TRAIN)) {
-			to += " (" + this.mCtx.getString(R.string.leg_bus_line) + " " + bold(leg.getTransport().getTripId()) + ")";
+			desc += mCtx.getString(R.string.leg_train_take, leg.getTransport().getTripId());
 		}
 
-		desc += from + to;
+		desc += (desc.length() > 0) ? ("<br/>" + from) : from;
+		desc += (desc.length() > 0) ? ("<br/>" + to) : to;
 		desc = desc.subSequence(0, 1).toString().toUpperCase(Locale.getDefault()) + desc.substring(1);
 		return Html.fromHtml(desc);
 	}
