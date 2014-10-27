@@ -36,14 +36,16 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.actionbarsherlock.app.SherlockFragment;
+
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
-import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.DialogHandler;
 import eu.trentorise.smartcampus.jp.custom.LegsListAdapter;
 import eu.trentorise.smartcampus.jp.helper.processor.SaveItineraryProcessor;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 
-public class ItineraryFragment extends FeedbackFragment {
+public class ItineraryFragment extends SherlockFragment {
 
 	private static final String ITINERARY = "itineraries";
 	private static final String JOURNEY = "journey";
@@ -63,8 +65,9 @@ public class ItineraryFragment extends FeedbackFragment {
 	@Override
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
-		if (singleJourney != null)
+		if (singleJourney != null) {
 			arg0.putSerializable(JOURNEY, singleJourney);
+		}
 		if (itinerary != null) {
 			arg0.putSerializable(ITINERARY, itinerary);
 		}
@@ -78,12 +81,15 @@ public class ItineraryFragment extends FeedbackFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(JOURNEY))
+			if (savedInstanceState.containsKey(JOURNEY)) {
 				singleJourney = (SingleJourney) savedInstanceState.get(JOURNEY);
-			if (savedInstanceState.containsKey(ITINERARY))
+			}
+			if (savedInstanceState.containsKey(ITINERARY)) {
 				itinerary = (Itinerary) savedInstanceState.get(ITINERARY);
-			if (savedInstanceState.containsKey(LEGS))
+			}
+			if (savedInstanceState.containsKey(LEGS)) {
 				legs = (List<Leg>) savedInstanceState.get(LEGS);
+			}
 		}
 	}
 
@@ -97,32 +103,31 @@ public class ItineraryFragment extends FeedbackFragment {
 		super.onStart();
 
 		legs = itinerary.getLeg();
-		
-		TextView dateTextView = (TextView) getView().findViewById(R.id.itinerary_date);
-		dateTextView.setText(Config.FORMAT_DATE_UI.format(new Date(itinerary.getStartime())));
-
-		TextView timeTextView = (TextView) getView().findViewById(R.id.itinerary_time);
-		timeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getStartime())));
 
 		ListView legsListView = (ListView) getView().findViewById(R.id.itinerary_legs);
 
-//		if (legsListView.getHeaderViewsCount() == 0) {
-//			// HEADER (before setAdapter or it won't work!)
-//			ViewGroup startLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, null);
-//			TextView startLegTimeTextView = (TextView) startLayout.findViewById(R.id.leg_time);
-//			startLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getStartime())));
-//			TextView startLegDescTextView = (TextView) startLayout.findViewById(R.id.leg_description);
-//			startLegDescTextView.setText(singleJourney.getFrom().getName());
-//			legsListView.addHeaderView(startLayout);
-//
-//			// FOOTER (before setAdapter or it won't work!)
-//			ViewGroup endLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, null);
-//			TextView endLegTimeTextView = (TextView) endLayout.findViewById(R.id.leg_time);
-//			endLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getEndtime())));
-//			TextView endLegDescTextView = (TextView) endLayout.findViewById(R.id.leg_description);
-//			endLegDescTextView.setText(singleJourney.getTo().getName());
-//			legsListView.addFooterView(endLayout);
-//		}
+		// date & time
+		TextView dateTextView = (TextView) getView().findViewById(R.id.itinerary_date);
+		dateTextView.setText(Config.FORMAT_DATE_UI.format(new Date(itinerary.getStartime())));
+		TextView timeTextView = (TextView) getView().findViewById(R.id.itinerary_time);
+		timeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getStartime())));
+
+		// add header (before setAdapter or it won't work!)
+		View headerView = getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, legsListView, false);
+		TextView headerTimeTextView = (TextView) headerView.findViewById(R.id.leg_time);
+		TextView headerDescTextView = (TextView) headerView.findViewById(R.id.leg_description);
+		headerTimeTextView.setText(Config.FORMAT_TIME_UI.format(itinerary.getStartime()));
+		headerDescTextView.setText(singleJourney.getFrom().getName());
+		headerDescTextView.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Medium);
+		legsListView.addHeaderView(headerView);
+		// add footer (before setAdapter or it won't work!)
+		View footerView = getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, legsListView, false);
+		TextView footerTimeTextView = (TextView) footerView.findViewById(R.id.leg_time);
+		TextView footerDescTextView = (TextView) footerView.findViewById(R.id.leg_description);
+		footerTimeTextView.setText(Config.FORMAT_TIME_UI.format(itinerary.getEndtime()));
+		footerDescTextView.setText(singleJourney.getTo().getName());
+		footerDescTextView.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Medium);
+		legsListView.addFooterView(footerView);
 
 		legsListView.setAdapter(new LegsListAdapter(getSherlockActivity(), R.layout.itinerary_leg, singleJourney.getFrom(),
 				singleJourney.getTo(), legs));

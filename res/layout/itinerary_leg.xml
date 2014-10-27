@@ -14,7 +14,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
@@ -24,24 +24,21 @@
         android:id="@+id/leg_time"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/leg_description"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@id/leg_time"
-        android:gravity="top"
+        android:layout_marginLeft="@dimen/dimen_m"
+        android:layout_weight="1"
         android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/leg_alerts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/leg_description"
         android:drawableLeft="@drawable/ic_alert"
         android:gravity="center_vertical"
         android:textColor="@color/red"
@@ -55,4 +52,4 @@
     <!-- android:layout_centerVertical="true" > -->
     <!-- </FrameLayout> -->
 
-</RelativeLayout>
+</LinearLayout>

@@ -23,7 +23,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -45,8 +44,7 @@ public class LegsListAdapter extends ArrayAdapter<Leg> {
 
 	private LegContentRenderer renderer;
 
-	public LegsListAdapter(Context context, int layoutResourceId, Position fromPosition, Position toPosition,
-			List<Leg> legs) {
+	public LegsListAdapter(Context context, int layoutResourceId, Position fromPosition, Position toPosition, List<Leg> legs) {
 		super(context, layoutResourceId, legs);
 		this.context = context;
 		this.layoutResourceId = layoutResourceId;
@@ -62,16 +60,13 @@ public class LegsListAdapter extends ArrayAdapter<Leg> {
 		RowHolder holder = null;
 
 		if (row == null) {
-			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-			row = inflater.inflate(layoutResourceId, parent, false);
-
+			row = ((Activity) context).getLayoutInflater().inflate(layoutResourceId, parent, false);
 			holder = new RowHolder();
 			holder.time = (TextView) row.findViewById(R.id.leg_time);
 			holder.description = (TextView) row.findViewById(R.id.leg_description);
 			holder.alerts = (TextView) row.findViewById(R.id.leg_alerts);
 			// holder.transportType = (FrameLayout)
 			// row.findViewById(R.id.leg_transporttype);
-
 			row.setTag(holder);
 		} else {
 			holder = (RowHolder) row.getTag();
@@ -81,21 +76,18 @@ public class LegsListAdapter extends ArrayAdapter<Leg> {
 
 		// time
 		Date time = new Date(leg.getStartime());
-		String timeFromString = Config.FORMAT_TIME_UI.format(time);
-		holder.time.setText(timeFromString);
-		
-		if(position==0)
-			leg.setFrom(fromPosition);
-		else if(position==getCount()-1)
-			leg.setTo(toPosition);
+		String timeString = Config.FORMAT_TIME_UI.format(time);
+		holder.time.setText(timeString);
 
 		// description
 		holder.description.setText(renderer.buildDescription(leg, position));
 
-		ImageView imgv = Utils.getImageByTType(getContext(), leg.getTransport().getType());
-		if (imgv.getDrawable() != null) {
-			holder.description.setCompoundDrawablesWithIntrinsicBounds(null, null, imgv.getDrawable(), null);
+		// image
+		ImageView imgv = new ImageView(getContext());
+		if (leg.getTransport() != null && leg.getTransport().getType() != null) {
+			imgv = Utils.getImageByTType(getContext(), leg.getTransport().getType());
 		}
+		holder.description.setCompoundDrawablesWithIntrinsicBounds(null, null, imgv.getDrawable(), null);
 
 		// alert
 		if (Utils.containsAlerts(leg)) {
