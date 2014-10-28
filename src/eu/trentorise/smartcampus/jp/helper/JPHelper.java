@@ -103,7 +103,7 @@ public class JPHelper {
 
 	private static String GCM_APP_ID = "core.mobility";
 
-	private static String GCM_SERVER_URL = "https://tn.smartcampuslab.it/core.communicator";
+	private static String GCM_SERVER_URL = "/core.communicator";
 
 	private SyncStorageWithPaging storage = null;
 
@@ -230,7 +230,8 @@ public class JPHelper {
 			try {
 				bps = new BasicProfileService(Constants.getAuthUrl(mContext));
 				String authToken = getAuthToken(mContext);
-				connector.init(mContext, authToken, GCM_APP_ID, GCM_SERVER_URL);
+				connector.init(mContext, authToken, GCM_APP_ID,
+						GlobalConfig.getAppUrl(mContext) + GCM_SERVER_URL);
 				return bps.getAccountProfile(authToken);
 
 			} catch (Exception e) {
@@ -339,10 +340,14 @@ public class JPHelper {
 				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getCacheStatus(agencyIdsVersions, authToken);
 	}
-	public static Map<String, CacheUpdateResponse> getPartialCacheStatus(Map agencyIdsVersions,
-			String authToken) throws ProtocolException, SecurityException, RemoteException {
-		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return dataService.getPartialCacheStatus(((Map<String,Map>)agencyIdsVersions), authToken);
+
+	public static Map<String, CacheUpdateResponse> getPartialCacheStatus(
+			Map agencyIdsVersions, String authToken) throws ProtocolException,
+			SecurityException, RemoteException {
+		MobilityDataService dataService = new MobilityDataService(
+				GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		return dataService.getPartialCacheStatus(
+				((Map<String, Map>) agencyIdsVersions), authToken);
 	}
 
 	public static CompressedTransitTimeTable getCacheUpdate(String agencyId,
