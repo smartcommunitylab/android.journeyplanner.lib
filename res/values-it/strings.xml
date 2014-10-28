@@ -39,6 +39,7 @@
     <string name="tab_zones">Zone</string>
     <string name="tab_parkings">Parcheggi</string>
     <string name="tab_alerts">Ordinanze</string>
+    <string name="tab_itinerary">Itinerario</string>
     <string name="dialog_itineraryname_hint">Nome dell\'itinerario</string>
     <string name="plan_location">Dove</string>
     <string name="plan_datetime">Quando</string>

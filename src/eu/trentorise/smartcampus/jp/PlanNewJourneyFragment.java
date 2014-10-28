@@ -52,6 +52,9 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.ActionBar;
+
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper;
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper.OnAddressSelectedListener;
 import eu.trentorise.smartcampus.android.common.SCGeocoder;
@@ -206,6 +209,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		setUpPreferenceControls();
 		setUpTimingControls();
 		setUpMainOperation();
+
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
 		super.onResume();
 	}

@@ -43,10 +43,10 @@ import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 
 public class ItineraryFragment extends SherlockFragment {
 
-	private static final String ITINERARY = "itineraries";
-	private static final String JOURNEY = "journey";
-	private static final String LEGS = "legs";
-	private static final String STEPS = "steps";
+	public static final String ITINERARY = "itineraries";
+	public static final String JOURNEY = "journey";
+	public static final String LEGS = "legs";
+	public static final String STEPS = "steps";
 
 	private StepUtils stepUtils;
 
@@ -80,15 +80,29 @@ public class ItineraryFragment extends SherlockFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if (getArguments() != null) {
+			Bundle bundle = getArguments();
+			if (bundle.containsKey(JOURNEY)) {
+				singleJourney = (SingleJourney) bundle.getSerializable(JOURNEY);
+			}
+			if (bundle.containsKey(ITINERARY)) {
+				itinerary = (Itinerary) bundle.getSerializable(ITINERARY);
+			}
+			if (bundle.containsKey(STEPS)) {
+				steps = (List<Step>) bundle.getSerializable(STEPS);
+			}
+		}
+
 		if (savedInstanceState != null) {
 			if (savedInstanceState.containsKey(JOURNEY)) {
-				singleJourney = (SingleJourney) savedInstanceState.get(JOURNEY);
+				singleJourney = (SingleJourney) savedInstanceState.getSerializable(JOURNEY);
 			}
 			if (savedInstanceState.containsKey(ITINERARY)) {
-				itinerary = (Itinerary) savedInstanceState.get(ITINERARY);
+				itinerary = (Itinerary) savedInstanceState.getSerializable(ITINERARY);
 			}
 			if (savedInstanceState.containsKey(STEPS)) {
-				steps = (List<Step>) savedInstanceState.get(STEPS);
+				steps = (List<Step>) savedInstanceState.getSerializable(STEPS);
 			}
 		}
 	}

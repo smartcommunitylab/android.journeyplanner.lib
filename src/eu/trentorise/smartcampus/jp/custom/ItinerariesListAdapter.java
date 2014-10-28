@@ -183,7 +183,6 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 			} else {
 				holder.alert.setVisibility(View.GONE);
 			}
-
 		}
 
 		return row;

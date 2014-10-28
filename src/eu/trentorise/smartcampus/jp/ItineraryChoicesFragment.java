@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
@@ -98,6 +99,8 @@ public class ItineraryChoicesFragment extends SherlockFragment {
 	public void onStart() {
 		super.onStart();
 
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+
 		TextView dateTextView = (TextView) getView().findViewById(R.id.choices_date);
 		// Date dateDate = Utils.sjDateString2date(singleJourney.getDate());
 		// dateTextView.setText(new SimpleDateFormat(Config.FORMAT_DATE_UI,
@@ -152,6 +155,49 @@ public class ItineraryChoicesFragment extends SherlockFragment {
 				}
 
 				if (adapter != null) {
+					// ActionBar actionBar =
+					// getSherlockActivity().getSupportActionBar();
+					//
+					// // navigation mode tabs
+					// if (actionBar.getNavigationMode() !=
+					// ActionBar.NAVIGATION_MODE_TABS) {
+					// actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+					// }
+					//
+					// actionBar.removeAllTabs();
+					//
+					// // Itinerary steps
+					// ActionBar.Tab tab = actionBar.newTab();
+					// tab.setText(R.string.tab_itinerary);
+					// tab.setTabListener(new
+					// TabListener<ItineraryFragment>(getSherlockActivity(),
+					// "itinerary",
+					// ItineraryFragment.class, null));
+					// Bundle bundle = new Bundle();
+					// bundle.putSerializable(ItineraryFragment.JOURNEY,
+					// singleJourney);
+					// bundle.putSerializable(ItineraryFragment.ITINERARY,
+					// adapter.getItem(position));
+					// tab.setTag(bundle);
+					// actionBar.addTab(tab);
+					//
+					// // Itinerary map
+					// tab = actionBar.newTab();
+					// tab.setText(R.string.tab_map);
+					// tab.setTabListener(new
+					// TabListener<ItineraryFragment>(getSherlockActivity(),
+					// "map",
+					// ItineraryFragment.class, null));
+					// bundle = new Bundle();
+					// bundle.putSerializable(ItineraryFragment.JOURNEY,
+					// singleJourney);
+					// bundle.putSerializable(ItineraryFragment.ITINERARY,
+					// adapter.getItem(position));
+					// tab.setTag(bundle);
+					// actionBar.addTab(tab);
+					//
+					// actionBar.selectTab(actionBar.getTabAt(0));
+
 					FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager()
 							.beginTransaction();
 					Fragment fragment = ItineraryFragment.newInstance(singleJourney, adapter.getItem(position));

@@ -27,7 +27,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -35,7 +34,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
 
-import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.notifications.BroadcastNotificationsActivity;
@@ -47,8 +45,10 @@ public class HomeActivity extends TutorialManagerActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home);
-		if (getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD)
+
+		if (getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD) {
 			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		}
 
 		List<View> list = createButtons();
 		LinearLayout ll = null;
@@ -75,8 +75,8 @@ public class HomeActivity extends TutorialManagerActivity {
 		// JPHelper.getTutorialPreferences(this).edit().clear().commit();
 
 		// Feedback
-		FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
-				(RelativeLayout) findViewById(R.id.home_relative_layout_jp));
+		// FeedbackFragmentInflater.inflateHandleButtonInRelativeLayout(this,
+		// (RelativeLayout) findViewById(R.id.home_relative_layout_jp));
 
 		// setHiddenNotification();
 
@@ -97,6 +97,20 @@ public class HomeActivity extends TutorialManagerActivity {
 		if (getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD) {
 			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		}
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		JPHelper.getLocationHelper().stop();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		getSupportActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		JPHelper.getLocationHelper().start();
 	}
 
 	@Override
@@ -129,20 +143,6 @@ public class HomeActivity extends TutorialManagerActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		JPHelper.getLocationHelper().stop();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		getSupportActionBar().setHomeButtonEnabled(true);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		JPHelper.getLocationHelper().start();
 	}
 
 	public void goToFunctionality(View view) {

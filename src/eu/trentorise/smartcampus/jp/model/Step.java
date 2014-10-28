@@ -1,11 +1,14 @@
 package eu.trentorise.smartcampus.jp.model;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import android.text.Spanned;
 import android.widget.ImageView;
 
-public class Step {
+public class Step implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private String time;
 	private Spanned description;
 	private ImageView image;
