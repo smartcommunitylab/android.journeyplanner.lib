@@ -16,21 +16,16 @@
 package eu.trentorise.smartcampus.jp;
 
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
-import it.sayservice.platform.smartplanner.data.message.Leg;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,17 +40,21 @@ import com.actionbarsherlock.view.SubMenu;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.AbstractAsyncTaskProcessor;
-import eu.trentorise.smartcampus.jp.custom.LegsListAdapter;
+import eu.trentorise.smartcampus.jp.custom.StepsListAdapter;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
+import eu.trentorise.smartcampus.jp.helper.StepUtils;
 import eu.trentorise.smartcampus.jp.helper.processor.DeleteMyItineraryProcessor;
+import eu.trentorise.smartcampus.jp.model.Step;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class MyItineraryFragment extends FeedbackFragment {
 
+	private StepUtils stepUtils;
+
 	private BasicItinerary myItinerary;
 	private Itinerary itinerary;
-	private List<Leg> legs;
+	private List<Step> steps;
 
 	public static MyItineraryFragment newInstance(BasicItinerary myItinerary) {
 		MyItineraryFragment f = new MyItineraryFragment();
@@ -68,7 +67,6 @@ public class MyItineraryFragment extends FeedbackFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-
 	}
 
 	@Override
@@ -77,113 +75,71 @@ public class MyItineraryFragment extends FeedbackFragment {
 	}
 
 	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-
-		menu.clear();
-		getSherlockActivity().getSupportMenuInflater().inflate(R.menu.gripmenu, menu);
-		SubMenu submenu = menu.getItem(0).getSubMenu();
-		submenu.clear();
-
-		submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_delete, Menu.NONE, R.string.menu_item_delete);
-		if (myItinerary != null) {
-			if (myItinerary.isMonitor())
-				submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_monitor, Menu.NONE, R.string.menu_item_monitor_off);
-			else
-				submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_monitor, Menu.NONE, R.string.menu_item_monitor_on);
-		}
-
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.menu_item_monitor) {
-			//toggle the monitor
-			SCAsyncTask<String, Void, Boolean> task = new SCAsyncTask<String, Void, Boolean>(getSherlockActivity(),
-					new MonitorMyItineraryProcessor(getSherlockActivity()));
-			task.execute(Boolean.toString(!myItinerary.isMonitor()), myItinerary.getClientId());
-			return true;
-		} else if (item.getItemId() == R.id.menu_item_delete) {
-			//delete monitor
-			AlertDialog.Builder deleteAlertDialog = new AlertDialog.Builder(getSherlockActivity());
-			deleteAlertDialog.setTitle(getString(R.string.dialog_delete_itinerary, myItinerary.getName()));
-			deleteAlertDialog.setMessage(getString(R.string.dialog_are_you_sure));
-			deleteAlertDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					SCAsyncTask<String, Void, Void> task = new SCAsyncTask<String, Void, Void>(getSherlockActivity(),
-							new DeleteMyItineraryProcessor(getSherlockActivity(),MyItineraryFragment.this.getTag()));
-					task.execute(myItinerary.getName(), myItinerary.getClientId());
-					dialog.dismiss();
-//					getSherlockActivity().getSupportFragmentManager().popBackStackImmediate();
-				}
-			});
-			deleteAlertDialog.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
-			deleteAlertDialog.show();
-			return true;
-		} else {
-			return super.onOptionsItemSelected(item);
-		}
-			}
-
-	@Override
 	public void onStart() {
 		super.onStart();
 
-		legs = itinerary.getLeg();
+		// legs = itinerary.getLeg();
+		// Converting legs to steps.
+		// You can have more steps than legs!
+		stepUtils = new StepUtils(getSherlockActivity(), myItinerary.getOriginalFrom(), myItinerary.getOriginalTo());
+		steps = stepUtils.legs2steps(itinerary.getLeg());
 
+		ListView stepsListView = (ListView) getView().findViewById(R.id.myitinerary_steps);
+
+		// title
 		TextView nameTextView = (TextView) getView().findViewById(R.id.myitinerary_name);
 		nameTextView.setText(myItinerary.getName());
 
+		// date & time
 		TextView dateTextView = (TextView) getView().findViewById(R.id.myitinerary_date);
 		dateTextView.setText(Config.FORMAT_DATE_UI.format(new Date(itinerary.getStartime())));
-
 		TextView timeTextView = (TextView) getView().findViewById(R.id.myitinerary_time);
 		timeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getStartime())));
 
-		ListView legsListView = (ListView) getView().findViewById(R.id.myitinerary_legs);
+		// promoted
+		if (itinerary.isPromoted()) {
+			TextView promotedTextView = (TextView) getView().findViewById(R.id.promoted_textview);
+			promotedTextView.setVisibility(View.VISIBLE);
+		}
 
-		// HEADER (before setAdapter or it won't work!)
-		if (legsListView.getHeaderViewsCount() == 0) {
-			ViewGroup startLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, null);
-			TextView startLegTimeTextView = (TextView) startLayout.findViewById(R.id.leg_time);
+		// add header (before setAdapter or it won't work!)
+		if (stepsListView.getHeaderViewsCount() == 0) {
+			ViewGroup startLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_step,
+					stepsListView, false);
+			TextView startLegTimeTextView = (TextView) startLayout.findViewById(R.id.step_time);
 			startLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getStartime())));
-			TextView startLegDescTextView = (TextView) startLayout.findViewById(R.id.leg_description);
+			TextView startLegDescTextView = (TextView) startLayout.findViewById(R.id.step_description);
 			startLegDescTextView.setText(myItinerary.getOriginalFrom().getName());
-			legsListView.addHeaderView(startLayout);
+			startLegDescTextView.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Medium);
+			stepsListView.addHeaderView(startLayout);
 		}
 
-		// FOOTER (before setAdapter or it won't work!)
-		if (legsListView.getFooterViewsCount() == 0) {
-			ViewGroup endLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, null);
-			TextView endLegTimeTextView = (TextView) endLayout.findViewById(R.id.leg_time);
+		// add footer (before setAdapter or it won't work!)
+		if (stepsListView.getFooterViewsCount() == 0) {
+			ViewGroup endLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_step,
+					stepsListView, false);
+			TextView endLegTimeTextView = (TextView) endLayout.findViewById(R.id.step_time);
 			endLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getEndtime())));
-			TextView endLegDescTextView = (TextView) endLayout.findViewById(R.id.leg_description);
+			TextView endLegDescTextView = (TextView) endLayout.findViewById(R.id.step_description);
 			endLegDescTextView.setText(myItinerary.getOriginalTo().getName());
-			legsListView.addFooterView(endLayout);
+			endLegDescTextView.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Medium);
+			stepsListView.addFooterView(endLayout);
 		}
 
-		legsListView.setAdapter(new LegsListAdapter(getSherlockActivity(), R.layout.itinerary_leg, myItinerary
-				.getOriginalFrom(), myItinerary.getOriginalTo(), legs));
+		stepsListView.setAdapter(new StepsListAdapter(getSherlockActivity(), R.layout.itinerary_step, steps));
 
-		legsListView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent i = new Intent(getActivity(), LegMapActivity.class);
-				if (legs != null) {
-					i.putExtra(LegMapActivity.LEGS, new ArrayList<Leg>(legs));
-				}
-				i.putExtra(LegMapActivity.ACTIVE_POS, position - 1);
-				getActivity().startActivity(i);
-			}
-		});
+		// stepsListView.setOnItemClickListener(new OnItemClickListener() {
+		// @Override
+		// public void onItemClick(AdapterView<?> parent, View view, int
+		// position, long id) {
+		// Intent i = new Intent(getActivity(), LegMapActivity.class);
+		// if (legs != null) {
+		// i.putExtra(LegMapActivity.LEGS, new ArrayList<Leg>(legs));
+		// }
+		// i.putExtra(LegMapActivity.ACTIVE_POS, position - 1);
+		// getActivity().startActivity(i);
+		// }
+		// });
 
 		// Button deleteMyItineraryBtn = (Button)
 		// getView().findViewById(R.id.myitinerary_delete);
@@ -227,12 +183,10 @@ public class MyItineraryFragment extends FeedbackFragment {
 			monitorToggleBtn.setBackgroundResource(R.drawable.ic_monitor_on);
 			monitorLabel.setText(getString(R.string.monitor_on));
 			monitorLabel.setTextAppearance(getSherlockActivity(), R.style.label_jp);
-
 		} else {
 			monitorToggleBtn.setBackgroundResource(R.drawable.ic_monitor_off);
 			monitorLabel.setText(getString(R.string.monitor_off));
 			monitorLabel.setTextAppearance(getSherlockActivity(), R.style.label_black_jp);
-
 		}
 
 		monitorToggleBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -243,6 +197,62 @@ public class MyItineraryFragment extends FeedbackFragment {
 				task.execute(Boolean.toString(isChecked), myItinerary.getClientId());
 			}
 		});
+	}
+
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		menu.clear();
+		getSherlockActivity().getSupportMenuInflater().inflate(R.menu.gripmenu, menu);
+		SubMenu submenu = menu.getItem(0).getSubMenu();
+		submenu.clear();
+		submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_delete, Menu.NONE, R.string.menu_item_delete);
+
+		if (myItinerary != null) {
+			if (myItinerary.isMonitor()) {
+				submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_monitor, Menu.NONE, R.string.menu_item_monitor_off);
+			} else {
+				submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_monitor, Menu.NONE, R.string.menu_item_monitor_on);
+			}
+		}
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.menu_item_monitor) {
+			// toggle the monitor
+			SCAsyncTask<String, Void, Boolean> task = new SCAsyncTask<String, Void, Boolean>(getSherlockActivity(),
+					new MonitorMyItineraryProcessor(getSherlockActivity()));
+			task.execute(Boolean.toString(!myItinerary.isMonitor()), myItinerary.getClientId());
+			return true;
+		} else if (item.getItemId() == R.id.menu_item_delete) {
+			// delete monitor
+			AlertDialog.Builder deleteAlertDialog = new AlertDialog.Builder(getSherlockActivity());
+			deleteAlertDialog.setTitle(getString(R.string.dialog_delete_itinerary, myItinerary.getName()));
+			deleteAlertDialog.setMessage(getString(R.string.dialog_are_you_sure));
+			deleteAlertDialog.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					SCAsyncTask<String, Void, Void> task = new SCAsyncTask<String, Void, Void>(getSherlockActivity(),
+							new DeleteMyItineraryProcessor(getSherlockActivity(), MyItineraryFragment.this.getTag()));
+					task.execute(myItinerary.getName(), myItinerary.getClientId());
+					dialog.dismiss();
+					// getSherlockActivity().getSupportFragmentManager().popBackStackImmediate();
+				}
+			});
+			deleteAlertDialog.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+			deleteAlertDialog.show();
+			return true;
+		} else {
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	public class MonitorMyItineraryProcessor extends AbstractAsyncTaskProcessor<String, Boolean> {
@@ -278,9 +288,7 @@ public class MyItineraryFragment extends FeedbackFragment {
 
 			}
 			getSherlockActivity().invalidateOptionsMenu();
-
 		}
-
 	}
 
 }

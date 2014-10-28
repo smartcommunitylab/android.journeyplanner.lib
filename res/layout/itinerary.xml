@@ -61,13 +61,13 @@
         android:visibility="gone" />
 
     <ListView
-        android:id="@+id/itinerary_legs"
+        android:id="@+id/itinerary_steps"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="1dp"
         android:layout_weight="1"
         android:background="@android:color/white"
-        android:cacheColorHint="@android:color/transparent" >
+        android:cacheColorHint="@android:color/transparent"
+        android:listSelector="@android:color/transparent" >
     </ListView>
 
     <Button

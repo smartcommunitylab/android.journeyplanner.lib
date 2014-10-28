@@ -62,7 +62,7 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 			// holder.time = (TextView) row.findViewById(R.id.it_time);
 			holder.transportTypes = (LinearLayout) row.findViewById(R.id.it_transporttypes);
 			holder.parkingTime = (TextView) row.findViewById(R.id.it_parkingdata_time);
-			holder.parkingCost = (TextView) row.findViewById(R.id.it_parkingdata_cost);
+			holder.parkingCost = (TextView) row.findViewById(R.id.it_parkingdata_price);
 			holder.alert = (ImageView) row.findViewById(R.id.it_alert);
 			row.setTag(holder);
 		} else {
@@ -101,24 +101,29 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 			// }
 			// TODO: ***** TEMP ***** end
 
+			Leg leg = itinerary.getLeg().get(i);
+
 			/*
 			 * transport types
 			 */
-			Leg l = itinerary.getLeg().get(i);
-			Transport transp = l.getTransport();
-			TType t = transp.getType();
-			if (t.equals(TType.BUS)) {
+			Transport transp = leg.getTransport();
+			TType tType = transp.getType();
+			if (tType.equals(TType.BUS)) {
 				String line = transp.getRouteShortName();
 				imgv = Utils.getImageByLine(getContext(), line);
 			} else {
-				imgv = Utils.getImageByTType(getContext(), t);
+				imgv = Utils.getImageByTType(getContext(), tType);
 			}
 
-			// TODO: ***** TEMP *****
-			// imgv = Utils.getImageForParkingStation(getContext(), "0,80");
-			// TODO: ***** TEMP ***** end
-
 			if (imgv != null && imgv.getBackground() != null || imgv.getDrawable() != null) {
+				holder.transportTypes.addView(imgv);
+			}
+
+			// parking!
+			if (tType.equals(TType.CAR) && leg.getTo().getStopId() != null) {
+				// TODO: get price for parking
+				String price = null;
+				imgv = Utils.getImageForParkingStation(getContext(), price);
 				holder.transportTypes.addView(imgv);
 			}
 
@@ -127,10 +132,10 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 			 */
 			Integer parkingSearchTimeMin = null;
 			Integer parkingSearchTimeMax = null;
-			if (l.getExtra() != null && l.getExtra().containsKey(ParkingsHelper.PARKING_EXTRA_SEARCHTIME)) {
+			if (leg.getExtra() != null && leg.getExtra().containsKey(ParkingsHelper.PARKING_EXTRA_SEARCHTIME)) {
 				@SuppressWarnings("unchecked")
-				Map<String, Object> searchTime = (Map<String, Object>) l.getExtra()
-						.get(ParkingsHelper.PARKING_EXTRA_SEARCHTIME);
+				Map<String, Object> searchTime = (Map<String, Object>) leg.getExtra().get(
+						ParkingsHelper.PARKING_EXTRA_SEARCHTIME);
 				if (searchTime.containsKey(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MIN)) {
 					parkingSearchTimeMin = (Integer) searchTime.get(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MIN);
 				}
@@ -139,18 +144,15 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 				}
 			}
 			String parkingSearchTimeString = "";
-			// TODO: ***** TEMP *****
-			// parkingSearchTimeString = "5'-10' per parcheggiare";
-			// TODO: ***** TEMP ***** end
-			if (parkingSearchTimeMin != null) {
+			if (parkingSearchTimeMin != null && parkingSearchTimeMin > 0) {
 				parkingSearchTimeString += parkingSearchTimeMin + "'";
 			}
-			if (parkingSearchTimeMax != null) {
-				parkingSearchTimeString += (parkingSearchTimeString.length() > 0 ? " - " + parkingSearchTimeMax
+			if (parkingSearchTimeMax != null && parkingSearchTimeMax > 0) {
+				parkingSearchTimeString += (parkingSearchTimeString.length() > 0 ? "-" + parkingSearchTimeMax
 						: parkingSearchTimeMax) + "'";
 			}
 			if (parkingSearchTimeString.length() > 0) {
-				holder.parkingTime.setText(parkingSearchTimeString);
+				holder.parkingTime.setText(context.getString(R.string.step_parking_search, parkingSearchTimeString));
 				holder.parkingTime.setVisibility(View.VISIBLE);
 			} else {
 				holder.parkingTime.setVisibility(View.GONE);
@@ -163,8 +165,8 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 			// TODO: ***** TEMP *****
 			// parkingCost = "0,80 euro/h";
 			// TODO: ***** TEMP ***** end
-			if (l.getExtra() != null && l.getExtra().containsKey(ParkingsHelper.PARKING_EXTRA_COST)) {
-				parkingCost = (String) l.getExtra().get(ParkingsHelper.PARKING_EXTRA_COST);
+			if (leg.getExtra() != null && leg.getExtra().containsKey(ParkingsHelper.PARKING_EXTRA_COST)) {
+				parkingCost = (String) leg.getExtra().get(ParkingsHelper.PARKING_EXTRA_COST);
 			}
 			if (parkingCost.length() > 0) {
 				holder.parkingCost.setText(parkingCost);
@@ -176,7 +178,7 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 			/*
 			 * alert
 			 */
-			if (Utils.containsAlerts(l)) {
+			if (Utils.containsAlerts(leg)) {
 				holder.alert.setVisibility(View.VISIBLE);
 			} else {
 				holder.alert.setVisibility(View.GONE);

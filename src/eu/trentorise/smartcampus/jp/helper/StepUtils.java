@@ -24,37 +24,91 @@ import it.sayservice.platform.smartplanner.data.message.alerts.AlertParking;
 import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoad;
 import it.sayservice.platform.smartplanner.data.message.alerts.AlertStrike;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
 import android.text.Html;
 import android.text.Spanned;
+import android.widget.ImageView;
+import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.model.Step;
 
-public class LegContentRenderer {
+public class StepUtils {
 
 	private Context mCtx;
 	private Position fromPosition;
 	private Position toPosition;
 	private List<Leg> legs;
 
-	public LegContentRenderer(Context context, Position fromPosition, Position toPosition, List<Leg> legs) {
+	public StepUtils(Context context, Position fromPosition, Position toPosition) {
 		this.mCtx = context;
 		this.fromPosition = fromPosition;
 		this.toPosition = toPosition;
-		this.legs = legs;
 	}
 
-	public Spanned buildDescription(Leg leg, int index) {
+	public List<Step> legs2steps(List<Leg> newLegs) {
+		if (newLegs != null) {
+			legs = newLegs;
+		}
+
+		List<Step> steps = new ArrayList<Step>();
+
+		for (int index = 0; index < legs.size(); index++) {
+			Leg leg = legs.get(index);
+
+			Step step = new Step();
+			// time
+			step.setTime(Config.FORMAT_TIME_UI.format(new Date(leg.getStartime())));
+			// description
+			step.setDescription(buildDescription(leg, index));
+
+			// image
+			if (leg.getTransport() != null && leg.getTransport().getType() != null) {
+				ImageView image = Utils.getImageByTType(mCtx, leg.getTransport().getType());
+				step.setImage(image);
+			}
+
+			// alert
+			if (Utils.containsAlerts(leg) && !leg.getTransport().getType().equals(TType.CAR)) {
+				step.setAlert(buildAlerts(leg, index));
+			}
+
+			// extras
+			step.setExtra(leg.getExtra());
+
+			steps.add(step);
+
+			// extra step?
+			if (leg.getTransport().getType().equals(TType.CAR) && leg.getTo().getStopId() != null) {
+				step = new Step();
+				step.setTime(Config.FORMAT_TIME_UI.format(new Date(legs.get(index + 1).getStartime())));
+				step.setDescription(Html.fromHtml(mCtx.getString(R.string.step_car_leave) + " "
+						+ bold(ParkingsHelper.getName(leg.getTo().getStopId().getId()))));
+				// TODO: get parking price
+				step.setImage(Utils.getImageForParkingStation(mCtx, null));
+				if (Utils.containsAlerts(leg)) {
+					step.setAlert(buildAlerts(leg, index));
+				}
+				steps.add(step);
+			}
+		}
+
+		return steps;
+	}
+
+	private Spanned buildDescription(Leg leg, int index) {
 		String desc = "";
-		String from = this.mCtx.getString(R.string.leg_from) + " " + bold(leg.getFrom().getName());
-		String to = this.mCtx.getString(R.string.leg_to) + " " + bold(leg.getTo().getName());
+		String from = this.mCtx.getString(R.string.step_from) + " " + bold(leg.getFrom().getName());
+		String to = this.mCtx.getString(R.string.step_to) + " " + bold(leg.getTo().getName());
 
 		TType tType = leg.getTransport().getType();
 
 		if (tType.equals(TType.WALK)) {
-			desc += mCtx.getString(R.string.leg_walk);
+			desc += mCtx.getString(R.string.step_walk);
 
 			if (isBadString(leg.getFrom().getName())) {
 				from = buildDescriptionFrom(index);
@@ -63,7 +117,7 @@ public class LegContentRenderer {
 				to = buildDescriptionTo(index);
 			}
 		} else if (tType.equals(TType.BICYCLE)) {
-			desc += mCtx.getString(R.string.leg_bike_ride);
+			desc += mCtx.getString(R.string.step_bike_ride);
 
 			if (isBadString(leg.getFrom().getName())) {
 				from = buildDescriptionFrom(index);
@@ -77,7 +131,7 @@ public class LegContentRenderer {
 				if (from.length() > 0) {
 					from += ", ";
 				}
-				from += this.mCtx.getString(R.string.leg_bike_pick_up)
+				from += this.mCtx.getString(R.string.step_bike_pick_up)
 						+ " "
 						+ bold(ParkingsHelper.getParkingAgencyName(this.mCtx, leg.getFrom().getStopId().getAgencyId()) + " "
 								+ leg.getFrom().getStopId().getId());
@@ -87,13 +141,13 @@ public class LegContentRenderer {
 				if (from.length() > 0 || to.length() > 0) {
 					to += ", ";
 				}
-				to += this.mCtx.getString(R.string.leg_bike_leave)
+				to += this.mCtx.getString(R.string.step_bike_leave)
 						+ " "
 						+ bold(ParkingsHelper.getParkingAgencyName(this.mCtx, leg.getFrom().getStopId().getAgencyId()) + " "
 								+ leg.getTo().getStopId().getId());
 			}
 		} else if (tType.equals(TType.CAR)) {
-			desc += mCtx.getString(R.string.leg_car_drive);
+			desc += mCtx.getString(R.string.step_car_drive);
 
 			if (isBadString(leg.getFrom().getName())) {
 				from = buildDescriptionFrom(index);
@@ -107,22 +161,14 @@ public class LegContentRenderer {
 				if (from.length() > 0) {
 					from += ", ";
 				}
-				from += this.mCtx.getString(R.string.leg_car_pick_up) + " "
+				from += this.mCtx.getString(R.string.step_car_pick_up) + " "
 						+ bold(ParkingsHelper.getName(leg.getFrom().getStopId().getId()));
 			}
-
-			if (leg.getTo().getStopId() != null) {
-				if (from.length() > 0 || to.length() > 0) {
-					to += ", ";
-				}
-				to += this.mCtx.getString(R.string.leg_car_leave) + " "
-						+ bold(ParkingsHelper.getName(leg.getTo().getStopId().getId()));
-			}
 		} else if (tType.equals(TType.BUS)) {
-			desc += mCtx.getString(R.string.leg_bus_take, RoutesHelper.getShortNameByRouteIdAndAgencyID(leg.getTransport()
+			desc += mCtx.getString(R.string.step_bus_take, RoutesHelper.getShortNameByRouteIdAndAgencyID(leg.getTransport()
 					.getRouteId(), leg.getTransport().getAgencyId()));
 		} else if (tType.equals(TType.TRAIN)) {
-			desc += mCtx.getString(R.string.leg_train_take, leg.getTransport().getTripId());
+			desc += mCtx.getString(R.string.step_train_take, leg.getTransport().getTripId());
 		}
 
 		desc += (desc.length() > 0) ? ("<br/>" + from) : from;
@@ -135,11 +181,11 @@ public class LegContentRenderer {
 		String from = "";
 
 		if (index == 0) {
-			from = this.mCtx.getString(R.string.leg_from) + " " + bold(fromPosition.getName());
+			from = this.mCtx.getString(R.string.step_from) + " " + bold(fromPosition.getName());
 		} else if (legs.get(index - 1) == null || isBadString(legs.get(index - 1).getTo().getName())) {
-			from = this.mCtx.getString(R.string.leg_move);
+			from = this.mCtx.getString(R.string.step_move);
 		} else {
-			from = this.mCtx.getString(R.string.leg_from) + " " + bold(legs.get(index - 1).getTo().getName());
+			from = this.mCtx.getString(R.string.step_from) + " " + bold(legs.get(index - 1).getTo().getName());
 		}
 
 		return from;
@@ -149,11 +195,11 @@ public class LegContentRenderer {
 		String to = "";
 
 		if ((index + 1 == legs.size())) {
-			to = this.mCtx.getString(R.string.leg_to) + " " + bold(toPosition.getName());
+			to = this.mCtx.getString(R.string.step_to) + " " + bold(toPosition.getName());
 		} else if (legs.get(index + 1) == null || isBadString(legs.get(index + 1).getFrom().getName())) {
 			to = "";
 		} else {
-			to = this.mCtx.getString(R.string.leg_to) + " " + bold(legs.get(index + 1).getFrom().getName());
+			to = this.mCtx.getString(R.string.step_to) + " " + bold(legs.get(index + 1).getFrom().getName());
 		}
 
 		return to;
@@ -167,13 +213,13 @@ public class LegContentRenderer {
 		return false;
 	}
 
-	public String buildAlerts(Leg leg, int index) {
+	private String buildAlerts(Leg leg, int index) {
 		// delay
 		String delay = "";
 		if (leg.getAlertDelayList() != null && !leg.getAlertDelayList().isEmpty()) {
 			for (AlertDelay ad : leg.getAlertDelayList()) {
 				if (ad.getDelay() > 0) {
-					delay += this.mCtx.getString(R.string.leg_delay) + " " + millis2mins(ad.getDelay()) + " min";
+					delay += this.mCtx.getString(R.string.step_delay) + " " + millis2mins(ad.getDelay()) + " min";
 				}
 			}
 		}
@@ -227,7 +273,7 @@ public class LegContentRenderer {
 		return "<b>" + s + "</b>";
 	}
 
-	public int millis2mins(long millis) {
+	private int millis2mins(long millis) {
 		return (int) ((millis / (1000 * 60)) % 60);
 	}
 }

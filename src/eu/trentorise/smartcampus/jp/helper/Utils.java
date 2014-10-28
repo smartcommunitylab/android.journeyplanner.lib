@@ -104,21 +104,23 @@ public class Utils {
 
 	private static Bitmap writeOnBitmap(Context mContext, int drawableId, String text, Integer size) {
 		float scale = mContext.getResources().getDisplayMetrics().density;
-
 		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), drawableId).copy(Bitmap.Config.ARGB_8888, true);
 
-		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		paint.setTextAlign(Align.CENTER);
-		paint.setTextSize(scale * (size != null ? size : 16));
-		paint.setAntiAlias(true);
-		paint.setARGB(255, 0, 0, 0);
+		if (text != null) {
+			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+			paint.setTextAlign(Align.CENTER);
+			paint.setTextSize(scale * (size != null ? size : 16));
+			paint.setAntiAlias(true);
+			paint.setARGB(255, 0, 0, 0);
 
-		Canvas canvas = new Canvas(bitmap);
-		Rect bounds = new Rect();
-		paint.getTextBounds(text, 0, text.length(), bounds);
-		float x = bitmap.getWidth() / 2;
-		float y = bitmap.getHeight() / 2 - Utils.convertDpToPixel(2.5f, mContext);
-		canvas.drawText(text, x, y, paint);
+			Canvas canvas = new Canvas(bitmap);
+			Rect bounds = new Rect();
+			paint.getTextBounds(text, 0, text.length(), bounds);
+			float x = bitmap.getWidth() / 2;
+			float y = bitmap.getHeight() / 2 - Utils.convertDpToPixel(2.5f, mContext);
+			canvas.drawText(text, x, y, paint);
+		}
+
 		return bitmap;
 	}
 

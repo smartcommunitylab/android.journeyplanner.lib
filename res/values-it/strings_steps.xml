@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2012-2013 Trento RISE
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either   express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<resources>
+
+    <!-- descriptive strings -->
+    <string name="step_from">Da</string>
+    <string name="step_to">A</string>
+    <string name="step_bike_pick_up">prendi una bicicletta a</string>
+    <string name="step_bike_leave">lascia la bicicletta a</string>
+    <string name="step_car_pick_up">prendi un\'auto a</string>
+    <string name="step_car_leave">Lascia l\'auto a</string>
+    <string name="step_bus_line">linea</string>
+    <string name="step_train">treno</string>
+    <string name="step_move">Prosegui</string>
+    <string name="step_delay">Ritardo:</string>
+
+    <!-- new strings -->
+    <string name="step_walk">Cammina</string>
+    <string name="step_bus_take">Prendi il bus, linea %s</string>
+    <string name="step_train_take">Prendi il treno, linea %s</string>
+    <string name="step_bike_ride">Pedala</string>
+    <string name="step_car_drive">Guida</string>
+    <string name="step_parking_search">%s per trovare parcheggio</string>
+
+</resources>

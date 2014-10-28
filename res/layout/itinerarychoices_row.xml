@@ -88,18 +88,16 @@
                 android:drawableStart="@drawable/ic_look_for_parking"
                 android:gravity="center_vertical"
                 android:visibility="gone" />
-            <!-- android:text="5&apos;-10&apos; per parcheggiare" -->
 
             <TextView
-                android:id="@+id/it_parkingdata_cost"
+                android:id="@+id/it_parkingdata_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/ic_parking_thin"
-                android:drawableStart="@drawable/ic_parking_thin"
+                android:drawableLeft="@drawable/ic_price_parking"
+                android:drawableStart="@drawable/ic_price_parking"
                 android:gravity="center_vertical"
                 android:visibility="gone" />
-            <!-- android:text="0,80 €/h" -->
         </LinearLayout>
 
         <ImageView
