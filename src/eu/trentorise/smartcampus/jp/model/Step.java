@@ -10,10 +10,11 @@ public class Step implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String time;
-	private Spanned description;
-	private ImageView image;
+	private transient Spanned description;
+	private transient ImageView image;
 	private String alert;
 	private Map<String, Object> extra;
+	private int legIndex;
 
 	public Step() {
 	}
@@ -63,5 +64,12 @@ public class Step implements Serializable {
 
 	public void setExtra(Map<String, Object> extra) {
 		this.extra = extra;
+	}
+
+	public int getLegIndex() {
+		return legIndex;
+	}
+	public void setLegIndex(int legIndex) {
+		this.legIndex = legIndex;
 	}
 }

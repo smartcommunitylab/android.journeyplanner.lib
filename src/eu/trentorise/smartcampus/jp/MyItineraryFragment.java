@@ -16,16 +16,21 @@
 package eu.trentorise.smartcampus.jp;
 
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
+import it.sayservice.platform.smartplanner.data.message.Leg;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -128,18 +133,13 @@ public class MyItineraryFragment extends FeedbackFragment {
 
 		stepsListView.setAdapter(new StepsListAdapter(getSherlockActivity(), R.layout.itinerary_step, steps));
 
-		// stepsListView.setOnItemClickListener(new OnItemClickListener() {
-		// @Override
-		// public void onItemClick(AdapterView<?> parent, View view, int
-		// position, long id) {
-		// Intent i = new Intent(getActivity(), LegMapActivity.class);
-		// if (legs != null) {
-		// i.putExtra(LegMapActivity.LEGS, new ArrayList<Leg>(legs));
-		// }
-		// i.putExtra(LegMapActivity.ACTIVE_POS, position - 1);
-		// getActivity().startActivity(i);
-		// }
-		// });
+		stepsListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				int idx = position == 0 ? -1 : position > steps.size() ? steps.size() : steps.get(position-1).getLegIndex();
+				showMap(idx);
+			}
+		});
 
 		// Button deleteMyItineraryBtn = (Button)
 		// getView().findViewById(R.id.myitinerary_delete);
@@ -202,8 +202,8 @@ public class MyItineraryFragment extends FeedbackFragment {
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
-		getSherlockActivity().getSupportMenuInflater().inflate(R.menu.gripmenu, menu);
-		SubMenu submenu = menu.getItem(0).getSubMenu();
+		getSherlockActivity().getSupportMenuInflater().inflate(R.menu.myitinerarymenu, menu);
+		SubMenu submenu = menu.getItem(1).getSubMenu();
 		submenu.clear();
 		submenu.add(Menu.CATEGORY_SYSTEM, R.id.menu_item_delete, Menu.NONE, R.string.menu_item_delete);
 
@@ -223,6 +223,10 @@ public class MyItineraryFragment extends FeedbackFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.menu_map) {
+			showMap(null);
+			return true;
+		}
 		if (item.getItemId() == R.id.menu_item_monitor) {
 			// toggle the monitor
 			SCAsyncTask<String, Void, Boolean> task = new SCAsyncTask<String, Void, Boolean>(getSherlockActivity(),
@@ -289,6 +293,17 @@ public class MyItineraryFragment extends FeedbackFragment {
 			}
 			getSherlockActivity().invalidateOptionsMenu();
 		}
+	}
+
+	private void showMap(Integer pos) {
+		Intent i = new Intent(getActivity(), LegMapActivity.class);
+		if (itinerary != null && itinerary.getLeg() != null) {
+			i.putExtra(LegMapActivity.LEGS, new ArrayList<Leg>(itinerary.getLeg()));
+		}
+		if (pos != null) {
+			i.putExtra(LegMapActivity.ACTIVE_POS, pos);
+		}
+		getActivity().startActivity(i);
 	}
 
 }
