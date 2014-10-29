@@ -27,6 +27,7 @@
     <string name="btn_broadcast">Submit\nan alert</string>
     <string name="btn_myprofile">Preferences</string>
     <string name="btn_smartcheck">Real time info</string>
+    <string name="btn_bikesharing">Bike sharing</string>
     <string name="btn_notifications">Read\nnotifications</string>
     <string name="btn_save">Save</string>
     <string name="btn_delete">Delete</string>
@@ -152,7 +153,7 @@
     <string name="tab_myrecjourneys">MONITORING</string>
     <string name="promoted_itineraries">SUSTAINABLE ITINERARIES</string>
     <string name="promoted_itinerary">Sustainable itinerary</string>
-    
+
     <!-- days of the week -->
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>

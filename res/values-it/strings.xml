@@ -25,6 +25,7 @@
     <string name="btn_broadcast">Invia\nsegnalazioni</string>
     <string name="btn_myprofile">Preferenze</string>
     <string name="btn_smartcheck">Info in tempo reale</string>
+    <string name="btn_bikesharing">Bici condivisa</string>
     <string name="btn_notifications">Leggi\nnotifiche</string>
     <string name="btn_save">Salva</string>
     <string name="btn_delete">Cancella</string>
@@ -150,7 +151,7 @@
     <string name="tab_myrecjourneys">MONITORAGGI</string>
     <string name="promoted_itineraries">ITINERARI SOSTENIBILI</string>
     <string name="promoted_itinerary">Itinerario sostenibile</string>
-    
+
     <!-- days of the week -->
     <string name="monday">Lun</string>
     <string name="tuesday">Mar</string>

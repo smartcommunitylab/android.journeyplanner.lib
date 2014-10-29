@@ -7,6 +7,7 @@
     <string name="jp_watch_tut">Keep track of your usual travel routes here.</string>
     <string name="jp_send_tut">Notify users about train or city bus delays.</string>
     <string name="jp_info_tut">Check the local bus or train schedule or find available parking in the city.</string>
+    <string name="jp_bike_tut"> Bike sharing. Open the app Bike Rovereto for checking the availability of bikes shared in the nearest stations.</string>
     <string name="jp_notif_tut">Read notifications about the journeys you saved!</string>
     <string name="jp_prefs_tut">Set up your defaults here.</string>
     <string name="jp_tut_bus_trento_timetable">Check the schedule of Trento buses and of the cable car to Sardagna. You can also check if there are delays reported by other users.</string>
