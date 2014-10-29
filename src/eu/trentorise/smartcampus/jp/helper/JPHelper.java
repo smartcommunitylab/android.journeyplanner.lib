@@ -103,7 +103,7 @@ public class JPHelper {
 
 	private static String GCM_APP_ID = "core.mobility";
 
-	private static String GCM_SERVER_URL = "https://tn.smartcampuslab.it/core.communicator";
+	private static String GCM_SERVER_URL = "/core.communicator";
 
 	private SyncStorageWithPaging storage = null;
 
@@ -230,7 +230,8 @@ public class JPHelper {
 			try {
 				bps = new BasicProfileService(Constants.getAuthUrl(mContext));
 				String authToken = getAuthToken(mContext);
-				connector.init(mContext, authToken, GCM_APP_ID, GCM_SERVER_URL);
+				connector.init(mContext, authToken, GCM_APP_ID,
+						GlobalConfig.getAppUrl(mContext) + GCM_SERVER_URL);
 				return bps.getAccountProfile(authToken);
 
 			} catch (Exception e) {
