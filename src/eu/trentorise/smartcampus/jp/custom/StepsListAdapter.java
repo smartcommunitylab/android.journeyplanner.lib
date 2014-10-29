@@ -120,14 +120,9 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		/*
 		 * parking cost
 		 */
-		String parkingCost = "";
-		if (step.getExtra() != null && step.getExtra().containsKey(ParkingsHelper.PARKING_EXTRA_COST)) {
-			Map<String,Object> costData = (Map<String, Object>) step.getExtra().get(ParkingsHelper.PARKING_EXTRA_COST);
-			parkingCost = (String)costData.get(ParkingsHelper.PARKING_EXTRA_COST_FIXED);
-		}
-		if (parkingCost.length() > 0) {
+		String parkingCost = ParkingsHelper.getParkingCostLong(step.getExtra(), mCtx);
+		if (parkingCost != null && parkingCost.length() > 0) {
 			holder.parkingdataPrice.setText(parkingCost);
-			holder.parkingdataPrice.setText(mCtx.getString(R.string.step_parking_cost, parkingCost));
 			holder.parkingdataPrice.setVisibility(View.VISIBLE);
 		} else {
 			holder.parkingdataPrice.setVisibility(View.GONE);

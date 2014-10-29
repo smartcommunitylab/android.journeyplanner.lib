@@ -121,11 +121,7 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 
 			// parking!
 			if (tType.equals(TType.CAR) && leg.getTo().getStopId() != null) {
-				String price = null;
-				if (leg.getTo().getStopId().getExtra() != null && leg.getTo().getStopId().getExtra().containsKey(ParkingsHelper.PARKING_EXTRA_COST)) {
-					Map<String,Object> costData = (Map<String, Object>) leg.getTo().getStopId().getExtra().get(ParkingsHelper.PARKING_EXTRA_COST);
-					price = (String)costData.get(ParkingsHelper.PARKING_EXTRA_COST_FIXED);
-				}
+				String price = ParkingsHelper.getParkingCost(leg.getTo().getStopId().getExtra(), context);
 				imgv = Utils.getImageForParkingStation(getContext(), price);
 				holder.transportTypes.addView(imgv);
 			}
@@ -164,16 +160,9 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 			/*
 			 * parking cost
 			 */
-			String parkingCost = "";
-			// TODO: ***** TEMP *****
-			// parkingCost = "0,80 euro/h";
-			// TODO: ***** TEMP ***** end
-			if (leg.getExtra() != null && leg.getExtra().containsKey(ParkingsHelper.PARKING_EXTRA_COST)) {
-				Map<String,Object> costData = (Map<String, Object>) leg.getExtra().get(ParkingsHelper.PARKING_EXTRA_COST);
-				parkingCost = (String)costData.get(ParkingsHelper.PARKING_EXTRA_COST_FIXED);
-			}
-			if (parkingCost.length() > 0) {
-				holder.parkingCost.setText(context.getString(R.string.step_parking_cost, parkingCost));
+			String parkingCost = ParkingsHelper.getParkingCostLong(leg.getExtra(), context);
+			if (parkingCost != null && parkingCost.length() > 0) {
+				holder.parkingCost.setText(parkingCost);
 				holder.parkingCost.setVisibility(View.VISIBLE);
 			} else {
 				holder.parkingCost.setVisibility(View.GONE);

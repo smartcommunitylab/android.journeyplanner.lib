@@ -203,4 +203,26 @@ public class ParkingsHelper {
 		}
 		return agencyId;
 	}
+	
+	public static String getParkingCost(Map<String, Object> extra, Context ctx) {
+		if (extra != null && extra.containsKey(ParkingsHelper.PARKING_EXTRA_COST)) {
+			Map<String,Object> costData = (Map<String, Object>) extra.get(ParkingsHelper.PARKING_EXTRA_COST);
+			String price = (String)costData.get(ParkingsHelper.PARKING_EXTRA_COST_FIXED);
+			if (price.equals("0")) return ctx.getResources().getString(R.string.step_parking_free);
+			try {
+				Double d = Double.parseDouble(price);
+				if (d.equals(0)) return ctx.getResources().getString(R.string.step_parking_free);
+			} catch (NumberFormatException e) {
+			}
+			return price;
+		}
+		return null;
+	}
+	
+	public static String getParkingCostLong(Map<String, Object> extra, Context ctx) {
+		String res = getParkingCost(extra, ctx);
+		if (res == null || ctx.getResources().getString(R.string.step_parking_free).equals(res)) return res;
+		return ctx.getString(R.string.step_parking_cost, res);
+	}
+
 }

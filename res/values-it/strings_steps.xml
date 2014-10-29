@@ -36,5 +36,6 @@
     <string name="step_car_drive">Guida</string>
     <string name="step_parking_search">%s per trovare parcheggio</string>
     <string name="step_parking_cost">%s&#8364;/h</string>
+    <string name="step_parking_free">gratis</string>
     
 </resources>

@@ -36,5 +36,6 @@
     <string name="step_car_drive">Drive</string>
     <string name="step_parking_search">%s to find parking</string>
     <string name="step_parking_cost">%s&#8364;/h</string>
+    <string name="step_parking_free">free</string>
     
 </resources>
