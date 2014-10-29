@@ -35,7 +35,8 @@ public class ParkingsHelper {
 	public static final String PARKING_EXTRA_SEARCHTIME = "searchTime";
 	public static final String PARKING_EXTRA_SEARCHTIME_MIN = "min";
 	public static final String PARKING_EXTRA_SEARCHTIME_MAX = "max";
-	public static final String PARKING_EXTRA_COST = "cost";
+	public static final String PARKING_EXTRA_COST = "costData";
+	public static final Object PARKING_EXTRA_COST_FIXED = "fixedCost";
 	
 	private static Location myLocation;
 

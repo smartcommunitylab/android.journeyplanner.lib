@@ -52,6 +52,7 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 			holder.alerts = (TextView) row.findViewById(R.id.step_alerts);
 			holder.parkingdataTime = (TextView) row.findViewById(R.id.step_parkingdata_time);
 			holder.parkingdataPrice = (TextView) row.findViewById(R.id.step_parkingdata_price);
+			holder.ttImage = (TextView) row.findViewById(R.id.step_img);
 			row.setTag(holder);
 		} else {
 			holder = (RowHolder) row.getTag();
@@ -72,7 +73,7 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		/*
 		 * image
 		 */
-		holder.description.setCompoundDrawablesWithIntrinsicBounds(null, null, step.getImage().getDrawable(), null);
+		holder.ttImage.setCompoundDrawablesWithIntrinsicBounds(null, null, step.getImage().getDrawable(), null);
 
 		/*
 		 * alert
@@ -107,6 +108,8 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 			parkingSearchTimeString += (parkingSearchTimeString.length() > 0 ? "-" + parkingSearchTimeMax
 					: parkingSearchTimeMax) + "'";
 		}
+
+		
 		if (parkingSearchTimeString.length() > 0) {
 			holder.parkingdataTime.setText(mCtx.getString(R.string.step_parking_search, parkingSearchTimeString));
 			holder.parkingdataTime.setVisibility(View.VISIBLE);
@@ -118,14 +121,13 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		 * parking cost
 		 */
 		String parkingCost = "";
-		// TODO: ***** TEMP *****
-		// parkingCost = "0,80 euro/h";
-		// TODO: ***** TEMP ***** end
 		if (step.getExtra() != null && step.getExtra().containsKey(ParkingsHelper.PARKING_EXTRA_COST)) {
-			parkingCost = (String) step.getExtra().get(ParkingsHelper.PARKING_EXTRA_COST);
+			Map<String,Object> costData = (Map<String, Object>) step.getExtra().get(ParkingsHelper.PARKING_EXTRA_COST);
+			parkingCost = (String)costData.get(ParkingsHelper.PARKING_EXTRA_COST_FIXED);
 		}
 		if (parkingCost.length() > 0) {
 			holder.parkingdataPrice.setText(parkingCost);
+			holder.parkingdataPrice.setText(mCtx.getString(R.string.step_parking_cost, parkingCost));
 			holder.parkingdataPrice.setVisibility(View.VISIBLE);
 		} else {
 			holder.parkingdataPrice.setVisibility(View.GONE);
@@ -140,6 +142,7 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		TextView alerts;
 		TextView parkingdataTime;
 		TextView parkingdataPrice;
+		TextView ttImage;
 	}
 
 }
