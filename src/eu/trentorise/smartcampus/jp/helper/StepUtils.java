@@ -80,6 +80,7 @@ public class StepUtils {
 			// extras
 			step.setExtra(leg.getExtra());
 
+			step.setLegIndex(index);
 			steps.add(step);
 
 			// extra step?
@@ -93,6 +94,7 @@ public class StepUtils {
 				if (Utils.containsAlerts(leg)) {
 					step.setAlert(buildAlerts(leg, index));
 				}
+				step.setLegIndex(index);
 				steps.add(step);
 			}
 		}
@@ -119,32 +121,22 @@ public class StepUtils {
 		} else if (tType.equals(TType.BICYCLE)) {
 			desc += mCtx.getString(R.string.step_bike_ride);
 
-			if (isBadString(leg.getFrom().getName())) {
-				from = buildDescriptionFrom(index);
-			}
-
-			if (isBadString(leg.getTo().getName())) {
-				to = buildDescriptionTo(index);
-			}
-
 			if (leg.getFrom().getStopId() != null) {
-				if (from.length() > 0) {
-					from += ", ";
-				}
-				from += this.mCtx.getString(R.string.step_bike_pick_up)
+				from = this.mCtx.getString(R.string.step_bike_pick_up)
 						+ " "
 						+ bold(ParkingsHelper.getParkingAgencyName(this.mCtx, leg.getFrom().getStopId().getAgencyId()) + " "
 								+ leg.getFrom().getStopId().getId());
+			} else if (isBadString(leg.getFrom().getName())) {
+				from = buildDescriptionFrom(index);
 			}
 
 			if (leg.getTo().getStopId() != null) {
-				if (from.length() > 0 || to.length() > 0) {
-					to += ", ";
-				}
-				to += this.mCtx.getString(R.string.step_bike_leave)
+				to = this.mCtx.getString(R.string.step_bike_leave)
 						+ " "
 						+ bold(ParkingsHelper.getParkingAgencyName(this.mCtx, leg.getFrom().getStopId().getAgencyId()) + " "
 								+ leg.getTo().getStopId().getId());
+			} else if (isBadString(leg.getTo().getName())) {
+				to = buildDescriptionTo(index);
 			}
 		} else if (tType.equals(TType.CAR)) {
 			desc += mCtx.getString(R.string.step_car_drive);
