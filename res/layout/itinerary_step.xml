@@ -18,13 +18,82 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:orientation="horizontal"
-    android:padding="@dimen/dimen_xs" >
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/ll_step_beginning"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dimen_xs"
+        android:layout_marginTop="@dimen/dimen_xs"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_point_outline" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/imageView1"
+            android:layout_centerHorizontal="true"
+            android:background="#878786" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_step_middle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dimen_xs"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="8dp"
+            android:src="@drawable/ic_point" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_centerHorizontal="true"
+            android:background="#878786" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_step_end"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dimen_xs"
+        android:layout_marginLeft="@dimen/dimen_xs"
+        android:visibility="gone" >
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/imageView3"
+            android:layout_centerHorizontal="true"
+            android:background="#878786" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_point_outline" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/step_time"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:padding="@dimen/dimen_xs"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
@@ -33,7 +102,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_m"
         android:layout_weight="1"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:padding="@dimen/dimen_xs" >
 
         <TextView
             android:id="@+id/step_description"
@@ -68,12 +138,13 @@
             android:gravity="center_vertical"
             android:visibility="gone" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/step_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black" />
-    
+
     <!-- <FrameLayout -->
     <!-- android:id="@+id/leg_transporttype" -->
     <!-- android:layout_width="wrap_content" -->

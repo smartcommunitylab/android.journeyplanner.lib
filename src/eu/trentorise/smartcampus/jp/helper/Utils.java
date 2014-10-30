@@ -48,7 +48,7 @@ public class Utils {
 
 		switch (tType) {
 		case BICYCLE:
-			imgv.setImageResource(R.drawable.ic_mt_bicyle);
+			imgv.setImageResource(R.drawable.ic_mt_bicycle);
 			break;
 		case CAR:
 			imgv.setImageResource(R.drawable.ic_mt_car);
@@ -81,7 +81,7 @@ public class Utils {
 
 	public static ImageView getImageForParkingStation(Context ctx, String price) {
 		ImageView imgv = new ImageView(ctx);
-		Bitmap img = writeOnBitmap(ctx, R.drawable.ic_mt_park, price, 12);
+		Bitmap img = writeOnBitmap(ctx, R.drawable.ic_mt_parking, price, 12);
 		imgv.setImageBitmap(img);
 		return imgv;
 	}
@@ -117,7 +117,7 @@ public class Utils {
 			Rect bounds = new Rect();
 			paint.getTextBounds(text, 0, text.length(), bounds);
 			float x = bitmap.getWidth() / 2;
-			float y = bitmap.getHeight() / 2 - Utils.convertDpToPixel(2.5f, mContext);
+			float y = bitmap.getHeight() / 2 + Utils.convertDpToPixel(6.5f, mContext);
 			canvas.drawText(text, x, y, paint);
 		}
 
@@ -129,7 +129,7 @@ public class Utils {
 		Resources r = ctx.getResources();
 		switch (tType) {
 		case BICYCLE:
-			imgv.setCompoundDrawables(null, r.getDrawable(R.drawable.ic_mt_bicyle), null, null);
+			imgv.setCompoundDrawables(null, r.getDrawable(R.drawable.ic_mt_bicycle), null, null);
 			break;
 		case CAR:
 			imgv.setCompoundDrawables(null, r.getDrawable(R.drawable.ic_mt_car), null, null);

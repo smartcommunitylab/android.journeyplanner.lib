@@ -34,7 +34,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -157,10 +159,14 @@ public class ItineraryFragment extends SherlockFragment {
 			promotedTextView.setVisibility(View.VISIBLE);
 		}
 
+
 		// add header (before setAdapter or it won't work!)
 		if (stepsListView.getHeaderViewsCount() == 0) {
 			View headerView = getSherlockActivity().getLayoutInflater()
 					.inflate(R.layout.itinerary_step, stepsListView, false);
+			//set visible first point ll
+			RelativeLayout firstLL= (RelativeLayout) headerView.findViewById(R.id.ll_step_beginning);
+			firstLL.setVisibility(View.VISIBLE);
 			TextView headerTimeTextView = (TextView) headerView
 					.findViewById(R.id.step_time);
 			TextView headerDescTextView = (TextView) headerView
@@ -176,6 +182,9 @@ public class ItineraryFragment extends SherlockFragment {
 		if (stepsListView.getFooterViewsCount() == 0) {
 			View footerView = getSherlockActivity().getLayoutInflater()
 					.inflate(R.layout.itinerary_step, stepsListView, false);
+			//set visible last point ll
+			RelativeLayout lastLL= (RelativeLayout) footerView.findViewById(R.id.ll_step_end);
+			lastLL.setVisibility(View.VISIBLE);
 			TextView footerTimeTextView = (TextView) footerView
 					.findViewById(R.id.step_time);
 			TextView footerDescTextView = (TextView) footerView
