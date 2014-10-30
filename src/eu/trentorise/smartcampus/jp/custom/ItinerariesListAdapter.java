@@ -121,8 +121,7 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 
 			// parking!
 			if (tType.equals(TType.CAR) && leg.getTo().getStopId() != null) {
-				// TODO: get price for parking
-				String price = null;
+				String price = ParkingsHelper.getParkingCost(leg.getTo().getStopId().getExtra(), context);
 				imgv = Utils.getImageForParkingStation(getContext(), price);
 				holder.transportTypes.addView(imgv);
 			}
@@ -161,14 +160,8 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 			/*
 			 * parking cost
 			 */
-			String parkingCost = "";
-			// TODO: ***** TEMP *****
-			// parkingCost = "0,80 euro/h";
-			// TODO: ***** TEMP ***** end
-			if (leg.getExtra() != null && leg.getExtra().containsKey(ParkingsHelper.PARKING_EXTRA_COST)) {
-				parkingCost = (String) leg.getExtra().get(ParkingsHelper.PARKING_EXTRA_COST);
-			}
-			if (parkingCost.length() > 0) {
+			String parkingCost = ParkingsHelper.getParkingCostLong(leg.getExtra(), context);
+			if (parkingCost != null && parkingCost.length() > 0) {
 				holder.parkingCost.setText(parkingCost);
 				holder.parkingCost.setVisibility(View.VISIBLE);
 			} else {

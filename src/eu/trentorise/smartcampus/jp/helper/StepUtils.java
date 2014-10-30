@@ -89,7 +89,7 @@ public class StepUtils {
 				step.setTime(Config.FORMAT_TIME_UI.format(new Date(legs.get(index + 1).getStartime())));
 				step.setDescription(Html.fromHtml(mCtx.getString(R.string.step_car_leave) + " "
 						+ bold(ParkingsHelper.getName(leg.getTo().getStopId().getId()))));
-				// TODO: get parking price
+				step.setExtra(leg.getTo().getStopId().getExtra());
 				step.setImage(Utils.getImageForParkingStation(mCtx, null));
 				if (Utils.containsAlerts(leg)) {
 					step.setAlert(buildAlerts(leg, index));

@@ -78,7 +78,7 @@ public class SmartCheckAlertsAdapter extends ArrayAdapter<AlertRoadLoc> {
 
 		// type
 		holder.alertRoadTypes.removeAllViews();
-		if (alertRoad.getChangeTypes().length > 0) {
+		if (alertRoad.getChangeTypes() != null && alertRoad.getChangeTypes().length > 0) {
 			for (AlertRoadType type : alertRoad.getChangeTypes()) {
 				ImageView typeImageView = new ImageView(mContext);
 				typeImageView.setImageResource(AlertRoadsHelper.getDrawableResourceByType(type));
