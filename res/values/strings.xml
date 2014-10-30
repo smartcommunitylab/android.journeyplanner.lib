@@ -21,7 +21,7 @@
     <string name="maps_api_key">0fdlLrw2lMFFg-TnfYFuceTi0m60-Q1mBF6EMFA</string>
     <string name="empty" />
     <string name="placeholder">&#8230;</string>
-    <string name="app_name">ViaggiaTrento</string>
+    <string name="app_name">ViaggiaRovereto</string>
     <string name="btn_planjourney">Plan\njourney</string>
     <string name="btn_monitorrecurrent">Monitoring setup</string>
     <string name="btn_broadcast">Submit\nan alert</string>
