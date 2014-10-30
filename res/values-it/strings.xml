@@ -202,7 +202,9 @@
     <string name="smart_check_alerts_time">dal %1$s al %2$s</string>
     <string name="smart_check_alerts_numbers">dal n. %1$s al n. %2$s</string>
     <string name="smart_check_alerts_intersections">dall\'intersezione con %1$s all\'intersezione con %2$s</string>
-    <string name="parking_alert">%1$s: %2$s posti disponibili</string>
+    <string name="parking_alert">Solo %s posti disponibili</string>
+    <string name="parking_pickup_alert_car">Solo %s auto disponibili</string>
+    <string name="parking_pickup_alert_bike">Solo %s bici disponibili</string>
     <string name="smart_check_routes_empty">Nessuna corsa</string>
     <string name="smart_check_parkings_empty">Nessun parcheggio</string>
     <string name="smart_check_alerts_empty">Nessuna ordinanza</string>
