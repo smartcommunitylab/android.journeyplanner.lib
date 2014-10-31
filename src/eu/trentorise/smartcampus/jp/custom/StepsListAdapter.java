@@ -23,6 +23,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import eu.trentorise.smartcampus.jp.R;
@@ -33,13 +34,11 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 
 	Context mCtx;
 	int resource;
-	private List<Step> itinerary;
 
 	public StepsListAdapter(Context context, int resource, List<Step> objects) {
 		super(context, resource, objects);
 		this.mCtx = context;
 		this.resource = resource;
-		this.itinerary = objects;
 	}
 
 	@Override
@@ -48,18 +47,15 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		RowHolder holder = null;
 
 		if (row == null) {
-			row = ((Activity) mCtx).getLayoutInflater().inflate(resource,
-					parent, false);
+			row = ((Activity) mCtx).getLayoutInflater().inflate(resource, parent, false);
 			holder = new RowHolder();
 			holder.time = (TextView) row.findViewById(R.id.step_time);
-			holder.description = (TextView) row
-					.findViewById(R.id.step_description);
+			holder.description = (TextView) row.findViewById(R.id.step_description);
 			holder.alerts = (TextView) row.findViewById(R.id.step_alerts);
-			holder.parkingdataTime = (TextView) row
-					.findViewById(R.id.step_parkingdata_time);
-			holder.parkingdataPrice = (TextView) row
-					.findViewById(R.id.step_parkingdata_price);
-			holder.ttImage = (TextView) row.findViewById(R.id.step_img);
+			holder.parkingdataTime = (TextView) row.findViewById(R.id.step_parkingdata_time);
+			holder.parkingdataPrice = (TextView) row.findViewById(R.id.step_parkingdata_price);
+			// holder.ttImage = (TextView) row.findViewById(R.id.step_img);
+			holder.ttImage = (ImageView) row.findViewById(R.id.step_img);
 			row.setTag(holder);
 		} else {
 			holder = (RowHolder) row.getTag();
@@ -72,8 +68,7 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		 */
 
 		// set visible middle
-		RelativeLayout middleLL = (RelativeLayout) row
-				.findViewById(R.id.ll_step_middle);
+		RelativeLayout middleLL = (RelativeLayout) row.findViewById(R.id.ll_step_middle);
 		middleLL.setVisibility(View.VISIBLE);
 		/*
 		 * time
@@ -88,8 +83,9 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		/*
 		 * image
 		 */
-		holder.ttImage.setCompoundDrawablesWithIntrinsicBounds(null, null, step
-				.getImage().getDrawable(), null);
+		// holder.ttImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
+		// step.getImage().getDrawable(), null);
+		holder.ttImage.setImageDrawable(step.getImage().getDrawable());
 
 		/*
 		 * alert
@@ -106,21 +102,14 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		 */
 		Integer parkingSearchTimeMin = null;
 		Integer parkingSearchTimeMax = null;
-		if (step.getExtra() != null
-				&& step.getExtra().containsKey(
-						ParkingsHelper.PARKING_EXTRA_SEARCHTIME)) {
+		if (step.getExtra() != null && step.getExtra().containsKey(ParkingsHelper.PARKING_EXTRA_SEARCHTIME)) {
 			@SuppressWarnings("unchecked")
-			Map<String, Object> searchTime = (Map<String, Object>) step
-					.getExtra().get(ParkingsHelper.PARKING_EXTRA_SEARCHTIME);
-			if (searchTime
-					.containsKey(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MIN)) {
-				parkingSearchTimeMin = (Integer) searchTime
-						.get(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MIN);
+			Map<String, Object> searchTime = (Map<String, Object>) step.getExtra().get(ParkingsHelper.PARKING_EXTRA_SEARCHTIME);
+			if (searchTime.containsKey(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MIN)) {
+				parkingSearchTimeMin = (Integer) searchTime.get(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MIN);
 			}
-			if (searchTime
-					.containsKey(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MAX)) {
-				parkingSearchTimeMax = (Integer) searchTime
-						.get(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MAX);
+			if (searchTime.containsKey(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MAX)) {
+				parkingSearchTimeMax = (Integer) searchTime.get(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MAX);
 			}
 		}
 		String parkingSearchTimeString = "";
@@ -128,15 +117,12 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 			parkingSearchTimeString += parkingSearchTimeMin + "'";
 		}
 		if (parkingSearchTimeMax != null && parkingSearchTimeMax > 0) {
-			parkingSearchTimeString += (parkingSearchTimeString.length() > 0 ? "-"
-					+ parkingSearchTimeMax
-					: parkingSearchTimeMax)
-					+ "'";
+			parkingSearchTimeString += (parkingSearchTimeString.length() > 0 ? "-" + parkingSearchTimeMax
+					: parkingSearchTimeMax) + "'";
 		}
 
 		if (parkingSearchTimeString.length() > 0) {
-			holder.parkingdataTime.setText(mCtx.getString(
-					R.string.step_parking_search, parkingSearchTimeString));
+			holder.parkingdataTime.setText(mCtx.getString(R.string.step_parking_search, parkingSearchTimeString));
 			holder.parkingdataTime.setVisibility(View.VISIBLE);
 		} else {
 			holder.parkingdataTime.setVisibility(View.GONE);
@@ -145,8 +131,7 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		/*
 		 * parking cost
 		 */
-		String parkingCost = ParkingsHelper.getParkingCostLong(step.getExtra(),
-				mCtx);
+		String parkingCost = ParkingsHelper.getParkingCostLong(step.getExtra(), mCtx);
 		if (parkingCost != null && parkingCost.length() > 0) {
 			holder.parkingdataPrice.setText(parkingCost);
 			holder.parkingdataPrice.setVisibility(View.VISIBLE);
@@ -163,7 +148,8 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		TextView alerts;
 		TextView parkingdataTime;
 		TextView parkingdataPrice;
-		TextView ttImage;
+		// TextView ttImage;
+		ImageView ttImage;
 	}
 
 }

@@ -33,11 +33,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:contentDescription="@null"
             android:src="@drawable/ic_point_outline" />
 
         <View
             android:layout_width="1dp"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_below="@+id/imageView1"
             android:layout_centerHorizontal="true"
             android:background="@color/step_line" />
@@ -55,12 +56,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:contentDescription="@null"
             android:paddingTop="@dimen/dimen_s"
             android:src="@drawable/ic_point" />
 
         <View
             android:layout_width="1dp"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:background="@color/step_line" />
     </RelativeLayout>
@@ -76,7 +78,7 @@
         <View
             android:id="@+id/view3"
             android:layout_width="1dp"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_above="@+id/imageView3"
             android:layout_centerHorizontal="true"
             android:background="@color/step_line" />
@@ -86,6 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:contentDescription="@null"
             android:src="@drawable/ic_point_outline" />
     </RelativeLayout>
 
@@ -139,11 +142,17 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <TextView
+    <!-- <TextView -->
+    <!-- android:id="@+id/step_img" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:textColor="@android:color/black" /> -->
+
+    <ImageView
         android:id="@+id/step_img"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black" />
+        android:layout_height="match_parent"
+        android:contentDescription="@null" />
 
     <!-- <FrameLayout -->
     <!-- android:id="@+id/leg_transporttype" -->
