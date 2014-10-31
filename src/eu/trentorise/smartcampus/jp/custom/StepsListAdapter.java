@@ -54,7 +54,6 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 			holder.alerts = (TextView) row.findViewById(R.id.step_alerts);
 			holder.parkingdataTime = (TextView) row.findViewById(R.id.step_parkingdata_time);
 			holder.parkingdataPrice = (TextView) row.findViewById(R.id.step_parkingdata_price);
-			// holder.ttImage = (TextView) row.findViewById(R.id.step_img);
 			holder.ttImage = (ImageView) row.findViewById(R.id.step_img);
 			row.setTag(holder);
 		} else {
@@ -62,14 +61,14 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		}
 
 		Step step = getItem(position);
+
 		/*
-		 * 
 		 * set line drawn
 		 */
-
 		// set visible middle
 		RelativeLayout middleLL = (RelativeLayout) row.findViewById(R.id.ll_step_middle);
 		middleLL.setVisibility(View.VISIBLE);
+
 		/*
 		 * time
 		 */
@@ -83,8 +82,6 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		/*
 		 * image
 		 */
-		// holder.ttImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
-		// step.getImage().getDrawable(), null);
 		holder.ttImage.setImageDrawable(step.getImage().getDrawable());
 
 		/*
@@ -148,7 +145,6 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		TextView alerts;
 		TextView parkingdataTime;
 		TextView parkingdataPrice;
-		// TextView ttImage;
 		ImageView ttImage;
 	}
 
