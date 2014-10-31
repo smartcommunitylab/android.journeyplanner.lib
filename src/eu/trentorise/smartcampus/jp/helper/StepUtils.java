@@ -125,7 +125,8 @@ public class StepUtils {
 		} else if (tType.equals(TType.BICYCLE)) {
 			desc += mCtx.getString(R.string.step_bike_ride);
 
-			if (leg.getFrom().getStopId() != null) {
+			if (leg.getFrom().getStopId() != null && 
+					leg.getFrom().getStopId().getId() != null && leg.getFrom().getStopId().getId().length() > 0) {
 				from = this.mCtx.getString(R.string.step_bike_pick_up)
 						+ " "
 						+ bold(ParkingsHelper.getParkingAgencyName(this.mCtx, leg.getFrom().getStopId().getAgencyId()) + " "
