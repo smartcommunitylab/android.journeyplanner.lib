@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:enabled="true"
-                android:text="@string/recurr_save" />
+                android:text="@string/btn_startmonitoring" />
         </LinearLayout>
     </LinearLayout>
 

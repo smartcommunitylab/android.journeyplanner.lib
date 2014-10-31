@@ -102,8 +102,10 @@ public class NotificationsListAdapterJP extends ArrayAdapter<Notification> {
 		String tripId = (String) content.get("tripId");
 //		String direction = (String) content.get("direction");
 		Long originalFromTime = (Long) content.get("from"); // milliseconds
-		String stopName = (String) content.get("station");
+		String stopName = (String) content.get("stopId");
 		String placesAvailable = (String) content.get("placesAvailable");
+		String noOfvehicles = (String) content.get("noOfvehicles");
+		String transport = (String) content.get("transport");
 		
 		JPNotificationBean bean = NotificationBuilder.buildNotification(mContext, 
 				type,
@@ -115,7 +117,9 @@ public class NotificationsListAdapterJP extends ArrayAdapter<Notification> {
 //				direction, 
 				originalFromTime, 
 				stopName,
-				placesAvailable);
+				placesAvailable,
+				noOfvehicles,
+				transport);
 		if (bean == null) {
 			bean = new JPNotificationBean();
 			bean.title = notification.getTitle();
