@@ -73,7 +73,7 @@ public class Utils {
 
 	public static ImageView getImageByLine(Context ctx, String line) {
 		ImageView imgv = new ImageView(ctx);
-		Bitmap img = writeOnBitmap(ctx, R.drawable.ic_mt_bus, line, 16);
+		Bitmap img = writeOnBitmap(ctx, R.drawable.ic_mt_bus, line, 12);
 		imgv.setImageBitmap(img);
 		// colorizeLineDrawable(ctx, line, imgv);
 		return imgv;
@@ -109,7 +109,7 @@ public class Utils {
 		if (text != null) {
 			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 			paint.setTextAlign(Align.CENTER);
-			paint.setTextSize(scale * (size != null ? size : 16));
+			paint.setTextSize(scale * (size != null ? size : 12));
 			paint.setAntiAlias(true);
 			paint.setARGB(255, 0, 0, 0);
 
@@ -117,7 +117,7 @@ public class Utils {
 			Rect bounds = new Rect();
 			paint.getTextBounds(text, 0, text.length(), bounds);
 			float x = bitmap.getWidth() / 2;
-			float y = bitmap.getHeight() / 2 + Utils.convertDpToPixel(6.5f, mContext);
+			float y = bitmap.getHeight() / 2 + Utils.convertDpToPixel(5f, mContext);
 			canvas.drawText(text, x, y, paint);
 		}
 
