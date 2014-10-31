@@ -103,8 +103,8 @@ public class NotificationsListAdapterJP extends ArrayAdapter<Notification> {
 //		String direction = (String) content.get("direction");
 		Long originalFromTime = (Long) content.get("from"); // milliseconds
 		String stopName = (String) content.get("stopId");
-		String placesAvailable = (String) content.get("placesAvailable");
-		String noOfvehicles = (String) content.get("noOfvehicles");
+		String placesAvailable = content.get("placesAvailable") != null ? ""+content.get("placesAvailable") : null;
+		String noOfvehicles = content.get("noOfvehicles")  != null ? ""+content.get("noOfvehicles") : null;
 		String transport = (String) content.get("transport");
 		
 		JPNotificationBean bean = NotificationBuilder.buildNotification(mContext, 
