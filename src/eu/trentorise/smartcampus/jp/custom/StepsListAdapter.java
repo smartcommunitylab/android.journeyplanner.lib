@@ -94,7 +94,7 @@ public class StepsListAdapter extends ArrayAdapter<Step> {
 		/*
 		 * alert
 		 */
-		if (step.getAlert() != null) {
+		if (step.getAlert() != null && step.getAlert().trim().length() > 0) {
 			holder.alerts.setText(step.getAlert());
 			holder.alerts.setVisibility(View.VISIBLE);
 		} else {

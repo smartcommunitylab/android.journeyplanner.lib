@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -176,9 +177,9 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 		} else if (item.getItemId() == R.id.menu_item_delete) {
 			// delete monitor
 			AlertDialog.Builder deleteAlertDialog = new AlertDialog.Builder(getSherlockActivity());
-			deleteAlertDialog.setTitle("Delete " + params.getName());
-			deleteAlertDialog.setMessage("Are you sure?");
-			deleteAlertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			deleteAlertDialog.setTitle(getString(R.string.dialog_delete_itinerary,params.getName()));
+			deleteAlertDialog.setMessage(R.string.dialog_are_you_sure);
+			deleteAlertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					SCAsyncTask<String, Void, Void> task = new SCAsyncTask<String, Void, Void>(getSherlockActivity(),
 							new DeleteMyRecurItineraryProcessor(getSherlockActivity(), MonitorJourneyFragment.this.getTag()));
@@ -187,7 +188,7 @@ public class MonitorJourneyFragment extends PlanNewJourneyFragment {
 //					getSherlockActivity().getSupportFragmentManager().popBackStackImmediate();
 				}
 			});
-			deleteAlertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			deleteAlertDialog.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();
 				}

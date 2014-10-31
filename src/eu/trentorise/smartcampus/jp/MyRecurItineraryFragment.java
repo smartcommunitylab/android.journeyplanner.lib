@@ -191,15 +191,19 @@ public class MyRecurItineraryFragment extends FeedbackFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.menu_item_edit) {
 			// toggle the monitor
-			FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
-			Fragment fragment = new MonitorJourneyFragment();
-			Bundle b = new Bundle();
-			b.putSerializable(MonitorJourneyFragment.PARAMS, params);
-			fragment.setArguments(b);
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-			fragmentTransaction.replace(Config.mainlayout, fragment, Config.PLAN_NEW_RECUR_FRAGMENT_TAG);
-			fragmentTransaction.addToBackStack(fragment.getTag());
-			fragmentTransaction.commit();
+//			FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
+//			Fragment fragment = new MonitorJourneyFragment();
+//			Bundle b = new Bundle();
+//			b.putSerializable(MonitorJourneyFragment.PARAMS, params);
+//			fragment.setArguments(b);
+//			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//			fragmentTransaction.replace(Config.mainlayout, fragment, Config.PLAN_NEW_RECUR_FRAGMENT_TAG);
+//			fragmentTransaction.addToBackStack(fragment.getTag());
+//			fragmentTransaction.commit();
+			Intent intent = new Intent(getSherlockActivity(), MonitorJourneyActivity.class);
+			intent.putExtra(MonitorJourneyFragment.PARAMS, params);
+			getSherlockActivity().startActivity(intent);
+			getSherlockActivity().finish();
 			return true;
 		} else if (item.getItemId() == R.id.menu_item_delete) {
 			// delete monitor
