@@ -248,6 +248,10 @@
 
     <string name="notifications_itinerary_delay_train">Treno %1$s</string>
 
+    <string name="notifications_itinerary_parking_place_title">Disponibilità posti per itinerario \"%s\"</string>
+    <string name="notifications_itinerary_parking_car_title">Disponibilità auto per itinerario \"%s\"</string>
+    <string name="notifications_itinerary_parking_bike_title">Disponibilità bici per itinerario \"%s\"</string>
+    
     <!-- <string name="notifications_itinerary_delay_train">Treno %1$s per %2$s</string> -->
     <string name="notifications_itinerary_delay_original_schedule">atteso alle %1$s a %2$s</string>
     <string name="dialog_are_you_sure">Sei sicuro?</string>

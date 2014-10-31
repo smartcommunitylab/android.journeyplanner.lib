@@ -251,6 +251,11 @@
     <string name="notifications_itinerary_delay_train">Train %1$s</string>
     <string name="notifications_itinerary_delay_original_schedule">scheduled at %1$s</string>
     <!-- <string name="notifications_itinerary_delay_original_schedule">scheduled at %1$s at %2$s</string> -->
+
+    <string name="notifications_itinerary_parking_place_title">Place availability for \"%s\" journey</string>
+    <string name="notifications_itinerary_parking_car_title">Car availability for \"%s\" journey</string>
+    <string name="notifications_itinerary_parking_bike_title">Bike availability for \"%s\" journey</string>
+
     <string name="dialog_are_you_sure">Are you sure?</string>
     <string name="dialog_delete_itinerary">Delete \"%s\"</string>
     <string name="minutes">m</string>

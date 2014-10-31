@@ -23,8 +23,10 @@ public class JPPushNotificationBuilder implements PushNotificationBuilder {
 	private final static String FIELD_TYPE = "content.type";
 	private final static String FIELD_ENTITY = "entities";
 	private final static String FIELD_PLACES_AVAILABLE = "content.placesAvailable";
+	private final static String FIELD_NUMBER_OF_VEHICLES = "content.noOfvehicles";
+	private final static String FIELD_TRANSPORT = "content.transport";
 	private final static String FIELD_FROMTIME = "content.from";
-	private final static String FIELD_STATION = "content.station";
+	private final static String FIELD_STATION = "content.stopId";
 
 	
 	private String getJourneyId(String json) {
@@ -53,7 +55,9 @@ public class JPPushNotificationBuilder implements PushNotificationBuilder {
 				i.getStringExtra(FIELD_TRIPID), 
 				i.hasExtra(FIELD_FROMTIME) ? Long.parseLong(i.getStringExtra(FIELD_FROMTIME)) : null, 
 				i.getStringExtra(FIELD_STATION),
-				i.getStringExtra(FIELD_PLACES_AVAILABLE));
+				i.getStringExtra(FIELD_PLACES_AVAILABLE),
+				i.getStringExtra(FIELD_NUMBER_OF_VEHICLES),
+				i.getStringExtra(FIELD_TRANSPORT));
 		
 		if (bean == null) bean = new JPNotificationBean();
 		if (bean.title == null) bean.title = i.getStringExtra(FIELD_TITLE);

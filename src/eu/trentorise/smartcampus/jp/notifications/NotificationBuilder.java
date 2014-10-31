@@ -1,5 +1,7 @@
 package eu.trentorise.smartcampus.jp.notifications;
 
+import it.sayservice.platform.smartplanner.data.message.TType;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -28,7 +30,9 @@ public class NotificationBuilder {
 			String tripId,
 			Long originalFromTime,
 			String stopName,
-			String placesAvailable) {
+			String placesAvailable, 
+			String noOfvehicles, 
+			String transport) {
 		
 		if ("alertDelay".equals(type)) {
 			JPNotificationBean bean = createDelayNotification(
@@ -47,16 +51,51 @@ public class NotificationBuilder {
 					journeyName,
 					agencyId,
 					stopName,
-					placesAvailable);
+					placesAvailable,
+					noOfvehicles,
+					transport);
+			return  bean;
 		}
 		return null;
 	}
 
 	private static JPNotificationBean createParkingNotification(
 			Context mContext, String journeyName, String agencyId,
-			String stopName, String placesAvailable) 
+			String stopName, String placesAvailable, String noOfvehicles, String transport) 
 	{
 		JPNotificationBean bean = new JPNotificationBean();
+		// title
+		boolean placeProblem = placesAvailable != null && Integer.parseInt(placesAvailable) >= 0;
+		
+		if (journeyName != null && journeyName.length() != 0) {
+			if (placeProblem) {
+				bean.title = mContext.getString(R.string.notifications_itinerary_parking_place_title, journeyName);
+			} else {
+				if (TType.BICYCLE.name().equals(transport)) {
+					bean.title = mContext.getString(R.string.notifications_itinerary_parking_bike_title, journeyName);
+				} else {
+					bean.title = mContext.getString(R.string.notifications_itinerary_parking_car_title, journeyName);
+				}
+			}
+		}
+
+		// description
+		StringBuilder description = new StringBuilder();
+		if (stopName != null && stopName.length()>0) {
+			description.append(stopName);
+			description.append(": ");
+		}
+		if (placeProblem) {
+			description.append(mContext.getString(R.string.parking_alert, placesAvailable));
+		} else {
+			if (TType.BICYCLE.name().equals(transport)) {
+				description.append(mContext.getString(R.string.parking_pickup_alert_bike, noOfvehicles));
+			} else {
+				description.append(mContext.getString(R.string.parking_pickup_alert_car, noOfvehicles));
+			}
+		}
+		
+		bean.description = description.toString();
 		
 		return bean;
 	}
