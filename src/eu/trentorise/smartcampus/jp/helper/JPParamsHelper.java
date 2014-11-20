@@ -113,8 +113,7 @@ public class JPParamsHelper {
 
 	public static List<String> getAgencyID() {
 		List<String> agencyIDs = new ArrayList<String>();
-		List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) getInstance().getParamsAsset().get(
-				KEY_AGENCY);
+		List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) getInstance().getParamsAsset().get(KEY_AGENCY);
 		if (result != null) {
 			for (HashMap<String, Object> n : result) {
 				if (n != null) {
@@ -129,8 +128,7 @@ public class JPParamsHelper {
 
 	public static List<RouteDescriptor> getRoutesIDByAgencyID(String agencyID) {
 		List<RouteDescriptor> routes = new ArrayList<RouteDescriptor>();
-		List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) getInstance().getParamsAsset().get(
-				KEY_AGENCY);
+		List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) getInstance().getParamsAsset().get(KEY_AGENCY);
 		if (result != null) {
 			for (HashMap<String, Object> n : result) {
 				if (((String) n.get(KEY_AGENCY_ID)).equals(agencyID)) {
@@ -146,8 +144,7 @@ public class JPParamsHelper {
 
 	public static List<String> getRoutesParamsIDByAgencyID(String agencyID) {
 		List<String> routes = new ArrayList<String>();
-		List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) getInstance().getParamsAsset().get(
-				KEY_AGENCY);
+		List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) getInstance().getParamsAsset().get(KEY_AGENCY);
 		if (result != null) {
 			for (HashMap<String, Object> n : result) {
 				if (((String) n.get(KEY_AGENCY_ID)).equals(agencyID)) {
@@ -166,14 +163,19 @@ public class JPParamsHelper {
 	 * MAP
 	 */
 	public static int getZoomLevelMap() {
-		if (getInstance() != null && getInstance().getParamsAsset() != null)
+		if (getInstance() != null && getInstance().getParamsAsset() != null) {
 			return (Integer) getInstance().getParamsAsset().get(KEY_ZOOM_MAP);
-		else
+		} else {
 			return DEFAULT_ZOOM_LEVEL;
+		}
 	}
 
 	public static List<Double> getCenterMap() {
-		return (List<Double>) getInstance().getParamsAsset().get(KEY_CENTER_MAP);
+		if (getInstance() != null && getInstance().getParamsAsset() != null) {
+			return (List<Double>) getInstance().getParamsAsset().get(KEY_CENTER_MAP);
+		} else {
+			return null;
+		}
 	}
 
 	/*
