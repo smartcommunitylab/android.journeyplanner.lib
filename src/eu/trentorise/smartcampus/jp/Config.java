@@ -96,6 +96,7 @@ public class Config {
 	public static final Set<TType> SHAREDBIKE_SET = new HashSet<TType>() {
 		{
 			add(TType.SHAREDBIKE_WITHOUT_STATION);
+			add(TType.SHAREDBIKE);
 		}
 	};
 	public static final Set<TType> SHAREDCAR_SET = new HashSet<TType>() {

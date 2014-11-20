@@ -14,25 +14,22 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/sc_light_gray">
+    android:layout_height="match_parent" >
 
     <LinearLayout
-       
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/sc_light_gray"
         android:orientation="vertical" >
 
-       <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/white"
             android:orientation="vertical"
-            android:padding="10dp"
-            android:background="@android:color/white" >
-
-
+            android:padding="@dimen/dimen_s" >
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -75,34 +72,63 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@android:color/black" />
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/no_items_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone" >
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="2dip"
-                    android:background="@color/sc_light_gray" />
-
-                <TextView
-                    style="@style/no_items"
-                    android:text="@string/no_items" />
-            </LinearLayout>
         </LinearLayout>
 
-        <ListView
+        <LinearLayout
+            android:id="@+id/choices_promoted_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/promoted"
+                android:drawableEnd="@drawable/ic_action_leaf"
+                android:drawableRight="@drawable/ic_action_leaf"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dimen_xs"
+                android:paddingRight="@dimen/dimen_xs"
+                android:text="@string/promoted_itineraries"
+                android:textColor="@android:color/white" />
+
+            <eu.trentorise.smartcampus.android.common.view.ExpandedListView
+                android:id="@+id/choices_promoted_listView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cacheColorHint="@android:color/transparent" >
+            </eu.trentorise.smartcampus.android.common.view.ExpandedListView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_s"
+                android:background="@color/promoted" />
+        </LinearLayout>
+
+        <eu.trentorise.smartcampus.android.common.view.ExpandedListView
             android:id="@+id/choices_listView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="6dp"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
+            android:layout_height="wrap_content"
             android:cacheColorHint="@android:color/transparent" >
-        </ListView>
+        </eu.trentorise.smartcampus.android.common.view.ExpandedListView>
+
+        <LinearLayout
+            android:id="@+id/no_items_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_xxs"
+                android:background="@color/sc_light_gray" />
+
+            <TextView
+                style="@style/no_items"
+                android:text="@string/no_items" />
+        </LinearLayout>
     </LinearLayout>
 
-</RelativeLayout>
+</ScrollView>

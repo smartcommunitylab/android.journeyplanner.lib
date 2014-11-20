@@ -44,5 +44,6 @@
     <item name="btn_broadcast" type="id"/>
     <item name="btn_myprofile" type="id"/>
     <item name="btn_smartcheck" type="id"/>
+    <item name="btn_bikesharing" type="id"/>
 
 </resources>

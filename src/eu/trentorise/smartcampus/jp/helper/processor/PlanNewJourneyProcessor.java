@@ -30,37 +30,69 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class PlanNewJourneyProcessor extends AbstractAsyncTaskProcessor<SingleJourney, List<Itinerary>> {
 
-	private ItinerariesListAdapter adapter = null;
-	private LinearLayout mNoItems = null;
-	
+	private View itinerariesView;
+	private ItinerariesListAdapter itinerariesAdapter = null;
+	private View itinerariesPromotedView;
+	private ItinerariesListAdapter itinerariesPromotedAdapter = null;
+	private LinearLayout noItemsView = null;
 
-	public PlanNewJourneyProcessor(Activity activity, ItinerariesListAdapter adapter, LinearLayout mNoItems) {
+	public PlanNewJourneyProcessor(Activity activity, View itinerariesView, ItinerariesListAdapter itinerariesAdapter,
+			View itinerariesPromotedView, ItinerariesListAdapter itinerariesPromotedAdapter, LinearLayout noItemsView) {
 		super(activity);
-		this.adapter = adapter;
-		this.mNoItems  = mNoItems;
+		this.itinerariesView = itinerariesView;
+		this.itinerariesAdapter = itinerariesAdapter;
+		this.itinerariesPromotedView = itinerariesPromotedView;
+		this.itinerariesPromotedAdapter = itinerariesPromotedAdapter;
+		this.noItemsView = noItemsView;
 	}
 
 	@Override
 	public List<Itinerary> performAction(SingleJourney... array) throws SecurityException, Exception {
-		return JPHelper.planSingleJourney(array[0],JPHelper.getAuthToken(activity));
+		return JPHelper.planSingleJourney(array[0], JPHelper.getAuthToken(activity));
 	}
 
 	@Override
 	public void handleResult(List<Itinerary> itineraries) {
-		adapter.clear();
-		for (Itinerary myt : itineraries) {
-			adapter.add(myt);
-		}
-		adapter.notifyDataSetChanged();
-		if ((itineraries==null)||(itineraries.size()==0))
-		{
-		//put "empty string"
-		mNoItems.setVisibility(View.VISIBLE);
-		}
-	else {
-		mNoItems.setVisibility(View.GONE);
-	}
-		
-	}
+		itinerariesPromotedAdapter.clear();
+		itinerariesAdapter.clear();
 
+		for (int i = 0; i < itineraries.size(); i++) {
+			Itinerary myt = itineraries.get(i);
+
+			// TODO: ***** TEMP ***** Put in the right adapter!
+			// if (i < 2) {
+			// myt.setPromoted(true);
+			// } else {
+			// myt.setPromoted(false);
+			// }
+			// TODO: ***** TEMP ***** end
+
+			if (myt.isPromoted()) {
+				itinerariesPromotedAdapter.add(myt);
+			} else {
+				itinerariesAdapter.add(myt);
+			}
+		}
+
+		itinerariesPromotedAdapter.notifyDataSetChanged();
+		itinerariesAdapter.notifyDataSetChanged();
+
+		if (itinerariesPromotedAdapter.isEmpty()) {
+			itinerariesPromotedView.setVisibility(View.GONE);
+		} else {
+			itinerariesPromotedView.setVisibility(View.VISIBLE);
+		}
+
+		if (itinerariesAdapter.isEmpty()) {
+			itinerariesView.setVisibility(View.GONE);
+		} else {
+			itinerariesView.setVisibility(View.VISIBLE);
+		}
+
+		if (itinerariesPromotedAdapter.isEmpty() && itinerariesAdapter.isEmpty()) {
+			noItemsView.setVisibility(View.VISIBLE);
+		} else {
+			noItemsView.setVisibility(View.GONE);
+		}
+	}
 }

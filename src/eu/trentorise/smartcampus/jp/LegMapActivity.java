@@ -22,14 +22,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
@@ -44,9 +45,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.feedback.utils.FeedbackFragmentInflater;
-import eu.trentorise.smartcampus.jp.custom.StopsV2AsyncTask;
 import eu.trentorise.smartcampus.jp.custom.map.MapManager;
 import eu.trentorise.smartcampus.jp.helper.AlertRoadsHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
@@ -122,7 +121,7 @@ public class LegMapActivity extends BaseActivity implements OnCameraChangeListen
 			if (legs != null) {
 				polylines = legs2polylines(legs);
 			}
-			activePos = getIntent().getIntExtra(ACTIVE_POS, -1);
+			activePos = getIntent().getIntExtra(ACTIVE_POS, polylines.size()+1);
 
 			date = getIntent().getLongExtra(DATE, 0);
 		}
@@ -160,12 +159,14 @@ public class LegMapActivity extends BaseActivity implements OnCameraChangeListen
 			// alerts
 			if (AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN) == null
 					|| AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN).isEmpty()) {
-				Log.e("DATE IN MILLIS!", Long.toString(date));
-//				new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(this, new SmartCheckAlertRoadsMapProcessor(this,
-//						getSupportMap(), JPParamsHelper.getAlertroadsAgencyId(), (date > 0 ? date : null), null,
-//						JPParamsHelper.getAlertroadsAgencyId(), true)).execute();
-				new SmartCheckAlertRoadsMapProcessor(this,getSupportMap(), JPParamsHelper.getAlertroadsAgencyId(), (date > 0 ? date : null), null,
-						JPParamsHelper.getAlertroadsAgencyId(), true).execute();
+				// Log.e("DATE IN MILLIS!", Long.toString(date));
+				// new SCAsyncTask<Void, Void, List<AlertRoadLoc>>(this, new
+				// SmartCheckAlertRoadsMapProcessor(this,
+				// getSupportMap(), JPParamsHelper.getAlertroadsAgencyId(),
+				// (date > 0 ? date : null), null,
+				// JPParamsHelper.getAlertroadsAgencyId(), true)).execute();
+				new SmartCheckAlertRoadsMapProcessor(this, getSupportMap(), JPParamsHelper.getAlertroadsAgencyId(),
+						(date > 0 ? date : null), null, JPParamsHelper.getAlertroadsAgencyId(), true).execute();
 			} else {
 				List<AlertRoadLoc> newFilteredList = filterByProjection(getSupportMap(),
 						AlertRoadsHelper.getCache(AlertRoadsHelper.ALERTS_CACHE_PLAN));
@@ -348,7 +349,17 @@ public class LegMapActivity extends BaseActivity implements OnCameraChangeListen
 			LatLngBounds llb = LatLngBounds.builder().include(southwest).include(northeast).build();
 
 			Display display = getWindowManager().getDefaultDisplay();
-			map.moveCamera(CameraUpdateFactory.newLatLngBounds(llb, display.getWidth() - 48, display.getHeight(), 16));
+			int offsetHeight = 200;
+			try {
+				final TypedArray styledAttributes = getTheme().obtainStyledAttributes(
+				new int[] { android.R.attr.actionBarSize });
+				offsetHeight = (int) styledAttributes.getDimension(0, 0)+50;
+				styledAttributes.recycle();
+			} catch (Exception e) {
+			}
+			
+			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(llb, display.getWidth() - 48, display.getHeight(), offsetHeight);
+			map.moveCamera(cameraUpdate);
 		}
 	}
 
@@ -384,13 +395,14 @@ public class LegMapActivity extends BaseActivity implements OnCameraChangeListen
 						BitmapDescriptorFactory.fromResource(R.drawable.ic_stop)));
 			}
 		}
-		if (index == -1)// show start leg
+		if (index == -1) {// show start leg
 			drawPath(map, legsPoints.get(index + 1), getApplicationContext().getResources().getColor(R.color.path_actual));
-		else if (index == legsPoints.size())// show end leg
+		} else if (index >= legsPoints.size()) {// show end leg
 			drawPath(map, legsPoints.get(legsPoints.size() - 1),
 					getApplicationContext().getResources().getColor(R.color.path_actual));
-		else
+		} else {
 			drawPath(map, legsPoints.get(index), getApplicationContext().getResources().getColor(R.color.path_actual));
+		}
 
 		return true;
 	}

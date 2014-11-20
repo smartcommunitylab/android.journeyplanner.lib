@@ -14,63 +14,66 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/sc_light_gray" >
+    android:background="@android:color/white"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/dimen_s"
+        android:paddingLeft="@dimen/dimen_xs"
+        android:paddingRight="@dimen/dimen_xs"
+        android:paddingTop="@dimen/dimen_s" >
 
         <TextView
-            android:id="@+id/warning_journey"
-            android:layout_width="wrap_content"
+            android:id="@+id/itinerary_date"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-			android:padding="8dp"
-			android:gravity="left"
-			android:background="@android:color/white"
-            android:text="@string/info_save_new_journey" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginTop="6dp"
-			android:background="@android:color/white" >
-
-            <TextView
-                android:id="@+id/itinerary_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true" />
-
-            <TextView
-                android:id="@+id/itinerary_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true" />
-        </RelativeLayout>
-
-        <ListView
-            android:id="@+id/itinerary_legs"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="1dp"
-			android:background="@android:color/white"
             android:layout_weight="1"
-            android:cacheColorHint="@android:color/transparent" >
-        </ListView>
+            android:gravity="left" />
 
-        <Button
-            android:id="@+id/itinerary_save"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/itinerary_time"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/btn_startmonitoring" />
+            android:layout_weight="1"
+            android:gravity="right" />
     </LinearLayout>
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/promoted_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/promoted"
+        android:drawableEnd="@drawable/ic_action_leaf"
+        android:drawableRight="@drawable/ic_action_leaf"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dimen_xs"
+        android:paddingRight="@dimen/dimen_xs"
+        android:text="@string/promoted_itinerary"
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/itinerary_steps"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:cacheColorHint="@android:color/transparent"
+        android:listSelector="@android:color/transparent" >
+    </ListView>
+
+    <Button
+        android:id="@+id/itinerary_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_startmonitoring" />
+
+</LinearLayout>

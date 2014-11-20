@@ -53,7 +53,7 @@ public class SmartCheckAlertDetailsFragment extends FeedbackFragment {
 		title.setText(alert.getRoad().getStreet());
 
 		// types
-		if (alert.getChangeTypes().length > 0) {
+		if (alert.getChangeTypes() != null && alert.getChangeTypes().length > 0) {
 			typesLayout.removeAllViews();
 			for (AlertRoadType type : alert.getChangeTypes()) {
 				ImageView typeImageView = new ImageView(getActivity());

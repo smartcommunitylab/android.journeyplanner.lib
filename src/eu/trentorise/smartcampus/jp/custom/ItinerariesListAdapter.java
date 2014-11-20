@@ -20,9 +20,8 @@ import it.sayservice.platform.smartplanner.data.message.Leg;
 import it.sayservice.platform.smartplanner.data.message.TType;
 import it.sayservice.platform.smartplanner.data.message.Transport;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,15 +29,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
-import eu.trentorise.smartcampus.jp.custom.data.BusStop;
-import eu.trentorise.smartcampus.jp.custom.draw.LineDrawView;
-import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
+import eu.trentorise.smartcampus.jp.helper.ParkingsHelper;
 import eu.trentorise.smartcampus.jp.helper.Utils;
 
 public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
@@ -46,9 +42,8 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 	Context context;
 	int layoutResourceId;
 
-	public ItinerariesListAdapter(Context context, int layoutResourceId,
-			List<Itinerary> itineraries) {
-		super(context, layoutResourceId, itineraries);
+	public ItinerariesListAdapter(Context context, int layoutResourceId) {
+		super(context, layoutResourceId);
 		this.context = context;
 		this.layoutResourceId = layoutResourceId;
 	}
@@ -61,14 +56,14 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 		if (row == null) {
 			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
 			row = inflater.inflate(layoutResourceId, parent, false);
-
 			holder = new RowHolder();
-			holder.timeFromTo = (TextView) row.findViewById(R.id.it_time_from);
-			holder.time = (TextView) row.findViewById(R.id.it_time);
-			holder.transportTypes = (LinearLayout) row
-					.findViewById(R.id.it_transporttypes);
+			holder.timeFrom = (TextView) row.findViewById(R.id.it_time_from);
+			holder.timeTo = (TextView) row.findViewById(R.id.it_time_to);
+			// holder.time = (TextView) row.findViewById(R.id.it_time);
+			holder.transportTypes = (LinearLayout) row.findViewById(R.id.it_transporttypes);
+			holder.parkingTime = (TextView) row.findViewById(R.id.it_parkingdata_time);
+			holder.parkingCost = (TextView) row.findViewById(R.id.it_parkingdata_price);
 			holder.alert = (ImageView) row.findViewById(R.id.it_alert);
-
 			row.setTag(holder);
 		} else {
 			holder = (RowHolder) row.getTag();
@@ -76,37 +71,107 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 
 		Itinerary itinerary = getItem(position);
 
+		if (itinerary.isPromoted()) {
+			row.setBackgroundColor(getContext().getResources().getColor(android.R.color.white));
+		} else {
+			row.setBackgroundColor(getContext().getResources().getColor(android.R.color.transparent));
+		}
+
 		// time from
 		Date timeFrom = new Date(itinerary.getStartime());
 		String timeFromString = Config.FORMAT_TIME_UI.format(timeFrom);
-
+		holder.timeFrom.setText(timeFromString);
 		// time to
 		Date timeTo = new Date(itinerary.getEndtime());
 		String timeToString = Config.FORMAT_TIME_UI.format(timeTo);
-		holder.timeFromTo.setText(context.getString(R.string.itinerary_timing, timeFromString, timeToString));
+		holder.timeTo.setText(timeToString);
 
-		holder.time.setText("("+((timeTo.getTime()-timeFrom.getTime())/60000)+"m)");
-
-//		holder.line.addView(new LineDrawView(getContext()));
+		// holder.timeFrom.setText(context.getString(R.string.itinerary_timing,
+		// timeFromString, timeToString));
+		// holder.time.setText("(" + ((timeTo.getTime() - timeFrom.getTime()) /
+		// 60000) + "m)");
 
 		holder.transportTypes.removeAllViews();
 		ImageView imgv = null;
-		
 		// transport types & alerts
-		for (Leg l : itinerary.getLeg()) {
-			Transport transp = l.getTransport();
-			TType t = transp.getType();
-			if (t.equals(TType.BUS)) {
+		for (int i = 0; i < itinerary.getLeg().size(); i++) {
+			// TODO: ***** TEMP *****
+			// if (i > 0) {
+			// break;
+			// }
+			// TODO: ***** TEMP ***** end
+
+			Leg leg = itinerary.getLeg().get(i);
+
+			/*
+			 * transport types
+			 */
+			Transport transp = leg.getTransport();
+			TType tType = transp.getType();
+			if (tType.equals(TType.BUS)) {
 				String line = transp.getRouteShortName();
 				imgv = Utils.getImageByLine(getContext(), line);
 			} else {
-				imgv = Utils.getImageByTType(getContext(), t);
+				imgv = Utils.getImageByTType(getContext(), tType);
 			}
-			if (imgv.getBackground() != null || imgv.getDrawable() != null) {
 
+			if (imgv != null && imgv.getBackground() != null || imgv.getDrawable() != null) {
 				holder.transportTypes.addView(imgv);
 			}
-			if (Utils.containsAlerts(l)) {
+
+			// parking!
+			if (tType.equals(TType.CAR) && leg.getTo().getStopId() != null) {
+				String price = ParkingsHelper.getParkingCost(leg.getTo().getStopId().getExtra(), context);
+				imgv = Utils.getImageForParkingStation(getContext(), price);
+				holder.transportTypes.addView(imgv);
+			}
+
+			/*
+			 * parking time
+			 */
+			Integer parkingSearchTimeMin = null;
+			Integer parkingSearchTimeMax = null;
+			if (leg.getExtra() != null && leg.getExtra().containsKey(ParkingsHelper.PARKING_EXTRA_SEARCHTIME)) {
+				@SuppressWarnings("unchecked")
+				Map<String, Object> searchTime = (Map<String, Object>) leg.getExtra().get(
+						ParkingsHelper.PARKING_EXTRA_SEARCHTIME);
+				if (searchTime.containsKey(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MIN)) {
+					parkingSearchTimeMin = (Integer) searchTime.get(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MIN);
+				}
+				if (searchTime.containsKey(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MAX)) {
+					parkingSearchTimeMax = (Integer) searchTime.get(ParkingsHelper.PARKING_EXTRA_SEARCHTIME_MAX);
+				}
+			}
+			String parkingSearchTimeString = "";
+			if (parkingSearchTimeMin != null && parkingSearchTimeMin > 0) {
+				parkingSearchTimeString += parkingSearchTimeMin + "'";
+			}
+			if (parkingSearchTimeMax != null && parkingSearchTimeMax > 0) {
+				parkingSearchTimeString += (parkingSearchTimeString.length() > 0 ? "-" + parkingSearchTimeMax
+						: parkingSearchTimeMax) + "'";
+			}
+			if (parkingSearchTimeString.length() > 0) {
+				holder.parkingTime.setText(context.getString(R.string.step_parking_search, parkingSearchTimeString));
+				holder.parkingTime.setVisibility(View.VISIBLE);
+			} else {
+				holder.parkingTime.setVisibility(View.GONE);
+			}
+
+			/*
+			 * parking cost
+			 */
+			String parkingCost = ParkingsHelper.getParkingCostLong(leg.getExtra(), context);
+			if (parkingCost != null && parkingCost.length() > 0) {
+				holder.parkingCost.setText(parkingCost);
+				holder.parkingCost.setVisibility(View.VISIBLE);
+			} else {
+				holder.parkingCost.setVisibility(View.GONE);
+			}
+
+			/*
+			 * alert
+			 */
+			if (Utils.containsAlerts(leg)) {
 				holder.alert.setVisibility(View.VISIBLE);
 			} else {
 				holder.alert.setVisibility(View.GONE);
@@ -117,9 +182,12 @@ public class ItinerariesListAdapter extends ArrayAdapter<Itinerary> {
 	}
 
 	static class RowHolder {
-		TextView timeFromTo;
-		TextView time;
+		TextView timeFrom;
+		TextView timeTo;
+		// TextView time;
 		LinearLayout transportTypes;
+		TextView parkingTime;
+		TextView parkingCost;
 		ImageView alert;
 	}
 }

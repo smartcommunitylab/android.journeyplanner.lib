@@ -35,23 +35,35 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
-import eu.trentorise.smartcampus.android.feedback.fragment.FeedbackFragment;
 import eu.trentorise.smartcampus.jp.custom.DialogHandler;
-import eu.trentorise.smartcampus.jp.custom.LegsListAdapter;
+import eu.trentorise.smartcampus.jp.custom.StepsListAdapter;
+import eu.trentorise.smartcampus.jp.helper.StepUtils;
 import eu.trentorise.smartcampus.jp.helper.processor.SaveItineraryProcessor;
+import eu.trentorise.smartcampus.jp.model.Step;
 import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 
-public class ItineraryFragment extends FeedbackFragment {
+public class ItineraryFragment extends SherlockFragment {
 
-	private static final String ITINERARY = "itineraries";
-	private static final String JOURNEY = "journey";
-	private static final String LEGS = "legs";
+	public static final String ITINERARY = "itineraries";
+	public static final String JOURNEY = "journey";
+	public static final String LEGS = "legs";
+	public static final String STEPS = "steps";
+
+	private StepUtils stepUtils;
 
 	private SingleJourney singleJourney;
 	private Itinerary itinerary;
-	private List<Leg> legs;
+	private List<Step> steps;
+	private StepsListAdapter stepsListAdapter;
 
 	public static ItineraryFragment newInstance(SingleJourney singleJourney, Itinerary itinerary) {
 		ItineraryFragment f = new ItineraryFragment();
@@ -61,15 +73,16 @@ public class ItineraryFragment extends FeedbackFragment {
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle arg0) {
-		super.onSaveInstanceState(arg0);
-		if (singleJourney != null)
-			arg0.putSerializable(JOURNEY, singleJourney);
-		if (itinerary != null) {
-			arg0.putSerializable(ITINERARY, itinerary);
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		if (singleJourney != null) {
+			outState.putSerializable(JOURNEY, singleJourney);
 		}
-		if (legs != null) {
-			arg0.putSerializable(LEGS, new ArrayList<Leg>(legs));
+		if (itinerary != null) {
+			outState.putSerializable(ITINERARY, itinerary);
+		}
+		if (steps != null) {
+			outState.putSerializable(LEGS, new ArrayList<Step>(steps));
 		}
 	}
 
@@ -77,13 +90,31 @@ public class ItineraryFragment extends FeedbackFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+
+		if (getArguments() != null) {
+			Bundle bundle = getArguments();
+			if (bundle.containsKey(JOURNEY)) {
+				singleJourney = (SingleJourney) bundle.getSerializable(JOURNEY);
+			}
+			if (bundle.containsKey(ITINERARY)) {
+				itinerary = (Itinerary) bundle.getSerializable(ITINERARY);
+			}
+			if (bundle.containsKey(STEPS)) {
+				steps = (List<Step>) bundle.getSerializable(STEPS);
+			}
+		}
+
 		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(JOURNEY))
-				singleJourney = (SingleJourney) savedInstanceState.get(JOURNEY);
-			if (savedInstanceState.containsKey(ITINERARY))
-				itinerary = (Itinerary) savedInstanceState.get(ITINERARY);
-			if (savedInstanceState.containsKey(LEGS))
-				legs = (List<Leg>) savedInstanceState.get(LEGS);
+			if (savedInstanceState.containsKey(JOURNEY)) {
+				singleJourney = (SingleJourney) savedInstanceState.getSerializable(JOURNEY);
+			}
+			if (savedInstanceState.containsKey(ITINERARY)) {
+				itinerary = (Itinerary) savedInstanceState.getSerializable(ITINERARY);
+			}
+			if (savedInstanceState.containsKey(STEPS)) {
+				steps = (List<Step>) savedInstanceState.getSerializable(STEPS);
+			}
 		}
 	}
 
@@ -96,52 +127,63 @@ public class ItineraryFragment extends FeedbackFragment {
 	public void onStart() {
 		super.onStart();
 
-		legs = itinerary.getLeg();
-		
+		// legs = itinerary.getLeg();
+		// Converting legs to steps.
+		// You can have more steps than legs!
+		stepUtils = new StepUtils(getSherlockActivity(), singleJourney.getFrom(), singleJourney.getTo());
+		steps = stepUtils.legs2steps(itinerary.getLeg());
+
+		final ListView stepsListView = (ListView) getView().findViewById(R.id.itinerary_steps);
+
+		// date & time
 		TextView dateTextView = (TextView) getView().findViewById(R.id.itinerary_date);
 		dateTextView.setText(Config.FORMAT_DATE_UI.format(new Date(itinerary.getStartime())));
-
 		TextView timeTextView = (TextView) getView().findViewById(R.id.itinerary_time);
 		timeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getStartime())));
 
-		ListView legsListView = (ListView) getView().findViewById(R.id.itinerary_legs);
+		// promoted
+		if (itinerary.isPromoted()) {
+			TextView promotedTextView = (TextView) getView().findViewById(R.id.promoted_textview);
+			promotedTextView.setVisibility(View.VISIBLE);
+		}
 
-//		if (legsListView.getHeaderViewsCount() == 0) {
-//			// HEADER (before setAdapter or it won't work!)
-//			ViewGroup startLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, null);
-//			TextView startLegTimeTextView = (TextView) startLayout.findViewById(R.id.leg_time);
-//			startLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getStartime())));
-//			TextView startLegDescTextView = (TextView) startLayout.findViewById(R.id.leg_description);
-//			startLegDescTextView.setText(singleJourney.getFrom().getName());
-//			legsListView.addHeaderView(startLayout);
-//
-//			// FOOTER (before setAdapter or it won't work!)
-//			ViewGroup endLayout = (ViewGroup) getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_leg, null);
-//			TextView endLegTimeTextView = (TextView) endLayout.findViewById(R.id.leg_time);
-//			endLegTimeTextView.setText(Config.FORMAT_TIME_UI.format(new Date(itinerary.getEndtime())));
-//			TextView endLegDescTextView = (TextView) endLayout.findViewById(R.id.leg_description);
-//			endLegDescTextView.setText(singleJourney.getTo().getName());
-//			legsListView.addFooterView(endLayout);
-//		}
+		// add header (before setAdapter or it won't work!)
+		if (stepsListView.getHeaderViewsCount() == 0) {
+			View headerView = getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_step, stepsListView, false);
+			// set visible first point ll
+			RelativeLayout firstLL = (RelativeLayout) headerView.findViewById(R.id.ll_step_beginning);
+			firstLL.setVisibility(View.VISIBLE);
+			TextView headerTimeTextView = (TextView) headerView.findViewById(R.id.step_time);
+			TextView headerDescTextView = (TextView) headerView.findViewById(R.id.step_description);
+			headerTimeTextView.setText(Config.FORMAT_TIME_UI.format(itinerary.getStartime()));
+			headerDescTextView.setText(singleJourney.getFrom().getName());
+			headerDescTextView.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Medium);
+			stepsListView.addHeaderView(headerView);
+		}
+		// add footer (before setAdapter or it won't work!)
+		if (stepsListView.getFooterViewsCount() == 0) {
+			View footerView = getSherlockActivity().getLayoutInflater().inflate(R.layout.itinerary_step, stepsListView, false);
+			// set visible last point ll
+			RelativeLayout lastLL = (RelativeLayout) footerView.findViewById(R.id.ll_step_end);
+			lastLL.setVisibility(View.VISIBLE);
+			TextView footerTimeTextView = (TextView) footerView.findViewById(R.id.step_time);
+			TextView footerDescTextView = (TextView) footerView.findViewById(R.id.step_description);
+			footerTimeTextView.setText(Config.FORMAT_TIME_UI.format(itinerary.getEndtime()));
+			footerDescTextView.setText(singleJourney.getTo().getName());
+			footerDescTextView.setTextAppearance(getSherlockActivity(), android.R.style.TextAppearance_Medium);
+			stepsListView.addFooterView(footerView);
+		}
 
-		legsListView.setAdapter(new LegsListAdapter(getSherlockActivity(), R.layout.itinerary_leg, singleJourney.getFrom(),
-				singleJourney.getTo(), legs));
+		if (stepsListAdapter == null) {
+			stepsListAdapter = new StepsListAdapter(getSherlockActivity(), R.layout.itinerary_step, steps);
+		}
+		stepsListView.setAdapter(stepsListAdapter);
 
-		legsListView.setOnItemClickListener(new OnItemClickListener() {
+		stepsListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent i = new Intent(getActivity(), LegMapActivity.class);
-				if (legs != null) {
-					i.putExtra(LegMapActivity.LEGS, new ArrayList<Leg>(legs));
-					try {
-						long date = Config.FORMAT_DATE_SMARTPLANNER.parse(singleJourney.getDate()).getTime();
-						i.putExtra(LegMapActivity.DATE, date);
-					} catch (ParseException e) {
-						Log.e(ItineraryFragment.class.getSimpleName(), e.getMessage());
-					}
-				}
-				i.putExtra(LegMapActivity.ACTIVE_POS, position);
-				getActivity().startActivity(i);
+				int idx = position == 0 ? -1 : position > steps.size() ? steps.size() : steps.get(position - 1).getLegIndex();
+				showMap(idx);
 			}
 		});
 
@@ -169,4 +211,35 @@ public class ItineraryFragment extends FeedbackFragment {
 		});
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.menu_map) {
+			showMap(null);
+			return true;
+		} else {
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.itinerarymenu, menu);
+	}
+
+	private void showMap(Integer pos) {
+		Intent i = new Intent(getActivity(), LegMapActivity.class);
+		if (itinerary != null && itinerary.getLeg() != null) {
+			i.putExtra(LegMapActivity.LEGS, new ArrayList<Leg>(itinerary.getLeg()));
+			try {
+				long date = Config.FORMAT_DATE_SMARTPLANNER.parse(singleJourney.getDate()).getTime();
+				i.putExtra(LegMapActivity.DATE, date);
+			} catch (ParseException e) {
+				Log.e(ItineraryFragment.class.getSimpleName(), e.getMessage());
+			}
+			if (pos != null) {
+				i.putExtra(LegMapActivity.ACTIVE_POS, pos);
+			}
+		}
+		getActivity().startActivity(i);
+	}
 }

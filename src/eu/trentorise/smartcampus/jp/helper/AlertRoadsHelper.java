@@ -67,7 +67,7 @@ public class AlertRoadsHelper {
 	public static int getMarker(AlertRoadLoc alert) {
 		int marker = R.drawable.marker_alert_other;
 
-		if (alert.getChangeTypes().length == 1) {
+		if (alert.getChangeTypes() != null && alert.getChangeTypes().length == 1) {
 			if (AlertRoadType.ROAD_BLOCK.equals(alert.getChangeTypes()[0])) {
 				marker = R.drawable.marker_alert_road_block;
 			} else if (AlertRoadType.PARKING_BLOCK.equals(alert.getChangeTypes()[0])) {

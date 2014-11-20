@@ -19,17 +19,18 @@
     <string name="maps_api_key">0fdlLrw2lMFFg-TnfYFuceTi0m60-Q1mBF6EMFA</string>
     <string name="empty" />
     <string name="placeholder">&#8230;</string>
-    <string name="app_name">ViaggiaTrento</string>
+    <string name="app_name">ViaggiaRovereto</string>
     <string name="btn_planjourney">Pianifica\nviaggio</string>
     <string name="btn_monitorrecurrent">Monitoraggio tratte abituali</string>
     <string name="btn_broadcast">Invia\nsegnalazioni</string>
     <string name="btn_myprofile">Preferenze</string>
     <string name="btn_smartcheck">Info in tempo reale</string>
+    <string name="btn_bikesharing">Bici condivisa</string>
     <string name="btn_notifications">Leggi\nnotifiche</string>
     <string name="btn_save">Salva</string>
     <string name="btn_delete">Cancella</string>
     <string name="backstring">Indietro</string>
-    <string name="btn_startmonitoring">Salva</string>
+    <string name="btn_startmonitoring">Salva per ricevere le notifiche</string>
     <string name="tab_plannew">Nuovo viaggio</string>
     <string name="tab_myjourneys">I miei viaggi</string>
     <string name="tab_profile">Preferenze viaggio</string>
@@ -39,6 +40,7 @@
     <string name="tab_zones">Zone</string>
     <string name="tab_parkings">Parcheggi</string>
     <string name="tab_alerts">Ordinanze</string>
+    <string name="tab_itinerary">Itinerario</string>
     <string name="dialog_itineraryname_hint">Nome dell\'itinerario</string>
     <string name="plan_location">Dove</string>
     <string name="plan_datetime">Quando</string>
@@ -147,6 +149,9 @@
     <string name="title_monitor_journey">Monitoraggio</string>
     <string name="tab_myoneoffjourneys">VIAGGI</string>
     <string name="tab_myrecjourneys">MONITORAGGI</string>
+    <string name="promoted_itineraries">ITINERARI SOSTENIBILI</string>
+    <string name="promoted_itinerary">Itinerario sostenibile</string>
+
     <!-- days of the week -->
     <string name="monday">Lun</string>
     <string name="tuesday">Mar</string>
@@ -167,16 +172,6 @@
     <string name="delaysLabel">Ritardi</string>
     <string name="dayLabel">Giorni</string>
     <string name="loading_dialog_label">Creazione tabella &#8230;</string>
-    <string name="leg_from">da</string>
-    <string name="leg_to">a</string>
-    <string name="leg_bike_pick_up">prendi una bicicletta a</string>
-    <string name="leg_bike_leave">lascia la bicicletta a</string>
-    <string name="leg_car_pick_up">prendi un\'auto a</string>
-    <string name="leg_car_leave">lascia l\'auto a</string>
-    <string name="leg_bus_line">linea</string>
-    <string name="leg_train">treno</string>
-    <string name="leg_move">Prosegui</string>
-    <string name="leg_delay">Ritardo:</string>
     <string name="broadcast_notifications_accident">Incidente</string>
     <string name="broadcast_notifications_bus_trento_delay">Ritardo autobus di Trento</string>
     <string name="broadcast_notifications_bus_rovereto_delay">Ritardo autobus di Rovereto</string>
@@ -207,7 +202,9 @@
     <string name="smart_check_alerts_time">dal %1$s al %2$s</string>
     <string name="smart_check_alerts_numbers">dal n. %1$s al n. %2$s</string>
     <string name="smart_check_alerts_intersections">dall\'intersezione con %1$s all\'intersezione con %2$s</string>
-    <string name="parking_alert">%1$s: %2$s posti disponibili</string>
+    <string name="parking_alert">Solo %s posti disponibili</string>
+    <string name="parking_pickup_alert_car">Solo %s auto disponibili</string>
+    <string name="parking_pickup_alert_bike">Solo %s bici disponibili</string>
     <string name="smart_check_routes_empty">Nessuna corsa</string>
     <string name="smart_check_parkings_empty">Nessun parcheggio</string>
     <string name="smart_check_alerts_empty">Nessuna ordinanza</string>
@@ -251,6 +248,10 @@
 
     <string name="notifications_itinerary_delay_train">Treno %1$s</string>
 
+    <string name="notifications_itinerary_parking_place_title">Disponibilità posti per itinerario \"%s\"</string>
+    <string name="notifications_itinerary_parking_car_title">Disponibilità auto per itinerario \"%s\"</string>
+    <string name="notifications_itinerary_parking_bike_title">Disponibilità bici per itinerario \"%s\"</string>
+    
     <!-- <string name="notifications_itinerary_delay_train">Treno %1$s per %2$s</string> -->
     <string name="notifications_itinerary_delay_original_schedule">atteso alle %1$s a %2$s</string>
     <string name="dialog_are_you_sure">Sei sicuro?</string>

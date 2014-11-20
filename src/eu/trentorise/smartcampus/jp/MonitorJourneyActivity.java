@@ -50,6 +50,9 @@ public class MonitorJourneyActivity extends BaseActivity {
 
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 		SherlockFragment fragment = new MonitorJourneyFragment();
+		if (getIntent() != null && getIntent().getExtras() != null) {
+			fragment.setArguments(getIntent().getExtras());
+		}
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		fragmentTransaction.replace(Config.mainlayout, fragment);
 		fragmentTransaction.commit();

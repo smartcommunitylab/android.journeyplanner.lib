@@ -21,17 +21,18 @@
     <string name="maps_api_key">0fdlLrw2lMFFg-TnfYFuceTi0m60-Q1mBF6EMFA</string>
     <string name="empty" />
     <string name="placeholder">&#8230;</string>
-    <string name="app_name">ViaggiaTrento</string>
+    <string name="app_name">ViaggiaRovereto</string>
     <string name="btn_planjourney">Plan\njourney</string>
     <string name="btn_monitorrecurrent">Monitoring setup</string>
     <string name="btn_broadcast">Submit\nan alert</string>
     <string name="btn_myprofile">Preferences</string>
     <string name="btn_smartcheck">Real time info</string>
+    <string name="btn_bikesharing">Bike sharing</string>
     <string name="btn_notifications">Read\nnotifications</string>
     <string name="btn_save">Save</string>
     <string name="btn_delete">Delete</string>
     <string name="backstring">Back</string>
-    <string name="btn_startmonitoring">Save</string>
+    <string name="btn_startmonitoring">Save to receive notifications</string>
     <string name="tab_plannew">New journey</string>
     <string name="tab_myjourneys">My journeys</string>
     <string name="tab_profile">Preferences</string>
@@ -41,6 +42,7 @@
     <string name="tab_zones">Zones</string>
     <string name="tab_parkings">Parkings</string>
     <string name="tab_alerts">Decrees</string>
+    <string name="tab_itinerary">Itinerary</string>
     <string name="dialog_itineraryname_hint">Journey name</string>
     <string name="plan_location">Location</string>
     <string name="plan_datetime">Departure</string>
@@ -149,6 +151,9 @@
     <string name="title_monitor_journey">Monitor journey</string>
     <string name="tab_myoneoffjourneys">JOURNEYS</string>
     <string name="tab_myrecjourneys">MONITORING</string>
+    <string name="promoted_itineraries">SUSTAINABLE ITINERARIES</string>
+    <string name="promoted_itinerary">Sustainable itinerary</string>
+
     <!-- days of the week -->
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
@@ -169,16 +174,6 @@
     <string name="delaysLabel">Delays</string>
     <string name="dayLabel">Day</string>
     <string name="loading_dialog_label">Creating timetable &#8230;</string>
-    <string name="leg_from">from</string>
-    <string name="leg_to">to</string>
-    <string name="leg_bike_pick_up">pick up a bike at</string>
-    <string name="leg_bike_leave">leave the bike at</string>
-    <string name="leg_car_pick_up">pick up a car at</string>
-    <string name="leg_car_leave">leave the car at</string>
-    <string name="leg_bus_line">line</string>
-    <string name="leg_train">train</string>
-    <string name="leg_move">Move</string>
-    <string name="leg_delay">There is a delay:</string>
     <string name="broadcast_notifications_accident">Accidents</string>
     <string name="broadcast_notifications_bus_trento_delay">Trento bus delays</string>
     <string name="broadcast_notifications_bus_rovereto_delay">Rovereto bus delays</string>
@@ -210,7 +205,9 @@
     <string name="smart_check_alerts_time">from %1$s to %2$s</string>
     <string name="smart_check_alerts_numbers">from n. %1$s to n. %2$s</string>
     <string name="smart_check_alerts_intersections">from intersection with %1$s to intersection with %2$s</string>
-    <string name="parking_alert">%1$s: %2$s places available</string>
+    <string name="parking_alert">Only %s places available</string>
+    <string name="parking_pickup_alert_car">Only %s car(s) available</string>
+    <string name="parking_pickup_alert_bike">Only %s bike(s) available</string>
     <string name="smart_check_routes_empty">No routes</string>
     <string name="smart_check_parkings_empty">No parkings</string>
     <string name="smart_check_alerts_empty">No alerts</string>
@@ -254,6 +251,11 @@
     <string name="notifications_itinerary_delay_train">Train %1$s</string>
     <string name="notifications_itinerary_delay_original_schedule">scheduled at %1$s</string>
     <!-- <string name="notifications_itinerary_delay_original_schedule">scheduled at %1$s at %2$s</string> -->
+
+    <string name="notifications_itinerary_parking_place_title">Place availability for \"%s\" journey</string>
+    <string name="notifications_itinerary_parking_car_title">Car availability for \"%s\" journey</string>
+    <string name="notifications_itinerary_parking_bike_title">Bike availability for \"%s\" journey</string>
+
     <string name="dialog_are_you_sure">Are you sure?</string>
     <string name="dialog_delete_itinerary">Delete \"%s\"</string>
     <string name="minutes">m</string>

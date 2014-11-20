@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2012-2013 Trento RISE
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either   express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/ll_step_beginning"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dimen_xs"
+        android:layout_marginTop="@dimen/dimen_s"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_point_outline" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/imageView1"
+            android:layout_centerHorizontal="true"
+            android:background="@color/step_line" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_step_middle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dimen_xs"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@null"
+            android:paddingTop="@dimen/dimen_s"
+            android:src="@drawable/ic_point" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:background="@color/step_line" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_step_end"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dimen_xs"
+        android:layout_marginLeft="@dimen/dimen_xs"
+        android:visibility="gone" >
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/imageView3"
+            android:layout_centerHorizontal="true"
+            android:background="@color/step_line" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_point_outline" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/step_time"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="@dimen/dimen_xs"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/black" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_m"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="@dimen/dimen_xs" >
+
+        <TextView
+            android:id="@+id/step_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/step_alerts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_alert"
+            android:gravity="center_vertical"
+            android:textColor="@color/red"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/step_parkingdata_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_look_for_parking"
+            android:drawableStart="@drawable/ic_look_for_parking"
+            android:gravity="center_vertical"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/step_parkingdata_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_price_parking"
+            android:drawableStart="@drawable/ic_price_parking"
+            android:gravity="center_vertical"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/step_img" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:textColor="@android:color/black" /> -->
+
+    <ImageView
+        android:id="@+id/step_img"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:contentDescription="@null" />
+
+    <!-- <FrameLayout -->
+    <!-- android:id="@+id/leg_transporttype" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_alignParentRight="true" -->
+    <!-- android:layout_centerVertical="true" > -->
+    <!-- </FrameLayout> -->
+
+</LinearLayout>

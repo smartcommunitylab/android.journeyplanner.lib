@@ -28,15 +28,12 @@ import java.util.Date;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.Rect;
 import android.graphics.Paint.Align;
+import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.widget.ImageView;
@@ -51,7 +48,7 @@ public class Utils {
 
 		switch (tType) {
 		case BICYCLE:
-			imgv.setImageResource(R.drawable.ic_mt_bicyle);
+			imgv.setImageResource(R.drawable.ic_mt_bicycle);
 			break;
 		case CAR:
 			imgv.setImageResource(R.drawable.ic_mt_car);
@@ -73,77 +70,81 @@ public class Utils {
 
 		return imgv;
 	}
-	
-	public static ImageView getImageByLine(Context ctx,String line) {
+
+	public static ImageView getImageByLine(Context ctx, String line) {
 		ImageView imgv = new ImageView(ctx);
-		Bitmap img = writeOnBitmap(ctx,R.drawable.ic_mt_bus, line);
+		Bitmap img = writeOnBitmap(ctx, R.drawable.ic_mt_bus, line, 12);
 		imgv.setImageBitmap(img);
-		//colorizeLineDrawable(ctx, line, imgv);
+		// colorizeLineDrawable(ctx, line, imgv);
 		return imgv;
 	}
 
-	private static void colorizeLineDrawable(Context ctx, String line,
-			ImageView imgv) {
-		TypedArray colors = ctx.getResources().obtainTypedArray(R.array.smart_check_12_colors);
-		TypedArray lines = ctx.getResources().obtainTypedArray(R.array.smart_check_12_numbers);
-		for(int index =0; index<lines.length();index++){
-			if(line.equals(lines.getString(index).replace("0", ""))){
-				int c = colors.getColor(index, 0xFFF);
-				imgv.setColorFilter(c);
-			}
-		}
-		lines.recycle();
-		colors.recycle();
+	public static ImageView getImageForParkingStation(Context ctx, String price) {
+		ImageView imgv = new ImageView(ctx);
+		Bitmap img = writeOnBitmap(ctx, R.drawable.ic_mt_parking, price, 12);
+		imgv.setImageBitmap(img);
+		return imgv;
 	}
-	
-	private static Bitmap writeOnBitmap(Context mContext, int drawableId, String text) {
+
+	// private static void colorizeLineDrawable(Context ctx, String line,
+	// ImageView imgv) {
+	// TypedArray colors =
+	// ctx.getResources().obtainTypedArray(R.array.smart_check_12_colors);
+	// TypedArray lines =
+	// ctx.getResources().obtainTypedArray(R.array.smart_check_12_numbers);
+	// for (int index = 0; index < lines.length(); index++) {
+	// if (line.equals(lines.getString(index).replace("0", ""))) {
+	// int c = colors.getColor(index, 0xFFF);
+	// imgv.setColorFilter(c);
+	// }
+	// }
+	// lines.recycle();
+	// colors.recycle();
+	// }
+
+	private static Bitmap writeOnBitmap(Context mContext, int drawableId, String text, Integer size) {
 		float scale = mContext.getResources().getDisplayMetrics().density;
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), drawableId).copy(Bitmap.Config.ARGB_8888, true);
 
-		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), drawableId).copy(Bitmap.Config.ARGB_8888,
-				true);
+		if (text != null) {
+			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+			paint.setTextAlign(Align.CENTER);
+			paint.setTextSize(scale * (size != null ? size : 12));
+			paint.setAntiAlias(true);
+			paint.setARGB(255, 0, 0, 0);
 
-		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		paint.setTextAlign(Align.CENTER);
-		paint.setTextSize(scale * 16);
-		paint.setAntiAlias(true);
-		paint.setARGB(255, 0, 0, 0);
+			Canvas canvas = new Canvas(bitmap);
+			Rect bounds = new Rect();
+			paint.getTextBounds(text, 0, text.length(), bounds);
+			float x = bitmap.getWidth() / 2;
+			float y = bitmap.getHeight() / 2 + Utils.convertDpToPixel(5f, mContext);
+			canvas.drawText(text, x, y, paint);
+		}
 
-		Canvas canvas = new Canvas(bitmap);
-		Rect bounds = new Rect();
-		paint.getTextBounds(text, 0, text.length(), bounds);
-		float x = bitmap.getWidth() / 2;
-		float y = bitmap.getHeight() / 2 - Utils.convertDpToPixel(2.5f, mContext);
-		canvas.drawText(text, x, y, paint);
 		return bitmap;
 	}
-	
+
 	public static TextView getTextViewByTType(Context ctx, TType tType) {
 		TextView imgv = new TextView(ctx);
 		Resources r = ctx.getResources();
 		switch (tType) {
 		case BICYCLE:
-			imgv.setCompoundDrawables(null,
-					r.getDrawable(R.drawable.ic_mt_bicyle), null, null);
+			imgv.setCompoundDrawables(null, r.getDrawable(R.drawable.ic_mt_bicycle), null, null);
 			break;
 		case CAR:
-			imgv.setCompoundDrawables(null,
-					r.getDrawable(R.drawable.ic_mt_car), null, null);
+			imgv.setCompoundDrawables(null, r.getDrawable(R.drawable.ic_mt_car), null, null);
 			break;
 		case BUS:
-			imgv.setCompoundDrawables(null,
-					r.getDrawable(R.drawable.ic_mt_bus), null, null);
+			imgv.setCompoundDrawables(null, r.getDrawable(R.drawable.ic_mt_bus), null, null);
 			break;
 		case WALK:
-			imgv.setCompoundDrawables(null,
-					r.getDrawable(R.drawable.ic_mt_foot), null, null);
+			imgv.setCompoundDrawables(null, r.getDrawable(R.drawable.ic_mt_foot), null, null);
 			break;
 		case TRAIN:
-			imgv.setCompoundDrawables(null,
-					r.getDrawable(R.drawable.ic_mt_train), null, null);
+			imgv.setCompoundDrawables(null, r.getDrawable(R.drawable.ic_mt_train), null, null);
 			break;
 		case TRANSIT:
-			imgv.setCompoundDrawables(null,
-					r.getDrawable(R.drawable.ic_mt_bus), null, null);
+			imgv.setCompoundDrawables(null, r.getDrawable(R.drawable.ic_mt_bus), null, null);
 			break;
 		default:
 		}
@@ -415,16 +416,15 @@ public class Utils {
 		}
 		return chunk.toString();
 	}
-	
+
 	public static boolean containsAlerts(Leg leg) {
-		return 
-				(leg.getAlertAccidentList() != null && !leg.getAlertAccidentList().isEmpty()) ||
-				(leg.getAlertDelayList() != null && !leg.getAlertDelayList().isEmpty()) ||
-				(leg.getAlertParkingList() != null && !leg.getAlertParkingList().isEmpty()) ||
-				(leg.getAlertRoadList() != null && !leg.getAlertRoadList().isEmpty()) ||
-				(leg.getAlertStrikeList() != null && !leg.getAlertStrikeList().isEmpty());
+		return (leg.getAlertAccidentList() != null && !leg.getAlertAccidentList().isEmpty())
+				|| (leg.getAlertDelayList() != null && !leg.getAlertDelayList().isEmpty())
+				|| (leg.getAlertParkingList() != null && !leg.getAlertParkingList().isEmpty())
+				|| (leg.getAlertRoadList() != null && !leg.getAlertRoadList().isEmpty())
+				|| (leg.getAlertStrikeList() != null && !leg.getAlertStrikeList().isEmpty());
 	}
-	
+
 	/**
 	 * This method converts dp unit to equivalent pixels, depending on device
 	 * density.
