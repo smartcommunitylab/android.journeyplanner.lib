@@ -66,6 +66,7 @@ import eu.trentorise.smartcampus.jp.custom.UserPrefsHolder;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.PrefsHelper;
+import eu.trentorise.smartcampus.jp.helper.XmasMarketsHelper;
 
 public class PlanNewJourneyFragment extends FeedbackFragment {
 
@@ -161,17 +162,11 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		}
 
 		if (from != null) {
-			Location location = new Location("");
-			location.setLatitude(from.getLatitude());
-			location.setLongitude(from.getLongitude());
-			findAddressForField(FROM, location);
+			findAddressForField(FROM, from);
 		}
 
 		if (to != null) {
-			Location location = new Location("");
-			location.setLatitude(to.getLatitude());
-			location.setLongitude(to.getLongitude());
-			findAddressForField(TO, location);
+			findAddressForField(TO, to);
 		}
 	}
 
@@ -557,17 +552,30 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		// : new CharSequence[] { getString(R.string.address_dlg_current),
 		// getString(R.string.address_dlg_map) };
 
-		final CharSequence[] items = new CharSequence[] { getString(R.string.address_dlg_current),
+		CharSequence[] items = new CharSequence[] { getString(R.string.address_dlg_current),
 				getString(R.string.address_dlg_map) };
 
+		if (XmasMarketsHelper.isXmasMarketsTime()) {
+			// Christmas Markets custom entries!
+			ArrayList<CharSequence> itemsArrayList = new ArrayList<CharSequence>(Arrays.asList(items));
+			itemsArrayList.add(getActivity().getString(R.string.xmasmarkets_xmasmarkets));
+			itemsArrayList.add(getActivity().getString(R.string.xmasmarkets_querciaparking));
+			items = itemsArrayList.toArray(new CharSequence[] {});
+		}
+
+		final CharSequence[] dialogItems = items;
+
 		builder.setTitle(getString(R.string.address_dlg_title));
-		builder.setItems(items, new DialogInterface.OnClickListener() {
+		builder.setItems(dialogItems, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
 				switch (item) {
 				case 0:
 					Location hereLocation = JPHelper.getLocationHelper().getLocation();
 					if (hereLocation != null) {
-						findAddressForField(field, hereLocation);
+						Address address = new Address(Locale.getDefault());
+						address.setLatitude(hereLocation.getLatitude());
+						address.setLongitude(hereLocation.getLongitude());
+						findAddressForField(field, address);
 					}
 					break;
 				case 1:
@@ -575,9 +583,12 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 					intent.putExtra("field", field);
 					startActivityForResult(intent, InfoDialog.RESULT_SELECTED);
 					break;
-				// case 2:
-				// createFavoritesDialog(field);
-				// break;
+				case 2:
+					savePosition(XmasMarketsHelper.getXmasMarketAddress(getActivity()), field);
+					break;
+				case 3:
+					savePosition(XmasMarketsHelper.getXmasMarketParkingAddress(getActivity()), field);
+					break;
 				default:
 					break;
 				}
@@ -586,20 +597,27 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		return builder.create();
 	}
 
-	private void findAddressForField(final String field, Location location) {
-		List<Address> hereAddressesList = new SCGeocoder(getSherlockActivity()).findAddressesAsync(location);
-		if (hereAddressesList != null && !hereAddressesList.isEmpty()) {
-			Address hereAddress = hereAddressesList.get(0);
-			savePosition(hereAddress, field);
+	private void findAddressForField(final String field, Address address) {
+		if (address.getAddressLine(0) != null) {
+			savePosition(address, field);
 		} else {
-			Address customAddress = new Address(Locale.getDefault());
-			customAddress.setLatitude(location.getLatitude());
-			customAddress.setLongitude(location.getLongitude());
-			customAddress.setAddressLine(
-					0,
-					"LON " + Double.toString(customAddress.getLongitude()) + ", LAT "
-							+ Double.toString(customAddress.getLatitude()));
-			savePosition(customAddress, field);
+			Location location = new Location("custom");
+			location.setLatitude(address.getLatitude());
+			location.setLongitude(address.getLongitude());
+			List<Address> hereAddressesList = new SCGeocoder(getSherlockActivity()).findAddressesAsync(location);
+			if (hereAddressesList != null && !hereAddressesList.isEmpty()) {
+				Address hereAddress = hereAddressesList.get(0);
+				savePosition(hereAddress, field);
+			} else {
+				Address customAddress = new Address(Locale.getDefault());
+				customAddress.setLatitude(location.getLatitude());
+				customAddress.setLongitude(location.getLongitude());
+				customAddress.setAddressLine(
+						0,
+						"LON " + Double.toString(customAddress.getLongitude()) + ", LAT "
+								+ Double.toString(customAddress.getLatitude()));
+				savePosition(customAddress, field);
+			}
 		}
 	}
 

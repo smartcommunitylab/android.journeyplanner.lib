@@ -45,5 +45,6 @@
     <item name="btn_myprofile" type="id"/>
     <item name="btn_smartcheck" type="id"/>
     <item name="btn_bikesharing" type="id"/>
+    <item name="btn_xmasmarkets" type="id"/>
 
 </resources>
