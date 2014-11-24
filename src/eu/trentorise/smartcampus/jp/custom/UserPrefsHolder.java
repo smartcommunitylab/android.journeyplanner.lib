@@ -19,10 +19,12 @@ import it.sayservice.platform.smartplanner.data.message.Position;
 import it.sayservice.platform.smartplanner.data.message.RType;
 import it.sayservice.platform.smartplanner.data.message.TType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserPrefsHolder {
+public class UserPrefsHolder implements Serializable {
+	private static final long serialVersionUID = -5370045289604099959L;
 
 	private TType[] transportTypes;
 	private RType routeType;

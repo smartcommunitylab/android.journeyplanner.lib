@@ -142,10 +142,14 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			}
 		}
 
-		Address from = null, to = null;
+		Address from = null;
+		Address to = null;
+		UserPrefsHolder uph = null;
+
 		if (getArguments() != null) {
 			from = (Address) getArguments().getSerializable(getString(R.string.navigate_arg_from));
 			to = (Address) getArguments().getSerializable(getString(R.string.navigate_arg_to));
+			uph = (UserPrefsHolder) getArguments().getSerializable(getString(R.string.userprefsholder));
 		} else if (getActivity().getIntent() != null) {
 			if (getActivity().getIntent().getData() != null) {
 				// is it a google url?
@@ -158,6 +162,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			} else {
 				from = (Address) getActivity().getIntent().getParcelableExtra(getString(R.string.navigate_arg_from));
 				to = (Address) getActivity().getIntent().getParcelableExtra(getString(R.string.navigate_arg_to));
+				// userPrefsHolder
+				uph = (UserPrefsHolder) getActivity().getIntent().getSerializableExtra(getString(R.string.userprefsholder));
 			}
 		}
 
@@ -167,6 +173,10 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 
 		if (to != null) {
 			findAddressForField(TO, to);
+		}
+		
+		if (uph != null) {
+			userPrefsHolder = uph;
 		}
 	}
 
@@ -201,8 +211,8 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		// JPHelper.getLocationHelper().start();
 
 		setUpLocationControls();
-		setUpPreferenceControls();
 		setUpTimingControls();
+		setUpPreferenceControls();
 		setUpMainOperation();
 
 		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -349,7 +359,6 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 			toEditText.setText(toPosition.getName());
 		}
 
-		// };
 		ImageButton opt = (ImageButton) getView().findViewById(R.id.plannew_from_opt);
 		opt.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -460,20 +469,27 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 	protected void setUpPreferenceControls() {
 		userPrefs = getSherlockActivity().getSharedPreferences(Config.USER_PREFS, Context.MODE_PRIVATE);
 
+		boolean customUserPrefsHolder = false;
+
 		if (userPrefsHolder == null) {
 			userPrefsHolder = PrefsHelper.sharedPreferences2Holder(userPrefs);
+		} else {
+			// merge
+			UserPrefsHolder sharedUph = PrefsHelper.sharedPreferences2Holder(userPrefs);
+			sharedUph.setRouteType(userPrefsHolder.getRouteType());
+			sharedUph.setTransportTypes(userPrefsHolder.getTransportTypes());
+			userPrefsHolder = sharedUph;
+			customUserPrefsHolder = true;
 		}
 
 		final View userPrefsLayout = (View) getView().findViewById(R.id.plannew_userprefs);
 		PrefsHelper.buildUserPrefsView(getSherlockActivity(), userPrefsHolder, userPrefsLayout);
 
 		View useCustomPrefsToggleBtn = getView().findViewById(R.id.plannew_options);
-
+		final ImageView imgv = (ImageView) getView().findViewById(R.id.plannew_options_toggle);
 		useCustomPrefsToggleBtn.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
-				ImageView imgv = (ImageView) getView().findViewById(R.id.plannew_options_toggle);
 				if (!userPrefsLayout.isShown()) {
 					userPrefsLayout.setVisibility(View.VISIBLE);
 					imgv.setImageResource(R.drawable.ic_navigation_expand);
@@ -483,6 +499,11 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 				}
 			}
 		});
+
+		if (customUserPrefsHolder) {
+			userPrefsLayout.setVisibility(View.VISIBLE);
+			imgv.setImageResource(R.drawable.ic_navigation_expand);
+		}
 	}
 
 	@Override
