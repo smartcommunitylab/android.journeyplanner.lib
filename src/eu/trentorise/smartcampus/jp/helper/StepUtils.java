@@ -104,12 +104,10 @@ public class StepUtils {
 
 	private Spanned buildDescription(Leg leg, int index) {
 		String desc = "";
-		String from = leg.getFrom().getName() != null && leg.getFrom().getName().length() > 0 ? 
-				  this.mCtx.getString(R.string.step_from) + " " + bold(leg.getFrom().getName())
-				: "";
-		String to = leg.getTo().getName() != null && leg.getTo().getName().length() > 0 ? 
-				  this.mCtx.getString(R.string.step_to) + " " + bold(leg.getTo().getName())
-				: "";
+		String from = leg.getFrom().getName() != null && leg.getFrom().getName().length() > 0 ? this.mCtx
+				.getString(R.string.step_from) + " " + bold(leg.getFrom().getName()) : "";
+		String to = leg.getTo().getName() != null && leg.getTo().getName().length() > 0 ? this.mCtx.getString(R.string.step_to)
+				+ " " + bold(leg.getTo().getName()) : "";
 
 		TType tType = leg.getTransport().getType();
 
@@ -125,8 +123,8 @@ public class StepUtils {
 		} else if (tType.equals(TType.BICYCLE)) {
 			desc += mCtx.getString(R.string.step_bike_ride);
 
-			if (leg.getFrom().getStopId() != null && 
-					leg.getFrom().getStopId().getId() != null && leg.getFrom().getStopId().getId().length() > 0) {
+			if (leg.getFrom().getStopId() != null && leg.getFrom().getStopId().getId() != null
+					&& leg.getFrom().getStopId().getId().length() > 0) {
 				from = this.mCtx.getString(R.string.step_bike_pick_up)
 						+ " "
 						+ bold(ParkingsHelper.getParkingAgencyName(this.mCtx, leg.getFrom().getStopId().getAgencyId()) + " "
@@ -137,8 +135,8 @@ public class StepUtils {
 				from = "";
 			}
 
-			if (leg.getTo().getStopId() != null && 
-					leg.getTo().getStopId().getId() != null && leg.getTo().getStopId().getId().length() > 0) {
+			if (leg.getTo().getStopId() != null && leg.getTo().getStopId().getId() != null
+					&& leg.getTo().getStopId().getId().length() > 0) {
 				to = this.mCtx.getString(R.string.step_bike_leave)
 						+ " "
 						+ bold(ParkingsHelper.getParkingAgencyName(this.mCtx, leg.getFrom().getStopId().getAgencyId()) + " "
@@ -167,8 +165,8 @@ public class StepUtils {
 						+ bold(ParkingsHelper.getName(leg.getFrom().getStopId().getId()));
 			}
 		} else if (tType.equals(TType.BUS)) {
-			desc += mCtx.getString(R.string.step_bus_take, RoutesHelper.getShortNameByRouteIdAndAgencyID(leg.getTransport()
-					.getRouteId(), leg.getTransport().getAgencyId()));
+			desc += mCtx.getString(R.string.step_bus_take, RoutesHelper.getShortNameByRouteIdAndAgencyId(this.mCtx, leg
+					.getTransport().getRouteId(), leg.getTransport().getAgencyId()));
 		} else if (tType.equals(TType.TRAIN)) {
 			desc += mCtx.getString(R.string.step_train_take, leg.getTransport().getTripId());
 		}
@@ -264,25 +262,22 @@ public class StepUtils {
 			for (AlertParking aa : leg.getAlertParkingList()) {
 				if (aa.getDescription() != null) {
 					// check if it is 'from' station
-					if (aa.getPlace() != null && aa.getPlace().getId() != null &&
-						leg.getFrom().getStopId() != null &&	
-						aa.getPlace().getId().equals(leg.getFrom().getStopId().getId())) 
-					{
+					if (aa.getPlace() != null && aa.getPlace().getId() != null && leg.getFrom().getStopId() != null
+							&& aa.getPlace().getId().equals(leg.getFrom().getStopId().getId())) {
 						if (leg.getTransport().getType().equals(TType.CAR)) {
-							delay += mCtx.getString(R.string.parking_pickup_alert_car, //ParkingsHelper.getName(aa.getPlace().getId()),
+							delay += mCtx.getString(R.string.parking_pickup_alert_car, // ParkingsHelper.getName(aa.getPlace().getId()),
+									aa.getNoOfvehicles());
+						} else if (leg.getTransport().getType().equals(TType.BICYCLE)) {
+							delay += mCtx.getString(R.string.parking_pickup_alert_bike, // ParkingsHelper.getName(aa.getPlace().getId()),
 									aa.getNoOfvehicles());
 						}
-						else if (leg.getTransport().getType().equals(TType.BICYCLE)) {
-							delay += mCtx.getString(R.string.parking_pickup_alert_bike, //ParkingsHelper.getName(aa.getPlace().getId()),
-									aa.getNoOfvehicles());
-						}
-						
-					// otherwise if this is alert for the target place	
+
+						// otherwise if this is alert for the target place
 					} else if (leg.getTo().getStopId() != null && leg.getTo().getStopId().getId() != null) {
-						delay += mCtx.getString(R.string.parking_alert, //ParkingsHelper.getName(aa.getPlace().getId()),
+						delay += mCtx.getString(R.string.parking_alert, // ParkingsHelper.getName(aa.getPlace().getId()),
 								aa.getPlacesAvailable());
 					}
-					
+
 				}
 			}
 		}

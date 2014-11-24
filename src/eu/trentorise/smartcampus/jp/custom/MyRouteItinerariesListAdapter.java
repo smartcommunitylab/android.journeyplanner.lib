@@ -79,7 +79,7 @@ public class MyRouteItinerariesListAdapter extends ArrayAdapter<RecurrentItinera
 			
 			RouteDescriptor rd = RoutesHelper.getRouteDescriptorByRouteId(context, myItinerary.getName()); 
 			if (rd != null) {
-				String name = rd.getShortNameResource() + ": " + context.getString(rd.getNameResource());
+				String name = rd.getShortName() + ": " + context.getString(rd.getNameResource());
 				holder.name.setText(name);
 			} else {
 				holder.name.setText(myItinerary.getName());

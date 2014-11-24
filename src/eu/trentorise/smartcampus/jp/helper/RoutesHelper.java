@@ -31,6 +31,7 @@ public class RoutesHelper {
 	// public static final String AGENCYID_BUS_SUBURBAN_ZONE_4 = "17_4";
 	// public static final String AGENCYID_BUS_SUBURBAN_ZONE_5 = "17_5";
 	// public static final String AGENCYID_BUS_SUBURBAN_ZONE_6 = "17_6";
+	public static final String AGENCYID_BUS_ROVERETO_XMAS_MARKETS = "116";
 
 	public static final List<String> AGENCYIDS = Arrays.asList(AGENCYID_BUS_TRENTO, AGENCYID_BUS_ROVERETO, AGENCYID_TRAIN_BZVR,
 			AGENCYID_TRAIN_TM, AGENCYID_TRAIN_TNBDG, AGENCYID_BUS_SUBURBAN);
@@ -54,16 +55,19 @@ public class RoutesHelper {
 
 		return list;
 	}
-//	public static List<String> getRoutesIdsList(Context ctx, String[] agencyIds) {
-//		List<String> list = new ArrayList<String>();
-//		List<RouteDescriptor> routeDescriptorsList = getRouteDescriptorsList(ctx, agencyIds);
-//		for (RouteDescriptor r : routeDescriptorsList) {
-//			list.add(routeDescriptor2route(ctx, r).getId().getId());
-//		}
-//
-//		return list;
-//	}
-	
+
+	// public static List<String> getRoutesIdsList(Context ctx, String[]
+	// agencyIds) {
+	// List<String> list = new ArrayList<String>();
+	// List<RouteDescriptor> routeDescriptorsList = getRouteDescriptorsList(ctx,
+	// agencyIds);
+	// for (RouteDescriptor r : routeDescriptorsList) {
+	// list.add(routeDescriptor2route(ctx, r).getId().getId());
+	// }
+	//
+	// return list;
+	// }
+
 	public static List<String> getRoutesIdsList(Context ctx, String[] agencyIds) {
 		List<String> list = new ArrayList<String>();
 		List<RouteDescriptor> routeDescriptorsList = getRouteDescriptorsListFiltered(ctx, agencyIds);
@@ -73,11 +77,12 @@ public class RoutesHelper {
 
 		return list;
 	}
+
 	public static List<RouteDescriptor> getRouteDescriptorsListFiltered(Context ctx, String[] agencyIds) {
 		// if agencyIds are not provided use all
-//		if (agencyIds == null || agencyIds.length == 0) {
-//			agencyIds = AGENCYIDS.toArray(new String[] {});
-//		}
+		// if (agencyIds == null || agencyIds.length == 0) {
+		// agencyIds = AGENCYIDS.toArray(new String[] {});
+		// }
 		if (agencyIds == null || agencyIds.length == 0) {
 			agencyIds = JPParamsHelper.getAgencyID().toArray(new String[] {});
 		}
@@ -95,16 +100,17 @@ public class RoutesHelper {
 				lines = ctx.getResources().getStringArray(R.array.smart_check_17_zones);
 				lines = filterSuburbanLines(lines);
 			}
-			//ritorna [null null 3 null null 6]
-			List <RouteDescriptor> routes = null;
-			//if param agencyid the prendi il parametro, altrimenti prendi tutto
-			routes=JPParamsHelper.getRoutesIDByAgencyID(agencyId);
-			
+			// ritorna [null null 3 null null 6]
+			List<RouteDescriptor> routes = null;
+			// if param agencyid the prendi il parametro, altrimenti prendi
+			// tutto
+			routes = JPParamsHelper.getRoutesIDByAgencyID(agencyId);
+
 			for (RouteDescriptor r : routes) {
 				if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
-					//solo se e' extraurbano
+					// solo se e' extraurbano
 					for (int index = 0; index < lines.length; index++) {
-						//per tutte le zone extraurbane
+						// per tutte le zone extraurbane
 						if (lines[index] != null && validateRouteDescriptor(ctx, agencyId, r, lines[index], index)) {
 							list.add(r);
 						}
@@ -116,41 +122,44 @@ public class RoutesHelper {
 		}
 		return list;
 	}
-//	public static List<RouteDescriptor> getRouteDescriptorsList(Context ctx, String[] agencyIds) {
-//		// if agencyIds are not provided use all
-//		if (agencyIds == null || agencyIds.length == 0) {
-//			agencyIds = AGENCYIDS.toArray(new String[] {});
-//		}
-//
-//		List<RouteDescriptor> list = new ArrayList<RouteDescriptor>();
-//		for (int i = 0; i < agencyIds.length; i++) {
-//			String agencyId = agencyIds[i];
-//
-//			if (ROUTES.get(agencyId) == null) {
-//				continue;
-//			}
-//
-//			String[] lines = new String[] {};
-//			if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
-//				// filter for suburban zones in app parameters!
-//				lines = ctx.getResources().getStringArray(R.array.smart_check_17_zones);
-//				lines = filterSuburbanLines(lines);
-//			}
-//
-//			for (RouteDescriptor r : ROUTES.get(agencyId)) {
-//				if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
-//					for (int index = 0; index < lines.length; index++) {
-//						if (lines[index] != null && validateRouteDescriptor(ctx, agencyId, r, lines[index], index)) {
-//							list.add(r);
-//						}
-//					}
-//				} else {
-//					list.add(r);
-//				}
-//			}
-//		}
-//		return list;
-//	}
+
+	// public static List<RouteDescriptor> getRouteDescriptorsList(Context ctx,
+	// String[] agencyIds) {
+	// // if agencyIds are not provided use all
+	// if (agencyIds == null || agencyIds.length == 0) {
+	// agencyIds = AGENCYIDS.toArray(new String[] {});
+	// }
+	//
+	// List<RouteDescriptor> list = new ArrayList<RouteDescriptor>();
+	// for (int i = 0; i < agencyIds.length; i++) {
+	// String agencyId = agencyIds[i];
+	//
+	// if (ROUTES.get(agencyId) == null) {
+	// continue;
+	// }
+	//
+	// String[] lines = new String[] {};
+	// if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
+	// // filter for suburban zones in app parameters!
+	// lines = ctx.getResources().getStringArray(R.array.smart_check_17_zones);
+	// lines = filterSuburbanLines(lines);
+	// }
+	//
+	// for (RouteDescriptor r : ROUTES.get(agencyId)) {
+	// if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
+	// for (int index = 0; index < lines.length; index++) {
+	// if (lines[index] != null && validateRouteDescriptor(ctx, agencyId, r,
+	// lines[index], index)) {
+	// list.add(r);
+	// }
+	// }
+	// } else {
+	// list.add(r);
+	// }
+	// }
+	// }
+	// return list;
+	// }
 
 	public static String getAgencyIdByRouteId(String routeId) {
 		for (List<RouteDescriptor> list : ROUTES.values()) {
@@ -182,13 +191,18 @@ public class RoutesHelper {
 		return getRouteDescriptorByRouteId(context, null, routeId);
 	}
 
-	public static String getShortNameByRouteIdAndAgencyID(String routeId, String AgencyId) {
-
+	public static String getShortNameByRouteIdAndAgencyId(Context context, String routeId, String agencyId) {
 		String returnShortName = "";
-		List<RouteDescriptor> names = ROUTES.get(AgencyId);
+		List<RouteDescriptor> names = ROUTES.get(agencyId);
 		for (RouteDescriptor desc : names) {
-			if (desc.getRouteId().equals(routeId))
-				return desc.getShortNameResource();
+			if (desc.getRouteId().equals(routeId)) {
+				Object shortNameObject = desc.getShortName();
+				if (shortNameObject instanceof String) {
+					return (String) shortNameObject;
+				} else if (shortNameObject instanceof Integer) {
+					return context.getString((Integer) shortNameObject);
+				}
+			}
 		}
 		return returnShortName;
 	}
@@ -288,7 +302,7 @@ public class RoutesHelper {
 		id.setAgency(rd.getAgencyId());
 		id.setId(rd.getRouteId());
 		route.setId(id);
-		route.setRouteShortName(rd.getShortNameResource());
+		route.setRouteShortName(getShortNameByRouteIdAndAgencyId(ctx, rd.getRouteId(), rd.getAgencyId()));
 		route.setRouteLongName(ctx.getString(rd.getNameResource()));
 		return route;
 	}
@@ -320,11 +334,11 @@ public class RoutesHelper {
 					|| routeDescriptor.getRouteId().equalsIgnoreCase(line + "A")
 					|| routeDescriptor.getRouteId().equalsIgnoreCase(line + "R");
 		} else if (AGENCYID_BUS_ROVERETO.equals(agencyId)) {
-			contains = routeDescriptor.getShortNameResource().equals(line);
+			contains = routeDescriptor.getShortName().equals(line);
 		} else if (AGENCYID_BUS_SUBURBAN.equals(agencyId)) {
 			TypedArray routesArrays = mContext.getResources().obtainTypedArray(R.array.agency_17_zones);
 			CharSequence[] routesShortNames = routesArrays.getTextArray(index);
-			contains = Arrays.asList(routesShortNames).contains(routeDescriptor.getShortNameResource());
+			contains = Arrays.asList(routesShortNames).contains(routeDescriptor.getShortName());
 			routesArrays.recycle();
 		}
 
@@ -936,7 +950,13 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "638_17_0", R.string.agency_17_route_638_17_0, "140"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "638_17_1", R.string.agency_17_route_638_17_1, "140"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "640_17_0", R.string.agency_17_route_640_17_0, "468"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "640_17_1", R.string.agency_17_route_640_17_1, "468") }); 
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "640_17_1", R.string.agency_17_route_640_17_1, "468") });
+
+	private static final List<RouteDescriptor> RoutesDescriptorsList_116 = Arrays.asList(new RouteDescriptor[] {
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO_XMAS_MARKETS, "xmasA_Rov", R.string.xmasmarkets_route_name,
+					R.string.xmasmarkets_route_name),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO_XMAS_MARKETS, "xmasR_Rov", R.string.xmasmarkets_route_name,
+					R.string.xmasmarkets_route_name) });
 
 	public static final Map<String, List<RouteDescriptor>> ROUTES = new HashMap<String, List<RouteDescriptor>>() {
 		private static final long serialVersionUID = 8472504007546826470L;
@@ -947,6 +967,7 @@ public class RoutesHelper {
 			put(AGENCYID_TRAIN_TNBDG, RoutesDescriptorsList_6);
 			put(AGENCYID_BUS_ROVERETO, RoutesDescriptorsList_16);
 			put(AGENCYID_BUS_SUBURBAN, RoutesDescriptorsList_17);
+			put(AGENCYID_BUS_ROVERETO_XMAS_MARKETS, RoutesDescriptorsList_116);
 		}
 	};
 
