@@ -17,8 +17,8 @@
 <resources>
 
     <!-- Christmas Markets strings -->
-    <string name="xmasmarkets_xmasmarkets">Christmas Markets</string>
-    <string name="xmasmarkets_querciaparking">Markets Parking (\"Stadio Quercia\")</string>
-    <string name="xmasmarkets_route_name">Christmas Markets shuttle bus</string>
+    <string name="xmasmarkets_xmasmarkets">Mercatini di Natale</string>
+    <string name="xmasmarkets_querciaparking">Parcheggio Mercatini (Stadio Quercia)</string>
+    <string name="xmasmarkets_route_name">Navetta Mercatini di Natale</string>
 
 </resources>
