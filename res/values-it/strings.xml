@@ -218,7 +218,7 @@
     <string name="ttype_car_w_parking">Auto con parcheggio</string>
     <!-- <string name="ttype_sharedcar">Car sharing</string> -->
     <!-- <string name="ttype_sharedcar_wo_station">Car sharing senza stazione</string> -->
-    <string name="ttype_sharedcar_wo_station">Car sharing</string>
+    <string name="ttype_sharedcar_wo_station">Auto condivisa</string>
     <string name="ttype_bus">Bus</string>
     <string name="ttype_train">Treno</string>
     <string name="ttype_walk">A piedi</string>
