@@ -41,13 +41,13 @@ public class TutorialManagerActivity extends BaseActivity {
 
 	protected TutorialHelper mTutorialHelper = null;
 	private List<TutorialItem> tutorial = null;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mTutorialHelper = new TutorialHelper(this, mTutorialProvider );
+		mTutorialHelper = new TutorialHelper(this, mTutorialProvider);
 	}
-	
+
 	protected void showTourDialog() {
 		mTutorialHelper.showTourDialog(getString(R.string.jp_first_launch), getString(R.string.begin_tut));
 	}
@@ -68,7 +68,7 @@ public class TutorialManagerActivity extends BaseActivity {
 		super.onConfigurationChanged(newConfig);
 		tutorial = null;
 	}
-	
+
 	private TutorialProvider mTutorialProvider = new TutorialProvider() {
 		private List<TutorialItem> tutorial() {
 			if (tutorial == null) {
@@ -96,33 +96,33 @@ public class TutorialManagerActivity extends BaseActivity {
 					if (v != null) {
 						int[] pos = new int[2];
 						v.getLocationOnScreen(pos);
-						tutorial.add(new TutorialItem(allNames[i], pos, v.getWidth(), allNames[i], allTut[i]));
+						if (allTut[i] != null) {
+							tutorial.add(new TutorialItem(allNames[i], pos, v.getWidth(), allNames[i], allTut[i]));
+						}
 					}
 				}
 				allIds.recycle();
 			}
 			return tutorial;
 		}
-		
+
 		@Override
 		public int size() {
 			return tutorial().size();
 		}
-		
+
 		@Override
 		public void onTutorialFinished() {
 		}
-		
+
 		@Override
 		public void onTutorialCancelled() {
 		}
-		
+
 		@Override
 		public TutorialItem getItemAt(int pos) {
 			return tutorial().get(pos);
 		}
 	};
-
-
 
 }
