@@ -18,6 +18,7 @@ package eu.trentorise.smartcampus.jp.helper;
 import it.sayservice.platform.smartplanner.data.message.Leg;
 import it.sayservice.platform.smartplanner.data.message.Position;
 import it.sayservice.platform.smartplanner.data.message.TType;
+import it.sayservice.platform.smartplanner.data.message.Transport;
 import it.sayservice.platform.smartplanner.data.message.alerts.AlertAccident;
 import it.sayservice.platform.smartplanner.data.message.alerts.AlertDelay;
 import it.sayservice.platform.smartplanner.data.message.alerts.AlertParking;
@@ -105,10 +106,10 @@ public class StepUtils {
 	private Spanned buildDescription(Leg leg, int index) {
 		String desc = "";
 		String from = leg.getFrom().getName() != null && leg.getFrom().getName().length() > 0 ? 
-				  this.mCtx.getString(R.string.step_from) + " " + bold(leg.getFrom().getName())
+				  this.mCtx.getString(R.string.step_from) + " " + bold(placeName(leg.getFrom()))
 				: "";
 		String to = leg.getTo().getName() != null && leg.getTo().getName().length() > 0 ? 
-				  this.mCtx.getString(R.string.step_to) + " " + bold(leg.getTo().getName())
+				  this.mCtx.getString(R.string.step_to) + " " + bold(placeName(leg.getTo()))
 				: "";
 
 		TType tType = leg.getTransport().getType();
@@ -187,10 +188,18 @@ public class StepUtils {
 		} else if (legs.get(index - 1) == null || isBadString(legs.get(index - 1).getTo().getName())) {
 			from = this.mCtx.getString(R.string.step_move);
 		} else {
-			from = this.mCtx.getString(R.string.step_from) + " " + bold(legs.get(index - 1).getTo().getName());
+			from = this.mCtx.getString(R.string.step_from) + " " + bold(placeName(legs.get(index - 1).getTo()));
 		}
 
 		return from;
+	}
+
+	private String placeName(Position p) {
+		if (p.getStopId() != null) {
+			String name = ParkingsHelper.getName(p.getStopId().getId());
+			return name != null && name.length() > 0 ? name : p.getName();
+		}
+		return p.getName();
 	}
 
 	private String buildDescriptionTo(int index) {
@@ -201,7 +210,7 @@ public class StepUtils {
 		} else if (legs.get(index + 1) == null || isBadString(legs.get(index + 1).getFrom().getName())) {
 			to = "";
 		} else {
-			to = this.mCtx.getString(R.string.step_to) + " " + bold(legs.get(index + 1).getFrom().getName());
+			to = this.mCtx.getString(R.string.step_to) + " " + bold(placeName(legs.get(index + 1).getFrom()));
 		}
 
 		return to;
