@@ -1,13 +1,9 @@
 package eu.trentorise.smartcampus.jp.helper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.google.android.gms.internal.o;
 
 import android.content.Context;
 import android.util.Log;
