@@ -197,7 +197,7 @@ public class StepUtils {
 	private String placeName(Position p) {
 		if (p.getStopId() != null) {
 			String name = ParkingsHelper.getName(p.getStopId().getId());
-			return name != null && name.length() > 0 ? name : p.getName();
+			return name != null && !name.equals(p.getStopId().getId()) ? name : p.getName();
 		}
 		return p.getName();
 	}
