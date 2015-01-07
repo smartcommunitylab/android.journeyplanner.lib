@@ -96,7 +96,9 @@ public class TutorialManagerActivity extends BaseActivity {
 					if (v != null) {
 						int[] pos = new int[2];
 						v.getLocationOnScreen(pos);
-						tutorial.add(new TutorialItem(allNames[i], pos, v.getWidth(), allNames[i], allTut[i]));
+						if (allTut[i] != null) {
+							tutorial.add(new TutorialItem(allNames[i], pos, v.getWidth(), allNames[i], allTut[i]));
+						}
 					}
 				}
 				allIds.recycle();
