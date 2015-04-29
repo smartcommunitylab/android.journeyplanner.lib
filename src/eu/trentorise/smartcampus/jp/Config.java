@@ -74,7 +74,7 @@ public class Config {
 	// TType.SHAREDCAR,
 	// TType.SHAREDCAR_WITHOUT_STATION, TType.WALK };// TType.values();
 
-	public static final TType[] TTYPES_ALLOWED = new TType[] { TType.TRANSIT, TType.CAR, TType.WALK, TType.BICYCLE,
+	public static final TType[] TTYPES_ALLOWED = new TType[] { TType.WALK, TType.BICYCLE, TType.TRANSIT, TType.CAR,
 			TType.SHAREDCAR_WITHOUT_STATION, TType.SHAREDBIKE_WITHOUT_STATION };
 
 	public static final Set<TType> CAR_SET = new HashSet<TType>() {
