@@ -106,7 +106,7 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 
 		// time
 		Calendar time = Calendar.getInstance();
-		time.setTimeInMillis(tripData.getTime() * 1000);
+		time.setTimeInMillis(tripData.getTime());
 		String timeFromString = Config.FORMAT_TIME_UI.format(time.getTime());
 		holder.time.setText(timeFromString);
 
