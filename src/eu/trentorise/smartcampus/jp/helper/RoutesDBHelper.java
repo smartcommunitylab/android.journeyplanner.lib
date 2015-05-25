@@ -350,7 +350,7 @@ public class RoutesDBHelper {
 
 		// DB configurations
 		private static final String DB_NAME = "routesdb";
-		private static final int DB_VERSION = 9;
+		private static final int DB_VERSION = 12;
 
 		// Tables
 		public final static String DB_TABLE_CALENDAR = "calendar";

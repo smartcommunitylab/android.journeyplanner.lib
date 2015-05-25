@@ -427,7 +427,7 @@ public class JPHelper {
 		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		List<StopTime> res = dataService.getStopTimes(agencyId, routeId, stopId, authToken);
 		for (StopTime st : res)
-			st.setTime(st.getTime() * 1000);
+			st.setTime(st.getTime());
 
 		return res;
 	}
