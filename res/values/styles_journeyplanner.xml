@@ -18,7 +18,7 @@
      limitations under the License.
 -->
 
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="Theme.Journeyplanner" parent="@style/Theme.Sherlock.Light.DarkActionBar">
         <item name="actionBarItemBackground">@drawable/selectable_background_journeyplanner</item>
@@ -50,6 +50,8 @@
         <item name="android:listViewStyle">@style/ListViewJourneyplanner</item>
         <item name="android:listViewWhiteStyle">@style/ListViewJourneyplanner.White</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItemJourneyplanner</item>
+
+        <!-- Lollipop issues -->
     </style>
 
     <style name="ActionBar.Solid.Journeyplanner" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
