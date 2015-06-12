@@ -431,7 +431,7 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "03R_Rov", R.string.agency_16_route_03R_Rov, "3"),
 			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "04A_Rov", R.string.agency_16_route_04A_Rov, "4"),
 			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "04R_Rov", R.string.agency_16_route_04R_Rov, "4"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "05_Rov", R.string.agency_16_route_05_Rov, "5"),
+//			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "05_Rov", R.string.agency_16_route_05_Rov, "5"),
 			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "06A_Rov", R.string.agency_16_route_06A_Rov, "6"),
 			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "06R_Rov", R.string.agency_16_route_06R_Rov, "6"),
 			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "07A_Rov", R.string.agency_16_route_07A_Rov, "7"),

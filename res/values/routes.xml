@@ -821,7 +821,7 @@
     <string name="agency_16_route_03R_Rov">Lenzima Rosmini Nogaredo Pedersano</string>
     <string name="agency_16_route_04A_Rov">Rosmini Isera Nogaredo Villa Lagarina</string>
     <string name="agency_16_route_04R_Rov">Villa Lagarina Nogaredo Isera Rosmini</string>
-    <string name="agency_16_route_05_Rov">Mori Villa Lagarina Pomarolo Nomi</string>
+<!--     <string name="agency_16_route_05_Rov">Mori Villa Lagarina Pomarolo Nomi</string> -->
     <string name="agency_16_route_06A_Rov">Nomi Pomarolo/Volano Rosmini Mori</string>
     <string name="agency_16_route_06R_Rov">Mori Rosmini Calliano Nomi</string>
     <string name="agency_16_route_07A_Rov">Campana Dei Caduti Noriglio</string>
