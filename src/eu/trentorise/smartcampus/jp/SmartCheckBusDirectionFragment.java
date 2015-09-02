@@ -103,10 +103,14 @@ public class SmartCheckBusDirectionFragment extends FeedbackFragment {
 				FragmentTransaction fragmentTransaction = getSherlockActivity().getSupportFragmentManager().beginTransaction();
 				Fragment fragment = new SmartCheckTTFragment();
 				Bundle b = new Bundle();
-				SmartLine smartLineParam = new SmartLine(null, smartLine.getRoutesShorts().get(position), smartLine.getColor(),
-						new ArrayList<String>(Arrays.asList(smartLine.getRoutesShorts().get(position))), new ArrayList<String>(
-								Arrays.asList(smartLine.getRoutesLong().get(position))), new ArrayList<String>(Arrays
-								.asList(smartLine.getRouteID().get(position))));
+				SmartLine smartLineParam = new SmartLine(
+						null, 
+						smartLine.getRoutesShorts().get(position), 
+						smartLine.getColor(),
+						new ArrayList<String>(Arrays.asList(smartLine.getRoutesShorts().get(position))), 
+						new ArrayList<String>(Arrays.asList(smartLine.getRoutesLong().get(position))), 
+						new ArrayList<String>(Arrays.asList(smartLine.getRouteID().get(position))),
+						smartLine.getAgencyId());
 				b.putParcelable(SmartCheckTTFragment.PARAM_SMARTLINE, smartLineParam);
 				fragment.setArguments(b);
 				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

@@ -112,13 +112,11 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 		}
 
 		if (this.params != null) {
-			if (RoutesHelper.AGENCYIDS_TRAINS_TYPED.contains(RoutesHelper
-					.getAgencyIdByRouteId(params.getRouteID().get(0)))) {
+			if (RoutesHelper.AGENCYIDS_TRAINS_TYPED.contains(params.getAgencyId())) {
 				this.typeOfTransport = true;
 			}
 
-			if (RoutesHelper.AGENCYIDS_TRAINS.contains(RoutesHelper
-					.getAgencyIdByRouteId(params.getRouteID().get(0)))) {
+			if (RoutesHelper.AGENCYIDS_TRAINS.contains(params.getAgencyId())) {
 				this.smallTitle = true;
 			}
 		}
@@ -129,7 +127,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 				getSherlockActivity(), new GetBusTimeTableProcessor(
 						getSherlockActivity()));
 		task.execute(from_date_millisecond, to_date_millisecond, params
-				.getRouteID().get(0));
+				.getRouteID().get(0), params.getAgencyId());
 	}
 
 	private void create_interval() {
@@ -212,7 +210,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 				create_interval();
 				todayButtonCheck();
 				task.execute(from_date_millisecond, to_date_millisecond, params
-						.getRouteID().get(0));
+						.getRouteID().get(0), params.getAgencyId());
 			}
 		});
 
@@ -262,7 +260,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 					todayButtonCheck();
 
 					task.execute(from_date_millisecond, to_date_millisecond,
-							params.getRouteID().get(0));
+							params.getRouteID().get(0), params.getAgencyId());
 					return true; // if you want to handle the touch event
 				}
 				return false;
@@ -315,7 +313,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 					todayButtonCheck();
 
 					task.execute(from_date_millisecond, to_date_millisecond,
-							params.getRouteID().get(0));
+							params.getRouteID().get(0), params.getAgencyId());
 					return true; // if you want to handle the touch event
 				}
 				return false;
@@ -433,10 +431,11 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 			long from_day = (Long) params[0];
 			long to_day = (Long) params[1];
 			String routeId = (String) params[2];
+			String agencyId = (String) params[3];
 
 			 CompressedTransitTimeTable cttt = RoutesDBHelper.getTimeTable(
 			 CompressedTTHelper.convertMsToDateFormat(from_day),
-			 RoutesHelper.getAgencyIdByRouteId(routeId), routeId);
+			 agencyId, routeId);
 			 
 			 TimeTable returnTimeTable = cttt != null ? CompressedTTHelper.ctt2tt(cttt) : null;
 //			 TimeTable returnTimeTable =

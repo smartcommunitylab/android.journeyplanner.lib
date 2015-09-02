@@ -63,7 +63,7 @@ public class SmartCheckTrainFragment extends FeedbackFragment {
 				Fragment fragment = new SmartCheckTTFragment();
 				Bundle b = new Bundle();
 				SmartLine param = new SmartLine(null, getString(adapter.getItem(position).getNameResource()), getResources()
-						.getColor(R.color.sc_gray), null, null, Arrays.asList(adapter.getItem(position).getRouteId()));
+						.getColor(R.color.sc_gray), null, null, Arrays.asList(adapter.getItem(position).getRouteId()), adapter.getItem(position).getAgencyId());
 				b.putParcelable(SmartCheckTTFragment.PARAM_SMARTLINE, param);
 				fragment.setArguments(b);
 				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

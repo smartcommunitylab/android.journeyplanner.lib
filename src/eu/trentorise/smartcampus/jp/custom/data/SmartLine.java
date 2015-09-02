@@ -13,13 +13,14 @@ public class SmartLine implements Parcelable {
 	private Drawable icon;
 	private String line;
 	private int color;
+	private String agencyId;
 	private List<String> routesID;
 	private List<String> routesShorts;
 	private List<String> routesLong;
 
 	public SmartLine(Drawable icon, String line, int color,
 			List<String> routesShorts, List<String> routesLong,
-			List<String> routeID) {
+			List<String> routeID, String agencyId) {
 		super();
 		this.icon = icon;
 		this.line = line;
@@ -27,6 +28,7 @@ public class SmartLine implements Parcelable {
 		this.routesID = routeID;
 		this.routesShorts = routesShorts;
 		this.routesLong = routesLong;
+		this.agencyId = agencyId;
 	}
 
 	public List<String> getRouteID() {
@@ -75,6 +77,14 @@ public class SmartLine implements Parcelable {
 
 	public void setRoutesLong(List<String> routesLong) {
 		this.routesLong = routesLong;
+	}
+
+	public String getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
 	}
 
 	@Override

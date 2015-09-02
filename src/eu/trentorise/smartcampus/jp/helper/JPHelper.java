@@ -152,14 +152,6 @@ public class JPHelper {
 
 			@Override
 			public void run() {
-				CompressedTTHelper.init(mContext);
-
-			}
-		}).start();
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
 				MapManager.initWithParams();
 
 			}
@@ -422,7 +414,7 @@ public class JPHelper {
 				}
 			}
 			SmartLine singleLine = new SmartLine(icons.getDrawable(index), lines[index], colors.getColor(index, 0),
-					singleRoutesShorts.get(lines[index]), singleRoutesLong.get(lines[index]), singleRoutesId.get(lines[index]));
+					singleRoutesShorts.get(lines[index]), singleRoutesLong.get(lines[index]), singleRoutesId.get(lines[index]), agencyId);
 			busLines.add(singleLine);
 		}
 
