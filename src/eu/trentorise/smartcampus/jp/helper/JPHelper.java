@@ -17,10 +17,8 @@ package eu.trentorise.smartcampus.jp.helper;
 
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
 import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoad;
-import it.sayservice.platform.smartplanner.data.message.cache.CacheUpdateResponse;
 import it.sayservice.platform.smartplanner.data.message.journey.RecurrentJourney;
 import it.sayservice.platform.smartplanner.data.message.journey.SingleJourney;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.GeolocalizedStopRequest;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
@@ -28,6 +26,7 @@ import it.sayservice.platform.smartplanner.data.message.otpbeans.Stop;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -192,9 +191,15 @@ public class JPHelper {
 				JPParamsHelper.init(mContext);
 			}
 		}).start();
-		instance = new JPHelper(mContext);
-		RoutesDBHelper.init(mContext);
-		getUserProfileInit();
+		
+		
+		try {
+			instance = new JPHelper(mContext);
+			RoutesDBHelper.init(mContext);
+			getUserProfileInit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void getUserProfileInit() {
@@ -319,23 +324,33 @@ public class JPHelper {
 		return userService.monitorSingleJourney(id, monitor, authToken);
 	}
 
-	public static Map<String, CacheUpdateResponse> getCacheStatus(Map<String, String> agencyIdsVersions, String authToken)
-			throws ProtocolException, SecurityException, RemoteException {
-		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return dataService.getCacheStatus(agencyIdsVersions, authToken);
+	public static Map<String, Long> getVersions(String authToken) throws ProtocolException, SecurityException, RemoteException, MobilityServiceException {
+		MobilityDataService dataService = new MobilityDataService( GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		return dataService.getVersions(authToken);
 	}
-
-	public static Map<String, CacheUpdateResponse> getPartialCacheStatus(Map agencyIdsVersions, String authToken)
-			throws ProtocolException, SecurityException, RemoteException {
-		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return dataService.getPartialCacheStatus(((Map<String, Map>) agencyIdsVersions), authToken);
+	
+	public static InputStream getDBZipStream(String appId, String authToken) throws MobilityServiceException, ProtocolException {
+		MobilityDataService dataService = new MobilityDataService( GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+		return dataService.getRoutesDB(appId, authToken);
 	}
-
-	public static CompressedTransitTimeTable getCacheUpdate(String agencyId, String fileName, String authToken)
-			throws ProtocolException, SecurityException, RemoteException {
-		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return dataService.getCachedTimetable(agencyId, fileName, authToken);
-	}
+	
+//	public static Map<String, CacheUpdateResponse> getCacheStatus(Map<String, String> agencyIdsVersions, String authToken)
+//			throws ProtocolException, SecurityException, RemoteException {
+//		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+//		return dataService.getCacheStatus(agencyIdsVersions, authToken);
+//	}
+//
+//	public static Map<String, CacheUpdateResponse> getPartialCacheStatus(Map agencyIdsVersions, String authToken)
+//			throws ProtocolException, SecurityException, RemoteException {
+//		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+//		return dataService.getPartialCacheStatus(((Map<String, Map>) agencyIdsVersions), authToken);
+//	}
+//
+//	public static CompressedTransitTimeTable getCacheUpdate(String agencyId, String fileName, String authToken)
+//			throws ProtocolException, SecurityException, RemoteException {
+//		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+//		return dataService.getCachedTimetable(agencyId, fileName, authToken);
+//	}
 
 	public static boolean monitorMyRecItinerary(boolean monitor, String id, String authToken) throws ProtocolException,
 			MobilityServiceException {
@@ -554,14 +569,14 @@ public class JPHelper {
 		return userService.getRecurrentJourneys(authToken);
 	}
 
-	public static TimeTable getTransitTimeTableById(long from_day, long to_day, String routeId, String authToken)
-			throws ProtocolException, MobilityServiceException {
-		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		if (routeId != null) {
-			return dataService.getTimeTable(routeId, from_day, authToken);
-		}
-		return null;
-	}
+//	public static TimeTable getTransitTimeTableById(long from_day, long to_day, String routeId, String authToken)
+//			throws ProtocolException, MobilityServiceException {
+//		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
+//		if (routeId != null) {
+//			return dataService.getTimeTable(routeId, from_day, authToken);
+//		}
+//		return null;
+//	}
 
 	// da rifare
 

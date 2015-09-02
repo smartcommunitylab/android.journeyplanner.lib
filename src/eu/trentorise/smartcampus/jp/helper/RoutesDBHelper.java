@@ -19,20 +19,29 @@ import it.sayservice.platform.smartplanner.data.message.cache.CacheUpdateRespons
 import it.sayservice.platform.smartplanner.data.message.cache.CompressedCalendar;
 import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
 
+import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipInputStream;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
-import eu.trentorise.smartcampus.jp.timetable.CTTTCacheUpdaterAsyncTask;
 import eu.trentorise.smartcampus.jp.timetable.CompressedTTHelper;
 import eu.trentorise.smartcampus.network.JsonUtils;
 
@@ -44,24 +53,13 @@ public class RoutesDBHelper {
 
 	private static RoutesDBHelper instance = null;
 
-	protected RoutesDBHelper(Context context) {
-		// TODO: test
-//			context.deleteDatabase(Environment.getExternalStorageDirectory() + "/" + RoutesDatabase.DB_NAME);
-		//	Log.e(RoutesDBHelper.class.getCanonicalName(), "Deleting DB.... SUCCESS");
-		//
-		routesDB = new RoutesDatabase(context);
+	protected RoutesDBHelper(Context context) throws IOException {
+		routesDB = RoutesDatabase.createDataBase(context);
 	}
 
-	public static void init(Context applicationContext) {
-		instance = new RoutesDBHelper(applicationContext);
-		CTTTCacheUpdaterAsyncTask ctttCacheUpdaterAsyncTask = new CTTTCacheUpdaterAsyncTask(applicationContext);
-		ctttCacheUpdaterAsyncTask.execute(); 
+	public static void init(Context applicationContext) throws IOException {
+		new UpdaterAsyncTask(applicationContext).execute();
 	}
-
-	public static RoutesDBHelper getInstance() {
-		return instance;
-	}
-
 
 	public static Map<String, Long> getVersions() {
 		SQLiteDatabase db = RoutesDBHelper.routesDB.getReadableDatabase();
@@ -346,7 +344,7 @@ public class RoutesDBHelper {
 			return cv;
 		}
 	}
-	private class RoutesDatabase extends SQLiteOpenHelper {
+	private static class RoutesDatabase extends SQLiteOpenHelper {
 
 		// DB configurations
 		private static final String DB_NAME = "routesdb";
@@ -376,45 +374,167 @@ public class RoutesDBHelper {
 
 		// version field
 		public final static String VERSION_KEY = "version";
-
-//		private static final String CREATE_CALENDAR_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_CALENDAR + " ("
-//				+ AGENCY_ID_KEY + " text not null, " + DATE_KEY + " text not null, " + ROUTE_KEY + " text not null, " + LINEHASH_KEY + " text not null);";
-		private static final String CREATE_CALENDAR_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_CALENDAR + " ("
-				+ AGENCY_ID_KEY + " text not null, " + CAL_KEY + " text not null, " + ROUTE_KEY + " text not null);";
-
-		private static final String CREATE_ROUTE_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_ROUTE + " (" + LINEHASH_KEY
-				+ " text primary key, " + STOPS_IDS_KEY + " text, " + STOPS_NAMES_KEY + " text," + TRIPS_IDS_KEY + " text,"
-				+ COMPRESSED_TIMES_KEY + " text );";
-
-		private static final String CREATE_VERSION_TABLE = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_VERSION + " ("
-				+ AGENCY_ID_KEY + " integer primary key, " + VERSION_KEY + " integer not null default 0);";
-
-		private static final String DELETE_TABLE  = "DROP TABLE IF EXISTS %s";
 		
-		public RoutesDatabase(Context context) {
-//			test
-//			super(context, Environment.getExternalStorageDirectory() + "/" + DB_NAME, null, DB_VERSION);
-			super(context, DB_NAME, null, DB_VERSION);
-
+		private RoutesDatabase(Context context, Integer version) {
+			super(context, dbPath(context), null, version);
 		}
 
+		/**
+		 * Creates a empty database on the system and rewrites it with your own
+		 * database.
+		 * 
+		 * @param dbVersion
+		 * @param ctx
+		 * */
+		private static RoutesDatabase createDataBase(Context ctx) throws IOException {
+			int version = checkDataBase(ctx);
+			if (JPParamsHelper.getInstance() == null) {
+				JPParamsHelper.init(ctx);
+			}
+			Integer assetVersion = JPParamsHelper.getDBVersion();
+			if (assetVersion == null) assetVersion = DB_VERSION;
+			if (version < 0) {
+				// By calling this method and empty database will be created into
+				// the default system path
+				// of your application so we are gonna be able to overwrite that
+				// database with our database.
+				// this.getReadableDatabase();
+				try {
+					copyDataBase(ctx);
+				} catch (IOException e) {
+					throw new Error("Error copying database");
+				}
+			} else if (version < assetVersion) {
+				try {
+					copyDataBase(ctx);
+				} catch (IOException e) {
+					throw new Error("Error copying database");
+				}
+			}
+			RoutesDatabase helper = new RoutesDatabase(ctx, assetVersion);
+			helper.openDataBase();
+			return helper;
+		}
+
+		
+		private static String dbPath(Context ctx) {
+			return Environment.getExternalStorageDirectory() + "/" + DB_NAME;
+			//ctx.getDatabasePath(DB_NAME).getAbsolutePath();
+		}
+
+		/**
+		 * Copies your database from your local assets-folder.
+		 * */
+		private static void copyDataBase(Context ctx) throws IOException {
+			// Open your local db as the input stream
+			InputStream zipInput = ctx.getAssets().open(DB_NAME+".zip");
+			copyDataBase(ctx, zipInput);
+		}
+
+		/**
+		 * Copies your database from the inputstream to the just created
+		 * empty database in the system folder, from where it can be accessed and
+		 * handled. This is done by transfering bytestream.
+		 * */
+		private static void copyDataBase(Context ctx, InputStream zipInput) throws IOException {
+			ZipInputStream zis = new ZipInputStream(new BufferedInputStream(zipInput)); 
+			try {
+				if (zis.getNextEntry() != null) {
+					// Path to the just created empty db
+					String outFileName = dbPath(ctx);
+					// Open the empty db as the output stream
+					OutputStream myOutput = new FileOutputStream(outFileName);
+					// transfer bytes from the inputfile to the outputfile
+					byte[] buffer = new byte[1024];
+					int length;
+					while ((length = zis.read(buffer)) > 0) {
+						myOutput.write(buffer, 0, length);
+					}
+					// Close the streams
+					myOutput.flush();
+					myOutput.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw e;
+			} finally {
+				zipInput.close();
+				zis.close();
+			}
+			
+		}
+		
+		/**
+		 * Check if the database already exist to avoid re-copying the file each
+		 * time you open the application.
+		 * 
+		 * @return version of a db or -1
+		 */
+		private static int checkDataBase(Context ctx) {
+			SQLiteDatabase checkDB = null;
+			int version = -1;
+			try {
+				String myPath = dbPath(ctx);
+				checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+				version = checkDB.getVersion();
+			} catch (SQLiteException e) {
+				// database does't exist yet.
+			}
+			if (checkDB != null) {
+				checkDB.close();
+			}
+
+			return version;
+		}
+		
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			db.execSQL(CREATE_CALENDAR_TABLE);
-			db.execSQL(CREATE_ROUTE_TABLE);
-			db.execSQL(CREATE_VERSION_TABLE);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			db.execSQL(String.format(DELETE_TABLE, DB_TABLE_CALENDAR));
-			db.execSQL(String.format(DELETE_TABLE, DB_TABLE_ROUTE));
-			db.execSQL(String.format(DELETE_TABLE, DB_TABLE_VERSION));
-			db.execSQL(CREATE_CALENDAR_TABLE);
-			db.execSQL(CREATE_ROUTE_TABLE);
-			db.execSQL(CREATE_VERSION_TABLE);
 		}
-
+		private void openDataBase() throws SQLException {
+			// Open the database
+			getWritableDatabase();
+		}
 	}
 
+	private static class UpdaterAsyncTask extends AsyncTask<Void, Void, Void> {
+
+		private Context ctx;
+
+		public UpdaterAsyncTask(Context ctx) {
+			super();
+			this.ctx = ctx;
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			try {
+				routesDB = RoutesDatabase.createDataBase(ctx);
+				Map<String, Long> versions = getVersions();
+				Map<String, Long> remoteVersions = JPHelper.getVersions(JPHelper.getAuthToken(ctx));
+				if (remoteVersions != null && versions != null) {
+					boolean update = false;
+					for (String agencyId: versions.keySet()) {
+						if (remoteVersions.get(agencyId) != null && versions.get(agencyId) < remoteVersions.get(agencyId)) {
+							update = true; 
+							break;
+						}
+					}
+					if (update) {
+						String appId = JPParamsHelper.getDBAppId();
+						if (appId != null) {
+							RoutesDatabase.copyDataBase(ctx, JPHelper.getDBZipStream(appId, JPHelper.getAuthToken(ctx)));
+						}
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+	}
 }

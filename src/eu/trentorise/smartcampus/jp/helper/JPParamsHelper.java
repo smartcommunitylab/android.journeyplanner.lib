@@ -32,6 +32,9 @@ public class JPParamsHelper {
 	public static final String KEY_BROADCAST_NOTIFICATIONS_OPTIONS = "broadcast_notifications_options";
 	public static final String KEY_CENTER_MAP = "center_map";
 	public static final String KEY_ZOOM_MAP = "zoom_map";
+	public static final String KEY_DB_VERSION = "db_version";
+	public static final String KEY_APP_ID = "app_id";
+	
 
 	private static final Integer DEFAULT_ZOOM_LEVEL = 15;
 	private Map<Object, Object> paramsAsset;
@@ -197,4 +200,12 @@ public class JPParamsHelper {
 		return filteredOptions.toArray(new String[] {});
 	}
 
+	public static int getDBVersion() {
+		return (Integer)getInstance().getParamsAsset().get(KEY_DB_VERSION);
+	}
+
+	public static String getDBAppId() {
+		return (String)getInstance().getParamsAsset().get(KEY_APP_ID);
+	}
+	
 }
