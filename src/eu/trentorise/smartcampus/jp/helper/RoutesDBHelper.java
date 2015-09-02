@@ -518,7 +518,9 @@ public class RoutesDBHelper {
 				if (remoteVersions != null && versions != null) {
 					boolean update = false;
 					for (String agencyId: versions.keySet()) {
-						if (remoteVersions.get(agencyId) != null && versions.get(agencyId) < remoteVersions.get(agencyId)) {
+						String localVersion = ""+versions.get(agencyId);
+						String remoteVersion = ""+ remoteVersions.get(agencyId);
+						if (remoteVersion != null && !localVersion.equals(remoteVersion)) {
 							update = true; 
 							break;
 						}
