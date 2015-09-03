@@ -3,8 +3,8 @@
 
     <!-- Trento urbano -->
     <string-array name="smart_check_12_numbers">
-        <item>_A</item>
-        <item>_B</item>
+        <item>%20AC</item>
+        <item>%20BC</item>
         <item>C</item>
 <!--         <item>D</item> -->
         <item>1</item>
@@ -24,8 +24,8 @@
         <item>15</item>
         <item>16</item>
         <item>17</item>
-        <item>NP</item>
-        <item>FUTS</item>
+        <item>NPC</item>
+        <item>Fun</item>
     </string-array>
 
     <array name="smart_check_12_icons">

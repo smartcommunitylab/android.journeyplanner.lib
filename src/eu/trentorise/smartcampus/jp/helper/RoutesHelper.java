@@ -299,15 +299,15 @@ public class RoutesHelper {
 	 * Trento urbano
 	 */
 	private static final List<RouteDescriptor> RoutesDescriptorsList_12 = Arrays.asList(new RouteDescriptor[] {
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "_A", R.string.agency_12_route__A, "A"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "_B", R.string.agency_12_route__B, "B"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "%20AC", R.string.agency_12_route__A, "A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "%20BC", R.string.agency_12_route__B, "B"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "Ca", R.string.agency_12_route_Ca, "C"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "Cr", R.string.agency_12_route_Cr, "C"),
 			// new RouteDescriptor(AGENCYID_BUS_TRENTO, "Da",
 			// R.string.agency_12_route_Da, "D"),
 			// new RouteDescriptor(AGENCYID_BUS_TRENTO, "Dr",
 			// R.string.agency_12_route_Dr, "D"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "NPA", R.string.agency_12_route_NPA, "NP"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "NPC", R.string.agency_12_route_NPA, "NP"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "1A", R.string.agency_12_route_1A, "1"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "1R", R.string.agency_12_route_1R, "1"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "02", R.string.agency_12_route_02, "2"),
@@ -341,8 +341,8 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "16R", R.string.agency_12_route_16R, "16"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "17A", R.string.agency_12_route_17A, "17"),
 			new RouteDescriptor(AGENCYID_BUS_TRENTO, "17R", R.string.agency_12_route_17R, "17"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "FUTSA", R.string.agency_12_route_FUTSA, "Funivia"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "FUTSR", R.string.agency_12_route_FUTSR, "Funivia") });
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "FunA", R.string.agency_12_route_FUTSA, "Funivia"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "FunR", R.string.agency_12_route_FUTSR, "Funivia") });
 
 	/*
 	 * Trento - Male'
