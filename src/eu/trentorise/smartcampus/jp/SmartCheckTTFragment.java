@@ -382,7 +382,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 		@Override
 		public List<Delay> performAction(Object... params)
 				throws SecurityException, Exception {
-			return JPHelper.getDelay((String) params[2], (Long) params[0],
+			return JPHelper.getDelay((String) params[2], (String) params[3], (Long) params[0],
 					(Long) params[1], JPHelper.getAuthToken(getActivity()));
 		}
 
@@ -498,7 +498,7 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 				AsyncTaskNoDialog<Object, Void, List<Delay>> task = new AsyncTaskNoDialog<Object, Void, List<Delay>>(
 						getSherlockActivity(), new GetDelayProcessor(
 								getSherlockActivity()));
-				task.execute(from_date_millisecond, to_date_millisecond, params
+				task.execute(from_date_millisecond, to_date_millisecond, params.getAgencyId(), params
 						.getRouteID().get(0));
 			}
 		}

@@ -257,10 +257,10 @@ public class JPHelper {
 		return userService.getSingleJourneys(authToken);
 	}
 
-	public static List<Delay> getDelay(String routeId, long from_time, long to_time, String authToken)
+	public static List<Delay> getDelay(String agencyId, String routeId, long from_time, long to_time, String authToken)
 			throws ProtocolException, MobilityServiceException {
 		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return dataService.getDelays(routeId, authToken);
+		return dataService.getDelays(agencyId, routeId, authToken);
 	}
 
 	/**
