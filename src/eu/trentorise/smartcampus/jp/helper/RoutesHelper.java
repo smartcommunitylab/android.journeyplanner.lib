@@ -410,8 +410,8 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "306R", R.string.agency_17_route_196_17_1, "306"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "307A", R.string.agency_17_route_200_17_0, "307"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "307R", R.string.agency_17_route_200_17_1, "307"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "310ESA", R.string.agency_17_route_220_17_0, "310"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "310ESR", R.string.agency_17_route_220_17_1, "310"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "310INA", R.string.agency_17_route_220_17_0, "310"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "310INR", R.string.agency_17_route_220_17_1, "310"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "311A", R.string.agency_17_route_194_17_0, "311"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "311R", R.string.agency_17_route_194_17_1, "311"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "312A", R.string.agency_17_route_215_17_0, "312"),
@@ -422,8 +422,8 @@ public class RoutesHelper {
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "315R", R.string.agency_17_route_198_17_1, "315"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "316A", R.string.agency_17_route_190_17_0, "316"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "316R", R.string.agency_17_route_190_17_1, "316"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "318A", R.string.agency_17_route_235_17_0, "318"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "318R", R.string.agency_17_route_235_17_1, "318"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "318INA", R.string.agency_17_route_235_17_0, "318"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "318INR", R.string.agency_17_route_235_17_1, "318"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "319A", R.string.agency_17_route_233_17_0, "319"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "319R", R.string.agency_17_route_233_17_1, "319"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "321A", R.string.agency_17_route_205_17_0, "321"),
@@ -434,8 +434,8 @@ public class RoutesHelper {
 //			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "334R", R.string.agency_17_route_507_17_1, "334"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "335A", R.string.agency_17_route_503_17_0, "335"),
 //			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "335R", R.string.agency_17_route_503_17_1, "335"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "336A", R.string.agency_17_route_580_17_0, "336"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "336R", R.string.agency_17_route_580_17_1, "336"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "336AA", R.string.agency_17_route_580_17_0, "336"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "336AR", R.string.agency_17_route_580_17_1, "336"),
 	}); 
 
 	/*

@@ -24,9 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
@@ -37,7 +39,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
-import android.os.Environment;
 import eu.trentorise.smartcampus.network.JsonUtils;
 
 public class RoutesDBHelper {
@@ -70,6 +71,7 @@ public class RoutesDBHelper {
 			tt.setStops(Collections.<String>emptyList());
 			tt.setStopsId(Collections.<String>emptyList());
 			tt.setTripIds(Collections.<String>emptyList());
+			tt.setRoutesIds(Collections.<String>emptyList());
 			tt.setCompressedTimes("");
 			return tt;
 		} finally {
@@ -81,18 +83,28 @@ public class RoutesDBHelper {
 	private static void fillCTT(SQLiteDatabase db, String agencyId, String line, String hash, CompressedTransitTimeTable tt) {
 		String whereClause = RoutesDatabase.LINEHASH_KEY + "=? AND "+RoutesDatabase.AGENCY_ID_KEY +"=?";
 		Cursor c = db.query(RoutesDatabase.DB_TABLE_ROUTE, new String[] { RoutesDatabase.STOPS_IDS_KEY,
-				RoutesDatabase.STOPS_NAMES_KEY, RoutesDatabase.TRIPS_IDS_KEY, RoutesDatabase.COMPRESSED_TIMES_KEY },
+				RoutesDatabase.STOPS_NAMES_KEY, RoutesDatabase.TRIPS_IDS_KEY, RoutesDatabase.COMPRESSED_TIMES_KEY, RoutesDatabase.ROUTES_IDS_KEY },
 				whereClause, new String[] { hash, agencyId}, null, null, null, "1");
 		c.moveToFirst();
 		String stops = c.getString(c.getColumnIndex(RoutesDatabase.STOPS_NAMES_KEY));
-		tt.setStops(stops != null ? Arrays.asList(stops.split(",")) : Collections.<String> emptyList());
+		tt.setStops(toTrimmedList(stops));
+		
 		String stopsIds = c.getString(c.getColumnIndex(RoutesDatabase.STOPS_IDS_KEY));
-		tt.setStopsId(stopsIds != null ? Arrays.asList(stopsIds.split(",")) : Collections.<String> emptyList());
+		tt.setStopsId(toTrimmedList(stopsIds));
 		String tripIds = c.getString(c.getColumnIndex(RoutesDatabase.TRIPS_IDS_KEY));
-		tt.setTripIds(tripIds != null ? Arrays.asList(tripIds.split(",")) : Collections.<String> emptyList());
+		tt.setTripIds(toTrimmedList(tripIds));
+		String routeIds = c.getString(c.getColumnIndex(RoutesDatabase.ROUTES_IDS_KEY));
+		tt.setRoutesIds(toTrimmedList(routeIds));
 		String compressedTimes = c.getString(c.getColumnIndex(RoutesDatabase.COMPRESSED_TIMES_KEY));
 		tt.setCompressedTimes(compressedTimes != null ? compressedTimes : "");
 		c.close();
+	}
+
+	private static List<String> toTrimmedList(String str) {
+		List<String> list = str != null ? Arrays.asList(str.split(",")) : Collections.<String> emptyList();
+		List<String> copy = new ArrayList<String>();
+		for (String s : list) copy.add(s.trim());
+		return copy;
 	}
 
 	private static Map<String, Long> queryVersions(SQLiteDatabase db) {
@@ -172,6 +184,7 @@ public class RoutesDBHelper {
 		public final static String STOPS_NAMES_KEY = "stopsNames";
 		public final static String TRIPS_IDS_KEY = "tripIds";
 		public final static String COMPRESSED_TIMES_KEY = "times";
+		public static final String ROUTES_IDS_KEY = "routeIds";
 
 		// version field
 		public final static String VERSION_KEY = "version";

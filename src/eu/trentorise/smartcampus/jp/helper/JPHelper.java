@@ -162,18 +162,6 @@ public class JPHelper {
 		setLocationHelper(new LocationHelper(mContext));
 	}
 
-	// public static void init(final Context mContext) {
-	// new Thread(new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// JPParamsHelper.init(mContext);
-	// }
-	// }).start();
-	// instance = new JPHelper(mContext);
-	// RoutesDBHelper.init(mContext);
-	// }
-
 	public static void init(final Context mContext) {
 
 		new Thread(new Runnable() {
@@ -275,28 +263,6 @@ public class JPHelper {
 		return dataService.getDelays(routeId, authToken);
 	}
 
-	// TODO old code
-	// public static List<List<Map<String, String>>> getDelay(String routeId,
-	// long from_time, long to_time) throws ConnectionException,
-	// ProtocolException, SecurityException, JSONException,
-	// JsonParseException, JsonMappingException, IOException {
-	// String url = Config.TARGET_ADDRESS
-	// + Config.CALL_GET_DELAY_TIME_BY_ROUTE + "/" + routeId + "/"
-	// + from_time + "/" + to_time;
-	//
-	// MessageRequest req = new MessageRequest(
-	// GlobalConfig.getAppUrl(JPHelper.mContext), url);
-	// req.setMethod(Method.GET);
-	// req.setQuery("complex=true");
-	//
-	// MessageResponse res = JPHelper.instance.getProtocolCarrier()
-	// .invokeSync(req, JPParamsHelper.getAppToken(), getAuthToken());
-	//
-	// return eu.trentorise.smartcampus.android.common.Utils
-	// .convertJSONToObject(res.getBody(), TimeTable.class)
-	// .getDelays();
-	// }
-
 	/**
 	 * Delete single journeys
 	 * 
@@ -325,39 +291,12 @@ public class JPHelper {
 		MobilityDataService dataService = new MobilityDataService( GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return dataService.getRoutesDB(appId, authToken);
 	}
-	
-//	public static Map<String, CacheUpdateResponse> getCacheStatus(Map<String, String> agencyIdsVersions, String authToken)
-//			throws ProtocolException, SecurityException, RemoteException {
-//		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-//		return dataService.getCacheStatus(agencyIdsVersions, authToken);
-//	}
-//
-//	public static Map<String, CacheUpdateResponse> getPartialCacheStatus(Map agencyIdsVersions, String authToken)
-//			throws ProtocolException, SecurityException, RemoteException {
-//		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-//		return dataService.getPartialCacheStatus(((Map<String, Map>) agencyIdsVersions), authToken);
-//	}
-//
-//	public static CompressedTransitTimeTable getCacheUpdate(String agencyId, String fileName, String authToken)
-//			throws ProtocolException, SecurityException, RemoteException {
-//		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-//		return dataService.getCachedTimetable(agencyId, fileName, authToken);
-//	}
 
 	public static boolean monitorMyRecItinerary(boolean monitor, String id, String authToken) throws ProtocolException,
 			MobilityServiceException {
 		MobilityUserService userService = new MobilityUserService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
 		return userService.monitorRecurrentJourney(id, monitor, authToken);
 
-	}
-
-	/*
-	 * BUS
-	 */
-	public static List<Route> getRoutesByAgencyId(String agencyId, String authToken) throws ProtocolException,
-			MobilityServiceException {
-		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return dataService.getRoutes(agencyId, authToken);
 	}
 
 	public static List<SmartLine> getSmartLinesByAgencyId(String agencyId) throws ConnectionException, ProtocolException,
@@ -423,21 +362,6 @@ public class JPHelper {
 		return busLines;
 	}
 
-	public static List<Stop> getStopsByAgencyIdRouteId(String agencyId, String routeId, String authToken)
-			throws ProtocolException, MobilityServiceException {
-		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		return dataService.getStops(agencyId, routeId, authToken);
-	}
-
-	public static List<StopTime> getStopTimesByAgencyIdRouteIdStopId(String agencyId, String routeId, String stopId,
-			String authToken) throws ProtocolException, MobilityServiceException {
-		MobilityDataService dataService = new MobilityDataService(GlobalConfig.getAppUrl(mContext) + MOBILITY_URL);
-		List<StopTime> res = dataService.getStopTimes(agencyId, routeId, stopId, authToken);
-		for (StopTime st : res)
-			st.setTime(st.getTime());
-
-		return res;
-	}
 
 	/*
 	 * Alerts
