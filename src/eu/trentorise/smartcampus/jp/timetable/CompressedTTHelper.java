@@ -54,7 +54,7 @@ public class CompressedTTHelper {
 		timeTable.setStops(ctt.getStops());
 		timeTable.setStopsId(ctt.getStopsId());
 		timeTable.setTripIds(ctt.getTripIds());
-		
+		timeTable.setRouteIds(ctt.getRoutesIds());
 
 		List<List<String>> timesLists = new ArrayList<List<String>>();
 

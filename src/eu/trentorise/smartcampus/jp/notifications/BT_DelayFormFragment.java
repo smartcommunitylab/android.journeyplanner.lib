@@ -54,6 +54,7 @@ import eu.trentorise.smartcampus.jp.custom.data.BasicAlert;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.jp.helper.processor.GetBroadcastDataProcessor;
 import eu.trentorise.smartcampus.jp.helper.processor.SubmitAlertProcessor;
+import eu.trentorise.smartcampus.jp.model.AlertStopTime;
 
 public class BT_DelayFormFragment extends FeedbackFragment {
 
@@ -61,7 +62,7 @@ public class BT_DelayFormFragment extends FeedbackFragment {
 
 	private List<Route> routes = new ArrayList<Route>();
 	private List<Stop> stops = new ArrayList<Stop>();
-	private List<StopTime> stoptimes = new ArrayList<StopTime>();
+	private List<AlertStopTime> stoptimes = new ArrayList<AlertStopTime>();
 
 	private Spinner routesSpinner;
 	private Spinner stopsSpinner;
@@ -70,11 +71,11 @@ public class BT_DelayFormFragment extends FeedbackFragment {
 
 	private ArrayAdapter<Route> routesAdapter;
 	private ArrayAdapter<Stop> stopsAdapter;
-	private ArrayAdapter<StopTime> stopTimesAdapter;
+	private ArrayAdapter<AlertStopTime> stopTimesAdapter;
 
 	private Route selectedRoute;
 	private Stop selectedStop;
-	private StopTime selectedStoptime;
+	private AlertStopTime selectedStoptime;
 
 	private String[] agencyIds;
 
@@ -194,7 +195,7 @@ public class BT_DelayFormFragment extends FeedbackFragment {
 					return;
 				}
 
-				String agencyId = selectedRoute.getId().getAgency();
+				String agencyId = selectedStoptime.getAgencyId();
 
 				TType type = TType.BUS;
 				if (agencyId.equals("12")) {
@@ -203,8 +204,8 @@ public class BT_DelayFormFragment extends FeedbackFragment {
 					type = TType.TRAIN;
 				}
 
-				String routeId = selectedRoute.getId().getId();
-				String tripId = selectedStoptime.getTrip().getId();
+				String routeId = selectedStoptime.getRouteId();
+				String tripId = selectedStoptime.getTripId();
 				Transport transport = new Transport(type, agencyId, routeId, tripId);
 
 				Calendar now = Calendar.getInstance();

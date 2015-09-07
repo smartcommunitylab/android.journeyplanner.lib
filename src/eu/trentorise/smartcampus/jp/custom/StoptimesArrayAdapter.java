@@ -15,8 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.custom;
 
-import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
-
 import java.util.List;
 
 import android.app.Activity;
@@ -27,15 +25,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import eu.trentorise.smartcampus.jp.helper.Utils;
+import eu.trentorise.smartcampus.jp.model.AlertStopTime;
 
-public class StoptimesArrayAdapter extends ArrayAdapter<StopTime> {
+public class StoptimesArrayAdapter extends ArrayAdapter<AlertStopTime> {
 
 	Context context;
 	int layoutResourceId;
 	int textViewResourceId;
-	List<StopTime> stoptimesList;
+	List<AlertStopTime> stoptimesList;
 
-	public StoptimesArrayAdapter(Context context, int layoutResourceId, int textViewResourceId, List<StopTime> stoptimesList) {
+	public StoptimesArrayAdapter(Context context, int layoutResourceId, int textViewResourceId, List<AlertStopTime> stoptimesList) {
 		super(context, layoutResourceId, textViewResourceId, stoptimesList);
 		this.context = context;
 		this.layoutResourceId = layoutResourceId;
@@ -69,7 +68,7 @@ public class StoptimesArrayAdapter extends ArrayAdapter<StopTime> {
 			holder = (DataHolder) row.getTag();
 		}
 
-		StopTime stoptime = this.getItem(position);
+		AlertStopTime stoptime = this.getItem(position);
 		holder.timeTextView.setText(Utils.millis2time(stoptime.getTime()));
 
 		return row;
