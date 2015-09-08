@@ -454,7 +454,7 @@ public class RoutesHelper {
 
 	
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "301A", R.string.agency_17_route_110_17_0, "301", "110_17_0"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "301_17_0", R.string.agency_17_route_110_17_1,"301", "110_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "301R", R.string.agency_17_route_110_17_1,"301", "110_17_1"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "302A", R.string.agency_17_route_181_17_0, "302", "181_17_0"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "302R", R.string.agency_17_route_181_17_1, "302", "181_17_1"),
 			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "303A", R.string.agency_17_route_186_17_0, "303", "186_17_0"),
