@@ -19,11 +19,11 @@ import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +37,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import eu.trentorise.smartcampus.jp.Config;
 import eu.trentorise.smartcampus.jp.R;
+import eu.trentorise.smartcampus.jp.custom.data.SmartLine;
 import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.jp.model.RouteDescriptor;
 import eu.trentorise.smartcampus.mobilityservice.model.TripData;
@@ -46,18 +47,14 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 	Context mContext;
 	int layoutResourceId;
 
-	String[] lines;
-	TypedArray icons;
-	TypedArray colors;
+	List<SmartLine> smartLines = null;
 
-	public SmartCheckRoutesListAdapter(Context context, int layoutResourceId) {
+	public SmartCheckRoutesListAdapter(Context context, int layoutResourceId, String agencyId) {
 		super(context, layoutResourceId);
 		this.mContext = context;
 		this.layoutResourceId = layoutResourceId;
 
-		lines = mContext.getResources().getStringArray(R.array.smart_check_12_numbers);
-		icons = mContext.getResources().obtainTypedArray(R.array.smart_check_12_icons);
-		colors = mContext.getResources().obtainTypedArray(R.array.smart_check_12_colors);
+		smartLines = RoutesHelper.getSmartLines(mContext, agencyId);
 	}
 
 	@Override
@@ -84,21 +81,20 @@ public class SmartCheckRoutesListAdapter extends ArrayAdapter<TripData> {
 		// separator
 		if (position == 0 || !(getItem(position - 1).getRouteId()).equalsIgnoreCase(tripData.getRouteId())) {
 			holder.route.setBackgroundColor(mContext.getResources().getColor(R.color.sc_gray));
-			for (int i = 0; i < lines.length; i++) {
-				if (tripData.getRouteId().startsWith(lines[i])) {
-					holder.route.setBackgroundColor(colors.getColor(i, 0));
+			for (int i = 0; i < smartLines.size(); i++) {
+				if (tripData.getRouteShortName().equals(smartLines.get(i).getLine())) {
+					holder.route.setBackgroundColor(smartLines.get(i).getColor());
 					break;
 				}
 			}
 
-			RouteDescriptor rd = RoutesHelper.getRouteDescriptorByRouteId(mContext, tripData.getRouteId());
+			RouteDescriptor rd = RoutesHelper.getRouteDescriptorByRouteGTFSId(mContext, tripData.getAgencyId(), tripData.getRouteId());
 			if (rd != null)  {
 				holder.route.setText(rd.getShortNameResource() + " - " + mContext.getResources().getString(rd.getNameResource()));
 			} else {
 				holder.route.setText(tripData.getRouteShortName() + " - " + tripData.getRouteName());
 			}
 
-			rd.getNameResource();
 			holder.route.setVisibility(View.VISIBLE);
 		} else {
 			holder.route.setVisibility(View.GONE);

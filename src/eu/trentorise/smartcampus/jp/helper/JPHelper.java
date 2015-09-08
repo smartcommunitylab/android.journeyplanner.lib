@@ -144,6 +144,7 @@ public class JPHelper {
 	protected JPHelper(final Context mContext) {
 		super();
 		JPHelper.mContext = mContext;
+		JPParamsHelper.init(mContext);
 		if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.FROYO) {
 			RemoteConnector.setClientType(CLIENT_TYPE.CLIENT_WILDCARD);
 		}

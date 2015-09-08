@@ -9,12 +9,14 @@ public class RouteDescriptor implements Serializable {
 	private String routeId;
 	private Integer nameResource;
 	private String shortNameResource;
+	private String routeGTFSId;
 
-	public RouteDescriptor(String agencyId, String routeId, int nameResource, String shortNameResource) {
+	public RouteDescriptor(String agencyId, String routeId, int nameResource, String shortNameResource, String routeGTFSId) {
 		this.agencyId = agencyId;
 		this.routeId = routeId;
 		this.nameResource = nameResource;
 		this.shortNameResource = shortNameResource;
+		this.routeGTFSId = routeGTFSId;
 	}
 
 	public String getAgencyId() {
@@ -31,6 +33,10 @@ public class RouteDescriptor implements Serializable {
 	
 	public String getShortNameResource() {
 		return shortNameResource;
+	}
+
+	public String getRouteGTFSId() {
+		return routeGTFSId;
 	}
 
 }

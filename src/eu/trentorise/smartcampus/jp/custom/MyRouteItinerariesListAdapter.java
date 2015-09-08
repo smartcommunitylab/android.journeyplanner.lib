@@ -33,9 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import eu.trentorise.smartcampus.jp.R;
 import eu.trentorise.smartcampus.jp.custom.data.RecurrentItinerary;
-import eu.trentorise.smartcampus.jp.helper.RoutesHelper;
 import eu.trentorise.smartcampus.jp.helper.Utils;
-import eu.trentorise.smartcampus.jp.model.RouteDescriptor;
 
 public class MyRouteItinerariesListAdapter extends ArrayAdapter<RecurrentItinerary> {
 
@@ -77,13 +75,14 @@ public class MyRouteItinerariesListAdapter extends ArrayAdapter<RecurrentItinera
 			holder.monitor.setChecked(myItineraries.get(position).isMonitor());
 			RecurrentItinerary myItinerary = myItineraries.get(position);
 			
-			RouteDescriptor rd = RoutesHelper.getRouteDescriptorByRouteId(context, myItinerary.getName()); 
-			if (rd != null) {
-				String name = rd.getShortNameResource() + ": " + context.getString(rd.getNameResource());
-				holder.name.setText(name);
-			} else {
-				holder.name.setText(myItinerary.getName());
-			}
+//			RouteDescriptor rd = RoutesHelper.getRouteDescriptorByRouteId(context, myItinerary.getName()); 
+//			if (rd != null) {
+//				String name = rd.getShortNameResource() + ": " + context.getString(rd.getNameResource());
+//				holder.name.setText(name);
+//			} else {
+//				holder.name.setText(myItinerary.getName());
+//			}
+			holder.name.setText(myItinerary.getName());
 			
 			holder.locationFrom.setText(myItinerary.getFrom());
 			holder.locationTo.setText(myItinerary.getTo());

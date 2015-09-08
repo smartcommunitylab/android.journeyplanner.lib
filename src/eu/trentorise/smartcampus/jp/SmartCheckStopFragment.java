@@ -33,7 +33,10 @@ public class SmartCheckStopFragment extends SherlockListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		adapter = new SmartCheckRoutesListAdapter(getSherlockActivity(), R.layout.smartcheck_trip);
+		this.stop = (SmartCheckStop) getArguments().getSerializable(ARG_STOP);
+
+
+		adapter = new SmartCheckRoutesListAdapter(getSherlockActivity(), R.layout.smartcheck_trip, (String)this.stop.getCustomData().get("agencyId"));
 		adapter.registerDataSetObserver(new DataSetObserver() {
 			@Override
 			public void onChanged() {
@@ -50,8 +53,6 @@ public class SmartCheckStopFragment extends SherlockListFragment {
 		});
 
 		setListAdapter(adapter);
-
-		this.stop = (SmartCheckStop) getArguments().getSerializable(ARG_STOP);
 
 		// LOAD
 		if (this.stop != null) {

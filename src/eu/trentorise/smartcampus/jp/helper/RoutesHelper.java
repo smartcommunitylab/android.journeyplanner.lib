@@ -109,6 +109,21 @@ public class RoutesHelper {
 		return list;
 	}
 
+	public static RouteDescriptor getRouteDescriptorByRouteGTFSId(Context context, String agencyId, String routeGTFSId) {
+		RouteDescriptor routeDescriptor = null;
+
+		String[] agencyIds = agencyId != null ? new String[] { agencyId } : null;
+
+		for (RouteDescriptor rd : getRouteDescriptorsListFiltered(context, agencyIds)) {
+			if (rd.getRouteGTFSId().equalsIgnoreCase(routeGTFSId)) {
+				routeDescriptor = rd;
+				break;
+			}
+		}
+
+		return routeDescriptor;
+	}
+
 	public static RouteDescriptor getRouteDescriptorByRouteId(Context context, String agencyId, String routeId) {
 		RouteDescriptor routeDescriptor = null;
 
@@ -124,10 +139,10 @@ public class RoutesHelper {
 		return routeDescriptor;
 	}
 
-	public static RouteDescriptor getRouteDescriptorByRouteId(Context context, String routeId) {
-		return getRouteDescriptorByRouteId(context, null, routeId);
-	}
-
+//	public static RouteDescriptor getRouteDescriptorByRouteId(Context context, String routeId) {
+//		return getRouteDescriptorByRouteId(context, null, routeId);
+//	}
+//
 	public static String getShortNameByRouteIdAndAgencyID(String routeId, String AgencyId) {
 
 		String returnShortName = "";
@@ -299,91 +314,91 @@ public class RoutesHelper {
 	 * Trento urbano
 	 */
 	private static final List<RouteDescriptor> RoutesDescriptorsList_12 = Arrays.asList(new RouteDescriptor[] {
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "%20AC", R.string.agency_12_route__A, "A"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "%20BC", R.string.agency_12_route__B, "B"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "Ca", R.string.agency_12_route_Ca, "C"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "Cr", R.string.agency_12_route_Cr, "C"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "%20AC", R.string.agency_12_route__A, "A", "_A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "%20BC", R.string.agency_12_route__B, "B", "_B"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "Ca", R.string.agency_12_route_Ca, "C", "Ca"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "Cr", R.string.agency_12_route_Cr, "C", "Cr"),
 			// new RouteDescriptor(AGENCYID_BUS_TRENTO, "Da",
 			// R.string.agency_12_route_Da, "D"),
 			// new RouteDescriptor(AGENCYID_BUS_TRENTO, "Dr",
 			// R.string.agency_12_route_Dr, "D"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "NPC", R.string.agency_12_route_NPA, "NP"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "01A", R.string.agency_12_route_1A, "1"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "01R", R.string.agency_12_route_1R, "1"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "02C", R.string.agency_12_route_02, "2"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "03A", R.string.agency_12_route_03A, "3"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "03R", R.string.agency_12_route_03R, "3"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "04A", R.string.agency_12_route_04A, "4"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "04R", R.string.agency_12_route_04R, "4"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "05A", R.string.agency_12_route_05A, "5"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "05R", R.string.agency_12_route_05R, "5"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "06A", R.string.agency_12_route_06A, "6"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "06R", R.string.agency_12_route_06R, "6"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "07A", R.string.agency_12_route_07A, "7"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "07R", R.string.agency_12_route_07R, "7"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "08A", R.string.agency_12_route_08A, "8"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "08R", R.string.agency_12_route_08R, "8"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "09A", R.string.agency_12_route_09A, "9"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "09R", R.string.agency_12_route_09R, "9"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "10A", R.string.agency_12_route_10A, "10"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "10R", R.string.agency_12_route_10R, "10"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "11A", R.string.agency_12_route_11A, "11"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "11R", R.string.agency_12_route_11R, "11"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "12A", R.string.agency_12_route_12A, "12"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "12R", R.string.agency_12_route_12R, "12"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "13A", R.string.agency_12_route_13A, "13"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "13R", R.string.agency_12_route_13R, "13"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "14A", R.string.agency_12_route_14A, "14"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "14R", R.string.agency_12_route_14R, "14"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "15A", R.string.agency_12_route_15A, "15"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "15R", R.string.agency_12_route_15R, "15"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "16A", R.string.agency_12_route_16A, "16"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "16R", R.string.agency_12_route_16R, "16"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "17A", R.string.agency_12_route_17A, "17"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "17R", R.string.agency_12_route_17R, "17"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "FunA", R.string.agency_12_route_FUTSA, "Funivia"),
-			new RouteDescriptor(AGENCYID_BUS_TRENTO, "FunR", R.string.agency_12_route_FUTSR, "Funivia") });
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "NPC", R.string.agency_12_route_NPA, "NP", "NPA"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "01A", R.string.agency_12_route_1A, "1", "01A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "01R", R.string.agency_12_route_1R, "1", "01R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "02C", R.string.agency_12_route_02, "2", "02"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "03A", R.string.agency_12_route_03A, "3", "03A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "03R", R.string.agency_12_route_03R, "3", "03R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "04A", R.string.agency_12_route_04A, "4", "04A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "04R", R.string.agency_12_route_04R, "4", "04R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "05A", R.string.agency_12_route_05A, "5", "05A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "05R", R.string.agency_12_route_05R, "5", "05R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "06A", R.string.agency_12_route_06A, "6", "06A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "06R", R.string.agency_12_route_06R, "6", "06R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "07A", R.string.agency_12_route_07A, "7", "07A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "07R", R.string.agency_12_route_07R, "7", "07R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "08A", R.string.agency_12_route_08A, "8", "08A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "08R", R.string.agency_12_route_08R, "8", "08R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "09A", R.string.agency_12_route_09A, "9", "09A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "09R", R.string.agency_12_route_09R, "9", "09R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "10A", R.string.agency_12_route_10A, "10", "10A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "10R", R.string.agency_12_route_10R, "10", "10R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "11A", R.string.agency_12_route_11A, "11", "11A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "11R", R.string.agency_12_route_11R, "11", "11R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "12A", R.string.agency_12_route_12A, "12", "12A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "12R", R.string.agency_12_route_12R, "12", "12R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "13A", R.string.agency_12_route_13A, "13", "13A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "13R", R.string.agency_12_route_13R, "13", "13R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "14A", R.string.agency_12_route_14A, "14", "14A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "14R", R.string.agency_12_route_14R, "14", "14R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "15A", R.string.agency_12_route_15A, "15", "15A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "15R", R.string.agency_12_route_15R, "15", "15R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "16A", R.string.agency_12_route_16A, "16", "16A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "16R", R.string.agency_12_route_16R, "16", "16R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "17A", R.string.agency_12_route_17A, "17", "17A"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "17R", R.string.agency_12_route_17R, "17", "17R"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "FunA", R.string.agency_12_route_FUTSA, "Funivia", "FUTSA"),
+			new RouteDescriptor(AGENCYID_BUS_TRENTO, "FunR", R.string.agency_12_route_FUTSR, "Funivia", "FUTSR") });
 
 	/*
 	 * Trento - Male'
 	 */
 	private static final List<RouteDescriptor> RoutesDescriptorsList_10 = Arrays.asList(new RouteDescriptor[] {
-			new RouteDescriptor(AGENCYID_TRAIN_TM, "555", R.string.agency_10_route_555, "RG"),
-			new RouteDescriptor(AGENCYID_TRAIN_TM, "556", R.string.agency_10_route_556, "RG") });
+			new RouteDescriptor(AGENCYID_TRAIN_TM, "555", R.string.agency_10_route_555, "RG", "555"),
+			new RouteDescriptor(AGENCYID_TRAIN_TM, "556", R.string.agency_10_route_556, "RG","556") });
 
 	/*
 	 * Bolzano - Verona
 	 */
 	private static final List<RouteDescriptor> RoutesDescriptorsList_5 = Arrays.asList(new RouteDescriptor[] {
-			new RouteDescriptor(AGENCYID_TRAIN_BZVR, "BV_R1_G", R.string.agency_5_route_BV_R1_G, "RG"),
-			new RouteDescriptor(AGENCYID_TRAIN_BZVR, "BV_R1_R", R.string.agency_5_route_BV_R1_R, "RG") });
+			new RouteDescriptor(AGENCYID_TRAIN_BZVR, "BV_R1_G", R.string.agency_5_route_BV_R1_G, "RG", "BV_R1_G"),
+			new RouteDescriptor(AGENCYID_TRAIN_BZVR, "BV_R1_R", R.string.agency_5_route_BV_R1_R, "RG", "BV_R1_R") });
 
 	/*
 	 * Trento - Bassano D.G.
 	 */
 	private static final List<RouteDescriptor> RoutesDescriptorsList_6 = Arrays.asList(new RouteDescriptor[] {
-			new RouteDescriptor(AGENCYID_TRAIN_TNBDG, "TB_R2_G", R.string.agency_6_route_TB_R2_G, "RG"),
-			new RouteDescriptor(AGENCYID_TRAIN_TNBDG, "TB_R2_R", R.string.agency_6_route_TB_R2_R, "RG") });
+			new RouteDescriptor(AGENCYID_TRAIN_TNBDG, "TB_R2_G", R.string.agency_6_route_TB_R2_G, "RG", "TB_R2_G"),
+			new RouteDescriptor(AGENCYID_TRAIN_TNBDG, "TB_R2_R", R.string.agency_6_route_TB_R2_R, "RG", "TB_R2_R") });
 
 	/*
 	 * Rovereto urban
 	 */
 	private static final List<RouteDescriptor> RoutesDescriptorsList_16 = Arrays.asList(new RouteDescriptor[] {
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "01A", R.string.agency_16_route_01A_Rov, "1"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "01R", R.string.agency_16_route_01R_Rov, "1"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "02A", R.string.agency_16_route_02A_Rov, "2"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "02R", R.string.agency_16_route_02R_Rov, "2"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "03A", R.string.agency_16_route_03A_Rov, "3"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "03R", R.string.agency_16_route_03R_Rov, "3"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "04A", R.string.agency_16_route_04A_Rov, "4"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "04R", R.string.agency_16_route_04R_Rov, "4"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "05R", R.string.agency_16_route_05_Rov, "5"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "06A", R.string.agency_16_route_06A_Rov, "6"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "06R", R.string.agency_16_route_06R_Rov, "6"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "07A", R.string.agency_16_route_07A_Rov, "7"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "07R", R.string.agency_16_route_07R_Rov, "7"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "AA", R.string.agency_16_route_AA_Rov, "A"),
-			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "AR", R.string.agency_16_route_AR_Rov, "A"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "01A", R.string.agency_16_route_01A_Rov, "1", "01A_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "01R", R.string.agency_16_route_01R_Rov, "1", "01R_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "02A", R.string.agency_16_route_02A_Rov, "2", "02A_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "02R", R.string.agency_16_route_02R_Rov, "2", "02R_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "03A", R.string.agency_16_route_03A_Rov, "3", "03A_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "03R", R.string.agency_16_route_03R_Rov, "3", "03R_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "04A", R.string.agency_16_route_04A_Rov, "4", "04A_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "04R", R.string.agency_16_route_04R_Rov, "4", "04R_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "05R", R.string.agency_16_route_05_Rov, "5", "05A_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "06A", R.string.agency_16_route_06A_Rov, "6", "06A_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "06R", R.string.agency_16_route_06R_Rov, "6", "06R_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "07A", R.string.agency_16_route_07A_Rov, "7", "07A_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "07R", R.string.agency_16_route_07R_Rov, "7", "07R_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "AA", R.string.agency_16_route_AA_Rov, "A", "AA_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "AR", R.string.agency_16_route_AR_Rov, "A", "AR_Rov"),
 //			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "N1A_Rov", R.string.agency_16_route_N1A_Rov, "1"),
 //			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "N1R_Rov", R.string.agency_16_route_N1R_Rov, "1"),
 //			new RouteDescriptor(AGENCYID_BUS_ROVERETO, "N2A_Rov", R.string.agency_16_route_N2A_Rov, "2"),
@@ -398,44 +413,84 @@ public class RoutesHelper {
 	 * Suburban NEWEST: 01092015!!!
 	 */
 	private static final List<RouteDescriptor> RoutesDescriptorsList_17 = Arrays.asList(new RouteDescriptor[] {
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "301A", R.string.agency_17_route_110_17_0, "301"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "301R", R.string.agency_17_route_110_17_1, "301"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "302A", R.string.agency_17_route_181_17_0, "302"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "302R", R.string.agency_17_route_181_17_1, "302"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "303A", R.string.agency_17_route_186_17_0, "303"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "303R", R.string.agency_17_route_186_17_1, "303"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "305A", R.string.agency_17_route_231_17_0, "305"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "305R", R.string.agency_17_route_231_17_1, "305"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "306A", R.string.agency_17_route_196_17_0, "306"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "306R", R.string.agency_17_route_196_17_1, "306"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "307A", R.string.agency_17_route_200_17_0, "307"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "307R", R.string.agency_17_route_200_17_1, "307"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "310INA", R.string.agency_17_route_220_17_0, "310"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "310INR", R.string.agency_17_route_220_17_1, "310"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "311A", R.string.agency_17_route_194_17_0, "311"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "311R", R.string.agency_17_route_194_17_1, "311"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "312A", R.string.agency_17_route_215_17_0, "312"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "312R", R.string.agency_17_route_215_17_1, "312"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "314A", R.string.agency_17_route_203_17_0, "314"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "314R", R.string.agency_17_route_203_17_1, "314"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "315A", R.string.agency_17_route_198_17_0, "315"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "315R", R.string.agency_17_route_198_17_1, "315"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "316A", R.string.agency_17_route_190_17_0, "316"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "316R", R.string.agency_17_route_190_17_1, "316"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "318INA", R.string.agency_17_route_235_17_0, "318"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "318INR", R.string.agency_17_route_235_17_1, "318"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "319A", R.string.agency_17_route_233_17_0, "319"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "319R", R.string.agency_17_route_233_17_1, "319"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "321A", R.string.agency_17_route_205_17_0, "321"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "321R", R.string.agency_17_route_205_17_1, "321"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "332A", R.string.agency_17_route_634_17_0, "332"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "332R", R.string.agency_17_route_634_17_1, "332"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "334A", R.string.agency_17_route_507_17_0, "334"),
-//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "334R", R.string.agency_17_route_507_17_1, "334"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "335A", R.string.agency_17_route_503_17_0, "335"),
-//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "335R", R.string.agency_17_route_503_17_1, "335"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "336AA", R.string.agency_17_route_580_17_0, "336"),
-			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "336AR", R.string.agency_17_route_580_17_1, "336"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "110_17_0", R.string.agency_17_route_110_17_0, "301"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "110_17_1", R.string.agency_17_route_110_17_1, "301"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "181_17_0", R.string.agency_17_route_181_17_0, "302"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "181_17_1", R.string.agency_17_route_181_17_1, "302"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "186_17_0", R.string.agency_17_route_186_17_0, "303"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "186_17_1", R.string.agency_17_route_186_17_1, "303"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "231_17_0", R.string.agency_17_route_231_17_0, "305"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "231_17_1", R.string.agency_17_route_231_17_1, "305"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "196_17_0", R.string.agency_17_route_196_17_0, "306"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "196_17_1", R.string.agency_17_route_196_17_1, "306"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "200_17_0", R.string.agency_17_route_200_17_0, "307"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "200_17_1", R.string.agency_17_route_200_17_1, "307"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "220_17_0", R.string.agency_17_route_220_17_0, "310"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "220_17_1", R.string.agency_17_route_220_17_1, "310"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "194_17_0", R.string.agency_17_route_194_17_0, "311"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "194_17_1", R.string.agency_17_route_194_17_1, "311"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "215_17_0", R.string.agency_17_route_215_17_0, "312"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "215_17_1", R.string.agency_17_route_215_17_1, "312"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "203_17_0", R.string.agency_17_route_203_17_0, "314"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "203_17_1", R.string.agency_17_route_203_17_1, "314"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "198_17_0", R.string.agency_17_route_198_17_0, "315"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "198_17_1", R.string.agency_17_route_198_17_1, "315"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "190_17_0", R.string.agency_17_route_190_17_0, "316"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "190_17_1", R.string.agency_17_route_190_17_1, "316"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "235_17_0", R.string.agency_17_route_235_17_0, "318"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "235_17_1", R.string.agency_17_route_235_17_1, "318"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "233_17_0", R.string.agency_17_route_233_17_0, "319"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "233_17_1", R.string.agency_17_route_233_17_1, "319"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "205_17_0", R.string.agency_17_route_205_17_0, "321"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "205_17_1", R.string.agency_17_route_205_17_1, "321"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "634_17_0", R.string.agency_17_route_634_17_0, "332"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "634_17_1", R.string.agency_17_route_634_17_1, "332"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "507_17_0", R.string.agency_17_route_507_17_0, "334"),
+////			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "507_17_1", R.string.agency_17_route_507_17_1, "334"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "503_17_0", R.string.agency_17_route_503_17_0, "335"),
+////			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "503_17_1", R.string.agency_17_route_503_17_1, "335"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "580_17_0", R.string.agency_17_route_580_17_0, "336"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "580_17_1", R.string.agency_17_route_580_17_1, "336"),
+
+	
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "301A", R.string.agency_17_route_110_17_0, "301", "110_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "301_17_0", R.string.agency_17_route_110_17_1,"301", "110_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "302A", R.string.agency_17_route_181_17_0, "302", "181_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "302R", R.string.agency_17_route_181_17_1, "302", "181_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "303A", R.string.agency_17_route_186_17_0, "303", "186_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "303R", R.string.agency_17_route_186_17_1, "303", "186_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "305A", R.string.agency_17_route_231_17_0, "305", "231_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "305R", R.string.agency_17_route_231_17_1, "305", "231_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "306A", R.string.agency_17_route_196_17_0, "306", "196_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "306R", R.string.agency_17_route_196_17_1, "306", "196_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "307A", R.string.agency_17_route_200_17_0, "307", "200_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "307R", R.string.agency_17_route_200_17_1, "307", "200_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "310INA", R.string.agency_17_route_220_17_0, "310", "220_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "310INR", R.string.agency_17_route_220_17_1, "310", "220_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "311A", R.string.agency_17_route_194_17_0, "311", "194_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "311R", R.string.agency_17_route_194_17_1, "311", "194_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "312A", R.string.agency_17_route_215_17_0, "312", "215_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "312R", R.string.agency_17_route_215_17_1, "312", "215_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "314A", R.string.agency_17_route_203_17_0, "314", "203_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "314R", R.string.agency_17_route_203_17_1, "314", "203_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "315A", R.string.agency_17_route_198_17_0, "315", "198_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "315R", R.string.agency_17_route_198_17_1, "315", "198_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "316AA", R.string.agency_17_route_190_17_0, "316", "190_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "316AR", R.string.agency_17_route_190_17_1, "316", "190_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "318INA", R.string.agency_17_route_235_17_0, "318", "235_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "318INR", R.string.agency_17_route_235_17_1, "318", "235_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "319A", R.string.agency_17_route_233_17_0, "319", "233_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "319R", R.string.agency_17_route_233_17_1, "319", "233_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "321A", R.string.agency_17_route_205_17_0, "321", "205_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "321R", R.string.agency_17_route_205_17_1, "321", "205_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "332A", R.string.agency_17_route_634_17_0, "332", "634_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "332R", R.string.agency_17_route_634_17_1, "332", "634_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "334A", R.string.agency_17_route_507_17_0, "334", "507_17_0"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "334R", R.string.agency_17_route_507_17_1, "334", "507_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "335A", R.string.agency_17_route_503_17_0, "335", "503_17_0"),
+//			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "335R", R.string.agency_17_route_503_17_1, "335", "503_17_1"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "336AA", R.string.agency_17_route_580_17_0, "336", "580_17_0"),
+			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "336AR", R.string.agency_17_route_580_17_1, "336", "580_17_1"),	
 	}); 
 
 	/*
