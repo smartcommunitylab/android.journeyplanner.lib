@@ -66,6 +66,7 @@ import eu.trentorise.smartcampus.jp.custom.UserPrefsHolder;
 import eu.trentorise.smartcampus.jp.helper.JPHelper;
 import eu.trentorise.smartcampus.jp.helper.JPParamsHelper;
 import eu.trentorise.smartcampus.jp.helper.PrefsHelper;
+import eu.trentorise.smartcampus.jp.helper.XmasMarketsHelper;
 
 public class PlanNewJourneyFragment extends FeedbackFragment {
 
@@ -557,11 +558,21 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 		// : new CharSequence[] { getString(R.string.address_dlg_current),
 		// getString(R.string.address_dlg_map) };
 
-		final CharSequence[] items = new CharSequence[] { getString(R.string.address_dlg_current),
+		CharSequence[] items = new CharSequence[] { getString(R.string.address_dlg_current),
 				getString(R.string.address_dlg_map) };
 
+		if (XmasMarketsHelper.isXmasMarketsTime()) {
+			// Christmas Markets custom entries!
+			ArrayList<CharSequence> itemsArrayList = new ArrayList<CharSequence>(Arrays.asList(items));
+			itemsArrayList.add(getActivity().getString(R.string.xmasmarkets_xmasmarkets));
+			itemsArrayList.add(getActivity().getString(R.string.xmasmarkets_querciaparking));
+			items = itemsArrayList.toArray(new CharSequence[] {});
+		}
+
+		final CharSequence[] dialogItems = items;
+
 		builder.setTitle(getString(R.string.address_dlg_title));
-		builder.setItems(items, new DialogInterface.OnClickListener() {
+		builder.setItems(dialogItems, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
 				switch (item) {
 				case 0:
@@ -575,9 +586,12 @@ public class PlanNewJourneyFragment extends FeedbackFragment {
 					intent.putExtra("field", field);
 					startActivityForResult(intent, InfoDialog.RESULT_SELECTED);
 					break;
-				// case 2:
-				// createFavoritesDialog(field);
-				// break;
+				case 2:
+					savePosition(XmasMarketsHelper.getXmasMarketAddress(getActivity()), field);
+					break;
+				case 3:
+					savePosition(XmasMarketsHelper.getXmasMarketParkingAddress(getActivity()), field);
+					break;
 				default:
 					break;
 				}

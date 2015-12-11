@@ -26,6 +26,7 @@
     <string name="btn_myprofile">Preferenze</string>
     <string name="btn_smartcheck">Info in tempo reale</string>
     <string name="btn_bikesharing">Bici condivisa</string>
+    <string name="btn_xmasmarkets">Mercatini di Natale</string>
     <string name="btn_notifications">Leggi\nnotifiche</string>
     <string name="btn_save">Salva</string>
     <string name="btn_delete">Cancella</string>

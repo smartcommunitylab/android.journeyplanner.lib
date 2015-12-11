@@ -31,6 +31,7 @@ public class RoutesHelper {
 	// public static final String AGENCYID_BUS_SUBURBAN_ZONE_4 = "17_4";
 	// public static final String AGENCYID_BUS_SUBURBAN_ZONE_5 = "17_5";
 	// public static final String AGENCYID_BUS_SUBURBAN_ZONE_6 = "17_6";
+	public static final String AGENCYID_BUS_ROVERETO_XMAS_MARKETS = "116";
 
 	public static final List<String> AGENCYIDS = Arrays.asList(AGENCYID_BUS_TRENTO, AGENCYID_BUS_ROVERETO, AGENCYID_TRAIN_BZVR,
 			AGENCYID_TRAIN_TM, AGENCYID_TRAIN_TNBDG, AGENCYID_BUS_SUBURBAN);
@@ -147,10 +148,11 @@ public class RoutesHelper {
 
 		String returnShortName = "";
 		List<RouteDescriptor> names = ROUTES.get(AgencyId);
-		for (RouteDescriptor desc : names) {
-			if (desc.getRouteId().equals(routeId))
-				return desc.getShortNameResource();
-		}
+		if (names != null)
+			for (RouteDescriptor desc : names) {
+				if (desc.getRouteId().equals(routeId))
+					return desc.getShortNameResource();
+			}
 		return returnShortName;
 	}
 
@@ -735,6 +737,13 @@ public class RoutesHelper {
 //			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "638_17_1", R.string.agency_17_route_638_17_1, "140"),
 //			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "640_17_0", R.string.agency_17_route_640_17_0, "468"),
 //			new RouteDescriptor(AGENCYID_BUS_SUBURBAN, "640_17_1", R.string.agency_17_route_640_17_1, "468") }); 	
+
+	private static final List<RouteDescriptor> RoutesDescriptorsList_116 = Arrays.asList(new RouteDescriptor[] {
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO_XMAS_MARKETS, "xmasA_Rov", R.string.xmasmarkets_route_name,
+					"XMas shuttle", "xmasA_Rov"),
+			new RouteDescriptor(AGENCYID_BUS_ROVERETO_XMAS_MARKETS, "xmasR_Rov", R.string.xmasmarkets_route_name,
+					"XMas shuttle", "xmasR_Rov") });
+
 	public static final Map<String, List<RouteDescriptor>> ROUTES = new HashMap<String, List<RouteDescriptor>>() {
 		private static final long serialVersionUID = 8472504007546826470L;
 		{
@@ -744,6 +753,7 @@ public class RoutesHelper {
 			put(AGENCYID_TRAIN_TNBDG, RoutesDescriptorsList_6);
 			put(AGENCYID_BUS_ROVERETO, RoutesDescriptorsList_16);
 			put(AGENCYID_BUS_SUBURBAN, RoutesDescriptorsList_17);
+			put(AGENCYID_BUS_ROVERETO_XMAS_MARKETS, RoutesDescriptorsList_116);
 		}
 	};
 
