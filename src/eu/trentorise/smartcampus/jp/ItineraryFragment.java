@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,13 +41,9 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
-import eu.trentorise.smartcampus.jp.custom.DialogHandler;
 import eu.trentorise.smartcampus.jp.custom.StepsListAdapter;
 import eu.trentorise.smartcampus.jp.helper.StepUtils;
-import eu.trentorise.smartcampus.jp.helper.processor.SaveItineraryProcessor;
 import eu.trentorise.smartcampus.jp.model.Step;
-import eu.trentorise.smartcampus.mobilityservice.model.BasicItinerary;
 
 public class ItineraryFragment extends SherlockFragment {
 
@@ -187,28 +181,28 @@ public class ItineraryFragment extends SherlockFragment {
 			}
 		});
 
-		Button saveItineraryBtn = (Button) getView().findViewById(R.id.itinerary_save);
-		saveItineraryBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String suggestedName = "";
-
-				Dialog dialog = new ItineraryNameDialog(getActivity(), new DialogHandler<String>() {
-					@Override
-					public void handleSuccess(String name) {
-						BasicItinerary basicItinerary = new BasicItinerary();
-						basicItinerary.setData(itinerary);
-						basicItinerary.setOriginalFrom(singleJourney.getFrom());
-						basicItinerary.setOriginalTo(singleJourney.getTo());
-						basicItinerary.setName(name);
-						SCAsyncTask<BasicItinerary, Void, Void> task = new SCAsyncTask<BasicItinerary, Void, Void>(
-								getSherlockActivity(), new SaveItineraryProcessor(getSherlockActivity()));
-						task.execute(basicItinerary);
-					}
-				}, suggestedName);
-				dialog.show();
-			}
-		});
+//		Button saveItineraryBtn = (Button) getView().findViewById(R.id.itinerary_save);
+//		saveItineraryBtn.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				String suggestedName = "";
+//
+//				Dialog dialog = new ItineraryNameDialog(getActivity(), new DialogHandler<String>() {
+//					@Override
+//					public void handleSuccess(String name) {
+//						BasicItinerary basicItinerary = new BasicItinerary();
+//						basicItinerary.setData(itinerary);
+//						basicItinerary.setOriginalFrom(singleJourney.getFrom());
+//						basicItinerary.setOriginalTo(singleJourney.getTo());
+//						basicItinerary.setName(name);
+//						SCAsyncTask<BasicItinerary, Void, Void> task = new SCAsyncTask<BasicItinerary, Void, Void>(
+//								getSherlockActivity(), new SaveItineraryProcessor(getSherlockActivity()));
+//						task.execute(basicItinerary);
+//					}
+//				}, suggestedName);
+//				dialog.show();
+//			}
+//		});
 	}
 
 	@Override

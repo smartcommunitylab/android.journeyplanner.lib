@@ -67,10 +67,6 @@
 
     <string-array name="main_list">
         <item>@string/btn_planjourney</item>
-        <item>@string/btn_monitorrecurrent</item>
-        <item>@string/btn_monitorsaved</item>
-        <item>@string/btn_notifications</item>
-        <item>@string/btn_broadcast</item>
         <!-- <item>@string/btn_myprofile</item> -->
     </string-array>
     <string-array name="main_list_tut">
@@ -84,19 +80,10 @@
 
     <array name="main_list_icons">
         <item>@drawable/ic_menu_planjourneys</item>
-        <item>@drawable/ic_menu_monitorjourneys</item>
-        <item>@drawable/ic_menu_savedjourneys</item>
-        <item>@drawable/ic_menu_notifications</item>
-        <item>@drawable/ic_menu_broadcast</item>
         <!-- <item>@drawable/ic_menu_preferences</item> -->
     </array>
     <array name="main_list_ids">
         <item>@id/btn_planjourney</item>
-        <item>@id/btn_monitorrecurrent</item>
-        <item>@id/btn_monitorsaved</item>
-        <item>@id/btn_notifications</item>
-        <item>@id/btn_broadcast</item>
-        <item>@id/btn_myprofile</item>
     </array>
 
     <string-array name="days_2chars">

@@ -177,17 +177,17 @@ public class JPHelper {
 		try {
 			instance = new JPHelper(mContext);
 			RoutesDBHelper.init(mContext);
-			getUserProfileInit();
+//			getUserProfileInit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void getUserProfileInit() {
-
-		readAccountProfile(null);
-
-	}
+//	public static void getUserProfileInit() {
+//
+//		readAccountProfile(null);
+//
+//	}
 
 	public static boolean isInitialized() {
 		return instance != null;
@@ -375,7 +375,8 @@ public class JPHelper {
 	}
 
 	public static String getAuthToken(Context ctx) throws AACException {
-		return JPHelper.getAccessProvider().readToken(ctx);
+		return null;
+//		return JPHelper.getAccessProvider().readToken(ctx);
 	}
 
 	public static JPHelper getInstance() throws DataException {

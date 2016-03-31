@@ -70,10 +70,10 @@
         android:listSelector="@android:color/transparent" >
     </ListView>
 
-    <Button
+<!--     <Button
         android:id="@+id/itinerary_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/btn_startmonitoring" />
-
+ -->
 </LinearLayout>
