@@ -111,9 +111,12 @@ public class ParkingsInfoDialog extends SherlockDialogFragment {
 		btn_ok.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Address from = new Address(Locale.getDefault());
-				from.setLatitude(myLocation.getLatitude());
-				from.setLongitude(myLocation.getLongitude());
+				Address from = null; 
+				if (myLocation != null) {
+					from = new Address(Locale.getDefault());
+					from.setLatitude(myLocation.getLatitude());
+					from.setLongitude(myLocation.getLongitude());
+				}
 
 				Address to = new Address(Locale.getDefault());
 				to.setLatitude(parking.getPosition()[0]);
