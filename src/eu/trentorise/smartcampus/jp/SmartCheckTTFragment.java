@@ -97,6 +97,8 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 	private int NUM_ROWS;
 	private int minFutureCol;
 
+	private boolean noDBData = false;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -449,6 +451,10 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 //						to_day, routeId, JPHelper.getAuthToken(getActivity()));
 //			}
 
+			if (returnTimeTable == null || returnTimeTable.getStops() == null || returnTimeTable.getStops().isEmpty()) {
+				noDBData = !RoutesDBHelper.checkDataUpdated(agencyId, routeId);
+			} 
+			 
 			actualTimeTable = returnTimeTable;
 			initData(actualTimeTable);
 			return returnTimeTable;
@@ -625,8 +631,11 @@ public class SmartCheckTTFragment extends FeedbackFragment {
 					View.INVISIBLE);
 		} else {
 			container.setVisibility(View.GONE);
-			getSherlockActivity().findViewById(R.id.ttempty).setVisibility(
-					View.VISIBLE);
+			TextView tv = (TextView) getSherlockActivity().findViewById(R.id.ttempty);
+			if (noDBData) {
+				tv.setText(R.string.no_db_data);
+			}
+			tv.setVisibility(View.VISIBLE);
 			refreshDayTextView(0);
 			return;
 		}

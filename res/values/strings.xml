@@ -57,6 +57,8 @@
     <string name="plan_time">Time</string>
     <string name="plan_search">Find solutions</string>
     <string name="no_items">No items found</string>
+    <string name="no_trips">No trips available for this line on this date.</string>
+    <string name="no_db_data">Data unavailable or expired. Ensure the network connection is present to update the timetables.</string>
     <string name="plan_custom_prefs">Preferences</string>
     <string name="plan_custom_prefs_off">Hide</string>
     <string name="plan_custom_prefs_on">Show</string>

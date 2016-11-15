@@ -55,6 +55,8 @@
     <string name="plan_time">Ora</string>
     <string name="plan_search">Trova soluzioni</string>
     <string name="no_items">Nessun risultato trovato</string>
+    <string name="no_trips">In questa giornata non ci sono corse disponibili per questa linea.</string>
+    <string name="no_db_data">Dati non disponibili o non aggiornati. Assicurati di essere connesso ad una rete per ricevere gli orari aggiornati.</string>
     <string name="plan_custom_prefs">Preferenze</string>
     <string name="plan_custom_prefs_off">Nascondi</string>
     <string name="plan_custom_prefs_on">Mostra</string>

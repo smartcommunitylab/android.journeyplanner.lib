@@ -15,9 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.jp.helper;
 
-import it.sayservice.platform.smartplanner.data.message.cache.CompressedCalendar;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
-
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,6 +23,7 @@ import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +37,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
+import eu.trentorise.smartcampus.jp.timetable.CompressedTTHelper;
 import eu.trentorise.smartcampus.network.JsonUtils;
+import it.sayservice.platform.smartplanner.data.message.cache.CompressedCalendar;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.CompressedTransitTimeTable;
 
 public class RoutesDBHelper {
 
@@ -60,10 +61,26 @@ public class RoutesDBHelper {
 		return queryVersions(db);
 	}
 
+	public static boolean checkDataUpdated(String agencyId, String routeId) {
+		// TODO: heuristic. Assume that no data present if no timetable for a week
+		SQLiteDatabase db = routesDB.getReadableDatabase();
+		Calendar c = Calendar.getInstance();
+		String hash = getHash(db, CompressedTTHelper.convertMsToDateFormat(c.getTimeInMillis()), agencyId, routeId);
+		if (hash == null) {
+			for (int i = 0; i < 7; i++) {
+				c.add(Calendar.DATE, 1);
+				hash = getHash(db, CompressedTTHelper.convertMsToDateFormat(c.getTimeInMillis()), agencyId, routeId);
+				if (hash != null) return true;
+			}
+			return false;
+		}
+		return true;
+	}
+
 	public static CompressedTransitTimeTable getTimeTable(String date, String agencyId, String routeId) {
 		CompressedTransitTimeTable out = new CompressedTransitTimeTable();
 		SQLiteDatabase db = routesDB.getReadableDatabase();
-		String hash = getHash(db, date, agencyId, routeId);
+		String hash = routeId+"_"+getHash(db, date, agencyId, routeId);
 		try {
 			fillCTT(db, agencyId, routeId, hash, out);
 		} catch (Exception e) {
@@ -136,7 +153,7 @@ public class RoutesDBHelper {
 		}
 		cal = calendarCache.get(agencyId).get(routeId).get();
 		String hash = cal.getMapping().get(cal.getEntries().get(date));
-		return routeId+"_"+hash;
+		return hash;
 	}
 
 	/**
