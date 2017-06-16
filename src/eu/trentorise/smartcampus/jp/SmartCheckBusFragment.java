@@ -86,10 +86,14 @@ public class SmartCheckBusFragment extends FeedbackFragment {
 							.beginTransaction();
 					Fragment fragment = new SmartCheckTTFragment();
 					Bundle b = new Bundle();
-					SmartLine param = new SmartLine(null, busLines.get(position).getRoutesShorts().get(0), busLines.get(
-							position).getColor(), new ArrayList<String>(Arrays.asList(busLines.get(position).getRoutesShorts()
-							.get(0))), new ArrayList<String>(Arrays.asList(busLines.get(position).getRoutesLong().get(0))),
-							new ArrayList<String>(Arrays.asList(busLines.get(position).getRouteID().get(0))), busLines.get(position).getAgencyId());
+					SmartLine param = new SmartLine(
+							null, 
+							busLines.get(position).getRoutesShorts().get(0), 
+							busLines.get(position).getColor(), 
+							new ArrayList<String>(Arrays.asList(busLines.get(position).getRoutesShorts().get(0))), 
+							new ArrayList<String>(Arrays.asList(busLines.get(position).getRoutesLong().get(0))),
+							new ArrayList<String>(Arrays.asList(busLines.get(position).getRouteID().get(0))), 
+							busLines.get(position).getAgencyId());
 					b.putParcelable(SmartCheckTTFragment.PARAM_SMARTLINE, param);
 					fragment.setArguments(b);
 					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

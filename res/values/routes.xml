@@ -6,7 +6,6 @@
         <item>%20AC</item>
         <item>%20BC</item>
         <item>C</item>
-<!--         <item>D</item> -->
         <item>01</item>
         <item>02C</item>
         <item>03</item>
@@ -26,13 +25,14 @@
         <item>17</item>
         <item>NPC</item>
         <item>Fun</item>
-    </string-array>
+        <item>CM</item>
+        <item>%20G</item>
+        </string-array>
 
     <array name="smart_check_12_icons">
         <item>@drawable/ic_f_a</item>
         <item>@drawable/ic_f_b</item>
         <item>@drawable/ic_f_c</item>
-<!--         <item>@drawable/ic_f_d</item> -->
         <item>@drawable/ic_f1</item>
         <item>@drawable/ic_f2</item>
         <item>@drawable/ic_f3</item>
@@ -52,7 +52,9 @@
         <item>@drawable/ic_f17</item>
         <item>@drawable/ic_f_np</item>
         <item>@drawable/ic_f_cw</item>
-    </array>
+        <item>@drawable/ic_f_cm</item>
+        <item>@drawable/ic_f_g</item>
+        </array>
     
     
     <array name="smart_check_12_colors">
@@ -79,7 +81,9 @@
         <item>#2493C5</item>
         <item>#000</item>
         <item>#FFF</item>
-    </array>
+        <item>#0976B7</item>
+        <item>#563176</item>
+        </array>
 
     <!-- Rovereto urbano -->
     <string-array name="smart_check_16_numbers">
@@ -340,7 +344,11 @@
     <string name="agency_12_route_17R">Lavis - S.Lazzaro - Via Bolzano - P.Dante</string>
     <string name="agency_12_route_FUTSA">Funivia Trento Sardagna</string>
     <string name="agency_12_route_FUTSR">Funivia Sardagna Trento </string>
-
+    <string name="agency_12_route_CMA">Povo - Borino - Celva - Passo Cimirlo</string>
+    <string name="agency_12_route_CMR">Passo Cimirlo - Celva - Borino - Povo</string>
+    <string name="agency_12_route_GA">Gardolo - Gardolo di Mezzo e Spini</string>
+    <string name="agency_12_route_GR">Spini e Gardolo di Mezzo - Gardolo</string>
+    
     <!-- Suburban zones -->
     <string name="agency_17_zone_1">Val di Fiemme, Val di Fassa, Val di Cembra</string>
     <string name="agency_17_zone_2">Val Rendena, Giudicarie</string>
