@@ -533,7 +533,7 @@ public class JPHelper {
 		SmartCheckStop singleStop = new SmartCheckStop();
 		singleStop.setTitle(stop.getName());
 		singleStop.setId(stop.getId());
-		singleStop.setLocation(stop.getCoordinates());
+		singleStop.setLocation(new double[]{stop.getCoordinates()[1],stop.getCoordinates()[0]});
 		HashMap<String, Object> customData = new HashMap<String, Object>();
 		customData.put("agencyId", agencyId);
 		customData.put("id", stop.getId());
