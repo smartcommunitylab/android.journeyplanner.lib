@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import android.content.Context;
@@ -246,6 +247,9 @@ public class RoutesDBHelper {
 					throw new Error("Error copying database");
 				}
 			}
+			helper = new RoutesDatabase(ctx, assetVersion);
+			helper.openDataBase();
+			helper.close();
 			return helper;
 		}
 
@@ -272,7 +276,9 @@ public class RoutesDBHelper {
 		private static void copyDataBase(Context ctx, InputStream zipInput) throws IOException {
 			ZipInputStream zis = new ZipInputStream(new BufferedInputStream(zipInput)); 
 			try {
-				if (zis.getNextEntry() != null) {
+				ZipEntry entry = zis.getNextEntry();
+				if (entry != null) {
+					long len = 0;
 					// Path to the just created empty db
 					String outFileName = dbPath(ctx);
 					// Open the empty db as the output stream
@@ -280,8 +286,11 @@ public class RoutesDBHelper {
 					// transfer bytes from the inputfile to the outputfile
 					byte[] buffer = new byte[1024];
 					int length;
-					while ((length = zis.read(buffer)) > 0) {
+					while (len < entry.getSize()) {
+						length = zis.read(buffer);
+//					while ((length = zis.read(buffer)) > 0) {
 						myOutput.write(buffer, 0, length);
+						len += length;
 					}
 					// Close the streams
 					myOutput.flush();
@@ -291,8 +300,12 @@ public class RoutesDBHelper {
 				e.printStackTrace();
 				throw e;
 			} finally {
-				zipInput.close();
-				zis.close();
+				try {
+					zipInput.close();
+					zis.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			
 		}
@@ -362,6 +375,9 @@ public class RoutesDBHelper {
 						String appId = JPParamsHelper.getDBAppId();
 						if (appId != null) {
 							RoutesDatabase.copyDataBase(ctx, JPHelper.getDBZipStream(appId, JPHelper.getAuthToken(ctx)));
+							RoutesDatabase helper = new RoutesDatabase(ctx, JPParamsHelper.getDBVersion());
+							helper.openDataBase();
+							helper.close();
 						}
 					}
 				}
